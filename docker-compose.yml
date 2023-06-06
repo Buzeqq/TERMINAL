@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  terminal-api:
+    image: terminal-api
+    build:
+      context: ./TerminalApi
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DB_HOST=terminal-db
+      - DB_PORT=3306
+      - DB_USER=user
+      - DB_PASSWORD=password
+      - DB_NAME=database
+    ports:
+      - "5000:80"
+    depends_on:
+      - terminal-db
+
+  terminal-db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: database
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "6033:3306"
