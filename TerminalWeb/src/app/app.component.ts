@@ -8,7 +8,7 @@ import { db, TodoList } from '../db/db';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  title = "demo";
+  title = "terminal-web";
   todoLists$ = liveQuery(() => db.todoLists.toArray());
   listName = 'My new list';
 

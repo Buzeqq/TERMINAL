@@ -1,6 +1,6 @@
 {
-  "name": "demo",
-  "short_name": "demo",
+  "name": "terminal-web",
+  "short_name": "terminal-web",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",
