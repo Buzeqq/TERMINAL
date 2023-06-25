@@ -1,0 +1,19 @@
+<h1>A very simple liveQuery() example</h1>
+
+<div *ngFor="let todoList of todoLists$ | async; trackBy: identifyList">
+  <app-itemlist [todoList]="todoList"></app-itemlist>
+</div>
+<label>
+  Add new list:
+  <input
+    autocomplete="off"
+    type="text"
+    id="name"
+    #name
+    [(ngModel)]="listName"
+  />
+</label>
+<button type="submit" (click)="addNewList()">Add new list</button>
+
+<h3>Reset Database</h3>
+<button (click)="resetDatabase()">Reset Database</button>

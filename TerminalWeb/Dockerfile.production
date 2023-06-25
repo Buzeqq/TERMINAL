@@ -1,0 +1,12 @@
+FROM node:20-alpine as node
+WORKDIR /app
+COPY . .
+RUN npm install
+RUN npm run build --prod
+
+FROM nginx:stable-alpine3.17-slim as production
+COPY --from=node /app/dist/terminal-web /usr/share/nginx/html
+
+EXPOSE 80
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
+

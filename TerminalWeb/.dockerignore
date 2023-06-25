@@ -1,0 +1,8 @@
+node_modules
+README.md
+.dockerignore
+.gitignore
+.angular
+Dockerfile
+Dockerfile.production
+docker-compose.yml
