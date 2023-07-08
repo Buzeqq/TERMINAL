@@ -36,7 +36,7 @@
           <button mat-button (click)="row.isEditing = !row.isEditing">Edit</button>
         </div>
         <div *ngIf="row.isEditing">
-          <button mat-button (click)="row.isEditing = !row.isEditing">Update</button>
+          <button mat-button (click)="row.isEditing = !row.isEditing; update(row)">Update</button>
         </div>
       </td>
     </ng-container>

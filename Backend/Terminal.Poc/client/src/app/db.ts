@@ -16,7 +16,7 @@ class AppDB extends Dexie {
 }
 export interface Change {
   id: string,
-  recordChanged: string
+  measurement: Measurement
   type: ChangeType
 }
 

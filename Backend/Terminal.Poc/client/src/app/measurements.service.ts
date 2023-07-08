@@ -24,26 +24,30 @@ export class MeasurementsService {
   }
 
   private async saveUncommittedChanges() {
-    let changedRecordsIds = await db.uncommittedChanges.toArray();
+    let changedRecordsIds = await db.uncommittedChanges.toCollection().sortBy('type');
     for (const change of changedRecordsIds) {
-      const measurement = await db.measurements.where({
-        id: change.recordChanged
-      }).first();
-      console.log(measurement);
+      let measurement = change.measurement;
+      if (!measurement) {
+        console.log(`Cant find measurement with key: ${change.measurement.id}`);
+        return;
+      }
+
       switch (change.type) {
         case ChangeType.Created: {
           this.addToRemote(measurement!).subscribe();
-          await db.measurements.where({
-            id: change.recordChanged
-          }).delete();
           break;
         }
-        case ChangeType.Updated:
+        case ChangeType.Updated: {
+          this.updateToRemote(measurement!).subscribe();
           break;
+        }
         case ChangeType.Deleted:
           break;
 
       }
+      await db.uncommittedChanges.where({
+        id: change.id
+      }).delete();
     }
   }
 
@@ -64,6 +68,10 @@ export class MeasurementsService {
     return this.http.post<never>(this.apiUrl + "/api/measurements", measurement);
   }
 
+  private updateToRemote(measurement: Measurement): Observable<never> {
+    return this.http.put<never>(this.apiUrl + `/api/measurements/${measurement.id}`, measurement);
+  }
+
   async getAll() {
     return db.measurements.toArray();
   }
@@ -76,21 +84,29 @@ export class MeasurementsService {
     };
     await db.measurements.add(newMeasurement);
     return this.http.post<never>(this.apiUrl + "/api/measurements", measurement)
-      .pipe(catchError(await this.handleRemoteUnavailable<never>(newMeasurement)));
+      .pipe(catchError(await this.handleRemoteUnavailable<never>(newMeasurement, ChangeType.Created)));
   }
 
-  private async handleRemoteUnavailable<T>(measurement: Measurement, result?: T) {
+  async updateMeasurement(measurement: Measurement) {
+    console.log(measurement);
+    await db.measurements.update(measurement, { value: measurement.value });
+    return this.http.put<never>(this.apiUrl + `/api/measurements/${measurement.id}`, measurement)
+      .pipe(catchError(await this.handleRemoteUnavailable<never>(measurement, ChangeType.Updated)));
+  }
+
+  private async handleRemoteUnavailable<T>(measurement: Measurement, change: ChangeType, result?: T) {
     return async (error: HttpErrorResponse): Promise<Observable<T>> => {
       console.log(error.status);
+      console.log(measurement);
 
-      if (!error.ok) {
-        console.log('adding to uncommitted changes');
-        await db.uncommittedChanges.add({
-          id: uuidv4(),
-          recordChanged: measurement.id,
-          type: ChangeType.Created
-        })
-      }
+      if (error.ok) return of(result as T);
+      console.log('adding to uncommitted changes');
+      await db.uncommittedChanges.add({
+        id: uuidv4(),
+        measurement: measurement,
+        type: change
+      })
+
       return of(result as T);
     }
   }

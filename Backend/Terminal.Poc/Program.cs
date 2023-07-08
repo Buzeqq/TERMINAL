@@ -29,7 +29,8 @@ app.UseRouting();
 
 app.MapPost("/api/measurements", async ([FromBody] PostMeasurementRequest measurement, IRepository<Measurement> measurementRepository) =>
 {
-    var newMeasurement = new Measurement(measurement.Value);
+    Console.WriteLine(measurement.Id);
+    var newMeasurement = new Measurement(measurement.Id, measurement.Value);
     await measurementRepository.CreateAsync(newMeasurement);
     return Results.Created($"/api/measurements/{newMeasurement.Id}", newMeasurement);
 });
@@ -61,5 +62,4 @@ app.MapPut("/api/measurements/{id:guid}",
         return Results.Ok();
     });
 app.MapGet("/api/ping", () => Results.Ok());
-
 app.Run();

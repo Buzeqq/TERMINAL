@@ -32,4 +32,8 @@ export class MeasurementsComponent implements AfterViewInit {
     };
     (await this.measurementService.addMeasurement(measurement)).subscribe();
   }
+
+  async update(row: { id: string, value: number, createdOnUtc: Date, isEditing: boolean }) {
+    (await this.measurementService.updateMeasurement(row)).subscribe();
+  }
 }

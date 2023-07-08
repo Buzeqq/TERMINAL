@@ -4,9 +4,9 @@ namespace Terminal.Poc;
 
 public class Measurement
 {
-    public Measurement(decimal value)
+    public Measurement(Guid id, decimal value)
     {
-        Id = new Guid();
+        Id = id;
         Value = value;
         CreatedOnUtc = DateTime.UtcNow;
     }
@@ -18,6 +18,7 @@ public class Measurement
 
 public class PostMeasurementRequest
 {
+    public Guid Id { get; set; }
     public decimal Value { get; set; }
 }
 
