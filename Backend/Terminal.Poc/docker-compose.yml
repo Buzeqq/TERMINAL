@@ -1,25 +1,20 @@
-services: 
+services:
   terminal.poc.reverse-proxy:
     image: nginx:latest
     ports:
       - 80:80
       - 443:443
     volumes:
-      - ./nginx/conf/:/etc/nginx/conf.d/:ro
+      - ./config/nginx:/etc/nginx/:ro
       - ./certbot/www:/var/www/certbot/:ro
+      - /etc/letsencrypt/:/etc/ssl/:ro
     depends_on: [terminal.poc.backend, terminal.poc.frontend]
-    
-  certbot:
-    image: certbot/certbot:latest
-    volumes:
-      - ./certbot/www/:/var/www/certbot/:rw
-    depends_on: [terminal.poc.reverse-proxy]
 
   terminal.poc.backend:
     build:
       context: .
       dockerfile: Dockerfile
-    
+
   terminal.poc.frontend:
     build:
       context: client

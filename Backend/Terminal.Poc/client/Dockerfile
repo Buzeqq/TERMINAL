@@ -1,8 +1,9 @@
-FROM node:20-alpine as build
+FROM node:20.2 as build
 WORKDIR /app
 COPY . .
 RUN npm install
-RUN npm run build --omit=dev
+RUN npm install -g @angular/cli
+RUN ng build -c production
 
 FROM nginx:latest as production
 COPY --from=build /app/dist/client /usr/share/nginx/html
