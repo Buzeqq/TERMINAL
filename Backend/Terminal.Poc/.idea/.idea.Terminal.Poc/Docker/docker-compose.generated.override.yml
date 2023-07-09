@@ -1,0 +1,21 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  terminal.poc.backend:
+    build:
+      context: "/home/buzeqq/code/TERMINAL/Backend/Terminal.Poc"
+      dockerfile: "Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net7.0/Terminal.Poc.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "https://+:443;http://+:80"
+    image: "terminal.poc:dev"
+    ports: []
+    volumes:
+    - "/home/buzeqq/.aspnet/https:/root/.aspnet/https"
+    - "/home/buzeqq/.microsoft/usersecrets:/root/.microsoft/usersecrets"
+    - "/home/buzeqq/code/TERMINAL/Backend/Terminal.Poc:/app:rw"
+    working_dir: "/app"

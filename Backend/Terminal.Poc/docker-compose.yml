@@ -1,0 +1,20 @@
+services: 
+  terminal.poc.reverse-proxy:
+    image: nginx:latest
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./config/nginx:/etc/nginx
+    depends_on: [terminal.poc.backend, terminal.poc.frontend]
+
+  terminal.poc.backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+  terminal.poc.frontend:
+    build:
+      context: client
+      dockerfile: Dockerfile
+      
