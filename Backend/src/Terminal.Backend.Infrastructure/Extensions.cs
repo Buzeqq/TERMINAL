@@ -15,6 +15,7 @@ public static class Extensions
         services.AddHttpContextAccessor();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+        services.AddCors();
         return services;
     }
 
@@ -25,6 +26,10 @@ public static class Extensions
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+            app.UseCors(x => x
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowAnyOrigin());
         }
 
         // app.UseAuthentication();
