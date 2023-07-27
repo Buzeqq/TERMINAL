@@ -20,4 +20,9 @@
 
 
 
+    <ItemGroup>
+      <ProjectReference Include="..\Terminal.Backend.Core\Terminal.Backend.Core.csproj" />
+    </ItemGroup>
+
+
 </Project>

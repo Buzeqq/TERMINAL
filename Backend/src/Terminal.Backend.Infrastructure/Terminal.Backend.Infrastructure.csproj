@@ -22,7 +22,7 @@
 
 
     <ItemGroup>
-      <ProjectReference Include="..\Terminal.Backend.Core\Terminal.Backend.Core.csproj" />
+      <ProjectReference Include="..\Terminal.Backend.Application\Terminal.Backend.Application.csproj" />
     </ItemGroup>
 
 </Project>
