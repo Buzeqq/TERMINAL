@@ -1,0 +1,46 @@
+name: terminal-test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x\
+    - name: Setup Angular
+      uses: mayurrawte/github-angular-actions@v1.1.0
+    - run: cd Backend
+    - name: Restore .NET dependencies
+      run: dotnet restore
+    - name: Build .NET
+      run: dotnet build --no-restore
+    - run: cd ../Frontend
+    - name: Build Angular
+      run: ng b -c production
+    
+  test:
+    runs-on: self-hosted
+    needs: build
+    
+    steps:
+    - name: Test .NET
+      run: dotnet test --no-build --verbosity normal
+#     - name: Test Angular
+#       run: ng test
+      
+  deploy:
+    runs-on: self-hosted
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - run: cd ../
+      - run: docker compose up --build -d
