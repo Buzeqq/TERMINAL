@@ -13,10 +13,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Terminal.Backend.Application\Terminal.Backend.Application.csproj" />
       <ProjectReference Include="..\Terminal.Backend.Core\Terminal.Backend.Core.csproj" />
       <ProjectReference Include="..\Terminal.Backend.Infrastructure\Terminal.Backend.Infrastructure.csproj" />

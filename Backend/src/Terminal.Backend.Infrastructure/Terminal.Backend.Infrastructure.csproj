@@ -25,4 +25,9 @@
       <ProjectReference Include="..\Terminal.Backend.Application\Terminal.Backend.Application.csproj" />
     </ItemGroup>
 
+
+    <ItemGroup>
+      <Folder Include="DAL\" />
+    </ItemGroup>
+
 </Project>

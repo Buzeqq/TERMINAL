@@ -3,6 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7C9FBE00-6B55-437F-9F79-9697A2DA77D3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{50DDADC7-E386-426C-B6E6-BDE3B756037A}"
+	ProjectSection(SolutionItems) = preProject
+		test\README.md = test\README.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Terminal.Backend.Api", "src\Terminal.Backend.Api\Terminal.Backend.Api.csproj", "{38A4C323-3F7F-42DD-9DBF-2C651DC33882}"
 EndProject

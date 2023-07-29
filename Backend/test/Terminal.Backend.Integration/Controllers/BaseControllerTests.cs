@@ -3,6 +3,9 @@ using Xunit;
 
 namespace Terminal.Backend.Integration.Controllers;
 
+/// <summary>
+/// Class <c>BaseControllerTests</c> is used as arrangement part for testing endpoints.
+/// </summary>
 [Collection("api")]
 public abstract class BaseControllerTests : IClassFixture<OptionsProvider>
 {
