@@ -27,9 +27,9 @@ jobs:
     - name: Build .NET
       run: dotnet build Backend/Terminal.Backend.sln
     - name: Restore Angular dependencies
-      run: npm install
+      run: cd Frontend/ && npm install
     - name: Build Angular
-      run: cd Frontend/ && ng b -c production
+      run: ng b -c production
     
   test:
     runs-on: self-hosted
