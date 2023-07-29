@@ -7,15 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
-        <HintPath>..\..\..\..\..\.nuget\packages\microsoft.aspnetcore.app.ref\7.0.3\ref\net7.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
-
-    <ItemGroup>
       <PackageReference Include="MediatR" Version="12.1.1" />
       <PackageReference Include="Scrutor" Version="4.2.2" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0"/>
     </ItemGroup>
 
 
