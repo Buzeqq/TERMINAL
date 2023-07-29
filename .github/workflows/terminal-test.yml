@@ -22,9 +22,9 @@ jobs:
         node-version: 18
     - name: Setup Angular
       run: npm install -g @angular/cli
-    - run: pwd && cd Backend && ls -la
+    - run: cd Backend
     - name: Restore .NET dependencies
-      run: dotnet restore 
+      run: dotnet restore Terminal.Backend.sln
     - name: Build .NET
       run: dotnet build --no-restore
     - run: cd ../Frontend
