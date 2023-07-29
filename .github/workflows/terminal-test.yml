@@ -25,7 +25,7 @@ jobs:
     - name: Restore .NET dependencies
       run: dotnet restore Backend/Terminal.Backend.sln
     - name: Build .NET
-      run: dotnet build Backend/Terminal.Backend.sln --no-restore
+      run: dotnet build Backend/Terminal.Backend.sln
     - run: cd ../Frontend
     - name: Build Angular
       run: ng b -c production
