@@ -26,9 +26,8 @@ jobs:
       run: dotnet restore Backend/Terminal.Backend.sln
     - name: Build .NET
       run: dotnet build Backend/Terminal.Backend.sln
-    - run: cd ../Frontend
     - name: Build Angular
-      run: ng b -c production
+      run: cd Frontend/ && ng b -c production
     
   test:
     runs-on: self-hosted
