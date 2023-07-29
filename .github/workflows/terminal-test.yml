@@ -16,8 +16,12 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.x
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with: 
+        node-version: 18
     - name: Setup Angular
-      uses: mayurrawte/github-angular-actions@v1.1.0
+      run: npm install -g @angular/cli
     - run: cd Backend
     - name: Restore .NET dependencies
       run: dotnet restore
