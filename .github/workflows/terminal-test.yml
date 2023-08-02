@@ -60,7 +60,7 @@ jobs:
     - name: Restore .NET build
       uses: actions/cache/restore@v3
       with:
-        name: terminal-backend-tmp
+        key: terminal-backend-tmp
 
     - name: Test .NET
       run: dotnet test --no-build --verbosity normal
@@ -69,7 +69,7 @@ jobs:
 #     - name: Restore Angular build
 #       uses: actions/cache/restore@v3
 #       with:
-#         name: terminal-frontend-tmp
+#         key: terminal-frontend-tmp
 #
 #     - name: Test Angular
 #       run: ng test
