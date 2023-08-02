@@ -26,12 +26,25 @@ jobs:
       run: dotnet restore Backend/Terminal.Backend.sln
     - name: Build .NET
       run: dotnet build --no-restore Backend/Terminal.Backend.sln
+    - name: Publish .NET
+      run: dotnet publish -c Release -o terminal-backend
+      working-directory: ./Backend
+    - name: Upload .NET artifacts
+      uses: actions/upload-artifacts@v3
+      with:
+        name: terminal-backend
+        path: ./Backend/terminal-backend
     - name: Restore Angular dependencies
       run: npm ci
       working-directory: ./Frontend
     - name: Build Angular
       run: ng b -c production
       working-directory: ./Frontend
+    - name: Upload Angular artifacts
+      uses: actions/upload-artifacts@v3
+      with:
+        name: terminal-frontend
+        path: ./Frontend/dist
     
   test:
     runs-on: self-hosted
