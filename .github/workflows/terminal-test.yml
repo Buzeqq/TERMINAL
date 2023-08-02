@@ -27,7 +27,7 @@ jobs:
     - name: Build .NET
       run: dotnet build Backend/Terminal.Backend.sln
     - name: Restore Angular dependencies
-      run: npm install
+      run: npm ci
       working-directory: ./Frontend
     - name: Build Angular
       run: ng b -c production
