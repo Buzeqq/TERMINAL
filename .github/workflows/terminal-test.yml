@@ -12,51 +12,84 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.x
+
     - name: Setup Node
       uses: actions/setup-node@v3
       with: 
         node-version: 18
+
     - name: Setup Angular
       run: npm install -g @angular/cli
+
     - name: Restore .NET dependencies
       run: dotnet restore Backend/Terminal.Backend.sln
+
     - name: Build .NET
       run: dotnet build --no-restore Backend/Terminal.Backend.sln
-    - name: Publish .NET
-      run: dotnet publish -c Release -o terminal-backend
-      working-directory: ./Backend
-    - name: Upload .NET artifacts
-      uses: actions/upload-artifact@v3
+
+    - name: Cache .NET build
+      uses: actions/cache@v3
       with:
-        name: terminal-backend
-        path: ./Backend/terminal-backend
+        path: ./Backend
+        key: terminal-backend-tmp
+
     - name: Restore Angular dependencies
       run: npm ci
       working-directory: ./Frontend
+
     - name: Build Angular
       run: ng b -c production
       working-directory: ./Frontend
-    - name: Upload Angular artifacts
-      uses: actions/upload-artifact@v3
+
+    - name: Cache Angular build
+      uses: actions/cache@v3
       with:
-        name: terminal-frontend
-        path: ./Frontend/dist
-    
+        path: ./Frontend
+        key: terminal-frontend-tmp
+
   test:
     runs-on: self-hosted
     needs: build
     
     steps:
+    - name: Restore .NET build
+      uses: actions/cache/restore@v3
+      with:
+        name: terminal-backend-tmp
+
     - name: Test .NET
       run: dotnet test --no-build --verbosity normal
       working-directory: ./Backend
+
+#     - name: Restore Angular build
+#       uses: actions/cache/restore@v3
+#       with:
+#         name: terminal-frontend-tmp
+#
 #     - name: Test Angular
 #       run: ng test
-      
+
+    - name: Publish .NET
+      run: dotnet publish ./src/Terminal.Backend.Api/Terminal.Backend.Api.csproj -c Release -o terminal-backend
+      working-directory: ./Backend
+
+    - name: Upload .NET artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: terminal-backend
+        path: ./Backend/terminal-backend
+
+    - name: Upload Angular artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: terminal-frontend
+        path: ./Frontend/dist
+
   deploy:
     runs-on: self-hosted
     needs: test
