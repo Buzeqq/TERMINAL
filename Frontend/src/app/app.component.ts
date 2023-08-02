@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {PingService} from "./services/ping/ping.service";
+import { PingService } from "./services/ping/ping.service";
 
 @Component({
   selector: 'app-root',
