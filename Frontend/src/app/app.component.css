@@ -1,0 +1,19 @@
+.online:after {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #5bff5b;
+}
+
+.offline:after {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: red;
+}
+
+/*# sourceMappingURL=app.component.css.map */

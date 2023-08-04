@@ -1,0 +1,2 @@
+<h1>Terminal client</h1>
+<h2 [ngClass]="{'online': isOnline$ | async, 'offline': !(isOnline$ | async)}">Status:</h2>
