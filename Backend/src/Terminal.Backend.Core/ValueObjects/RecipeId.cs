@@ -5,6 +5,8 @@ namespace Terminal.Backend.Core.ValueObjects;
 public sealed record RecipeId
 {
     public Guid Value { get; }
+    
+    public RecipeId() {}
 
     public RecipeId(Guid id)
     {
@@ -15,6 +17,8 @@ public sealed record RecipeId
 
         Value = id;
     }
+
+    public static RecipeId Create() => new(Guid.NewGuid());
 
     public static implicit operator Guid(RecipeId id) => id.Value;
     public static implicit operator RecipeId(Guid id) => new(id);

@@ -2,12 +2,13 @@ using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Core.Entities;
 
-public class Measurement
+public sealed class Measurement
 {
-    public MeasurementId Id { get; private set; }
-    public RecipeId RecipeId { get; private set; }
-    public List<Step> Steps { get; private set; }
-    public List<Tag> Tags { get; private set; }
+    public Guid Id { get; private set; }
+    public MeasurementCode Code { get; private set; }
+    public Recipe? Recipe { get; private set; }
+    public ICollection<Step> Steps { get; private set; } = new List<Step>();
+    public ICollection<Tag> Tags { get; private set; } = new List<Tag>();
     public DateTime CreatedAtUtc { get; private set; }
-    public string Comment { get; private set; }
+    public Comment Comment { get; private set; }
 }

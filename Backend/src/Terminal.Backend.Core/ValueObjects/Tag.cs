@@ -5,6 +5,9 @@ namespace Terminal.Backend.Core.ValueObjects;
 public sealed record Tag
 {
     public string Value { get; }
+    public bool IsActive { get; }
+    
+    public Tag() { }
 
     public Tag(string value)
     {

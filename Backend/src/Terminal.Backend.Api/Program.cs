@@ -30,7 +30,5 @@ var app = builder.Build();
 app.UseInfrastructure();
 app.UsePingEndpoints();
 app.Run();
-namespace Terminal.Backend.Api
-{
-    public partial class Program { }
-}
+
+public partial class Program { }

@@ -1,0 +1,19 @@
+services: 
+  terminal.reverse-proxy:
+    image: nginx:latest
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./config/nginx:/etc/nginx/:ro
+      - /certbot/www:/var/www/certbot/:ro
+      - /etc/letsencrypt:/etc/ssl/:ro
+    depends_on: [terminal.backend, terminal.frontend]
+  
+  terminal.backend:
+    build:
+      context: ./Backend/src
+
+  terminal.frontend:
+    build:
+      context: ./Frontend

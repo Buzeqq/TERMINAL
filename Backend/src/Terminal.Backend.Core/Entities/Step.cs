@@ -1,7 +1,10 @@
+using Terminal.Backend.Core.ValueObjects;
+
 namespace Terminal.Backend.Core.Entities;
 
-public class Step
+public sealed class Step
 {
     public Guid Id { get; private set; }
-    public Dictionary<string, string> Paremeters { get; private set; }
+    public ICollection<ParameterValue> Parameters { get; private set; } = new List<ParameterValue>();
+    public Comment Comment { get; private set; }
 }
