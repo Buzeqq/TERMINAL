@@ -6,7 +6,7 @@ public sealed class Measurement
 {
     public Guid Id { get; private set; }
     public MeasurementCode Code { get; private set; }
-    public Recipe? Recipe { get; private set; }
+    public Recipe Recipe { get; private set; }
     public ICollection<Step> Steps { get; private set; } = new List<Step>();
     public ICollection<Tag> Tags { get; private set; } = new List<Tag>();
     public DateTime CreatedAtUtc { get; private set; }

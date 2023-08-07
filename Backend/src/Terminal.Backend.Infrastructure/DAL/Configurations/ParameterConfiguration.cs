@@ -16,7 +16,9 @@ internal sealed class ParameterConfiguration : IEntityTypeConfiguration<Paramete
                 n => new ParameterName(n));
 
         builder.HasMany(p => p.ParameterValues)
-            .WithOne();
+            .WithOne(pv => pv.Parameter)
+            .HasForeignKey("ParameterName")
+            .IsRequired();
 
         builder
             .HasDiscriminator<string>("Type")

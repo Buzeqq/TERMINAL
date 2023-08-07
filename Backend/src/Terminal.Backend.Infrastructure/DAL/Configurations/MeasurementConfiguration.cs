@@ -25,5 +25,9 @@ internal sealed class MeasurementConfiguration : IEntityTypeConfiguration<Measur
             .IsRequired();
         builder.HasMany(m => m.Tags)
             .WithOne();
+        builder.HasOne(m => m.Recipe)
+            .WithMany()
+            .HasForeignKey("RecipeId")
+            .IsRequired(false);
     }
 }

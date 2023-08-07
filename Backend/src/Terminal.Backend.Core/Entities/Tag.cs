@@ -1,11 +1,11 @@
 using Terminal.Backend.Core.Exceptions;
 
-namespace Terminal.Backend.Core.ValueObjects;
+namespace Terminal.Backend.Core.Entities;
 
-public sealed record Tag
+public sealed class Tag
 {
-    public string Value { get; }
-    public bool IsActive { get; }
+    public string Value { get; private set; }
+    public bool IsActive { get; private set; }
     
     public Tag() { }
 
