@@ -32,11 +32,12 @@ jobs:
     - name: Build .NET
       run: dotnet build --no-restore Backend/Terminal.Backend.sln
 
-    - name: Cache .NET build
-      uses: actions/cache@v3
+    - name: Store .NET build
+      uses: actions/upload-artifact@v3
       with:
         path: ./Backend
-        key: terminal-backend-tmp
+        name: terminal-backend
+        retention-days: 7
 
     - name: Restore Angular dependencies
       run: npm ci
@@ -46,11 +47,12 @@ jobs:
       run: ng b -c production
       working-directory: ./Frontend
 
-    - name: Cache Angular build
-      uses: actions/cache@v3
+    - name: Store Angular build
+      uses: actions/upload-artifact@v3
       with:
         path: ./Frontend
-        key: terminal-frontend-tmp
+        name: terminal-frontend
+        retention-days: 7
 
   test:
     runs-on: self-hosted
@@ -71,20 +73,18 @@ jobs:
       run: npm install -g @angular/cli
 
     - name: Restore .NET build
-      uses: actions/cache/restore@v3
+      uses: actions/download-artifact@v3
       with:
-        path: ./Backend
-        key: terminal-backend-tmp
+        name: terminal-backend
 
     - name: Test .NET
       run: dotnet test --no-build --verbosity normal
       working-directory: ./Backend
 
 #     - name: Restore Angular build
-#       uses: actions/cache/restore@v3
+#       uses: actions/download-artifact@v3
 #       with:
-#         path: ./Frontend
-#         key: terminal-frontend-tmp
+#         key: terminal-frontend
 #
 #     - name: Test Angular
 #       run: ng test
