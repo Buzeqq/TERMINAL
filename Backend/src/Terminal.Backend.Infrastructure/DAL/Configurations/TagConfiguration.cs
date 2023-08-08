@@ -9,6 +9,10 @@ internal sealed class TagConfiguration : IEntityTypeConfiguration<Tag>
 {
     public void Configure(EntityTypeBuilder<Tag> builder)
     {
-        builder.HasKey(t => t.Value);
+        builder.HasKey(t => t.Name);
+
+        builder.Property(t => t.Name)
+            .HasConversion(n => n.Value,
+                n => new TagName(n));
     }
 }

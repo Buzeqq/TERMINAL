@@ -31,4 +31,7 @@ app.UseInfrastructure();
 app.UsePingEndpoints();
 app.Run();
 
-public partial class Program { }
+namespace Terminal.Backend.Api
+{
+    public partial class Program { }
+}

@@ -4,11 +4,9 @@ namespace Terminal.Backend.Core.ValueObjects;
 
 public sealed record MeasurementCode
 {
-    private static readonly string Prefix = "AX"; // TODO: move to configuration file
+    private const string Prefix = "AX"; // TODO: move to configuration file
     public string Value => $"{Prefix}{Number}";
     public ulong Number { get; }
-
-    public MeasurementCode() { }
 
     public MeasurementCode(ulong number)
     {
@@ -17,11 +15,10 @@ public sealed record MeasurementCode
 
     public MeasurementCode(string code)
     {
-        ulong number = 0; // should never create code with 0 number, it's here only so compiler stops complaining
+        var isParsable = ulong.TryParse(code.AsSpan(Prefix.Length), out var number);
         var isValid = !string.IsNullOrWhiteSpace(code) &&
                       code.StartsWith(Prefix) &&
-                      ulong.TryParse(code.AsSpan(Prefix.Length), out number) &&
-                      number != 0;
+                      isParsable;
         
         if (!isValid)
         {

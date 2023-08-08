@@ -5,8 +5,6 @@ namespace Terminal.Backend.Core.ValueObjects;
 public sealed record RecipeName
 {
     public string Name { get; }
-    
-    public RecipeName() {}
 
     public RecipeName(string name)
     {

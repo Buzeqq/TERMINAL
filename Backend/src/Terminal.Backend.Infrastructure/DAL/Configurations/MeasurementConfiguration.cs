@@ -11,7 +11,10 @@ internal sealed class MeasurementConfiguration : IEntityTypeConfiguration<Measur
     public void Configure(EntityTypeBuilder<Measurement> builder)
     {
         builder.HasKey(m => m.Id);
-        
+
+        builder.Property(m => m.Id)
+            .HasConversion(i => i.Value,
+                i => new MeasurementId(i));
         builder.Property(m => m.Code)
             .HasConversion(c => c.Value,
                 c => new MeasurementCode(c))

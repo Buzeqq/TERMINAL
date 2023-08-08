@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Terminal.Backend.Core.Entities;
+using Terminal.Backend.Core.Entities.Parameters;
+using Terminal.Backend.Core.Entities.ParameterValues;
 using Terminal.Backend.Core.ValueObjects;
 
-namespace Terminal.Backend.Infrastructure.DAL.Configurations;
+namespace Terminal.Backend.Infrastructure.DAL.Configurations.Parameters;
 
 internal sealed class ParameterConfiguration : IEntityTypeConfiguration<Parameter>
 {
@@ -15,15 +16,16 @@ internal sealed class ParameterConfiguration : IEntityTypeConfiguration<Paramete
             .HasConversion(n => n.Value, 
                 n => new ParameterName(n));
 
-        builder.HasMany(p => p.ParameterValues)
+        builder.HasMany<ParameterValue>()
             .WithOne(pv => pv.Parameter)
             .HasForeignKey("ParameterName")
             .IsRequired();
 
         builder
             .HasDiscriminator<string>("Type")
+            .HasValue<NumericParameter>(nameof(NumericParameter))
+            .HasValue<TextParameter>(nameof(TextParameter))
             .HasValue<IntegerParameter>(nameof(IntegerParameter))
-            .HasValue<DecimalParameter>(nameof(DecimalParameter))
-            .HasValue<TextParameter>(nameof(TextParameter));
+            .HasValue<DecimalParameter>(nameof(DecimalParameter));
     }
 }

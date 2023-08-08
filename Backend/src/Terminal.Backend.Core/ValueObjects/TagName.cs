@@ -2,11 +2,11 @@ using Terminal.Backend.Core.Exceptions;
 
 namespace Terminal.Backend.Core.ValueObjects;
 
-public sealed record ParameterName
+public sealed class TagName
 {
     public string Value { get; }
 
-    public ParameterName(string value)
+    public TagName(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
@@ -16,6 +16,6 @@ public sealed record ParameterName
         Value = value;
     }
 
-    public static implicit operator string(ParameterName name) => name.Value;
-    public static implicit operator ParameterName(string value) => new(value);
+    public static implicit operator string(TagName name) => name.Value;
+    public static implicit operator TagName(string value) => new(value);
 }

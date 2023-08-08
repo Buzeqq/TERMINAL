@@ -2,11 +2,11 @@ using Terminal.Backend.Core.Exceptions;
 
 namespace Terminal.Backend.Core.ValueObjects;
 
-public sealed record RecipeId
+public sealed class StepId
 {
     public Guid Value { get; }
 
-    public RecipeId(Guid id)
+    public StepId(Guid id)
     {
         if (id == Guid.Empty)
         {
@@ -16,8 +16,8 @@ public sealed record RecipeId
         Value = id;
     }
 
-    public static RecipeId Create() => new(Guid.NewGuid());
+    public static StepId Create() => new(Guid.NewGuid());
 
-    public static implicit operator Guid(RecipeId id) => id.Value;
-    public static implicit operator RecipeId(Guid id) => new(id);
+    public static implicit operator Guid(StepId id) => id.Value;
+    public static implicit operator StepId(Guid id) => new(id);
 }
