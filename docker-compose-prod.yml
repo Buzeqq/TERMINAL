@@ -13,7 +13,14 @@ services:
   terminal.backend:
     build:
       context: ./Backend/src
+    depends_on:
+      - terminal.postgres
 
   terminal.frontend:
     build:
       context: ./Frontend
+
+  terminal.postgres:
+    image: postgres:latest
+    env_file:
+      - /home/ubuntu/terminal-secrets/.env
