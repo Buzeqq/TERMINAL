@@ -36,7 +36,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         path: ./Backend
-        name: terminal-backend
+        name: terminal-backend-build
         retention-days: 7
 
     - name: Restore Angular dependencies
@@ -54,7 +54,7 @@ jobs:
           ./Frontend
           !./Frontend/node_modules
           !./Frontend/**/*.md
-        name: terminal-frontend
+        name: terminal-frontend-build
         retention-days: 7
 
   test:
@@ -74,11 +74,6 @@ jobs:
 
     - name: Setup Angular
       run: npm install -g @angular/cli
-
-    - name: Restore .NET build
-      uses: actions/download-artifact@v3
-      with:
-        name: terminal-backend
 
     - name: Test .NET
       run: dotnet test --no-build --verbosity normal
@@ -115,3 +110,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: docker compose up --build -d
+
+      - run: dotnet tool update -g docfx
+      - run: docfx docfx_project/docfx.json
+
+      - name: Deploy documentation
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_site
+
