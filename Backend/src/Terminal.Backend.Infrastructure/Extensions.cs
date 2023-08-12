@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Terminal.Backend.Infrastructure.DAL;
 using Terminal.Backend.Infrastructure.Exceptions;
 
 namespace Terminal.Backend.Infrastructure;
@@ -16,6 +17,7 @@ public static class Extensions
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddCors();
+        services.AddPostgres(configuration);
         return services;
     }
 
@@ -37,5 +39,14 @@ public static class Extensions
         app.MapControllers();
         
         return app;
+    }
+
+    public static T GetOptions<T>(this IConfiguration configuration, string sectionName) where T : class, new()
+    {
+        var options = new T();
+        var section = configuration.GetRequiredSection(sectionName);
+        section.Bind(options);
+
+        return options;
     }
 }

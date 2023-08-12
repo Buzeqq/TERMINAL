@@ -1,17 +1,23 @@
-using System.Numerics;
+using Terminal.Backend.Core.Exceptions;
 
 namespace Terminal.Backend.Core.ValueObjects;
 
-public sealed record MeasurementId
+public sealed class MeasurementId
 {
-    private BigInteger _value;
-    private const string _prefix = "AX";
+    public Guid Value { get; }
 
-    public string Value => $"{_prefix}{_value}";
-
-    public MeasurementId(BigInteger value)
+    public MeasurementId(Guid id)
     {
-        _value = value;
+        if (id == Guid.Empty)
+        {
+            throw new InvalidEntityIdException(id);
+        }
+
+        Value = id;
     }
-    
+
+    public static MeasurementId Create() => new(Guid.NewGuid());
+
+    public static implicit operator Guid(MeasurementId id) => id.Value;
+    public static implicit operator MeasurementId(Guid id) => new(id);
 }

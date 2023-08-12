@@ -32,11 +32,12 @@ jobs:
     - name: Build .NET
       run: dotnet build --no-restore Backend/Terminal.Backend.sln
 
-    - name: Cache .NET build
-      uses: actions/cache@v3
+    - name: Store .NET build
+      uses: actions/upload-artifact@v3
       with:
         path: ./Backend
-        key: terminal-backend-tmp
+        name: terminal-backend-build
+        retention-days: 7
 
     - name: Restore Angular dependencies
       run: npm ci
@@ -46,11 +47,15 @@ jobs:
       run: ng b -c production
       working-directory: ./Frontend
 
-    - name: Cache Angular build
-      uses: actions/cache@v3
+    - name: Store Angular build
+      uses: actions/upload-artifact@v3
       with:
-        path: ./Frontend
-        key: terminal-frontend-tmp
+        path: |
+          ./Frontend
+          !./Frontend/node_modules
+          !./Frontend/**/*.md
+        name: terminal-frontend-build
+        retention-days: 7
 
   test:
     runs-on: self-hosted
@@ -70,21 +75,14 @@ jobs:
     - name: Setup Angular
       run: npm install -g @angular/cli
 
-    - name: Restore .NET build
-      uses: actions/cache/restore@v3
-      with:
-        path: ./Backend
-        key: terminal-backend-tmp
-
     - name: Test .NET
       run: dotnet test --no-build --verbosity normal
       working-directory: ./Backend
 
 #     - name: Restore Angular build
-#       uses: actions/cache/restore@v3
+#       uses: actions/download-artifact@v3
 #       with:
-#         path: ./Frontend
-#         key: terminal-frontend-tmp
+#         key: terminal-frontend
 #
 #     - name: Test Angular
 #       run: ng test
@@ -110,5 +108,15 @@ jobs:
     needs: test
     if: github.ref == 'refs/heads/main'
     steps:
-      - run: cd ../
+      - uses: actions/checkout@v3
       - run: docker compose up --build -d
+
+      - run: dotnet tool update -g docfx
+      - run: docfx docfx_project/docfx.json
+
+      - name: Deploy documentation
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_site
+
