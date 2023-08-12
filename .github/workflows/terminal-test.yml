@@ -109,7 +109,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v3
-      - run: docker compose up --build -d
+      - run: docker compose -p docker-compose-prod.yml up --build -d
 
       - run: dotnet tool update -g docfx
       - run: docfx docfx_project/docfx.json
