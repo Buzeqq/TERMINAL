@@ -13,14 +13,20 @@ services:
   terminal.backend:
     build:
       context: ./Backend/src
+    environment:
+      - Postgres__ConnectionString=${Postgres__ConnectionString}
     depends_on:
       - terminal.postgres
 
   terminal.frontend:
     build:
       context: ./Frontend
+    depends_on:
+      - terminal.backend
 
   terminal.postgres:
     image: postgres:latest
-    env_file:
-      - /home/ubuntu/terminal-secrets/.env
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
