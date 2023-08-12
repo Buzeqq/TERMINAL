@@ -50,7 +50,10 @@ jobs:
     - name: Store Angular build
       uses: actions/upload-artifact@v3
       with:
-        path: ./Frontend
+        path: |
+          ./Frontend
+          !./Frontend/node_modules
+          !./Frontend/**/*.md
         name: terminal-frontend
         retention-days: 7
 
