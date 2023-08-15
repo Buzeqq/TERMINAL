@@ -116,7 +116,7 @@ jobs:
           dotnet-version: 7.0.x
 
       - run: dotnet tool update -g docfx
-      - run: ls  /usr/share/dotnet
+      - run: docfx --version
       - run: /usr/share/dotnet/tools/docfx docfx_project/docfx.json
 
       - name: Deploy documentation
