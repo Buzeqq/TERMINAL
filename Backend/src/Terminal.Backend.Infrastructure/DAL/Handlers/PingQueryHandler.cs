@@ -1,6 +1,7 @@
 using MediatR;
+using Terminal.Backend.Application.Queries;
 
-namespace Terminal.Backend.Application.Ping;
+namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 
 public class PingQueryHandler : IRequestHandler<PingQuery, string>
 {

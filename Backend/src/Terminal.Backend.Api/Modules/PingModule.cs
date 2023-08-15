@@ -1,7 +1,7 @@
 using MediatR;
-using Terminal.Backend.Application.Ping;
+using Terminal.Backend.Application.Queries;
 
-namespace Terminal.Backend.Api.Ping;
+namespace Terminal.Backend.Api.Modules;
 
 public static class PingModule
 {

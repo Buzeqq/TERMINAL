@@ -17,7 +17,6 @@ internal static class Extensions
         services.AddDbContext<TerminalDbContext>(x =>
             x.UseNpgsql(postgresOptions.ConnectionString));
         services.AddScoped<IUnitOfWork, PostgresUnitOfWork>();
-
         services.TryDecorate(typeof(IRequestHandler<>), typeof(UnitOfWorkCommandHandlerDecorator<>));
     
         return services;
