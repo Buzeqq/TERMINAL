@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.Entities.Parameters;
 using Terminal.Backend.Core.Entities.ParameterValues;
-using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Infrastructure.DAL;
 

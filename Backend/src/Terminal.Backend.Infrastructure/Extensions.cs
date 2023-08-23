@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Terminal.Backend.Application.Abstractions;
 using Terminal.Backend.Infrastructure.DAL;
 using Terminal.Backend.Infrastructure.Exceptions;
 
@@ -11,7 +12,6 @@ public static class Extensions
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        var infrastructureAssembly = typeof(Extensions).Assembly;
         services.AddControllers();
         services.AddSingleton<ExceptionMiddleware>();
         services.AddHttpContextAccessor();
@@ -19,10 +19,12 @@ public static class Extensions
         services.AddSwaggerGen();
         services.AddCors();
         services.AddPostgres(configuration);
-        services.AddMediatR(cfg =>
-        {
-            cfg.RegisterServicesFromAssembly(infrastructureAssembly);
-        });
+
+        services.Scan(s => s.FromAssemblies(AssemblyReference.Assembly)
+            .AddClasses(c => c.AssignableTo(typeof(IQueryHandler<,>)))
+            .AsImplementedInterfaces()
+            .WithScopedLifetime());
+        
         return services;
     }
 

@@ -29,6 +29,7 @@
 
 
     <ItemGroup>
+      <Folder Include="DAL\Decorators\" />
       <Folder Include="DAL\Migrations\" />
     </ItemGroup>
 

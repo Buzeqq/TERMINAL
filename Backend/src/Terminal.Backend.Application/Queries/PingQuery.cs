@@ -1,5 +1,7 @@
-using MediatR;
+using Terminal.Backend.Application.Abstractions;
 
 namespace Terminal.Backend.Application.Queries;
 
-public class PingQuery : IRequest<string> { }
+public class PingQuery : IQuery<string>
+{
+}
