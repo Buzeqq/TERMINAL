@@ -17,21 +17,18 @@ internal sealed class ProjectRepository : IProjectRepository
     public async Task<IEnumerable<Project>> GetAllAsync(CancellationToken ct)
         => await _projects.ToListAsync(ct);
 
-    public Task<Project?> GetAsync(ProjectName name, CancellationToken ct)
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<Project?> GetAsync(ProjectName name, CancellationToken ct)
+        => await _projects.Where(p => p.Name == name).SingleOrDefaultAsync(ct);
 
-    public Task<Project?> GetAsync(ProjectId id, CancellationToken ct)
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<Project?> GetAsync(ProjectId id, CancellationToken ct)
+        => await _projects.FindAsync(id, ct);
 
     public async Task AddAsync(Project project, CancellationToken ct)
         => await _projects.AddAsync(project, ct);
 
     public Task UpdateAsync(Project project, CancellationToken ct)
     {
-        throw new NotImplementedException();
+        _projects.Update(project);
+        return Task.CompletedTask;
     }
 }

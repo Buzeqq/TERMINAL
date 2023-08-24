@@ -21,4 +21,14 @@ public sealed class Project
         Name = name;
         IsActive = isActive;
     }
+
+    public void ChangeProjectStatus(bool isActive)
+    {
+        if (IsActive == isActive)
+        {
+            return;
+        }
+
+        IsActive = isActive;
+    }
 }
