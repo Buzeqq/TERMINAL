@@ -30,6 +30,7 @@ var app = builder.Build();
 app.UseInfrastructure();
 app.UsePingEndpoints();
 app.UseProjectsEndpoints();
+app.UseTagEndpoints();
 app.Run();
 
 namespace Terminal.Backend.Api

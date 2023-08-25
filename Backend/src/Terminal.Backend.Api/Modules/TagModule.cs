@@ -1,0 +1,39 @@
+using Terminal.Backend.Application.Abstractions;
+using Terminal.Backend.Application.Commands;
+using Terminal.Backend.Application.DTO;
+using Terminal.Backend.Application.Queries;
+
+namespace Terminal.Backend.Api.Modules;
+
+public static class TagModule
+{
+    public static void UseTagEndpoints(this IEndpointRouteBuilder app)
+    {
+        // TODO: based on route/query parameter/command, fetch n most popular or all paginated 
+        app.MapGet("api/tags", async (
+                int count, 
+                IQueryHandler<GetMostPopularTagsQuery, IEnumerable<GetTagsDto>> handler, 
+                CancellationToken ct) 
+            => await handler.HandleAsync(new GetMostPopularTagsQuery { Count = count }, ct));
+        
+        app.MapPost("api/tags", async (
+                CreateTagCommand command, 
+                ICommandHandler<CreateTagCommand> handler, 
+                CancellationToken ct) =>
+            {
+                await handler.HandleAsync(command, ct);
+                return Results.Created("api/tags", null);
+            });
+
+        app.MapPatch("api/tags/{name}", async (
+            string name, 
+            ChangeTagStatusCommand command,
+            ICommandHandler<ChangeTagStatusCommand> handler,
+            CancellationToken ct) =>
+        {
+            command = command with { Name = name };
+            await handler.HandleAsync(command, ct);
+            return Results.Ok();
+        });
+    }
+}

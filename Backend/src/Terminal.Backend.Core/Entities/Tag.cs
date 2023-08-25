@@ -12,4 +12,14 @@ public sealed class Tag
         Name = name;
         IsActive = isActive;
     }
+
+    public void ChangeStatus(bool status)
+    {
+        if (status == IsActive)
+        {
+            return;
+        }
+
+        IsActive = status;
+    }
 }

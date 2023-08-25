@@ -20,6 +20,7 @@ internal static class Extensions
             x.UseNpgsql(postgresOptions.ConnectionString));
         services.AddScoped<IUnitOfWork, PostgresUnitOfWork>();
         services.AddScoped<IProjectRepository, ProjectRepository>();
+        services.AddScoped<ITagRepository, TagRepository>();
         services.Decorate(typeof(ICommandHandler<>), typeof(UnitOfWorkCommandHandlerDecorator<>));
     
         return services;

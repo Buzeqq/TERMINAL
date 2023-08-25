@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Application.Abstractions;
 using Terminal.Backend.Application.Commands;
 using Terminal.Backend.Application.DTO;
 using Terminal.Backend.Application.Queries;
+using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Api.Modules;
@@ -15,6 +15,15 @@ public static class ProjectsModule
                     IEnumerable<GetProjectsDto>> handler, 
                     CancellationToken ct)
                 => Results.Ok(await handler.HandleAsync(new GetProjectsQuery(), ct)));
+
+        app.MapGet("api/projects/{id:guid}", async (
+            Guid id,
+            IQueryHandler<GetProjectQuery, Project?> handler, 
+            CancellationToken ct) =>
+        {
+            var project = await handler.HandleAsync(new GetProjectQuery { ProjectId = id }, ct);
+            return project is null ? Results.NotFound() : Results.Ok(project);
+        });
 
         app.MapPost("api/projects", async (
             CreateProjectCommand command, 

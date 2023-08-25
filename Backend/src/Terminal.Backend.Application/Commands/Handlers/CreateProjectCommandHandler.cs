@@ -5,11 +5,11 @@ using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Commands.Handlers;
 
-public sealed class CreateProjectHandler : ICommandHandler<CreateProjectCommand>
+public sealed class CreateProjectCommandHandler : ICommandHandler<CreateProjectCommand>
 {
     private readonly IProjectRepository _projectRepository;
 
-    public CreateProjectHandler(IProjectRepository projectRepository)
+    public CreateProjectCommandHandler(IProjectRepository projectRepository)
     {
         _projectRepository = projectRepository;
     }

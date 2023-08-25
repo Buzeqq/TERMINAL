@@ -3,11 +3,11 @@ using Terminal.Backend.Core.Repositories;
 
 namespace Terminal.Backend.Application.Commands.Handlers;
 
-public sealed class ChangeProjectStatusHandler : ICommandHandler<ChangeProjectStatusCommand>
+public sealed class ChangeProjectStatusCommandHandler : ICommandHandler<ChangeProjectStatusCommand>
 {
     private readonly IProjectRepository _projectRepository;
 
-    public ChangeProjectStatusHandler(IProjectRepository projectRepository)
+    public ChangeProjectStatusCommandHandler(IProjectRepository projectRepository)
     {
         _projectRepository = projectRepository;
     }
