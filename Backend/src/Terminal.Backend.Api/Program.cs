@@ -31,6 +31,7 @@ app.UseInfrastructure();
 app.UsePingEndpoints();
 app.UseProjectsEndpoints();
 app.UseTagEndpoints();
+app.UseParametersModule();
 app.Run();
 
 namespace Terminal.Backend.Api

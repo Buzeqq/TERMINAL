@@ -21,7 +21,7 @@ internal sealed class ProjectRepository : IProjectRepository
         => await _projects.Where(p => p.Name == name).SingleOrDefaultAsync(ct);
 
     public async Task<Project?> GetAsync(ProjectId id, CancellationToken ct)
-        => await _projects.FindAsync(id, ct);
+        => await _projects.SingleOrDefaultAsync(p => p.Id == id, ct);
 
     public async Task AddAsync(Project project, CancellationToken ct)
         => await _projects.AddAsync(project, ct);

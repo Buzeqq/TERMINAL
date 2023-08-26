@@ -24,7 +24,7 @@ public static class ProjectsModule
             var project = await handler.HandleAsync(new GetProjectQuery { ProjectId = id }, ct);
             return project is null ? Results.NotFound() : Results.Ok(project);
         });
-
+ 
         app.MapPost("api/projects", async (
             CreateProjectCommand command, 
             ICommandHandler<CreateProjectCommand> handler, 
@@ -35,13 +35,33 @@ public static class ProjectsModule
             return Results.Created("api/projects", new { command.Id });
         });
 
-        app.MapPatch("api/projects/{id:guid}", async (
+        // app.MapPatch("api/projects/{id:guid}", async (
+        //     Guid id,
+        //     ChangeProjectStatusCommand command,
+        //     ICommandHandler<ChangeProjectStatusCommand> handler,
+        //     CancellationToken ct) =>
+        // {
+        //     command = command with { ProjectId = id };
+        //     await handler.HandleAsync(command, ct);
+        //     return Results.Ok();
+        // });
+        
+        app.MapPost("api/projects/{id:guid}/activate", async (
             Guid id,
-            ChangeProjectStatusCommand command,
             ICommandHandler<ChangeProjectStatusCommand> handler,
             CancellationToken ct) =>
         {
-            command = command with { ProjectId = id };
+            var command = new ChangeProjectStatusCommand(id, true);
+            await handler.HandleAsync(command, ct);
+            return Results.Ok();
+        });
+        
+        app.MapPost("api/projects/{id:guid}/deactivate", async (
+            Guid id,
+            ICommandHandler<ChangeProjectStatusCommand> handler,
+            CancellationToken ct) =>
+        {
+            var command = new ChangeProjectStatusCommand(id, false);
             await handler.HandleAsync(command, ct);
             return Results.Ok();
         });

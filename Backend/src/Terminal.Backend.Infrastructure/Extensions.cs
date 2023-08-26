@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Terminal.Backend.Application.Abstractions;
 using Terminal.Backend.Infrastructure.DAL;
-using Terminal.Backend.Infrastructure.Exceptions;
+using Terminal.Backend.Infrastructure.Middleware;
 
 namespace Terminal.Backend.Infrastructure;
 

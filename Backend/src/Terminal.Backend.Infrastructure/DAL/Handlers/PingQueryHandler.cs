@@ -3,7 +3,7 @@ using Terminal.Backend.Application.Queries;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 
-public class PingQueryHandler : IQueryHandler<PingQuery, string>
+internal sealed class PingQueryHandler : IQueryHandler<PingQuery, string>
 {
     public Task<string> HandleAsync(PingQuery request, CancellationToken cancellationToken)
     {

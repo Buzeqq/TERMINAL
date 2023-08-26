@@ -3,6 +3,4 @@ using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Commands;
 
-public sealed record ChangeTagStatusCommand(
-    [property: System.Text.Json.Serialization.JsonIgnore] TagName Name,
-    bool IsActive) : ICommand;
+public sealed record ChangeTagStatusCommand(TagName Name, bool IsActive) : ICommand;

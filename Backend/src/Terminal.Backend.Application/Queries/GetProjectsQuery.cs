@@ -3,6 +3,6 @@ using Terminal.Backend.Application.DTO;
 
 namespace Terminal.Backend.Application.Queries;
 
-public class GetProjectsQuery : IQuery<IEnumerable<GetProjectsDto>>
+public sealed class GetProjectsQuery : IQuery<IEnumerable<GetProjectsDto>>
 {
 }

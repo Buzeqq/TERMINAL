@@ -25,13 +25,33 @@ public static class TagModule
                 return Results.Created("api/tags", null);
             });
 
-        app.MapPatch("api/tags/{name}", async (
-            string name, 
-            ChangeTagStatusCommand command,
+        // app.MapPatch("api/tags/{name}", async (
+        //     string name, 
+        //     ChangeTagStatusCommand command,
+        //     ICommandHandler<ChangeTagStatusCommand> handler,
+        //     CancellationToken ct) =>
+        // {
+        //     command = command with { Name = name };
+        //     await handler.HandleAsync(command, ct);
+        //     return Results.Ok();
+        // });
+        
+        app.MapPost("api/tags/{name}/activate", async (
+            string name,
             ICommandHandler<ChangeTagStatusCommand> handler,
             CancellationToken ct) =>
         {
-            command = command with { Name = name };
+            var command = new ChangeTagStatusCommand(name, true);
+            await handler.HandleAsync(command, ct);
+            return Results.Ok();
+        });
+        
+        app.MapPost("api/tags/{name}/deactivate", async (
+            string name,
+            ICommandHandler<ChangeTagStatusCommand> handler,
+            CancellationToken ct) =>
+        {
+            var command = new ChangeTagStatusCommand(name, false);
             await handler.HandleAsync(command, ct);
             return Results.Ok();
         });

@@ -3,7 +3,7 @@ using Terminal.Backend.Core.Repositories;
 
 namespace Terminal.Backend.Application.Commands.Handlers;
 
-public class ChangeTagStatusCommandHandler : ICommandHandler<ChangeTagStatusCommand>
+public sealed class ChangeTagStatusCommandHandler : ICommandHandler<ChangeTagStatusCommand>
 {
     private readonly ITagRepository _tagRepository;
 
