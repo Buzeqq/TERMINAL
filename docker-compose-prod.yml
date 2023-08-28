@@ -30,4 +30,4 @@ services:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
     volumes:
-       - ./data:/var/lib/postgresql/data
+       - ~/terminal-data:/var/lib/postgresql/data
