@@ -13,6 +13,7 @@ services:
     build:
       context: ./Backend/src
     environment:
+      - ASPNETCORE_ENVIRONMENT="Staging"
       - Postgres__ConnectionString
     depends_on:
       - terminal.postgres
