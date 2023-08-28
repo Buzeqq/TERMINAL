@@ -114,7 +114,9 @@ jobs:
         with:
           dotnet-version: 7.0.x
       - run: dotnet tool update --global dotnet-ef
-      - run: dotnet ef database update -s src/Terminal.Backend.Api/Terminal.Backend.Api.csproj -p src/Terminal.Backend.Infrastructure/Terminal.Backend.Infrastructure.csproj --
+      - name: Update database
+        run: dotnet ef database update -s src/Terminal.Backend.Api/Terminal.Backend.Api.csproj -p src/Terminal.Backend.Infrastructure/Terminal.Backend.Infrastructure.csproj --
+        working-directory: ./Backend
       - run: docker compose --env-file=/home/ubuntu/terminal-secrets/.env -f docker-compose-prod.yml up --build -d
 
 
