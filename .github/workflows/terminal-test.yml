@@ -113,12 +113,11 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 7.0.x
+      - run: docker compose --env-file=/home/ubuntu/terminal-secrets/.env -f docker-compose-prod.yml up --build -d
       - run: dotnet tool update --global dotnet-ef
       - name: Update database
         run: ~/.dotnet/tools/dotnet-ef database update -s src/Terminal.Backend.Api/Terminal.Backend.Api.csproj -p src/Terminal.Backend.Infrastructure/Terminal.Backend.Infrastructure.csproj --
         working-directory: ./Backend
-      - run: docker compose --env-file=/home/ubuntu/terminal-secrets/.env -f docker-compose-prod.yml up --build -d
-
 
       # - run: dotnet tool update -g docfx
       # - run: ~/.dotnet/tools/docfx docfx_project/docfx.json
