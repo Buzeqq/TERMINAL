@@ -12,7 +12,7 @@ public static class TagModule
         // TODO: based on route/query parameter/command, fetch n most popular or all paginated 
         app.MapGet("api/tags", async (
                 int count, 
-                IQueryHandler<GetMostPopularTagsQuery, IEnumerable<GetTagsDto>> handler, 
+                IQueryHandler<GetMostPopularTagsQuery, GetTagsDto> handler, 
                 CancellationToken ct) 
             => await handler.HandleAsync(new GetMostPopularTagsQuery { Count = count }, ct));
         

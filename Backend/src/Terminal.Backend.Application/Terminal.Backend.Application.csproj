@@ -6,7 +6,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="MediatR" Version="12.1.1" />
       <PackageReference Include="Scrutor" Version="4.2.2" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0"/>
     </ItemGroup>

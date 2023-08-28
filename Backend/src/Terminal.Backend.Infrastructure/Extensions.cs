@@ -31,7 +31,7 @@ public static class Extensions
     public static WebApplication UseInfrastructure(this WebApplication app)
     {
         app.UseMiddleware<ExceptionMiddleware>();
-        if (app.Environment.IsDevelopment())
+        if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
         {
             app.UseSwagger();
             app.UseSwaggerUI();

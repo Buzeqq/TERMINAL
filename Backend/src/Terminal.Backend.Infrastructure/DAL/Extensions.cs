@@ -21,6 +21,7 @@ internal static class Extensions
         services.AddScoped<IUnitOfWork, PostgresUnitOfWork>();
         services.AddScoped<IProjectRepository, ProjectRepository>();
         services.AddScoped<ITagRepository, TagRepository>();
+        services.AddScoped<IParameterRepository, ParameterRepository>();
         services.Decorate(typeof(ICommandHandler<>), typeof(UnitOfWorkCommandHandlerDecorator<>));
     
         return services;

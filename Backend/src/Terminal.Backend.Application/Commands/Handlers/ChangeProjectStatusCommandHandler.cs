@@ -12,16 +12,16 @@ public sealed class ChangeProjectStatusCommandHandler : ICommandHandler<ChangePr
         _projectRepository = projectRepository;
     }
 
-    public async Task HandleAsync(ChangeProjectStatusCommand command, CancellationToken cancellationToken)
+    public async Task HandleAsync(ChangeProjectStatusCommand command, CancellationToken ct)
     {
         var (projectId, isActive) = command;
-        var project = await _projectRepository.GetAsync(projectId, cancellationToken);
+        var project = await _projectRepository.GetAsync(projectId, ct);
         if (project is null || project.IsActive == isActive)
         {
             return;
         }
 
         project.ChangeProjectStatus(isActive);
-        await _projectRepository.UpdateAsync(project, cancellationToken);
+        await _projectRepository.UpdateAsync(project, ct);
     }
 }

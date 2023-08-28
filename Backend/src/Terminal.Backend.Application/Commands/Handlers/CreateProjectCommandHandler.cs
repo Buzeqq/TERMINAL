@@ -14,10 +14,10 @@ public sealed class CreateProjectCommandHandler : ICommandHandler<CreateProjectC
         _projectRepository = projectRepository;
     }
 
-    public async Task HandleAsync(CreateProjectCommand request, CancellationToken cancellationToken)
+    public async Task HandleAsync(CreateProjectCommand request, CancellationToken ct)
     {
         var newProjectId = ProjectId.Create();
-        var newProject = new Project(newProjectId, request.ProjectName);
-        await _projectRepository.AddAsync(newProject, cancellationToken);
+        var newProject = new Project(newProjectId, request.Name);
+        await _projectRepository.AddAsync(newProject, ct);
     }
 }

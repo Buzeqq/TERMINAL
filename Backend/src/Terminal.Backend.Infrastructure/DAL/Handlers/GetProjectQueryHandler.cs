@@ -14,11 +14,11 @@ internal sealed class GetProjectQueryHandler : IQueryHandler<GetProjectQuery, Pr
         _projects = dbContext.Projects;
     }
     
-    public async Task<Project?> HandleAsync(GetProjectQuery query, CancellationToken cancellationToken)
+    public async Task<Project?> HandleAsync(GetProjectQuery query, CancellationToken ct)
     {
         var projectId = query.ProjectId;
         var project = await _projects.AsNoTracking()
-            .SingleOrDefaultAsync(p => p.Id == projectId, cancellationToken);
+            .SingleOrDefaultAsync(p => p.Id == projectId, ct);
 
         return project;
     }

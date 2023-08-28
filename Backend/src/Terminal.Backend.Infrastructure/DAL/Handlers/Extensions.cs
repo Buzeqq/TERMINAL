@@ -11,10 +11,4 @@ public static class Extensions
             Id = entity.Id,
             Name = entity.Name
         };
-
-    public static GetTagsDto AsDto(this Tag entity)
-        => new()
-        {
-            Name = entity.Name
-        };
 }

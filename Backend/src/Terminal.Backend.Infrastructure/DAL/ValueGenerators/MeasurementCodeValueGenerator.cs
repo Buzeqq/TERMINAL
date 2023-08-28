@@ -27,11 +27,11 @@ internal sealed class MeasurementCodeValueGenerator : ValueGenerator<Measurement
         return lastCodeNumber is null ? new MeasurementCode(InitialNumberValue) : new MeasurementCode((ulong)(lastCodeNumber + 1));
     }
 
-    public override async ValueTask<MeasurementCode> NextAsync(EntityEntry entry, CancellationToken cancellationToken = default)
+    public override async ValueTask<MeasurementCode> NextAsync(EntityEntry entry, CancellationToken ct = default)
     {
         var lastCodeNumber = (await _dbContext.Measurements
             .Include(measurement => measurement.Code)
-            .LastOrDefaultAsync(cancellationToken))
+            .LastOrDefaultAsync(ct))
             ?.Code.Number;
         
         return lastCodeNumber is null ? new MeasurementCode(InitialNumberValue) : new MeasurementCode((ulong)(lastCodeNumber + 1));

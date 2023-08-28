@@ -15,7 +15,7 @@ internal sealed class ProjectRepository : IProjectRepository
     }
 
     public async Task<IEnumerable<Project>> GetAllAsync(CancellationToken ct)
-        => await _projects.ToListAsync(ct);
+        => await _projects.Where(p => p.IsActive).ToListAsync(ct);
 
     public async Task<Project?> GetAsync(ProjectName name, CancellationToken ct)
         => await _projects.Where(p => p.Name == name).SingleOrDefaultAsync(ct);

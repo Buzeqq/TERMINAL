@@ -12,11 +12,11 @@ internal sealed class GetProjectsQueryHandler : IQueryHandler<GetProjectsQuery, 
     public GetProjectsQueryHandler(TerminalDbContext dbContext) => _dbContext = dbContext;
 
     public async Task<IEnumerable<GetProjectsDto>> HandleAsync(GetProjectsQuery request,
-        CancellationToken cancellationToken)
+        CancellationToken ct)
         => await _dbContext
             .Projects
             .AsNoTracking()
             .Where(x => x.IsActive)
             .Select(x => x.AsDto())
-            .ToListAsync(cancellationToken);
+            .ToListAsync(ct);
 }

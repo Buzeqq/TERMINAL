@@ -14,8 +14,8 @@ where TCommand : class, ICommand
         _unitOfWork = unitOfWork;
     }
     
-    public async Task HandleAsync(TCommand command, CancellationToken cancellationToken)
+    public async Task HandleAsync(TCommand command, CancellationToken ct)
     {
-        await _unitOfWork.ExecuteAsync(() => _commandHandler.HandleAsync(command, cancellationToken));
+        await _unitOfWork.ExecuteAsync(() => _commandHandler.HandleAsync(command, ct));
     }
 }

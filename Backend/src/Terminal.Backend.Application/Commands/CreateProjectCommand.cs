@@ -4,4 +4,4 @@ namespace Terminal.Backend.Application.Commands;
 
 public sealed record CreateProjectCommand(
     [property: System.Text.Json.Serialization.JsonIgnore] Guid Id, 
-    string ProjectName) : ICommand;
+    string Name) : ICommand;
