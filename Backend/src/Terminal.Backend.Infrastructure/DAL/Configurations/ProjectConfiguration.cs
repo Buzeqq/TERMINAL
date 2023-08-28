@@ -14,5 +14,6 @@ internal sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
         builder.Property(s => s.Id)
             .HasConversion(i => i.Value,
                 i => new ProjectId(i));
+        builder.HasIndex(p => p.Name).IsUnique();
     }
 }

@@ -23,6 +23,21 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("MeasurementTag", b =>
+                {
+                    b.Property<Guid>("MeasurementId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("TagsName")
+                        .HasColumnType("text");
+
+                    b.HasKey("MeasurementId", "TagsName");
+
+                    b.HasIndex("TagsName");
+
+                    b.ToTable("MeasurementTag");
+                });
+
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Measurement", b =>
                 {
                     b.Property<Guid>("Id")
@@ -118,6 +133,9 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Projects");
                 });
 
@@ -167,12 +185,7 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
-                    b.Property<Guid?>("MeasurementId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Name");
-
-                    b.HasIndex("MeasurementId");
 
                     b.ToTable("Tags");
                 });
@@ -257,6 +270,21 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                     b.HasDiscriminator().HasValue("IntegerParameter");
                 });
 
+            modelBuilder.Entity("MeasurementTag", b =>
+                {
+                    b.HasOne("Terminal.Backend.Core.Entities.Measurement", null)
+                        .WithMany()
+                        .HasForeignKey("MeasurementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Terminal.Backend.Core.Entities.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Measurement", b =>
                 {
                     b.HasOne("Terminal.Backend.Core.Entities.Project", null)
@@ -302,18 +330,9 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Terminal.Backend.Core.Entities.Tag", b =>
-                {
-                    b.HasOne("Terminal.Backend.Core.Entities.Measurement", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("MeasurementId");
-                });
-
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Measurement", b =>
                 {
                     b.Navigation("Steps");
-
-                    b.Navigation("Tags");
                 });
 
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Project", b =>

@@ -1,5 +1,5 @@
 using Serilog;
-using Terminal.Backend.Api.Ping;
+using Terminal.Backend.Api.Modules;
 using Terminal.Backend.Application;
 using Terminal.Backend.Core;
 using Terminal.Backend.Infrastructure;
@@ -29,6 +29,9 @@ builder.Host.UseSerilog((context, loggerConfiguration) =>
 var app = builder.Build();
 app.UseInfrastructure();
 app.UsePingEndpoints();
+app.UseProjectsEndpoints();
+app.UseTagEndpoints();
+app.UseParametersModule();
 app.Run();
 
 namespace Terminal.Backend.Api

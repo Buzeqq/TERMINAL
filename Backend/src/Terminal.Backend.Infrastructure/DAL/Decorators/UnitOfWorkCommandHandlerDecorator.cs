@@ -1,21 +1,21 @@
-using MediatR;
+using Terminal.Backend.Application.Abstractions;
 
 namespace Terminal.Backend.Infrastructure.DAL.Decorators;
 
-internal sealed class UnitOfWorkCommandHandlerDecorator<TCommand> : IRequestHandler<TCommand>
-where TCommand : class, IRequest
+internal sealed class UnitOfWorkCommandHandlerDecorator<TCommand> : ICommandHandler<TCommand>
+where TCommand : class, ICommand
 {
-    private readonly IRequestHandler<TCommand> _commandHandler;
+    private readonly ICommandHandler<TCommand> _commandHandler;
     private readonly IUnitOfWork _unitOfWork;
 
-    public UnitOfWorkCommandHandlerDecorator(IRequestHandler<TCommand> commandHandler, IUnitOfWork unitOfWork)
+    public UnitOfWorkCommandHandlerDecorator(ICommandHandler<TCommand> commandHandler, IUnitOfWork unitOfWork)
     {
         _commandHandler = commandHandler;
         _unitOfWork = unitOfWork;
     }
     
-    public async Task Handle(TCommand request, CancellationToken cancellationToken)
+    public async Task HandleAsync(TCommand command, CancellationToken ct)
     {
-        await _unitOfWork.ExecuteAsync(() => _commandHandler.Handle(request, cancellationToken));
+        await _unitOfWork.ExecuteAsync(() => _commandHandler.HandleAsync(command, ct));
     }
 }

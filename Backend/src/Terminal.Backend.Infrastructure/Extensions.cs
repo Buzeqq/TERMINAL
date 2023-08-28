@@ -2,8 +2,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Terminal.Backend.Application.Abstractions;
 using Terminal.Backend.Infrastructure.DAL;
-using Terminal.Backend.Infrastructure.Exceptions;
+using Terminal.Backend.Infrastructure.Middleware;
 
 namespace Terminal.Backend.Infrastructure;
 
@@ -18,13 +19,19 @@ public static class Extensions
         services.AddSwaggerGen();
         services.AddCors();
         services.AddPostgres(configuration);
+
+        services.Scan(s => s.FromAssemblies(AssemblyReference.Assembly)
+            .AddClasses(c => c.AssignableTo(typeof(IQueryHandler<,>)))
+            .AsImplementedInterfaces()
+            .WithScopedLifetime());
+        
         return services;
     }
 
     public static WebApplication UseInfrastructure(this WebApplication app)
     {
         app.UseMiddleware<ExceptionMiddleware>();
-        if (app.Environment.IsDevelopment())
+        if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
         {
             app.UseSwagger();
             app.UseSwaggerUI();

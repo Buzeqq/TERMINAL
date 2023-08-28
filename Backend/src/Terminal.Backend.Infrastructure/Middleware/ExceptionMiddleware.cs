@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Terminal.Backend.Core.Exceptions;
 
-namespace Terminal.Backend.Infrastructure.Exceptions;
+namespace Terminal.Backend.Infrastructure.Middleware;
 
 internal sealed class ExceptionMiddleware : IMiddleware
 {
@@ -26,7 +26,7 @@ internal sealed class ExceptionMiddleware : IMiddleware
         }
     }
 
-    private async Task HandleErrorAsync(HttpContext context, Exception exception)
+    private static async Task HandleErrorAsync(HttpContext context, Exception exception)
     {
         var (statusCode, error) = exception switch
         {
