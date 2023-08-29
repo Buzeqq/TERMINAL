@@ -32,7 +32,7 @@ public static class Extensions
     public static WebApplication UseInfrastructure(this WebApplication app)
     {
         app.UseMiddleware<ExceptionMiddleware>();
-        if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
+        if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
@@ -46,10 +46,12 @@ public static class Extensions
         // app.UseAuthorization();
         app.MapControllers();
 
+        if (!app.Environment.IsProduction()) return app;
+        
         using var scope = app.Services.CreateScope();
         using var dbContext = scope.ServiceProvider.GetRequiredService<TerminalDbContext>();
         dbContext.Database.Migrate();
-        
+
         return app;
     }
 
