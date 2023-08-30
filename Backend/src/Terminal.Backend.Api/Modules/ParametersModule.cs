@@ -45,5 +45,25 @@ public static class ParametersModule
             var parameter = await handler.HandleAsync(new GetParameterQuery { Name = name }, ct);
             return parameter is null ? Results.NotFound() : Results.Ok(parameter);
         });
+        
+        app.MapPost("api/parameters/{name}/activate", async (
+            string name,
+            ICommandHandler<ChangeParameterStatusCommand> handler,
+            CancellationToken ct) =>
+        {
+            var command = new ChangeParameterStatusCommand(name, true);
+            await handler.HandleAsync(command, ct);
+            return Results.Ok();
+        });
+        
+        app.MapPost("api/parameters/{name}/deactivate", async (
+            string name,
+            ICommandHandler<ChangeParameterStatusCommand> handler,
+            CancellationToken ct) =>
+        {
+            var command = new ChangeParameterStatusCommand(name, false);
+            await handler.HandleAsync(command, ct);
+            return Results.Ok();
+        });
     }
 }

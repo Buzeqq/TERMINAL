@@ -1,4 +1,5 @@
 using Terminal.Backend.Application.Abstractions;
+using Terminal.Backend.Core.Exceptions;
 using Terminal.Backend.Core.Repositories;
 
 namespace Terminal.Backend.Application.Commands.Handlers;
@@ -16,12 +17,12 @@ public sealed class ChangeProjectStatusCommandHandler : ICommandHandler<ChangePr
     {
         var (projectId, isActive) = command;
         var project = await _projectRepository.GetAsync(projectId, ct);
-        if (project is null || project.IsActive == isActive)
+        if (project is null)
         {
-            return;
+            throw new ProjectNotFoundException(projectId);
         }
 
-        project.ChangeProjectStatus(isActive);
+        project.ChangeStatus(isActive);
         await _projectRepository.UpdateAsync(project, ct);
     }
 }
