@@ -31,10 +31,11 @@ app.UseInfrastructure();
 app.UsePingEndpoints();
 app.UseProjectsEndpoints();
 app.UseTagEndpoints();
-app.UseParametersModule();
+app.UseParametersEndpoints();
+app.UseMeasurementsEndpoints();
 app.Run();
 
 namespace Terminal.Backend.Api
 {
-    public partial class Program { }
+    public class Program { }
 }

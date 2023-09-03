@@ -4,7 +4,7 @@ using Terminal.Backend.Core.Repositories;
 
 namespace Terminal.Backend.Application.Commands.Handlers;
 
-public sealed class ChangeProjectStatusCommandHandler : ICommandHandler<ChangeProjectStatusCommand>
+internal sealed class ChangeProjectStatusCommandHandler : ICommandHandler<ChangeProjectStatusCommand>
 {
     private readonly IProjectRepository _projectRepository;
 

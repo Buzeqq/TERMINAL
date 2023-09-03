@@ -5,7 +5,7 @@ using Terminal.Backend.Application.Queries;
 
 namespace Terminal.Backend.Api.Modules;
 
-public static class TagModule
+public static class TagsModule
 {
     public static void UseTagEndpoints(this IEndpointRouteBuilder app)
     {

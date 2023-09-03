@@ -13,4 +13,8 @@
     <ItemGroup>
       <ProjectReference Include="..\Terminal.Backend.Core\Terminal.Backend.Core.csproj" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="Services\" />
+    </ItemGroup>
 </Project>

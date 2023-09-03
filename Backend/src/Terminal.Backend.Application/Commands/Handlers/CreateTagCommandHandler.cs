@@ -4,7 +4,7 @@ using Terminal.Backend.Core.Repositories;
 
 namespace Terminal.Backend.Application.Commands.Handlers;
 
-public sealed class CreateTagCommandHandler : ICommandHandler<CreateTagCommand>
+internal sealed class CreateTagCommandHandler : ICommandHandler<CreateTagCommand>
 {
     private readonly ITagRepository _tagRepository;
 

@@ -4,7 +4,7 @@ using Terminal.Backend.Core.Repositories;
 
 namespace Terminal.Backend.Application.Commands.Handlers;
 
-public sealed class ChangeTagStatusCommandHandler : ICommandHandler<ChangeTagStatusCommand>
+internal sealed class ChangeTagStatusCommandHandler : ICommandHandler<ChangeTagStatusCommand>
 {
     private readonly ITagRepository _tagRepository;
 

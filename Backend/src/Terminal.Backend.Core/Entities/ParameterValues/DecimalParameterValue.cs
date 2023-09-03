@@ -1,4 +1,5 @@
 using Terminal.Backend.Core.Entities.Parameters;
+using Terminal.Backend.Core.Exceptions;
 using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Core.Entities.ParameterValues;
@@ -7,8 +8,13 @@ public sealed class DecimalParameterValue : ParameterValue
 {
     public decimal Value { get; private set; }
 
-    public DecimalParameterValue(ParameterValueId id, Parameter parameter, decimal value) : base(id, parameter)
+    public DecimalParameterValue(DecimalParameter parameter, decimal value) : base(ParameterValueId.Create(), parameter)
     {
+        if (value % parameter.Step != 0)
+        {
+            throw new DecimalParameterValueNotValidException(parameter, value);
+        }
+        
         Value = value;
     }
 

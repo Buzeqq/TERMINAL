@@ -8,7 +8,7 @@ namespace Terminal.Backend.Api.Modules;
 
 public static class ParametersModule
 {
-    public static void UseParametersModule(this IEndpointRouteBuilder app)
+    public static void UseParametersEndpoints(this IEndpointRouteBuilder app)
     {
         app.MapPost("api/parameters/define/text", async (
             CreateTextParameterDto parameterDto, 

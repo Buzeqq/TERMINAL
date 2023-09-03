@@ -12,12 +12,13 @@ public sealed class Measurement
     public DateTime CreatedAtUtc { get; private set; }
     public Comment Comment { get; private set; }
 
-    public Measurement(MeasurementId id, MeasurementCode code, Recipe? recipe, Comment comment)
+    public Measurement(Recipe? recipe, Comment comment, ICollection<Step> steps, ICollection<Tag> tags)
     {
-        Id = id;
-        Code = code;
+        Id = MeasurementId.Create();
         Recipe = recipe;
         Comment = comment;
+        Steps = steps;
+        Tags = tags;
         CreatedAtUtc = DateTime.UtcNow;
     }
 
