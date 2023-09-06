@@ -13,13 +13,8 @@ public sealed class Tag
         IsActive = isActive;
     }
 
-    public void ChangeStatus(bool status)
+    public void ChangeStatus(bool isActive)
     {
-        if (status == IsActive)
-        {
-            return;
-        }
-
-        IsActive = status;
+        IsActive = isActive;
     }
 }

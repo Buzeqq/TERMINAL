@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Terminal.Backend.Core.Entities.Parameters;
@@ -12,8 +11,8 @@ internal sealed class TextParameterConfiguration : IEntityTypeConfiguration<Text
         builder.Property(p => p.AllowedValues)
             .HasColumnName($"{nameof(TextParameter)}_AllowedValues");
 
-        builder.Property(p => p.AllowedValues)
-            .HasConversion(x => JsonSerializer.Serialize(x, JsonSerializerOptions.Default),
-            x => JsonSerializer.Deserialize<ICollection<string>>(x, JsonSerializerOptions.Default)!);
+        // builder.Property(p => p.AllowedValues)
+        //     .HasConversion(x => JsonSerializer.Serialize(x, JsonSerializerOptions.Default),
+        //     x => JsonSerializer.Deserialize<List<string>>(x, JsonSerializerOptions.Default)!);
     }
 }

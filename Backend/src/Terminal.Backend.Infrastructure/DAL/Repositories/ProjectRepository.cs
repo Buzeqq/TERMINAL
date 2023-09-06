@@ -14,14 +14,8 @@ internal sealed class ProjectRepository : IProjectRepository
         _projects = dbContext.Projects;
     }
 
-    public async Task<IEnumerable<Project>> GetAllAsync(CancellationToken ct)
-        => await _projects.Where(p => p.IsActive).ToListAsync(ct);
-
-    public async Task<Project?> GetAsync(ProjectName name, CancellationToken ct)
-        => await _projects.Where(p => p.Name == name).SingleOrDefaultAsync(ct);
-
-    public async Task<Project?> GetAsync(ProjectId id, CancellationToken ct)
-        => await _projects.SingleOrDefaultAsync(p => p.Id == id, ct);
+    public Task<Project?> GetAsync(ProjectId id, CancellationToken ct)
+        => _projects.SingleOrDefaultAsync(p => p.Id == id, ct);
 
     public async Task AddAsync(Project project, CancellationToken ct)
         => await _projects.AddAsync(project, ct);

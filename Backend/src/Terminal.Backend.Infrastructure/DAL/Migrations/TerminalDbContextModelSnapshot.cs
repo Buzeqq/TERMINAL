@@ -165,7 +165,7 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                     b.Property<Guid>("MeasurementId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("RecipeId")
+                    b.Property<Guid?>("RecipeId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -323,11 +323,11 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Terminal.Backend.Core.Entities.Recipe", null)
+                    b.HasOne("Terminal.Backend.Core.Entities.Recipe", "Recipe")
                         .WithMany("Steps")
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RecipeId");
+
+                    b.Navigation("Recipe");
                 });
 
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Measurement", b =>

@@ -22,12 +22,8 @@ public sealed class Project
         IsActive = isActive;
     }
 
-    public void ChangeProjectStatus(bool isActive)
+    public void ChangeStatus(bool isActive)
     {
-        if (IsActive == isActive)
-        {
-            return;
-        }
 
         IsActive = isActive;
     }

@@ -17,4 +17,9 @@ public abstract class Parameter
         Name = name;
         IsActive = isActive;
     }
+
+    public void ChangeStatus(bool isActive)
+    {
+        IsActive = isActive;
+    }
 }

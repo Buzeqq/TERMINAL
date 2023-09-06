@@ -5,7 +5,7 @@ using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Commands.Handlers;
 
-public sealed class CreateProjectCommandHandler : ICommandHandler<CreateProjectCommand>
+internal sealed class CreateProjectCommandHandler : ICommandHandler<CreateProjectCommand>
 {
     private readonly IProjectRepository _projectRepository;
 

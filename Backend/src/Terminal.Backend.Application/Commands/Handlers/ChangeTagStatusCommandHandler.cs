@@ -1,9 +1,10 @@
 using Terminal.Backend.Application.Abstractions;
+using Terminal.Backend.Core.Exceptions;
 using Terminal.Backend.Core.Repositories;
 
 namespace Terminal.Backend.Application.Commands.Handlers;
 
-public sealed class ChangeTagStatusCommandHandler : ICommandHandler<ChangeTagStatusCommand>
+internal sealed class ChangeTagStatusCommandHandler : ICommandHandler<ChangeTagStatusCommand>
 {
     private readonly ITagRepository _tagRepository;
 
@@ -19,10 +20,10 @@ public sealed class ChangeTagStatusCommandHandler : ICommandHandler<ChangeTagSta
         var tag = await _tagRepository.GetAsync(name, ct);
         if (tag is null)
         {
-            return;
+            throw new TagNotFoundException(name);
         }
 
         tag.ChangeStatus(status);
-        _tagRepository.UpdateAsync(tag);
+        await _tagRepository.UpdateAsync(tag);
     }
 }
