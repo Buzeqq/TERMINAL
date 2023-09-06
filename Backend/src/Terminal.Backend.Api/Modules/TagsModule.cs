@@ -2,6 +2,7 @@ using Terminal.Backend.Application.Abstractions;
 using Terminal.Backend.Application.Commands;
 using Terminal.Backend.Application.DTO;
 using Terminal.Backend.Application.Queries;
+using Terminal.Backend.Core.Entities;
 
 namespace Terminal.Backend.Api.Modules;
 
@@ -10,11 +11,15 @@ public static class TagsModule
     public static void UseTagEndpoints(this IEndpointRouteBuilder app)
     {
         // TODO: based on route/query parameter/command, fetch n most popular or all paginated 
+        // app.MapGet("api/tags", async (
+        //         int count, 
+        //         IQueryHandler<GetMostPopularTagsQuery, GetTagsDto> handler, 
+        //         CancellationToken ct) 
+        //     => await handler.HandleAsync(new GetMostPopularTagsQuery { Count = count }, ct));
         app.MapGet("api/tags", async (
-                int count, 
-                IQueryHandler<GetMostPopularTagsQuery, GetTagsDto> handler, 
-                CancellationToken ct) 
-            => await handler.HandleAsync(new GetMostPopularTagsQuery { Count = count }, ct));
+            IQueryHandler<GetTagsQuery, IEnumerable<string>> handler,
+            CancellationToken ct
+            ) => await handler.HandleAsync(new GetTagsQuery(), ct));
         
         app.MapPost("api/tags", async (
                 CreateTagCommand command, 

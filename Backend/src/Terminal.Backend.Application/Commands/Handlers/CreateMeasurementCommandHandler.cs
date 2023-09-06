@@ -1,7 +1,8 @@
 using Terminal.Backend.Application.Abstractions;
-using Terminal.Backend.Application.DTO;
+using Terminal.Backend.Application.Exceptions;
+using Terminal.Backend.Application.Services;
 using Terminal.Backend.Core.Entities;
-using Terminal.Backend.Core.Exceptions;
+using Terminal.Backend.Core.Repositories;
 using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Commands.Handlers;
@@ -23,7 +24,7 @@ internal sealed class CreateMeasurementCommandHandler : ICommandHandler<CreateMe
 
     public async Task HandleAsync(CreateMeasurementCommand command, CancellationToken ct)
     {
-        var (recipeId, stepsDto, tagsDto, comment) = command;
+        var (measurementId, recipeId, stepsDto, tagsDto, comment) = command;
 
         var isAmbiguous = (recipeId is null && stepsDto is null) ||
                           (recipeId is not null && stepsDto is not null);
@@ -36,46 +37,18 @@ internal sealed class CreateMeasurementCommandHandler : ICommandHandler<CreateMe
         Recipe? recipe = null;
         if (recipeId is null)
         {
+            // create new steps
             steps = await _convertService.ConvertAsync(stepsDto!, ct);
         }
         else
         {
+            // retrieve steps from database
             steps = await _stepsRepository.GetFromRecipeAsync(recipeId, ct);
             recipe = await _recipeRepository.GetAsync(recipeId, ct);
         }
 
-
         var tags = await _convertService.ConvertAsync(tagsDto, ct);
-        var measurement = new Measurement(recipe, new Comment(comment), steps.ToList(), tags.ToList());
+        var measurement = new Measurement(measurementId, recipe, new Comment(comment), steps.ToList(), tags.ToList());
         await _measurementRepository.AddAsync(measurement, ct);
-    }
-}
-
-public interface IMeasurementRepository
-{
-    Task AddAsync(Measurement measurement, CancellationToken ct);
-}
-
-public interface IRecipeRepository
-{
-    Task<Recipe?> GetAsync(RecipeId recipeId, CancellationToken ct);
-}
-
-public interface IConvertDtoService
-{
-    Task<IEnumerable<Step>> ConvertAsync(IEnumerable<CreateMeasurementStepDto> stepsDto, CancellationToken ct);
-    Task<IEnumerable<Tag>> ConvertAsync(IEnumerable<string> tagNames, CancellationToken ct);
-}
-
-public interface IStepsRepository
-{
-    Task<IEnumerable<Step>> GetFromRecipeAsync(RecipeId id, CancellationToken ct);
-}
-
-public sealed class AmbiguousCreateMeasurementRequestException : TerminalException
-{
-    public AmbiguousCreateMeasurementRequestException(RecipeId? id, IEnumerable<CreateMeasurementStepDto>? steps) 
-        : base($"Ambiguous create measurement request: recipe - {id}, steps - {steps}.")
-    {
     }
 }

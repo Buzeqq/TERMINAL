@@ -23,6 +23,9 @@ internal static class Extensions
         services.AddScoped<ITagRepository, TagRepository>();
         services.AddScoped<IParameterRepository, ParameterRepository>();
         services.AddScoped<IParameterValueRepository, ParameterValueRepository>();
+        services.AddScoped<IRecipeRepository, RecipeRepository>();
+        services.AddScoped<IStepsRepository, StepsRepository>();
+        services.AddScoped<IMeasurementRepository, MeasurementRepository>();
         services.Decorate(typeof(ICommandHandler<>), typeof(UnitOfWorkCommandHandlerDecorator<>));
     
         return services;

@@ -20,7 +20,7 @@ internal sealed class RecipeConfiguration : IEntityTypeConfiguration<Recipe>
                 n => new RecipeName(n));
 
         builder.HasMany(r => r.Steps)
-            .WithOne()
-            .IsRequired();
+            .WithOne(s => s.Recipe)
+            .IsRequired(false);
     }
 }

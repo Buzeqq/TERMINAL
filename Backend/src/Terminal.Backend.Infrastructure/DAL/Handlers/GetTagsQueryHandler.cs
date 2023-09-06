@@ -6,13 +6,15 @@ using Terminal.Backend.Core.Entities;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 
-internal sealed class GetTagsQueryHandler : IQueryHandler<GetMostPopularTagsQuery, GetTagsDto>
+internal sealed class GetTagsQueryHandler : IQueryHandler<GetMostPopularTagsQuery, GetTagsDto>, IQueryHandler<GetTagsQuery, IEnumerable<string>>
 {
     private readonly DbSet<Measurement> _measurements;
+    private readonly DbSet<Tag> _tags;
 
     public GetTagsQueryHandler(TerminalDbContext dbContext)
     {
         _measurements = dbContext.Measurements;
+        _tags = dbContext.Tags;
     }
 
     public async Task<GetTagsDto> HandleAsync(GetMostPopularTagsQuery query, CancellationToken ct)
@@ -27,4 +29,7 @@ internal sealed class GetTagsQueryHandler : IQueryHandler<GetMostPopularTagsQuer
                 .Select(g => g.Key.Name.Value)
                 .ToListAsync(ct)
         };
+
+    public async Task<IEnumerable<string>> HandleAsync(GetTagsQuery query, CancellationToken ct)
+        => await _tags.AsNoTracking().Select(t => t.Name.Value).ToListAsync(ct);
 }

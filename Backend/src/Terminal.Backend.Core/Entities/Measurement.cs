@@ -12,9 +12,9 @@ public sealed class Measurement
     public DateTime CreatedAtUtc { get; private set; }
     public Comment Comment { get; private set; }
 
-    public Measurement(Recipe? recipe, Comment comment, ICollection<Step> steps, ICollection<Tag> tags)
+    public Measurement(MeasurementId id, Recipe? recipe, Comment comment, ICollection<Step> steps, ICollection<Tag> tags)
     {
-        Id = MeasurementId.Create();
+        Id = id;
         Recipe = recipe;
         Comment = comment;
         Steps = steps;

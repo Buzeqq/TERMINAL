@@ -1,6 +1,7 @@
 using Terminal.Backend.Application.Abstractions;
 using Terminal.Backend.Application.Commands;
 using Terminal.Backend.Application.DTO;
+using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Api.Modules;
 
@@ -13,12 +14,15 @@ public static class MeasurementsModule
             ICommandHandler<CreateMeasurementCommand> handler,
         CancellationToken ct) =>
         {
-            Console.WriteLine(command);
+            var id = MeasurementId.Create();
+            command = command with { MeasurementId = id };
+            await handler.HandleAsync(command, ct);
+            return Results.Created($"api/measurement/{id}", null);
         });
 
         app.MapGet("api/measurements/example", async () =>
         {
-            var measurement = new CreateMeasurementCommand(null, new []
+            var measurement = new CreateMeasurementCommand(MeasurementId.Create(), null, new []
             {
                 new CreateMeasurementStepDto(new CreateMeasurementBaseParameterValueDto[]
                 {

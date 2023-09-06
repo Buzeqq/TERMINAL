@@ -9,7 +9,16 @@ public sealed class Step
     public ICollection<ParameterValue> Parameters { get; private set; } = new List<ParameterValue>();
     public Comment Comment { get; private set; }
 
-    public Step(StepId id, Comment comment)
+    public Recipe? Recipe { get; private set; } = null;
+
+    public Step(StepId id, Comment comment, ICollection<ParameterValue> parameters)
+    {
+        Id = id;
+        Comment = comment;
+        Parameters = parameters;
+    }
+
+    private Step(StepId id, Comment comment)
     {
         Id = id;
         Comment = comment;

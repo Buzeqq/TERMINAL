@@ -14,8 +14,8 @@ internal sealed class ProjectRepository : IProjectRepository
         _projects = dbContext.Projects;
     }
 
-    public async Task<Project?> GetAsync(ProjectId id, CancellationToken ct)
-        => await _projects.SingleOrDefaultAsync(p => p.Id == id, ct);
+    public Task<Project?> GetAsync(ProjectId id, CancellationToken ct)
+        => _projects.SingleOrDefaultAsync(p => p.Id == id, ct);
 
     public async Task AddAsync(Project project, CancellationToken ct)
         => await _projects.AddAsync(project, ct);
