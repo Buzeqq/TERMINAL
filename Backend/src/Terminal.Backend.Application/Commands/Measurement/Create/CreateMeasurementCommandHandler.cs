@@ -1,13 +1,13 @@
-using Terminal.Backend.Application.Abstractions;
+using MediatR;
 using Terminal.Backend.Application.Exceptions;
 using Terminal.Backend.Application.Services;
 using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.Repositories;
 using Terminal.Backend.Core.ValueObjects;
 
-namespace Terminal.Backend.Application.Commands.Handlers;
+namespace Terminal.Backend.Application.Commands.Measurement.Create;
 
-internal sealed class CreateMeasurementCommandHandler : ICommandHandler<CreateMeasurementCommand>
+internal sealed class CreateMeasurementCommandHandler : IRequestHandler<CreateMeasurementCommand>
 {
     private readonly IStepsRepository _stepsRepository;
     private readonly IConvertDtoService _convertService;
@@ -22,7 +22,7 @@ internal sealed class CreateMeasurementCommandHandler : ICommandHandler<CreateMe
         _measurementRepository = measurementRepository;
     }
 
-    public async Task HandleAsync(CreateMeasurementCommand command, CancellationToken ct)
+    public async Task Handle(CreateMeasurementCommand command, CancellationToken ct)
     {
         var (measurementId, recipeId, stepsDto, tagsDto, comment) = command;
 
@@ -48,7 +48,7 @@ internal sealed class CreateMeasurementCommandHandler : ICommandHandler<CreateMe
         }
 
         var tags = await _convertService.ConvertAsync(tagsDto, ct);
-        var measurement = new Measurement(measurementId, recipe, new Comment(comment), steps.ToList(), tags.ToList());
+        var measurement = new Core.Entities.Measurement(measurementId, recipe, new Comment(comment), steps.ToList(), tags.ToList());
         await _measurementRepository.AddAsync(measurement, ct);
     }
 }

@@ -1,4 +1,4 @@
-using Terminal.Backend.Application.Abstractions;
+using MediatR;
 using Terminal.Backend.Application.Queries;
 
 namespace Terminal.Backend.Api.Modules;
@@ -14,9 +14,9 @@ public static class PingModule
     /// <param name="app">web app</param>
     public static void UsePingEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("api/ping", async (IQueryHandler<PingQuery, string> handler, CancellationToken ct) =>
+        app.MapGet("api/ping", async (ISender sender, CancellationToken ct) =>
         {
-            var response = await handler.HandleAsync(new PingQuery(), ct);
+            var response = await sender.Send(new PingQuery(), ct);
             return Results.Ok(response);
         });
     }

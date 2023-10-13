@@ -1,10 +1,10 @@
-using Terminal.Backend.Application.Abstractions;
+using MediatR;
 using Terminal.Backend.Core.Exceptions;
 using Terminal.Backend.Core.Repositories;
 
-namespace Terminal.Backend.Application.Commands.Handlers;
+namespace Terminal.Backend.Application.Commands.Project.ChangeStatus;
 
-internal sealed class ChangeProjectStatusCommandHandler : ICommandHandler<ChangeProjectStatusCommand>
+internal sealed class ChangeProjectStatusCommandHandler : IRequestHandler<ChangeProjectStatusCommand>
 {
     private readonly IProjectRepository _projectRepository;
 
@@ -13,7 +13,7 @@ internal sealed class ChangeProjectStatusCommandHandler : ICommandHandler<Change
         _projectRepository = projectRepository;
     }
 
-    public async Task HandleAsync(ChangeProjectStatusCommand command, CancellationToken ct)
+    public async Task Handle(ChangeProjectStatusCommand command, CancellationToken ct)
     {
         var (projectId, isActive) = command;
         var project = await _projectRepository.GetAsync(projectId, ct);

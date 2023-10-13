@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Terminal.Backend.Application.Abstractions;
 using Terminal.Backend.Infrastructure.DAL;
+using Terminal.Backend.Infrastructure.DAL.Behaviours;
 using Terminal.Backend.Infrastructure.Middleware;
 
 namespace Terminal.Backend.Infrastructure;
@@ -20,11 +20,11 @@ public static class Extensions
         services.AddSwaggerGen();
         services.AddCors();
         services.AddPostgres(configuration);
-
-        services.Scan(s => s.FromAssemblies(AssemblyReference.Assembly)
-            .AddClasses(c => c.AssignableTo(typeof(IQueryHandler<,>)))
-            .AsImplementedInterfaces()
-            .WithScopedLifetime());
+        services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssembly(AssemblyReference.Assembly);
+            cfg.AddOpenBehavior(typeof(UnitOfWorkBehaviour<,>));
+        });
         
         return services;
     }

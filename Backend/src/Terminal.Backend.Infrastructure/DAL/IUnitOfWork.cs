@@ -1,6 +1,8 @@
+using MediatR;
+
 namespace Terminal.Backend.Infrastructure.DAL;
 
-public interface IUnitOfWork
+public interface IUnitOfWork<TResponse>
 {
-    Task ExecuteAsync(Func<Task> action);
+    Task<TResponse> ExecuteAsync(RequestHandlerDelegate<TResponse> next);
 }

@@ -1,12 +1,14 @@
+using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Terminal.Backend.Application.Abstractions;
 using Terminal.Backend.Application.DTO;
 using Terminal.Backend.Application.Queries;
 using Terminal.Backend.Core.Entities;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 
-internal sealed class GetTagsQueryHandler : IQueryHandler<GetMostPopularTagsQuery, GetTagsDto>, IQueryHandler<GetTagsQuery, IEnumerable<string>>
+internal sealed class GetTagsQueryHandler : 
+    IRequestHandler<GetMostPopularTagsQuery, GetTagsDto>, 
+    IRequestHandler<GetTagsQuery, IEnumerable<string>>
 {
     private readonly DbSet<Measurement> _measurements;
     private readonly DbSet<Tag> _tags;
@@ -17,7 +19,7 @@ internal sealed class GetTagsQueryHandler : IQueryHandler<GetMostPopularTagsQuer
         _tags = dbContext.Tags;
     }
 
-    public async Task<GetTagsDto> HandleAsync(GetMostPopularTagsQuery query, CancellationToken ct)
+    public async Task<GetTagsDto> Handle(GetMostPopularTagsQuery query, CancellationToken ct)
         => new()
         {
             Tags = await _measurements
@@ -30,6 +32,6 @@ internal sealed class GetTagsQueryHandler : IQueryHandler<GetMostPopularTagsQuer
                 .ToListAsync(ct)
         };
 
-    public async Task<IEnumerable<string>> HandleAsync(GetTagsQuery query, CancellationToken ct)
+    public async Task<IEnumerable<string>> Handle(GetTagsQuery query, CancellationToken ct)
         => await _tags.AsNoTracking().Select(t => t.Name.Value).ToListAsync(ct);
 }

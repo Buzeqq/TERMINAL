@@ -1,10 +1,10 @@
-using Terminal.Backend.Application.Abstractions;
+using MediatR;
 using Terminal.Backend.Core.Exceptions;
 using Terminal.Backend.Core.Repositories;
 
-namespace Terminal.Backend.Application.Commands.Handlers;
+namespace Terminal.Backend.Application.Commands.Tag.ChangeStatus;
 
-internal sealed class ChangeTagStatusCommandHandler : ICommandHandler<ChangeTagStatusCommand>
+internal sealed class ChangeTagStatusCommandHandler : IRequestHandler<ChangeTagStatusCommand>
 {
     private readonly ITagRepository _tagRepository;
 
@@ -14,7 +14,7 @@ internal sealed class ChangeTagStatusCommandHandler : ICommandHandler<ChangeTagS
     }
 
 
-    public async Task HandleAsync(ChangeTagStatusCommand command, CancellationToken ct)
+    public async Task Handle(ChangeTagStatusCommand command, CancellationToken ct)
     {
         var (name, status) = command;
         var tag = await _tagRepository.GetAsync(name, ct);

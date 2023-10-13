@@ -1,11 +1,10 @@
-using Terminal.Backend.Application.Abstractions;
-using Terminal.Backend.Core.Entities.Parameters;
+using MediatR;
 using Terminal.Backend.Core.Exceptions;
 using Terminal.Backend.Core.Repositories;
 
-namespace Terminal.Backend.Application.Commands.Handlers;
+namespace Terminal.Backend.Application.Commands.Parameter.ChangeStatus;
 
-internal class ChangeParameterStatusCommandHandler : ICommandHandler<ChangeParameterStatusCommand>
+internal class ChangeParameterStatusCommandHandler : IRequestHandler<ChangeParameterStatusCommand>
 {
     private readonly IParameterRepository _repository;
 
@@ -14,10 +13,10 @@ internal class ChangeParameterStatusCommandHandler : ICommandHandler<ChangeParam
         _repository = repository;
     }
 
-    public async Task HandleAsync(ChangeParameterStatusCommand command, CancellationToken ct)
+    public async Task Handle(ChangeParameterStatusCommand command, CancellationToken ct)
     {
         var (name, status) = command;
-        var parameter = await _repository.GetAsync<Parameter>(name, ct);
+        var parameter = await _repository.GetAsync<Core.Entities.Parameters.Parameter>(name, ct);
 
         if (parameter is null)
         {

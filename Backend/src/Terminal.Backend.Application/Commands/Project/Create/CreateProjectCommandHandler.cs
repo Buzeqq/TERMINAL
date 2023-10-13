@@ -1,11 +1,10 @@
-using Terminal.Backend.Application.Abstractions;
-using Terminal.Backend.Core.Entities;
+using MediatR;
 using Terminal.Backend.Core.Repositories;
 using Terminal.Backend.Core.ValueObjects;
 
-namespace Terminal.Backend.Application.Commands.Handlers;
+namespace Terminal.Backend.Application.Commands.Project.Create;
 
-internal sealed class CreateProjectCommandHandler : ICommandHandler<CreateProjectCommand>
+internal sealed class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand>
 {
     private readonly IProjectRepository _projectRepository;
 
@@ -14,10 +13,10 @@ internal sealed class CreateProjectCommandHandler : ICommandHandler<CreateProjec
         _projectRepository = projectRepository;
     }
 
-    public async Task HandleAsync(CreateProjectCommand request, CancellationToken ct)
+    public async Task Handle(CreateProjectCommand request, CancellationToken ct)
     {
         var newProjectId = ProjectId.Create();
-        var newProject = new Project(newProjectId, request.Name);
+        var newProject = new Core.Entities.Project(newProjectId, request.Name);
         await _projectRepository.AddAsync(newProject, ct);
     }
 }

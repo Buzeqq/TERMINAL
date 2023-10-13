@@ -1,11 +1,11 @@
-using Terminal.Backend.Application.Abstractions;
+using MediatR;
 using Terminal.Backend.Application.Queries;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 
-internal sealed class PingQueryHandler : IQueryHandler<PingQuery, string>
+internal sealed class PingQueryHandler : IRequestHandler<PingQuery, string>
 {
-    public Task<string> HandleAsync(PingQuery request, CancellationToken ct)
+    public Task<string> Handle(PingQuery request, CancellationToken ct)
     {
         return Task.FromResult("backend reachable");
     }

@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { environment } from "../../environments/environment";
+import { environment } from "../../../environments/environment";
 
 export abstract class ApiService {
   private apiUrl = environment.apiUrl;

@@ -1,5 +1,5 @@
-using Terminal.Backend.Application.Abstractions;
-using Terminal.Backend.Application.Commands;
+using MediatR;
+using Terminal.Backend.Application.Commands.Measurement.Create;
 using Terminal.Backend.Application.DTO;
 using Terminal.Backend.Core.ValueObjects;
 
@@ -11,12 +11,12 @@ public static class MeasurementsModule
     {
         app.MapPost("api/measurements", async (
             CreateMeasurementCommand command,
-            ICommandHandler<CreateMeasurementCommand> handler,
+            ISender sender,
         CancellationToken ct) =>
         {
             var id = MeasurementId.Create();
             command = command with { MeasurementId = id };
-            await handler.HandleAsync(command, ct);
+            await sender.Send(command, ct);
             return Results.Created($"api/measurement/{id}", null);
         });
 
