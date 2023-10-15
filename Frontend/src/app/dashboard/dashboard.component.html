@@ -1,0 +1,25 @@
+<section class="dashboard">
+  <article class="recent-measurements dashboard__element">
+    <div class="recent-measurements__header mat-h1">
+      <mat-icon [inline]="true" fontIcon="history"></mat-icon>
+      <span>Recent measurements</span>
+    </div>
+    <div class="recent-measurements__list">
+      <div class="recent-measurements__list-header">
+        <span>Code</span>
+        <span>Project</span>
+        <span>Created</span>
+      </div>
+      <ul class="recent-measurements__list-content">
+        <li *ngFor="let measurement of recentMeasurement" class="recent-measurements__item">
+          <span>{{ measurement.code }}</span>
+          <span>{{ measurement.project }}</span>
+          <span>{{ measurement.created | timeAgo }}</span>
+        </li>
+      </ul>
+    </div>
+  </article>
+  <article class="menu dashboard__element mat-card">
+    I am section 2
+  </article>
+</section>

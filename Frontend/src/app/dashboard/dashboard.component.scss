@@ -1,0 +1,53 @@
+.dashboard {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 30px;
+  justify-content: space-between;
+  height: 100%;
+  padding: 25px;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
+
+  &__element {
+    border-radius: 10px;
+    flex: 1;
+    box-shadow: rgba(0, 0, 0, 0.35) 0 5px 15px;
+  }
+}
+
+.recent-measurements {
+  padding: 15px;
+
+  &__header {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+
+    span {
+      margin-left: 5px;
+    }
+  }
+
+  &__list-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    border-radius: 5px;
+    padding: 3px 0;
+  }
+
+  &__list-content {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    padding: 0;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+}

@@ -1,2 +1,18 @@
-<h1>Terminal client</h1>
-<h2 [ngClass]="{'online': isOnline$ | async, 'offline': !(isOnline$ | async)}">Status:</h2>
+<div class="grid-container">
+  <header>
+    <mat-toolbar class="toolbar" color="primary">
+      <button class="logo" aria-label="Logo-icon button">
+        <img alt="Terminal logo" ngSrc="assets/icons/black-logo.svg" height="50" width="54" priority="0"/>
+      </button>
+
+      <span>John Doe</span>
+
+    </mat-toolbar>
+  </header>
+  <main>
+    <app-dashboard></app-dashboard>
+  </main>
+</div>
+
+
+

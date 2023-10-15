@@ -1,21 +1,14 @@
-.online {
-  &:after {
-    content: '';
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 5px;
-    background-color: #5bff5b;
-  }
+.grid-container {
+  display: grid;
+  grid-template-rows: auto 1fr 10%;
+  height: 100vh;
 }
 
-.offline {
-  &:after {
-    content: '';
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 5px;
-    background-color: red;
+
+header {
+  .logo {
+    border: none;
+    box-sizing: border-box;
+    background-color: transparent;
   }
 }
