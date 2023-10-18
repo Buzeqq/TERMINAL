@@ -1,18 +1,36 @@
-<div class="grid-container">
-  <header>
-    <mat-toolbar class="toolbar" color="primary">
-      <button class="logo" aria-label="Logo-icon button">
-        <img alt="Terminal logo" ngSrc="assets/icons/black-logo.svg" height="50" width="54" priority="0"/>
-      </button>
+<mat-sidenav-container autosize>
+  <mat-sidenav [mode]="sideNavMode" opened="true">
+    <mat-nav-list>
+      <mat-list-item>
+        <mat-icon matListItemIcon (click)="isExpanded = !isExpanded">menu</mat-icon>
+      </mat-list-item>
 
-      <span>John Doe</span>
+      <mat-list-item>
+        <mat-icon matListItemIcon>add</mat-icon>
+        <span *ngIf="isExpanded">Add</span>
+      </mat-list-item>
 
-    </mat-toolbar>
-  </header>
-  <main>
-    <app-dashboard></app-dashboard>
-  </main>
-</div>
+      <mat-list-item>
+        <mat-icon matListItemIcon>home</mat-icon>
+        <span *ngIf="isExpanded">Home</span>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <div class="grid-container">
+    <header>
+      <mat-toolbar class="toolbar" color="primary">
+        <ng-container *ngIf="sideNavMode === 'over'">
+            <mat-icon>menu</mat-icon>
+        </ng-container>
+        <span>Welcome, {{user}}</span>
+      </mat-toolbar>
+    </header>
+    <main>
+      <app-quick-actions></app-quick-actions>
+      <app-dashboard></app-dashboard>
+    </main>
+  </div>
+</mat-sidenav-container>
 
 
 

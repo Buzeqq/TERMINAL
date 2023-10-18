@@ -5,21 +5,28 @@
       <span>Recent measurements</span>
     </div>
     <div class="recent-measurements__list">
-      <div class="recent-measurements__list-header">
-        <span>Code</span>
-        <span>Project</span>
-        <span>Created</span>
-      </div>
-      <ul class="recent-measurements__list-content">
-        <li *ngFor="let measurement of recentMeasurement" class="recent-measurements__item">
-          <span>{{ measurement.code }}</span>
-          <span>{{ measurement.project }}</span>
-          <span>{{ measurement.created | timeAgo }}</span>
-        </li>
-      </ul>
+      <mat-table class="recent-measurements__list-content mat-elevation-z8" [dataSource]="recentMeasurement">
+        <ng-container matColumnDef="code">
+          <mat-header-cell *matHeaderCellDef> Code </mat-header-cell>
+          <mat-cell *matCellDef="let measurement"> {{measurement.code}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="project">
+          <mat-header-cell *matHeaderCellDef> Project </mat-header-cell>
+          <mat-cell *matCellDef="let measurement"> {{measurement.project}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="created">
+          <mat-header-cell *matHeaderCellDef> Created </mat-header-cell>
+          <mat-cell *matCellDef="let measurement"> {{measurement.created | timeAgo}} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns" class="recent-measurements__list-header"></mat-header-row>
+        <mat-row mat-ripple *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
     </div>
   </article>
-  <article class="menu dashboard__element mat-card">
-    I am section 2
+  <article class="recent-measurement-details dashboard__element">
+
   </article>
 </section>

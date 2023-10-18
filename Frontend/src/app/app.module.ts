@@ -11,28 +11,48 @@ import { NgOptimizedImage } from "@angular/common";
 import { RouterOutlet } from "@angular/router";
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CoreModule } from "./core/core.module";
+import { MatRippleModule } from "@angular/material/core";
+import { MatInputModule } from "@angular/material/input";
+import { FormsModule } from "@angular/forms";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import {MatListModule} from "@angular/material/list";
+import {MatTableModule} from "@angular/material/table";
+import {CdkTableModule} from "@angular/cdk/table";
+import {MatSidenavModule} from "@angular/material/sidenav";
+import { QuickActionsComponent } from './quick-actions/quick-actions.component';
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent
+    DashboardComponent,
+    QuickActionsComponent
   ],
-    imports: [
-        BrowserModule,
-        HttpClientModule,
-        ServiceWorkerModule.register('ngsw-worker.js', {
-            enabled: !isDevMode(),
-            // Register the ServiceWorker as soon as the application is stable
-            // or after 30 seconds (whichever comes first).
-            registrationStrategy: 'registerWhenStable:30000'
-        }),
-        MatToolbarModule,
-        MatIconModule,
-        MatButtonModule,
-        NgOptimizedImage,
-        RouterOutlet,
-        CoreModule
-    ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    NgOptimizedImage,
+    RouterOutlet,
+    CoreModule,
+    MatRippleModule,
+    MatInputModule,
+    FormsModule,
+    BrowserAnimationsModule,
+    MatListModule,
+    MatTableModule,
+    CdkTableModule,
+    MatSidenavModule,
+    MatCheckboxModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
