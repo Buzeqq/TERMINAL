@@ -1,31 +1,21 @@
-import {Component, OnInit} from '@angular/core';
+import { Component } from '@angular/core';
+import { map, Observable } from "rxjs";
+import { BreakpointObserver } from "@angular/cdk/layout";
 import { PingService } from "./core/services/ping/ping.service";
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   isExpanded: boolean = false;
   user: string = 'John Doe';
-  sideNavMode: 'side' | 'over' = 'side';
-  constructor(private readonly pingService: PingService, private breakpointObserver: BreakpointObserver) {
-  }
 
-  isOnline$ = this.pingService.isOnline$;
+  menuOpened$: Observable<boolean> = this.breakpointObserver.observe('(max-width: 768px)')
+    .pipe(map(result => !result.matches));
+  isOnline$: Observable<boolean> = this.pingService.isOnline$;
 
-  ngOnInit(): void {
-    this.breakpointObserver.observe([
-      Breakpoints.HandsetPortrait,
-      Breakpoints.HandsetLandscape,
-    ]).subscribe(result => {
-      if (result.matches) {
-        this.sideNavMode = 'over'; // switch to over mode for mobile screens
-      } else {
-        this.sideNavMode = 'side'; // switch to side mode for tablet/desktop screens
-      }
-    });
+  constructor(private readonly breakpointObserver: BreakpointObserver, private readonly pingService: PingService) {
   }
 }

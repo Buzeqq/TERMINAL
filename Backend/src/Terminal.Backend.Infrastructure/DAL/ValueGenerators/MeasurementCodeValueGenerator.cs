@@ -14,11 +14,15 @@ internal sealed class MeasurementCodeValueGenerator : ValueGenerator<Measurement
     public override MeasurementCode Next(EntityEntry entry)
     {
         var dbContext = entry.Context as TerminalDbContext ?? throw new InvalidDataException(); // FIXME
-        var lastCodeNumber = dbContext.Measurements.Include(measurement => measurement.Code)
-            .LastOrDefault()
-            ?.Code.Number;
+        var lastCodeNumber = dbContext.Measurements
+            .Select(measurement => measurement.Code)
+            .ToList()
+            .LastOrDefault()?.Number;
 
-        return lastCodeNumber is null ? new MeasurementCode(InitialNumberValue) : new MeasurementCode((ulong)(lastCodeNumber + 1));
+
+        return lastCodeNumber is null
+            ? new MeasurementCode(InitialNumberValue)
+            : new MeasurementCode((ulong)(lastCodeNumber + 1));
     }
 
     public override async ValueTask<MeasurementCode> NextAsync(EntityEntry entry, CancellationToken ct = default)

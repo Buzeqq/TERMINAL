@@ -1,5 +1,6 @@
 export interface RecentMeasurement {
-  code: string,
-  project: string,
-  created: Date
+  measurementId: string;
+  code: string;
+  project: string;
+  createdAtUtc: Date;
 }

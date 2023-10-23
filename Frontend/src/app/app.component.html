@@ -1,8 +1,8 @@
 <mat-sidenav-container autosize>
-  <mat-sidenav [mode]="sideNavMode" opened="true">
+  <mat-sidenav #sidenav [mode]="(menuOpened$ | async) ? 'side' : 'over'" [opened]="(menuOpened$ | async) ?? false">
     <mat-nav-list>
-      <mat-list-item>
-        <mat-icon matListItemIcon (click)="isExpanded = !isExpanded">menu</mat-icon>
+      <mat-list-item (click)="isExpanded = !isExpanded;">
+        <mat-icon matListItemIcon>menu</mat-icon>
       </mat-list-item>
 
       <mat-list-item>
@@ -19,18 +19,32 @@
   <div class="grid-container">
     <header>
       <mat-toolbar class="toolbar" color="primary">
-        <ng-container *ngIf="sideNavMode === 'over'">
+        <ng-container *ngIf="!(menuOpened$ | async)">
+          <button mat-icon-button (click)="sidenav.toggle()">
             <mat-icon>menu</mat-icon>
+          </button>
         </ng-container>
         <span>Welcome, {{user}}</span>
+        <span class="toolbar__spacer"></span>
+        <ng-container *ngIf="isOnline$ | async as status; else loading;">
+          <ng-container *ngIf="status; else offline;">
+            <mat-icon>wifi</mat-icon>
+          </ng-container>
+          <ng-template #offline>
+            <mat-icon>wifi_off</mat-icon>
+          </ng-template>
+        </ng-container>
+        <button class="toolbar__logout" mat-flat-button>
+          Logout
+        </button>
       </mat-toolbar>
     </header>
     <main>
-      <app-quick-actions></app-quick-actions>
       <app-dashboard></app-dashboard>
     </main>
   </div>
 </mat-sidenav-container>
 
-
-
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>

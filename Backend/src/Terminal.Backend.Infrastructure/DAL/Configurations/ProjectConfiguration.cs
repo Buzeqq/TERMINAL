@@ -15,5 +15,9 @@ internal sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
             .HasConversion(i => i.Value,
                 i => new ProjectId(i));
         builder.HasIndex(p => p.Name).IsUnique();
+        builder.HasMany(p => p.Measurements)
+            .WithOne(m => m.Project)
+            .HasForeignKey("ProjectId")
+            .IsRequired();
     }
 }

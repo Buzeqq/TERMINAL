@@ -15,18 +15,21 @@ import { MatRippleModule } from "@angular/material/core";
 import { MatInputModule } from "@angular/material/input";
 import { FormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import {MatListModule} from "@angular/material/list";
-import {MatTableModule} from "@angular/material/table";
-import {CdkTableModule} from "@angular/cdk/table";
-import {MatSidenavModule} from "@angular/material/sidenav";
-import { QuickActionsComponent } from './quick-actions/quick-actions.component';
-import {MatCheckboxModule} from "@angular/material/checkbox";
+import { MatListModule } from "@angular/material/list";
+import { MatTableModule } from "@angular/material/table";
+import { CdkTableModule } from "@angular/cdk/table";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { QuickActionsComponent } from './dashboard/quick-actions/quick-actions.component';
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MeasurementDetailsComponent } from './dashboard/measurement-details/measurement-details.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
-    QuickActionsComponent
+    QuickActionsComponent,
+    MeasurementDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,7 +54,8 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     MatTableModule,
     CdkTableModule,
     MatSidenavModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

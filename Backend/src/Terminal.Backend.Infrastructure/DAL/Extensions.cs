@@ -24,6 +24,7 @@ internal static class Extensions
         services.AddScoped<IRecipeRepository, RecipeRepository>();
         services.AddScoped<IStepsRepository, StepsRepository>();
         services.AddScoped<IMeasurementRepository, MeasurementRepository>();
+        
         return services;
     }
 }

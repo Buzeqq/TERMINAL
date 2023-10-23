@@ -21,12 +21,13 @@ mat-sidenav-container {
   height: 100vh;
 }
 
+.toolbar {
+  &__spacer {
+    flex: 1 1 auto;
+  }
 
-header {
-  .logo {
-    border: none;
-    box-sizing: border-box;
-    background-color: transparent;
+  &__logout {
+    margin-left: 1rem;
   }
 }
 

@@ -1,0 +1,40 @@
+.quick-actions {
+  width: 100%;
+
+  &__search-input {
+    display: flex;
+    width: 100%;
+  }
+
+  &__search-bar {
+    display: flex;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
+
+    mat-form-field {
+      flex: 1;
+    }
+  }
+
+  &__search-button {
+    margin: 0 5px;
+  }
+
+  &__filters {
+    display: flex;
+    flex-direction: row;
+    padding-top: 0.5rem;
+
+    @media (max-width: 768px) {
+      padding-top: 0;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    column-gap: 1rem;
+    margin-bottom: 1rem;
+  }
+}

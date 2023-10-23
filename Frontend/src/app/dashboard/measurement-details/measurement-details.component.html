@@ -1,0 +1,19 @@
+<ng-container *ngIf="measurementDetails; let measurement">
+  <h1>Measurement {{measurement.code}}</h1>
+  <mat-divider></mat-divider>
+  <article>
+    <h2>Details</h2>
+    <p>Created: {{measurement.createdAtUct | date}}</p>
+
+    <p>Link to project: {{measurement.projectId}}</p>
+    <p>Link to recipe: {{measurement.recipeId}}</p>
+
+    <h3>Comment</h3>
+    <p>{{measurement.comment ?? "No comment"}}</p>
+
+    <button mat-raised-button>
+      <mat-icon>content_copy</mat-icon>
+      Redo
+    </button>
+  </article>
+</ng-container>

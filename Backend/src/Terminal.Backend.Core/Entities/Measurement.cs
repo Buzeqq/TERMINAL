@@ -11,6 +11,7 @@ public sealed class Measurement
     public ICollection<Tag> Tags { get; private set; } = new List<Tag>();
     public DateTime CreatedAtUtc { get; private set; }
     public Comment Comment { get; private set; }
+    public Project Project { get; private set; }
 
     public Measurement(MeasurementId id, Recipe? recipe, Comment comment, ICollection<Step> steps, ICollection<Tag> tags)
     {

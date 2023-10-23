@@ -1,13 +1,13 @@
 .dashboard {
   display: flex;
-  flex-wrap: wrap;
-  column-gap: 30px;
+  flex-direction: column;
 
-  @media (max-width: 767px) {
-    flex-direction: column;
+  &__cards {
+    display: flex;
+    column-gap: 30px;
   }
 
-  &__element {
+  &__card {
     border-radius: 10px;
     padding: 15px;
     flex: 1;
@@ -24,8 +24,8 @@
     display: flex;
     align-items: center;
 
-    span {
-      margin-left: 5px;
+    h2 {
+      margin: 0 0 0 5px;
     }
   }
 

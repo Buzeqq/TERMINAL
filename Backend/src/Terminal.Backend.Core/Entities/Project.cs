@@ -24,7 +24,6 @@ public sealed class Project
 
     public void ChangeStatus(bool isActive)
     {
-
         IsActive = isActive;
     }
 }

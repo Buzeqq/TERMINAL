@@ -1,6 +1,8 @@
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Application.Commands.Measurement.Create;
 using Terminal.Backend.Application.DTO;
+using Terminal.Backend.Application.Queries;
 using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Api.Modules;
@@ -39,6 +41,12 @@ public static class MeasurementsModule
             "comment");
 
             return Results.Ok(measurement);
+        });
+
+        app.MapGet("api/measurements/recent", async (GetRecentMeasurementsQuery query, ISender sender, CancellationToken ct) =>
+        {
+            var recentMeasurements = await sender.Send(query, ct);
+            return Results.Ok(recentMeasurements);
         });
     }
 }
