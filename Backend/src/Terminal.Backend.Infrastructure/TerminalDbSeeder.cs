@@ -4,6 +4,8 @@ using Terminal.Backend.Core.Entities.ParameterValues;
 using Terminal.Backend.Core.ValueObjects;
 using Terminal.Backend.Infrastructure.DAL;
 
+using ILogger = Serilog.ILogger;
+
 namespace Terminal.Backend.Infrastructure;
 
 internal sealed class TerminalDbSeeder
