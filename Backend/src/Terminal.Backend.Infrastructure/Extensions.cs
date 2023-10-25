@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Serilog;
 using Terminal.Backend.Infrastructure.DAL;
 using Terminal.Backend.Infrastructure.DAL.Behaviours;
 using Terminal.Backend.Infrastructure.Middleware;
@@ -50,7 +49,6 @@ public static class Extensions
         if (!app.Configuration.GetOptions<PostgresOptions>("Postgres").Seed) return app;
         using var scope = app.Services.CreateScope();
         using var dbContext = scope.ServiceProvider.GetRequiredService<TerminalDbContext>();
-        var logger = scope.ServiceProvider.GetRequiredService<ILogger>();
         var seeder = new TerminalDbSeeder(dbContext);
         seeder.Seed();
 
