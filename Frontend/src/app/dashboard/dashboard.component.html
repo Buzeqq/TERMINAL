@@ -1,11 +1,13 @@
 <section class="dashboard">
   <app-quick-actions></app-quick-actions>
   <section class="dashboard__cards">
-    <article class="recent-measurements dashboard__card">
-      <div class="recent-measurements__header mat-h1">
-        <mat-icon [inline]="true" fontIcon="history"></mat-icon>
-        <h2>Recent measurements</h2>
-      </div>
+    <mat-card class="recent-measurements">
+      <mat-card-header>
+        <div class="recent-measurements__header mat-h1">
+          <mat-icon [inline]="true" fontIcon="history"></mat-icon>
+          <h2>Recent measurements</h2>
+        </div>
+      </mat-card-header>
       <div *ngIf="recentMeasurement$ | async else loading; let recentMeasurements;" class="recent-measurements__list">
         <mat-table class="recent-measurements__list-content mat-elevation-z8" [dataSource]="recentMeasurements">
           <ng-container matColumnDef="code">
@@ -24,13 +26,11 @@
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns" class="recent-measurements__list-header"></mat-header-row>
-          <mat-row mat-ripple *matRowDef="let row; columns: displayedColumns;" (click)="selectedMeasurementId = row.measurementId"></mat-row>
+          <mat-row mat-ripple *matRowDef="let row; columns: displayedColumns;" (click)="selectMeasurement(row)"></mat-row>
         </mat-table>
       </div>
-    </article>
-    <article *ngIf="showDetails$ | async" class="recent-measurement-details dashboard__card">
-      <app-measurement-details *ngIf="selectedMeasurementId ?? 1" [measurementId]="selectedMeasurementId"></app-measurement-details>
-    </article>
+    </mat-card>
+    <app-measurement-details [measurementId]="selectedMeasurementId"></app-measurement-details>
   </section>
 </section>
 

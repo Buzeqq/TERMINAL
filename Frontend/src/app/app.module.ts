@@ -23,6 +23,10 @@ import { QuickActionsComponent } from './dashboard/quick-actions/quick-actions.c
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MeasurementDetailsComponent } from './dashboard/measurement-details/measurement-details.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -55,7 +59,11 @@ import { MeasurementDetailsComponent } from './dashboard/measurement-details/mea
     CdkTableModule,
     MatSidenavModule,
     MatCheckboxModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatMenuModule,
+    MatTooltipModule,
+    MatCardModule,
+    MatProgressBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

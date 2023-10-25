@@ -1,5 +1,5 @@
 export interface RecentMeasurement {
-  measurementId: string;
+  id: string;
   code: string;
   project: string;
   createdAtUtc: Date;

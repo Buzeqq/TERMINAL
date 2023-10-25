@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { MeasurementDetails } from "../../core/models/measurements/measurementDetails";
+import { Observable, tap } from 'rxjs';
+import { MeasurementDetails } from 'src/app/core/models/measurements/measurementDetails';
+import { MeasurementsService } from 'src/app/core/services/measurements/measurements.service';
 
 @Component({
   selector: 'app-measurement-details',
@@ -7,28 +9,25 @@ import { MeasurementDetails } from "../../core/models/measurements/measurementDe
   styleUrls: ['./measurement-details.component.scss']
 })
 export class MeasurementDetailsComponent {
+  constructor(private readonly measurementService: MeasurementsService) {
+  }
+
   @Input()
   get measurementId(): string | undefined {
     return this._measurementId;
   }
 
   set measurementId(id: string | undefined) {
-    this.measurementDetails = measurementsDetails.find(m => m.measurementId === id);
+    this._measurementId = id;
+    this.measurementDetails$ = this.measurementService.getMeasurementDetails(id!)
+      .pipe(tap(_ => this.loaded()));
   }
 
   private _measurementId?: string;
+  measurementDetails$?: Observable<MeasurementDetails>;
 
-  measurementDetails?: MeasurementDetails;
-}
-
-const measurementsDetails: MeasurementDetails[] = [
-  {
-    measurementId: "1",
-    code: "AX1",
-    recipeId: null,
-    createdAtUct: new Date(),
-    comment: "comment for measurement",
-    projectId: "1",
-    stepsId: ["1", "2"]
+  loading: 'determinate' | 'indeterminate' | 'buffer' | 'query' = 'query';
+  loaded(): void {
+    this.loading = 'determinate';
   }
-]
+}

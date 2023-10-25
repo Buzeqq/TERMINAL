@@ -14,11 +14,11 @@ export class MeasurementsService extends ApiService {
 
   getRecentMeasurements(length: number): Observable<RecentMeasurement[]> {
     return this.get<{ recentMeasurements: {
-        measurementId: string,
+        id: string,
         code: string,
         project: string,
         createdAtUtc: string
-      }[] }>(`measurements/recent?len=${length}`)
+      }[] }>(`measurements/recent?length=${length}`)
       .pipe(
         map(r => r.recentMeasurements),
         map(r => r.map(measurement => ({
@@ -26,5 +26,9 @@ export class MeasurementsService extends ApiService {
           createdAtUtc: new Date(measurement.createdAtUtc)
         })))
       );
+  }
+
+  getMeasurementDetails(id: string): Observable<any> {
+    return this.get<any>(`measurements/${id}`).pipe(tap(r => console.log(r)));
   }
 }

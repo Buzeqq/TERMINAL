@@ -24,7 +24,7 @@ public static class MeasurementsModule
 
         app.MapGet("api/measurements/example", async () =>
         {
-            var measurement = new CreateMeasurementCommand(MeasurementId.Create(), null, new []
+            var measurement = new CreateMeasurementCommand(MeasurementId.Create(), null, new[]
             {
                 new CreateMeasurementStepDto(new CreateMeasurementBaseParameterValueDto[]
                 {
@@ -34,7 +34,7 @@ public static class MeasurementsModule
                 },
                     "comment")
             },
-            new []
+            new[]
             {
                 "tag1", "tag2", "tag3"
             },
@@ -43,10 +43,28 @@ public static class MeasurementsModule
             return Results.Ok(measurement);
         });
 
-        app.MapGet("api/measurements/recent", async (GetRecentMeasurementsQuery query, ISender sender, CancellationToken ct) =>
+        app.MapGet("api/measurements/recent", async ([FromQuery] int length, ISender sender, CancellationToken ct) =>
         {
-            var recentMeasurements = await sender.Send(query, ct);
+            if (length <= 0)
+            {
+                return Results.BadRequest();
+            }
+
+            var recentMeasurements = await sender.Send(new GetRecentMeasurementsQuery(length), ct);
             return Results.Ok(recentMeasurements);
+        });
+
+        app.MapGet("api/measurements/{id:guid}", async (Guid id, ISender sender, CancellationToken ct) =>
+        {
+            var query = new GetMeasurementQuery
+            {
+                Id = id
+            };
+
+            var measurement = await sender.Send(query, ct);
+
+
+            return measurement is null ? Results.NotFound() : Results.Ok(measurement);
         });
     }
 }

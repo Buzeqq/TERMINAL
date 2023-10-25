@@ -3,8 +3,8 @@ export interface MeasurementDetails
   measurementId: string;
   code: string;
   recipeId: string | null;
-  createdAtUct: Date;
+  createdAtUtc: Date;
   comment: string | null;
   projectId: string;
-  stepsId: string[];
+  tags: string[];
 }

@@ -3,15 +3,9 @@
   flex-direction: column;
 
   &__cards {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     column-gap: 30px;
-  }
-
-  &__card {
-    border-radius: 10px;
-    padding: 15px;
-    flex: 1;
-    box-shadow: rgba(0, 0, 0, 0.35) 0 5px 15px;
   }
 }
 
@@ -27,25 +21,6 @@
     h2 {
       margin: 0 0 0 5px;
     }
-  }
-
-  &__list {
-    height: 100%;
-  }
-
-  &__list-header {
-    font-weight: bolder;
-    font-size: larger;
-  }
-
-  &__list-content {
-    height: 100%;
-  }
-
-  &__item {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
   }
 }
 
