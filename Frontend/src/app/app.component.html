@@ -1,2 +1,50 @@
-<h1>Terminal client</h1>
-<h2 [ngClass]="{'online': isOnline$ | async, 'offline': !(isOnline$ | async)}">Status:</h2>
+<mat-sidenav-container autosize>
+  <mat-sidenav #sidenav [mode]="(menuOpened$ | async) ? 'side' : 'over'" [opened]="(menuOpened$ | async) ?? false">
+    <mat-nav-list>
+      <mat-list-item (click)="isExpanded = !isExpanded;">
+        <mat-icon matListItemIcon>menu</mat-icon>
+      </mat-list-item>
+
+      <mat-list-item>
+        <mat-icon matListItemIcon>add</mat-icon>
+        <span *ngIf="isExpanded">Add</span>
+      </mat-list-item>
+
+      <mat-list-item>
+        <mat-icon matListItemIcon>home</mat-icon>
+        <span *ngIf="isExpanded">Home</span>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <div class="grid-container">
+    <header>
+      <mat-toolbar class="toolbar" color="primary">
+        <ng-container *ngIf="!(menuOpened$ | async)">
+          <button mat-icon-button (click)="sidenav.toggle()">
+            <mat-icon>menu</mat-icon>
+          </button>
+        </ng-container>
+        <span>Welcome, {{user}}</span>
+        <span class="toolbar__spacer"></span>
+        <ng-container *ngIf="isOnline$ | async as status; else loading;">
+          <ng-container *ngIf="status; else offline;">
+            <mat-icon>wifi</mat-icon>
+          </ng-container>
+          <ng-template #offline>
+            <mat-icon>wifi_off</mat-icon>
+          </ng-template>
+        </ng-container>
+        <button class="toolbar__logout" mat-flat-button>
+          Logout
+        </button>
+      </mat-toolbar>
+    </header>
+    <main>
+      <app-dashboard></app-dashboard>
+    </main>
+  </div>
+</mat-sidenav-container>
+
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>

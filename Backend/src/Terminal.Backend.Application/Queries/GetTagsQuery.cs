@@ -1,7 +1,7 @@
-using Terminal.Backend.Application.Abstractions;
+using MediatR;
 
 namespace Terminal.Backend.Application.Queries;
 
-public sealed class GetTagsQuery : IQuery<IEnumerable<string>>
+public sealed class GetTagsQuery : IRequest<IEnumerable<string>>
 {
 }

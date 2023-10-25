@@ -1,0 +1,39 @@
+<section class="dashboard">
+  <app-quick-actions></app-quick-actions>
+  <section class="dashboard__cards">
+    <mat-card class="recent-measurements">
+      <mat-card-header>
+        <div class="recent-measurements__header mat-h1">
+          <mat-icon [inline]="true" fontIcon="history"></mat-icon>
+          <h2>Recent measurements</h2>
+        </div>
+      </mat-card-header>
+      <div *ngIf="recentMeasurement$ | async else loading; let recentMeasurements;" class="recent-measurements__list">
+        <mat-table class="recent-measurements__list-content mat-elevation-z8" [dataSource]="recentMeasurements">
+          <ng-container matColumnDef="code">
+            <mat-header-cell *matHeaderCellDef> Code </mat-header-cell>
+            <mat-cell *matCellDef="let measurement"> {{measurement.code}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="project">
+            <mat-header-cell *matHeaderCellDef> Project </mat-header-cell>
+            <mat-cell *matCellDef="let measurement"> {{measurement.project}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="created">
+            <mat-header-cell *matHeaderCellDef> Created </mat-header-cell>
+            <mat-cell *matCellDef="let measurement"> {{measurement.createdAtUtc | timeAgo}} </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns" class="recent-measurements__list-header"></mat-header-row>
+          <mat-row mat-ripple *matRowDef="let row; columns: displayedColumns;" (click)="selectMeasurement(row)"></mat-row>
+        </mat-table>
+      </div>
+    </mat-card>
+    <app-measurement-details [measurementId]="selectedMeasurementId"></app-measurement-details>
+  </section>
+</section>
+
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>

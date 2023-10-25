@@ -1,11 +1,12 @@
+using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Terminal.Backend.Application.Abstractions;
+using Terminal.Backend.Application.DTO;
 using Terminal.Backend.Application.Queries;
 using Terminal.Backend.Core.Entities;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 
-internal sealed class GetProjectQueryHandler : IQueryHandler<GetProjectQuery, Project?>
+internal sealed class GetProjectQueryHandler : IRequestHandler<GetProjectQuery, GetProjectDto?>
 {
     private readonly DbSet<Project> _projects;
 
@@ -14,12 +15,12 @@ internal sealed class GetProjectQueryHandler : IQueryHandler<GetProjectQuery, Pr
         _projects = dbContext.Projects;
     }
     
-    public async Task<Project?> HandleAsync(GetProjectQuery query, CancellationToken ct)
+    public async Task<GetProjectDto?> Handle(GetProjectQuery query, CancellationToken ct)
     {
         var projectId = query.ProjectId;
         var project = await _projects.AsNoTracking()
             .SingleOrDefaultAsync(p => p.Id == projectId, ct);
 
-        return project;
+        return project?.AsGetProjectDto();
     }
 }

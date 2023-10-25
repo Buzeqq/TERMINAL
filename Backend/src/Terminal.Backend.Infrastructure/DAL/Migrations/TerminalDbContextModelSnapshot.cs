@@ -54,7 +54,7 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("ProjectId")
+                    b.Property<Guid>("ProjectId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("RecipeId")
@@ -287,13 +287,17 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
 
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Measurement", b =>
                 {
-                    b.HasOne("Terminal.Backend.Core.Entities.Project", null)
+                    b.HasOne("Terminal.Backend.Core.Entities.Project", "Project")
                         .WithMany("Measurements")
-                        .HasForeignKey("ProjectId");
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Terminal.Backend.Core.Entities.Recipe", "Recipe")
                         .WithMany()
                         .HasForeignKey("RecipeId");
+
+                    b.Navigation("Project");
 
                     b.Navigation("Recipe");
                 });

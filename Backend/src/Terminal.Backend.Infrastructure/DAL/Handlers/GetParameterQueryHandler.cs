@@ -1,11 +1,11 @@
+using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Terminal.Backend.Application.Abstractions;
 using Terminal.Backend.Application.Queries;
 using Terminal.Backend.Core.Entities.Parameters;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 
-internal sealed class GetParameterQueryHandler : IQueryHandler<GetParameterQuery, Parameter?>
+internal sealed class GetParameterQueryHandler : IRequestHandler<GetParameterQuery, Parameter?>
 {
     private readonly DbSet<Parameter> _parameters;
 
@@ -14,7 +14,7 @@ internal sealed class GetParameterQueryHandler : IQueryHandler<GetParameterQuery
         _parameters = dbContext.Parameters;
     }
     
-    public async Task<Parameter?> HandleAsync(GetParameterQuery query, CancellationToken ct)
+    public async Task<Parameter?> Handle(GetParameterQuery query, CancellationToken ct)
     {
         var name = query.Name;
         return await _parameters.AsNoTracking().SingleOrDefaultAsync(p => p.Name == name, ct);

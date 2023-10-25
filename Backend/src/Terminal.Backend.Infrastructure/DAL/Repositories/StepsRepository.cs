@@ -1,4 +1,3 @@
-using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.Repositories;

@@ -1,21 +1,36 @@
-.online {
-  &:after {
-    content: '';
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 5px;
-    background-color: #5bff5b;
+mat-sidenav-container {
+  height: 100%;
+
+  mat-list-item {
+    padding: 0;
+
+    mat-icon {
+      margin: 0 20px;
+    }
+
+    span {
+      padding-right: 20px;
+    }
   }
 }
 
-.offline {
-  &:after {
-    content: '';
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 5px;
-    background-color: red;
+.grid-container {
+  display: grid;
+  grid-template-rows: auto 1fr 15%;
+  grid-row-gap: 25px;
+  height: 100vh;
+}
+
+.toolbar {
+  &__spacer {
+    flex: 1 1 auto;
   }
+
+  &__logout {
+    margin-left: 1rem;
+  }
+}
+
+main {
+  padding: 0 20px;
 }

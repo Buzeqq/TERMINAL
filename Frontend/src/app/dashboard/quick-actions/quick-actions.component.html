@@ -1,0 +1,35 @@
+<section class="quick-actions">
+  <div class="quick-actions__search-bar">
+    <div class="quick-actions__search-input">
+      <mat-form-field>
+        <mat-label>Search</mat-label>
+        <input matInput type="text" [(ngModel)]="searchExpression"/>
+        <button *ngIf="searchExpression" matSuffix mat-icon-button aria-label="Clear" (click)="searchExpression=''">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <button mat-fab class="quick-actions__search-button">
+        <mat-icon>search</mat-icon>
+      </button>
+    </div>
+    <div class="quick-actions__filters">
+      <mat-checkbox checked="true">Projects</mat-checkbox>
+      <mat-checkbox checked="true">Measurements</mat-checkbox>
+      <mat-checkbox checked="true">Recipes</mat-checkbox>
+    </div>
+  </div>
+  <div class="quick-actions__buttons">
+    <button mat-raised-button color="primary">
+      <mat-icon>add</mat-icon>
+      Add measurement
+    </button>
+    <button mat-raised-button color="primary">
+      <mat-icon>assignment_add</mat-icon>
+      Add recipe
+    </button>
+    <button mat-raised-button color="primary">
+      <mat-icon>create_new_folder</mat-icon>
+      Add project
+    </button>
+  </div>
+</section>

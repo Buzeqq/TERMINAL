@@ -1,0 +1,44 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 30px;
+  }
+}
+
+.recent-measurements {
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+
+    h2 {
+      margin: 0 0 0 5px;
+    }
+  }
+}
+
+.menu {
+  &__quick-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    row-gap: 10px;
+  }
+
+  &__search-bar {
+    margin-top: 10px;
+    display: flex;
+    column-gap: 10px;
+  }
+
+  &__search-input {
+    flex: 1;
+  }
+}

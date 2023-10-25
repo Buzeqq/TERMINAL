@@ -3,8 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Terminal.Backend.Application.Abstractions;
+using Serilog;
 using Terminal.Backend.Infrastructure.DAL;
+using Terminal.Backend.Infrastructure.DAL.Behaviours;
 using Terminal.Backend.Infrastructure.Middleware;
 
 namespace Terminal.Backend.Infrastructure;
@@ -20,12 +21,12 @@ public static class Extensions
         services.AddSwaggerGen();
         services.AddCors();
         services.AddPostgres(configuration);
+        services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssembly(AssemblyReference.Assembly);
+            cfg.AddOpenBehavior(typeof(UnitOfWorkBehaviour<,>));
+        });
 
-        services.Scan(s => s.FromAssemblies(AssemblyReference.Assembly)
-            .AddClasses(c => c.AssignableTo(typeof(IQueryHandler<,>)))
-            .AsImplementedInterfaces()
-            .WithScopedLifetime());
-        
         return services;
     }
 
@@ -45,11 +46,15 @@ public static class Extensions
         // app.UseAuthentication();
         // app.UseAuthorization();
         app.MapControllers();
-
-        if (!app.Environment.IsProduction()) return app;
         
+        if (!app.Configuration.GetOptions<PostgresOptions>("Postgres").Seed) return app;
         using var scope = app.Services.CreateScope();
         using var dbContext = scope.ServiceProvider.GetRequiredService<TerminalDbContext>();
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger>();
+        var seeder = new TerminalDbSeeder(dbContext, logger);
+        seeder.Seed();
+
+        if (!app.Environment.IsProduction()) return app;
         dbContext.Database.Migrate();
 
         return app;
