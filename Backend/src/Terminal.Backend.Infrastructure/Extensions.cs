@@ -51,7 +51,7 @@ public static class Extensions
         using var scope = app.Services.CreateScope();
         using var dbContext = scope.ServiceProvider.GetRequiredService<TerminalDbContext>();
         var logger = scope.ServiceProvider.GetRequiredService<ILogger>();
-        var seeder = new TerminalDbSeeder(dbContext, logger);
+        var seeder = new TerminalDbSeeder(dbContext);
         seeder.Seed();
 
         if (!app.Environment.IsProduction()) return app;

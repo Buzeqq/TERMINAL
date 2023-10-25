@@ -1,4 +1,3 @@
-using Serilog;
 using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.Entities.Parameters;
 using Terminal.Backend.Core.Entities.ParameterValues;
@@ -10,12 +9,10 @@ namespace Terminal.Backend.Infrastructure;
 internal sealed class TerminalDbSeeder
 {
     private readonly TerminalDbContext _dbContext;
-    private readonly ILogger _logger;
 
-    public TerminalDbSeeder(TerminalDbContext dbContext, ILogger logger)
+    public TerminalDbSeeder(TerminalDbContext dbContext)
     {
         _dbContext = dbContext;
-        _logger = logger;
     }
 
     public void Seed()
