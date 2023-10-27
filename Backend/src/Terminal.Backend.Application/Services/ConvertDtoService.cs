@@ -29,17 +29,18 @@ internal sealed class ConvertDtoService : IConvertDtoService
             var parameters = new List<ParameterValue>();
             foreach (var parameterDto in stepDto.Parameters)
             {
+                var id = ParameterValueId.Create();
                 ParameterValue parameter = parameterDto switch
                 {
                     CreateMeasurementDecimalParameterValueDto @decimal 
-                        => new DecimalParameterValue(await _parameterRepository.GetAsync<DecimalParameter>(@decimal.Name, ct) 
+                        => new DecimalParameterValue(id, await _parameterRepository.GetAsync<DecimalParameter>(@decimal.Name, ct) 
                                                      ?? throw new ParameterNotFoundException(@decimal.Name), @decimal.Value),
                     CreateMeasurementIntegerParameterValueDto integer 
-                        => new IntegerParameterValue(await _parameterRepository.GetAsync<IntegerParameter>(integer.Name, ct) 
-                                                     ?? throw new ParameterNotFoundException(integer.Name), integer.Value),
+                        => new IntegerParameterValue(id, await _parameterRepository.GetAsync<IntegerParameter>(integer.Name, ct) 
+                                                         ?? throw new ParameterNotFoundException(integer.Name), integer.Value),
                     CreateMeasurementTextParameterValueDto text 
-                        => new TextParameterValue(await _parameterRepository.GetAsync<TextParameter>(text.Name, ct) 
-                                                     ?? throw new ParameterNotFoundException(text.Name), text.Value),
+                        => new TextParameterValue(id, await _parameterRepository.GetAsync<TextParameter>(text.Name, ct) 
+                                                      ?? throw new ParameterNotFoundException(text.Name), text.Value),
                     _ => throw new UnknownParameterTypeException(parameterDto)
                 };
                 
@@ -51,7 +52,7 @@ internal sealed class ConvertDtoService : IConvertDtoService
         
         return steps;
     }
-    public async Task<IEnumerable<Tag>> ConvertAsync(IEnumerable<string> tagNames, CancellationToken ct)
-        => await Task.WhenAll(tagNames.Select(async t => await _tagRepository.GetAsync(t, ct) ?? 
-                                                         throw new TagNotFoundException(t)));
+
+    public Task<IEnumerable<Tag>> ConvertAsync(IEnumerable<TagName> tagNames, CancellationToken ct)
+        => _tagRepository.GetManyAsync(tagNames, ct);
 }

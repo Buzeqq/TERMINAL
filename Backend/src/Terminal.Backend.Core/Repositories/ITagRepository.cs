@@ -8,4 +8,5 @@ public interface ITagRepository
     Task AddAsync(Tag tag, CancellationToken ct);
     Task<Tag?> GetAsync(TagName name, CancellationToken ct);
     Task UpdateAsync(Tag tag);
+    Task<IEnumerable<Tag>> GetManyAsync(IEnumerable<TagName> tagNames, CancellationToken ct);
 }

@@ -24,7 +24,7 @@ public static class MeasurementsModule
 
         app.MapGet("api/measurements/example", async () =>
         {
-            var measurement = new CreateMeasurementCommand(MeasurementId.Create(), null, new[]
+            var measurement = new CreateMeasurementCommand(MeasurementId.Create(), ProjectId.Create(), null, new[]
             {
                 new CreateMeasurementStepDto(new CreateMeasurementBaseParameterValueDto[]
                 {

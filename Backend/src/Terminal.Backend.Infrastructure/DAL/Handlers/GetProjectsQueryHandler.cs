@@ -5,18 +5,17 @@ using Terminal.Backend.Application.Queries;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 
-internal sealed class GetProjectsQueryHandler : IRequestHandler<GetProjectsQuery, IEnumerable<GetProjectsDto>>
+internal sealed class GetProjectsQueryHandler : IRequestHandler<GetProjectsQuery, GetProjectsDto>
 {
     private readonly TerminalDbContext _dbContext;
 
     public GetProjectsQueryHandler(TerminalDbContext dbContext) => _dbContext = dbContext;
 
-    public async Task<IEnumerable<GetProjectsDto>> Handle(GetProjectsQuery request,
+    public async Task<GetProjectsDto> Handle(GetProjectsQuery request,
         CancellationToken ct)
-        => await _dbContext
+        => (await _dbContext
             .Projects
             .AsNoTracking()
             .Where(x => x.IsActive)
-            .Select(x => x.AsGetProjectsDto())
-            .ToListAsync(ct);
+            .ToListAsync(ct)).AsGetProjectsDto();
 }

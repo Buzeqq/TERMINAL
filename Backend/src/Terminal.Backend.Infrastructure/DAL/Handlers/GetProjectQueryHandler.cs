@@ -18,9 +18,22 @@ internal sealed class GetProjectQueryHandler : IRequestHandler<GetProjectQuery, 
     public async Task<GetProjectDto?> Handle(GetProjectQuery query, CancellationToken ct)
     {
         var projectId = query.ProjectId;
-        var project = await _projects.AsNoTracking()
-            .SingleOrDefaultAsync(p => p.Id == projectId, ct);
+        var project = (await _projects
+            .AsNoTracking()
+            // FIXME: .Include(p => p.Measurements)
+            .SingleOrDefaultAsync(p => p.Id == projectId, ct))?.AsGetProjectDto();
 
-        return project?.AsGetProjectDto();
+        if (project is null) return project;
+        
+        var measurementIds = await _projects
+            .AsNoTracking()
+            .Where(p => p.Id == projectId)
+            .SelectMany(p => p.Measurements)
+            .Select(m => m.Id.Value)
+            .ToListAsync(ct);
+
+        project.MeasurementsIds = measurementIds;
+        
+        return project;
     }
 }

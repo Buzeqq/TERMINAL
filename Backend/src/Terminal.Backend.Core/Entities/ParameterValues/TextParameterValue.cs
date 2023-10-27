@@ -8,7 +8,7 @@ public sealed class TextParameterValue : ParameterValue
 {
     public string Value { get; private set; }
 
-    public TextParameterValue(TextParameter parameter, string value) : base(ParameterValueId.Create(), parameter)
+    public TextParameterValue(ParameterValueId id, TextParameter parameter, string value) : base(id, parameter)
     {
         if (!parameter.AllowedValues.Contains(value))
         {
