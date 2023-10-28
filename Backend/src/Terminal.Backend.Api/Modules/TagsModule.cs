@@ -56,5 +56,17 @@ public static class TagsModule
             await sender.Send(command, ct);
             return Results.Ok();
         });
+
+        app.MapGet("api/tags/search", async (
+            [FromQuery] string searchPhrase,
+            ISender sender,
+            CancellationToken ct
+            ) =>
+        {
+            var query = new SearchTagQuery(searchPhrase);
+            var tags = await sender.Send(query, ct);
+
+            return Results.Ok(tags);
+        });
     }
 }

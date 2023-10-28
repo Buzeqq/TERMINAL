@@ -14,5 +14,10 @@ internal sealed class TagConfiguration : IEntityTypeConfiguration<Tag>
         builder.Property(t => t.Name)
             .HasConversion(n => n.Value,
                 n => new TagName(n));
+
+        // search index
+        // builder.HasIndex(t => t.Name)
+        //     .HasMethod("GIN")
+        //     .IsTsVectorExpressionIndex("english");
     }
 }

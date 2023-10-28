@@ -33,5 +33,11 @@ internal sealed class MeasurementConfiguration : IEntityTypeConfiguration<Measur
 
         builder.HasOne(m => m.Recipe)
             .WithMany();
+        
+        // search index
+        builder
+            .HasIndex(m => new { m.Code, m.Comment })
+            .HasMethod("GIN")
+            .IsTsVectorExpressionIndex("english");
     }
 }

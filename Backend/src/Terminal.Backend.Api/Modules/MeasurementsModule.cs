@@ -22,7 +22,7 @@ public static class MeasurementsModule
             return Results.Created($"api/measurement/{id}", null);
         });
 
-        app.MapGet("api/measurements/example", async () =>
+        app.MapGet("api/measurements/example", () =>
         {
             var measurement = new CreateMeasurementCommand(MeasurementId.Create(), ProjectId.Create(), null, new[]
             {
@@ -72,6 +72,15 @@ public static class MeasurementsModule
 
             var measurements = await sender.Send(query, ct);
             
+            return Results.Ok(measurements);
+        });
+
+        app.MapGet("api/measurements/search", async ([FromQuery] string phrase, ISender sender, CancellationToken ct) =>
+        {
+            var query = new SearchMeasurementQuery(phrase);
+
+            var measurements = await sender.Send(query, ct);
+
             return Results.Ok(measurements);
         });
     }

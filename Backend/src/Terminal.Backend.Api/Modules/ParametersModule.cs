@@ -1,5 +1,4 @@
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Application.Commands.Parameter.ChangeStatus;
 using Terminal.Backend.Application.Commands.Parameter.Define;
 using Terminal.Backend.Application.DTO;

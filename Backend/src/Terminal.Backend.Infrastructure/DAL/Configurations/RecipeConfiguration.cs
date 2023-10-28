@@ -22,5 +22,10 @@ internal sealed class RecipeConfiguration : IEntityTypeConfiguration<Recipe>
         builder.HasMany(r => r.Steps)
             .WithOne(s => s.Recipe)
             .IsRequired(false);
+
+        // search index
+        builder.HasIndex(r => r.RecipeName)
+            .HasMethod("GIN")
+            .IsTsVectorExpressionIndex("english");
     }
 }
