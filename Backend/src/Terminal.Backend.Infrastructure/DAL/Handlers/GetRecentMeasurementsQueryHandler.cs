@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Terminal.Backend.Application.DTO;
 using Terminal.Backend.Application.Queries;
 using Terminal.Backend.Core.Entities;
 
@@ -22,7 +23,7 @@ internal sealed class GetRecentMeasurementsQueryHandler :
             RecentMeasurements = await _measurements
                 .Take(request.Length)
                 .OrderByDescending(m => m.CreatedAtUtc)
-                .Select(m => new RecentMeasurement(m.Id, m.Code.Value, m.Project.Name, m.CreatedAtUtc.ToString("o")))
+                .Select(m => new GetMeasurementsDto.MeasurementDto(m.Id, m.Code.Value, m.Project.Name, m.CreatedAtUtc.ToString("o")))
                 .ToListAsync(cancellationToken)
         };
 }

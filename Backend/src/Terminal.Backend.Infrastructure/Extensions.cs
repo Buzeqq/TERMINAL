@@ -46,23 +46,15 @@ public static class Extensions
         // app.UseAuthorization();
         app.MapControllers();
         
-        if (!app.Configuration.GetOptions<PostgresOptions>("Postgres").Seed) return app;
         using var scope = app.Services.CreateScope();
         using var dbContext = scope.ServiceProvider.GetRequiredService<TerminalDbContext>();
-        var seeder = new TerminalDbSeeder(dbContext);
-        try
-        {
-            seeder.Seed();
-        }
-        catch (Exception) { } // todo
 
-        // var measurement = dbContext.Measurements
-        //     .Include(m => m.Steps)
-        //     .Include(m => m.Tags)
-        //     .SingleOrDefault(m => m.Id == Guid.Parse("125bd034-e27c-4b89-97ff-8a701b1c5316"));
-        
         if (!app.Environment.IsProduction()) return app;
         dbContext.Database.Migrate();
+        
+        if (!app.Configuration.GetOptions<PostgresOptions>("Postgres").Seed) return app;
+        var seeder = new TerminalDbSeeder(dbContext);
+        seeder.Seed();
 
         return app;
     }
