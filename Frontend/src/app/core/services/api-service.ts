@@ -1,5 +1,5 @@
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {Observable, throwError} from "rxjs";
 import { environment } from "../../../environments/environment";
 
 export abstract class ApiService {
@@ -20,5 +20,15 @@ export abstract class ApiService {
 
   delete<T>(endpoint: string): Observable<T> {
     return this.http.delete<T>(this.apiUrl + endpoint);
+  }
+
+  handleError(err: HttpErrorResponse) {
+    if (err.status == 0) {
+      console.error(`There is an error with the client or network: `, err.error)
+    } else {
+      console.error(`Server-side error: `, err.error)
+    }
+
+    return throwError(() => Error('Cannot load data.'))
   }
 }
