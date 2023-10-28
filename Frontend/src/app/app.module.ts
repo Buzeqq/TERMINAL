@@ -13,20 +13,25 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { CoreModule } from "./core/core.module";
 import { MatRippleModule } from "@angular/material/core";
 import { MatInputModule } from "@angular/material/input";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatListModule } from "@angular/material/list";
 import { MatTableModule } from "@angular/material/table";
 import { CdkTableModule } from "@angular/cdk/table";
 import { MatSidenavModule } from "@angular/material/sidenav";
-import { QuickActionsComponent } from './dashboard/quick-actions/quick-actions.component';
+import { QuickActionsComponent } from './shared/quick-actions/quick-actions.component';
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
-import { MeasurementDetailsComponent } from './dashboard/measurement-details/measurement-details.component';
+import { MeasurementDetailsComponent } from './shared/item-details/measurement-details/measurement-details.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { AppRoutingModule } from './app-routing.module';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { ResultsListComponent } from './search/results-list/results-list.component';
+import { ItemDetailsComponent } from './shared/item-details/item-details.component';
+import { ProjectDetailsComponent } from './shared/item-details/project-details/project-details.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -37,6 +42,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     DashboardComponent,
     QuickActionsComponent,
     MeasurementDetailsComponent,
+    NotFoundComponent,
+    ResultsListComponent,
+    ItemDetailsComponent,
+    ProjectDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,6 +56,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
     }),
+    AppRoutingModule,
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
@@ -67,6 +77,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatTooltipModule,
     MatCardModule,
     MatProgressBarModule,
+    ReactiveFormsModule,
     MatChipsModule,
     MatGridListModule,
     MatSnackBarModule

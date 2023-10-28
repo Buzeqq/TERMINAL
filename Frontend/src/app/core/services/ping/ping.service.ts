@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from "../api-service";
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject, catchError, map, Observable, of, tap } from "rxjs";
+import { catchError, map, Observable, of } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +11,7 @@ export class PingService extends ApiService {
     super(http);
   }
 
-  get isOnline$(): Observable<boolean>
-  {
+  get isOnline$(): Observable<boolean> {
     return this.ping()
       .pipe(
         map(_ => true),

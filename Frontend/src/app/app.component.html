@@ -10,7 +10,7 @@
         <span *ngIf="isExpanded">Add</span>
       </mat-list-item>
 
-      <mat-list-item>
+      <mat-list-item routerLink="home">
         <mat-icon matListItemIcon>home</mat-icon>
         <span *ngIf="isExpanded">Home</span>
       </mat-list-item>
@@ -40,7 +40,7 @@
       </mat-toolbar>
     </header>
     <main>
-      <app-dashboard></app-dashboard>
+      <router-outlet></router-outlet>
     </main>
   </div>
 </mat-sidenav-container>
