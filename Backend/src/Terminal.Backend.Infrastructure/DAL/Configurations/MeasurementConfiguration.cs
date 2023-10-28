@@ -16,23 +16,22 @@ internal sealed class MeasurementConfiguration : IEntityTypeConfiguration<Measur
             .HasConversion(i => i.Value,
                 i => new MeasurementId(i));
         builder.Property(m => m.Code)
-            .HasConversion(c => c.Value,
+            .HasConversion(c => c.Number,
                 c => new MeasurementCode(c))
             .HasValueGenerator(typeof(MeasurementCodeValueGenerator));
         builder.Property(m => m.Comment)
             .HasConversion(c => c.Value, 
                 c => new Comment(c));
-
+        
+        builder
+            .HasMany(m => m.Tags)
+            .WithMany();
+        
         builder.HasMany(m => m.Steps)
             .WithOne()
             .IsRequired();
-        
-        builder.HasMany(m => m.Tags)
-            .WithMany();
-        
+
         builder.HasOne(m => m.Recipe)
-            .WithMany()
-            .HasForeignKey("RecipeId")
-            .IsRequired(false);
+            .WithMany();
     }
 }

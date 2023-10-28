@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { BreakpointObserver } from "@angular/cdk/layout";
 import { Observable, tap } from "rxjs";
 import { MeasurementsService } from "../core/services/measurements/measurements.service";
 import { Measurement } from "../core/models/measurements/recentMeasurement";
@@ -15,7 +14,7 @@ export class DashboardComponent {
   recentMeasurement$: Observable<Measurement[]> = this.measurementService.getRecentMeasurements(10)
     .pipe(tap(r => this.selectedMeasurementId = r[0].id));
 
-  constructor(private readonly breakpointObserver: BreakpointObserver, private readonly measurementService: MeasurementsService) {
+  constructor(private readonly measurementService: MeasurementsService) {
   }
 
   selectMeasurement(row: Measurement) {

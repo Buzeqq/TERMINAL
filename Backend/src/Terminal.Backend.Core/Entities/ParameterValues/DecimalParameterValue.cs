@@ -8,7 +8,7 @@ public sealed class DecimalParameterValue : ParameterValue
 {
     public decimal Value { get; private set; }
 
-    public DecimalParameterValue(DecimalParameter parameter, decimal value) : base(ParameterValueId.Create(), parameter)
+    public DecimalParameterValue(ParameterValueId id, DecimalParameter parameter, decimal value) : base(id, parameter)
     {
         if (value % parameter.Step != 0)
         {

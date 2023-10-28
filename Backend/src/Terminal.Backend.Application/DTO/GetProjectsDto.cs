@@ -2,6 +2,7 @@ namespace Terminal.Backend.Application.DTO;
 
 public class GetProjectsDto
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
+    public IEnumerable<InnerProjectDto> Projects { get; set; }
+
+    public record InnerProjectDto(Guid Id, string Name);
 }

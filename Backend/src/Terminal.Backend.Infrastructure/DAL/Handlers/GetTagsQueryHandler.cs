@@ -8,7 +8,7 @@ namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 
 internal sealed class GetTagsQueryHandler : 
     IRequestHandler<GetMostPopularTagsQuery, GetTagsDto>, 
-    IRequestHandler<GetTagsQuery, IEnumerable<string>>
+    IRequestHandler<GetTagsQuery, GetTagsDto>
 {
     private readonly DbSet<Measurement> _measurements;
     private readonly DbSet<Tag> _tags;
@@ -32,6 +32,9 @@ internal sealed class GetTagsQueryHandler :
                 .ToListAsync(ct)
         };
 
-    public async Task<IEnumerable<string>> Handle(GetTagsQuery query, CancellationToken ct)
-        => await _tags.AsNoTracking().Select(t => t.Name.Value).ToListAsync(ct);
+    public async Task<GetTagsDto> Handle(GetTagsQuery query, CancellationToken ct) 
+        => new()
+        {
+            Tags = (await _tags.AsNoTracking().ToListAsync(ct)).Select(t => t.Name.Value)
+        };
 }

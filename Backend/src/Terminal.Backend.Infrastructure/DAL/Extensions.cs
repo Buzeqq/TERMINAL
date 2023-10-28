@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Terminal.Backend.Core.Repositories;
 using Terminal.Backend.Infrastructure.DAL.Repositories;
 
@@ -15,7 +16,11 @@ internal static class Extensions
         services.Configure<PostgresOptions>(configuration.GetRequiredSection(OptionsSectionName));
         var postgresOptions = configuration.GetOptions<PostgresOptions>(OptionsSectionName);
         services.AddDbContext<TerminalDbContext>(x =>
-            x.UseNpgsql(postgresOptions.ConnectionString));
+            x.UseNpgsql(postgresOptions.ConnectionString)
+                .UseLoggerFactory(LoggerFactory.Create(b => b
+                    .AddConsole()
+                    .SetMinimumLevel(LogLevel.Debug)))
+                .EnableSensitiveDataLogging());
         services.AddScoped(typeof(IUnitOfWork<>), typeof(PostgresUnitOfWork<>));
         services.AddScoped<IProjectRepository, ProjectRepository>();
         services.AddScoped<ITagRepository, TagRepository>();

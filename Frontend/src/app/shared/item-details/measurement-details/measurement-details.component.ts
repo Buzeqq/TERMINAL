@@ -1,10 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { EMPTY, Observable, catchError, tap } from 'rxjs';
 import { MeasurementDetails } from 'src/app/core/models/measurements/measurementDetails';
 import { MeasurementsService } from 'src/app/core/services/measurements/measurements.service';
-import {ProjectsService} from "../../../core/services/projects/projects.service";
-import {Project} from "../../../core/models/projects/project";
-import {ItemDetailsComponent} from "../item-details.component";
+import { ProjectsService } from "../../../core/services/projects/projects.service";
+import { Project } from "../../../core/models/projects/project";
+import { ItemDetailsComponent } from "../item-details.component";
 
 @Component({
   selector: 'app-measurement-details',
@@ -14,21 +15,30 @@ import {ItemDetailsComponent} from "../item-details.component";
 export class MeasurementDetailsComponent extends ItemDetailsComponent {
   constructor(
     private readonly measurementService: MeasurementsService,
-    private readonly projectService: ProjectsService
-  ) { super(); }
+    private readonly snackBar: MatSnackBar,
+    private readonly projectService: ProjectsService) { super(); }
+
+  @Input()
+  get measurementId(): string | undefined {
+    return this._measurementId;
+  }
 
   set measurementId(id: string | undefined) {
     this._measurementId = id;
     this.measurementDetails$ = this.measurementService.getMeasurementDetails(id!)
       .pipe(
-        tap(_ => this.loaded()),
-        tap(m => this.projectDetails$ = this.projectService.getProject(m.projectId))
+        catchError((err, caught) => {
+          console.log(err);
+          this.snackBar.open('Failed to load measurement', 'Close', {
+            duration: 3000
+          });
+          return EMPTY;
+        }),
+        tap(m => {
+          this.loading = 'determinate';
+          this.projectDetails$ = this.projectService.getProject(m.projectId)
+        })
       );
-  }
-
-  @Input()
-  get measurementId(): string | undefined {
-    return this._measurementId;
   }
 
   private _measurementId?: string;

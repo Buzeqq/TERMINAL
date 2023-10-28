@@ -8,7 +8,7 @@ public sealed class IntegerParameterValue : ParameterValue
 {
     public int Value { get; private set; }
 
-    public IntegerParameterValue(IntegerParameter parameter, int value) : base(ParameterValueId.Create(), parameter)
+    public IntegerParameterValue(ParameterValueId id, IntegerParameter parameter, int value) : base(id, parameter)
     {
         if (value % parameter.Step != 0)
         {

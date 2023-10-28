@@ -2,6 +2,7 @@ using MediatR;
 using Terminal.Backend.Application.Exceptions;
 using Terminal.Backend.Application.Services;
 using Terminal.Backend.Core.Entities;
+using Terminal.Backend.Core.Exceptions;
 using Terminal.Backend.Core.Repositories;
 using Terminal.Backend.Core.ValueObjects;
 
@@ -13,18 +14,20 @@ internal sealed class CreateMeasurementCommandHandler : IRequestHandler<CreateMe
     private readonly IConvertDtoService _convertService;
     private readonly IRecipeRepository _recipeRepository;
     private readonly IMeasurementRepository _measurementRepository;
+    private readonly IProjectRepository _projectRepository;
 
-    public CreateMeasurementCommandHandler(IStepsRepository stepsRepository, IConvertDtoService convertService, IRecipeRepository recipeRepository, IMeasurementRepository measurementRepository)
+    public CreateMeasurementCommandHandler(IStepsRepository stepsRepository, IConvertDtoService convertService, IRecipeRepository recipeRepository, IMeasurementRepository measurementRepository, IProjectRepository projectRepository)
     {
         _stepsRepository = stepsRepository;
         _convertService = convertService;
         _recipeRepository = recipeRepository;
         _measurementRepository = measurementRepository;
+        _projectRepository = projectRepository;
     }
 
     public async Task Handle(CreateMeasurementCommand command, CancellationToken ct)
     {
-        var (measurementId, recipeId, stepsDto, tagsDto, comment) = command;
+        var (measurementId, projectId, recipeId, stepsDto, tagsDto, comment) = command;
 
         var isAmbiguous = (recipeId is null && stepsDto is null) ||
                           (recipeId is not null && stepsDto is not null);
@@ -47,8 +50,10 @@ internal sealed class CreateMeasurementCommandHandler : IRequestHandler<CreateMe
             recipe = await _recipeRepository.GetAsync(recipeId, ct);
         }
 
-        var tags = await _convertService.ConvertAsync(tagsDto, ct);
-        var measurement = new Core.Entities.Measurement(measurementId, recipe, new Comment(comment), steps.ToList(), tags.ToList());
+        var tags = await _convertService.ConvertAsync(tagsDto.Select(t => new TagName(t)), ct);
+        var project = await _projectRepository.GetAsync(projectId, ct) ?? throw new ProjectNotFoundException(projectId);
+        var measurement = new Core.Entities.Measurement(measurementId, project, recipe, new Comment(comment), steps.ToList(), tags.ToList());
+        project.Measurements.Add(measurement);
         await _measurementRepository.AddAsync(measurement, ct);
     }
 }

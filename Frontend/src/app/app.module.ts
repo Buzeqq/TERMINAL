@@ -13,7 +13,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { CoreModule } from "./core/core.module";
 import { MatRippleModule } from "@angular/material/core";
 import { MatInputModule } from "@angular/material/input";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatListModule } from "@angular/material/list";
 import { MatTableModule } from "@angular/material/table";
@@ -32,6 +32,9 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { ResultsListComponent } from './search/results-list/results-list.component';
 import { ItemDetailsComponent } from './shared/item-details/item-details.component';
 import { ProjectDetailsComponent } from './shared/item-details/project-details/project-details.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -75,6 +78,9 @@ import { ProjectDetailsComponent } from './shared/item-details/project-details/p
     MatCardModule,
     MatProgressBarModule,
     ReactiveFormsModule,
+    MatChipsModule,
+    MatGridListModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

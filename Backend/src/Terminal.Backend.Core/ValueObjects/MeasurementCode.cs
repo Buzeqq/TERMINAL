@@ -27,4 +27,8 @@ public sealed record MeasurementCode
 
         Number = number;
     }
+    
+    public static implicit operator string(MeasurementCode code) => code.Value;
+    public static implicit operator MeasurementCode(string code) => new(code);
+    
 }

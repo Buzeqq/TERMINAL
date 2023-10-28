@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.13" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
         <PackageReference Include="Serilog" Version="2.11.0" />
         <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
@@ -22,9 +23,5 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Terminal.Backend.Application\Terminal.Backend.Application.csproj" />
-    </ItemGroup>
-    
-    <ItemGroup>
-      <Folder Include="DAL\Migrations\" />
     </ItemGroup>
 </Project>

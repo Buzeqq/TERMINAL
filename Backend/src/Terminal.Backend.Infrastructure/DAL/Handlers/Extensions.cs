@@ -6,11 +6,10 @@ namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 
 public static class Extensions
 {
-    public static GetProjectsDto AsGetProjectsDto(this Project entity)
+    public static GetProjectsDto AsGetProjectsDto(this IEnumerable<Project> entities)
         => new()
         {
-            Id = entity.Id,
-            Name = entity.Name
+            Projects = entities.Select(p => new GetProjectsDto.InnerProjectDto(p.Id, p.Name))
         };
 
     public static GetProjectDto AsGetProjectDto(this Project entity)
@@ -19,7 +18,7 @@ public static class Extensions
             Id = entity.Id,
             Name = entity.Name,
             IsActive = entity.IsActive,
-            Measurements = entity.Measurements
+            MeasurementsIds = entity.Measurements.Select(m => m.Id.Value)
         };
 
     public static GetMeasurementDto AsGetMeasurementDto(this Measurement entity)
