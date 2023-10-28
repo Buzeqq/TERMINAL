@@ -1,0 +1,17 @@
+<section class="dashboard">
+    <section class="dashboard__cards">
+        <mat-card class="recent-measurements">
+            <mat-card-header>
+                <div class="recent-measurements__header mat-h1">
+                    <h2>{{itemType}}s</h2>
+                </div>
+            </mat-card-header>
+            <ng-component [ngSwitch]="itemType">
+                <app-measurement-views *ngSwitchCase="'Measurement'"></app-measurement-views>
+                <app-project-views *ngSwitchCase="'Project'"></app-project-views>
+            </ng-component>
+        </mat-card>
+        <app-item-details class="measurement-details" [itemId]="selectedItemId"
+            [itemType]="itemType"></app-item-details>
+    </section>
+</section>

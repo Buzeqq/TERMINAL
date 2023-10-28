@@ -11,12 +11,13 @@
       <mat-icon>redo</mat-icon>
       Redo
     </button>
-    <button mat-button color="primary">
+    <button mat-button color="primary" [routerLink]="['/measurements', measurementId]">
       <mat-icon>arrow_forward</mat-icon>
       Show steps
     </button>
   </mat-card-actions>
 </ng-container>
+
 <mat-card-footer>
   <mat-progress-bar [mode]="loading"></mat-progress-bar>
 </mat-card-footer>

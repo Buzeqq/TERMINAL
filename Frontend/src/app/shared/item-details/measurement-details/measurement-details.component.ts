@@ -6,6 +6,7 @@ import { MeasurementsService } from 'src/app/core/services/measurements/measurem
 import { ProjectsService } from "../../../core/services/projects/projects.service";
 import { Project } from "../../../core/models/projects/project";
 import { ItemDetailsComponent } from "../item-details.component";
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-measurement-details',
@@ -16,7 +17,12 @@ export class MeasurementDetailsComponent extends ItemDetailsComponent {
   constructor(
     private readonly measurementService: MeasurementsService,
     private readonly snackBar: MatSnackBar,
-    private readonly projectService: ProjectsService) { super(); }
+    private readonly projectService: ProjectsService,
+    protected override readonly route: ActivatedRoute
+  ) {
+    super(route);
+
+  }
 
   @Input()
   get measurementId(): string | undefined {
@@ -24,7 +30,7 @@ export class MeasurementDetailsComponent extends ItemDetailsComponent {
   }
 
   set measurementId(id: string | undefined) {
-    this._measurementId = id;
+    this._measurementId = id || this.route.snapshot.paramMap.get('id') || undefined;
     this.measurementDetails$ = this.measurementService.getMeasurementDetails(id!)
       .pipe(
         catchError((err, caught) => {
