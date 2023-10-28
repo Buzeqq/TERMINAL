@@ -1,4 +1,5 @@
 using Terminal.Backend.Application.DTO;
+using Terminal.Backend.Application.Queries.Parameters;
 using Terminal.Backend.Core.Entities;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
@@ -32,4 +33,7 @@ public static class Extensions
             StepIds = entity.Steps.Select(s => s.Id.Value),
             Tags = entity.Tags.Select(t => t.Name.Value),
         };
+
+    public static IQueryable<T> Paginate<T>(this IQueryable<T> queryable, PagingParameters parameters)
+        => queryable.Skip(parameters.PageNumber * parameters.PageSize).Take(parameters.PageSize);
 }

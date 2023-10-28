@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Application.Commands.Measurement.Create;
 using Terminal.Backend.Application.DTO;
 using Terminal.Backend.Application.Queries;
-using Terminal.Backend.Application.Queries.Parameters;
 using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Api.Modules;
@@ -69,12 +68,7 @@ public static class MeasurementsModule
 
         app.MapGet("api/measurements", async ([FromQuery] int pageNumber, [FromQuery] int pageSize, ISender sender, CancellationToken ct) =>
         {
-            var query = new GetMeasurementsQuery 
-            { Parameters = new PagingParameters
-                {
-                    PageNumber = pageNumber, PageSize = pageSize
-                } 
-            };
+            var query = new GetMeasurementsQuery(pageNumber, pageSize);
 
             var measurements = await sender.Send(query, ct);
             

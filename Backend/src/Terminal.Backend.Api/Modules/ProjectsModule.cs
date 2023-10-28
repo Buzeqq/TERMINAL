@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Application.Commands.Project.ChangeStatus;
 using Terminal.Backend.Application.Commands.Project.Create;
 using Terminal.Backend.Application.Queries;
@@ -10,9 +11,9 @@ public static class ProjectsModule
 {
     public static void UseProjectsEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("api/projects",async (ISender sender, 
+        app.MapGet("api/projects",async ([FromQuery] int pageSize, [FromQuery] int pageNumber, ISender sender, 
                     CancellationToken ct)
-                => Results.Ok(await sender.Send(new GetProjectsQuery(), ct)));
+                => Results.Ok(await sender.Send(new GetProjectsQuery(pageNumber, pageSize), ct)));
 
         app.MapGet("api/projects/{id:guid}", async (
             Guid id,

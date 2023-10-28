@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Application.Commands.Tag.ChangeStatus;
 using Terminal.Backend.Application.Commands.Tag.Create;
 using Terminal.Backend.Application.Queries;
@@ -9,16 +10,12 @@ public static class TagsModule
 {
     public static void UseTagEndpoints(this IEndpointRouteBuilder app)
     {
-        // TODO: based on route/query parameter/command, fetch n most popular or all paginated 
-        // app.MapGet("api/tags", async (
-        //         int count, 
-        //         IQueryHandler<GetMostPopularTagsQuery, GetTagsDto> handler, 
-        //         CancellationToken ct) 
-        //     => await handler.HandleAsync(new GetMostPopularTagsQuery { Count = count }, ct));
         app.MapGet("api/tags", async (
+            [FromQuery] int pageNumber,
+            [FromQuery] int pageSize,
             ISender sender,
             CancellationToken ct
-            ) => await sender.Send(new GetTagsQuery(), ct));
+            ) => await sender.Send(new GetTagsQuery(pageNumber, pageSize), ct));
         
         app.MapPost("api/tags", async (
                 CreateTagCommand command, 

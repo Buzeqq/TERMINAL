@@ -1,5 +1,3 @@
-using Terminal.Backend.Core.Entities;
-
 namespace Terminal.Backend.Application.DTO;
 
 public class GetProjectDto
