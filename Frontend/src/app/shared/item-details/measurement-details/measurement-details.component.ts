@@ -21,7 +21,6 @@ export class MeasurementDetailsComponent extends ItemDetailsComponent {
     protected override readonly route: ActivatedRoute
   ) {
     super(route);
-
   }
 
   @Input()
@@ -31,7 +30,7 @@ export class MeasurementDetailsComponent extends ItemDetailsComponent {
 
   set measurementId(id: string | undefined) {
     this._measurementId = id || this.route.snapshot.paramMap.get('id') || undefined;
-    this.measurementDetails$ = this.measurementService.getMeasurementDetails(id!)
+    this.measurementDetails$ = this.measurementService.getMeasurementDetails(this._measurementId!)
       .pipe(
         catchError((err, caught) => {
           console.log(err);

@@ -1,5 +1,10 @@
 <div *ngIf="projects$ | async as projects; else loading" class="recent-measurements__list">
     <mat-table class="recent-measurements__list-content mat-elevation-z8" [dataSource]="projects">
+        <ng-component matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
+            <mat-cell *matCellDef="let measurement"> {{measurement.id}} </mat-cell>
+        </ng-component>
+
         <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
             <mat-cell *matCellDef="let measurement"> {{measurement.name}} </mat-cell>
@@ -7,7 +12,7 @@
 
         <mat-header-row *matHeaderRowDef="displayedColumns" class="recent-measurements__list-header"></mat-header-row>
         <mat-row mat-ripple *matRowDef="let row; columns: displayedColumns;" (click)="selectProject(row);"
-            [class.recent-measurements__row--is-clicked]="row.id === selectedProjectId"></mat-row>
+            [class.recent-measurements__row--is-clicked]="row.id === selectedItemId"></mat-row>
     </mat-table>
 </div>
 

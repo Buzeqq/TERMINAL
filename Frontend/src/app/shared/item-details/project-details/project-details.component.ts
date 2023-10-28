@@ -19,9 +19,9 @@ export class ProjectDetailsComponent extends ItemDetailsComponent {
   ) { super(route); }
 
   set projectId(id: string | undefined) {
-    this._projectId = id;
+    this._projectId = id || this.route.snapshot.paramMap.get('id') || undefined;
     let projectName: string;
-    this.projectDetails$ = this.projectService.getProject(id!)
+    this.projectDetails$ = this.projectService.getProject(this._projectId!)
       .pipe(tap(r => projectName = r.name));
     this.numberOfMeasurements$ = this.measurementService.getAllMeasurements()
       .pipe(

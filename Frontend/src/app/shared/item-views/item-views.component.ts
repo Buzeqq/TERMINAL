@@ -20,7 +20,15 @@ export class ItemViewsComponent {
     this.loading = 'determinate';
   }
 
-  selectedItemId: string | undefined;
+  
+  @Input()
+  get selectedItemId(): string | undefined{
+    return this._selectedItemId;
+  }
+
+  set selectedItemId(id: string | undefined) {
+    this._selectedItemId = id;
+  }
 
   @Input()
   set itemType(type: string | undefined) {
@@ -31,5 +39,6 @@ export class ItemViewsComponent {
     return this._itemType;
   }
 
+  private _selectedItemId: string | undefined;
   private _itemType?: string;
 }

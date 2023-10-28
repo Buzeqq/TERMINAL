@@ -1,4 +1,4 @@
-<div *ngIf="measurements$ | async as measurements; else loading" class="recent-measurements__list">
+<div *ngIf="measurements$ | async as measurements else loading" class="recent-measurements__list">
     <mat-table class="recent-measurements__list-content mat-elevation-z8" [dataSource]="measurements">
         <ng-container matColumnDef="code">
             <mat-header-cell *matHeaderCellDef> Code </mat-header-cell>
@@ -17,7 +17,7 @@
 
         <mat-header-row *matHeaderRowDef="displayedColumns" class="recent-measurements__list-header"></mat-header-row>
         <mat-row mat-ripple *matRowDef="let row; columns: displayedColumns;" (click)="selectMeasurement(row);"
-            [class.recent-measurements__row--is-clicked]="row.id === selectedMeasurementId"></mat-row>
+            [class.recent-measurements__row--is-clicked]="row.id === selectedItemId"></mat-row>
     </mat-table>
 </div>
 
