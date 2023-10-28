@@ -21,6 +21,7 @@ public sealed class Measurement
         Comment = comment;
         Steps = steps;
         Tags = tags;
+        Project = project;
         CreatedAtUtc = DateTime.UtcNow;
     }
 

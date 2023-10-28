@@ -16,7 +16,7 @@ internal sealed class MeasurementConfiguration : IEntityTypeConfiguration<Measur
             .HasConversion(i => i.Value,
                 i => new MeasurementId(i));
         builder.Property(m => m.Code)
-            .HasConversion(c => c.Value,
+            .HasConversion(c => c.Number,
                 c => new MeasurementCode(c))
             .HasValueGenerator(typeof(MeasurementCodeValueGenerator));
         builder.Property(m => m.Comment)

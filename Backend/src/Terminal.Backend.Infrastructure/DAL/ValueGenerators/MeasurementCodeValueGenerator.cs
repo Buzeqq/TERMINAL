@@ -15,11 +15,10 @@ internal sealed class MeasurementCodeValueGenerator : ValueGenerator<Measurement
     {
         var dbContext = entry.Context as TerminalDbContext ?? throw new InvalidDataException(); // FIXME
         var lastCodeNumber = dbContext.Measurements
-            .Select(measurement => measurement.Code)
-            .ToList()
+            .OrderBy(m => m.Code)
+            .Select(m => m.Code)
             .LastOrDefault()?.Number;
-
-
+        
         return lastCodeNumber is null
             ? new MeasurementCode(InitialNumberValue)
             : new MeasurementCode((ulong)(lastCodeNumber + 1));

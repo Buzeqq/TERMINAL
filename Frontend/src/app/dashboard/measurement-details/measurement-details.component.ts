@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { EMPTY, Observable, catchError, tap } from 'rxjs';
 import { MeasurementDetails } from 'src/app/core/models/measurements/measurementDetails';
 import { MeasurementsService } from 'src/app/core/services/measurements/measurements.service';
 
@@ -9,7 +10,9 @@ import { MeasurementsService } from 'src/app/core/services/measurements/measurem
   styleUrls: ['./measurement-details.component.scss']
 })
 export class MeasurementDetailsComponent {
-  constructor(private readonly measurementService: MeasurementsService) {
+  constructor(
+    private readonly measurementService: MeasurementsService,
+    private readonly snackBar: MatSnackBar) {
   }
 
   @Input()
@@ -20,14 +23,22 @@ export class MeasurementDetailsComponent {
   set measurementId(id: string | undefined) {
     this._measurementId = id;
     this.measurementDetails$ = this.measurementService.getMeasurementDetails(id!)
-      .pipe(tap(_ => this.loaded()));
+      .pipe(
+        catchError((err, caught) => {
+          console.log(err);
+          this.snackBar.open('Failed to load measurement', 'Close', {
+            duration: 3000
+          });
+          return EMPTY;
+        }),
+        tap(_ => {
+          this.loading = 'determinate';
+        })
+      );
   }
 
   private _measurementId?: string;
-  measurementDetails$?: Observable<MeasurementDetails>;
+  measurementDetails$?: Observable<MeasurementDetails> = undefined;
 
   loading: 'determinate' | 'indeterminate' | 'buffer' | 'query' = 'query';
-  loaded(): void {
-    this.loading = 'determinate';
-  }
 }

@@ -4,8 +4,6 @@ using Terminal.Backend.Core.Entities.ParameterValues;
 using Terminal.Backend.Core.ValueObjects;
 using Terminal.Backend.Infrastructure.DAL;
 
-using ILogger = Serilog.ILogger;
-
 namespace Terminal.Backend.Infrastructure;
 
 internal sealed class TerminalDbSeeder
@@ -84,7 +82,7 @@ internal sealed class TerminalDbSeeder
             new DecimalParameterValue(ParameterValueId.Create(), bufferParameter, 0.0m),
             new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter, additionalGasesParameter.AllowedValues.First())
         });
-        
+
         var step2 = new Step(StepId.Create(), new Comment("First step!"), new List<ParameterValue>
         {
             new IntegerParameterValue(ParameterValueId.Create(), bcParameter, 2000),
@@ -228,19 +226,21 @@ internal sealed class TerminalDbSeeder
             new DecimalParameterValue(ParameterValueId.Create(), bufferParameter, 0.0m),
             new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter, additionalGasesParameter.AllowedValues.First())
         });
-        
+
         #endregion
 
         #region measurements
 
         var measurement1 = new Measurement(
-            MeasurementId.Create(), 
+            MeasurementId.Create(),
             projectUpturn,
-            null, 
-            new Comment("First measurement!"), 
-            new List<Step> { step1 }, 
+            null,
+            new Comment("First measurement!"),
+            new List<Step> { step1 },
             new List<Tag> { tag1, tag3, tag5 });
-        
+        _dbContext.Measurements.Add(measurement1);
+        _dbContext.SaveChanges();
+
         var measurement2 = new Measurement(
             MeasurementId.Create(),
             projectUpturn,
@@ -248,7 +248,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First measurement!"),
             new List<Step> { step2 },
             new List<Tag> { tag1, tag3, tag5 });
-        
+        _dbContext.Measurements.Add(measurement2);
+        _dbContext.SaveChanges();
+
         var measurement3 = new Measurement(
             MeasurementId.Create(),
             projectBessy2,
@@ -256,7 +258,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First measurement!"),
             new List<Step> { step3 },
             new List<Tag> { tag1, tag3, tag5 });
-        
+        _dbContext.Measurements.Add(measurement3);
+        _dbContext.SaveChanges();
+
         var measurement4 = new Measurement(
             MeasurementId.Create(),
             projectBessy2,
@@ -264,7 +268,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First measurement!"),
             new List<Step> { step4 },
             new List<Tag> { tag1, tag3, tag5 });
-        
+        _dbContext.Measurements.Add(measurement4);
+        _dbContext.SaveChanges();
+
         var measurement5 = new Measurement(
             MeasurementId.Create(),
             projectNitro,
@@ -272,7 +278,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First measurement!"),
             new List<Step> { step5 },
             new List<Tag> { tag1, tag3, tag5 });
-        
+        _dbContext.Measurements.Add(measurement5);
+        _dbContext.SaveChanges();
+
         var measurement6 = new Measurement(
             MeasurementId.Create(),
             projectNitro,
@@ -280,6 +288,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First measurement!"),
             new List<Step> { step6 },
             new List<Tag> { tag1, tag3, tag5 });
+        _dbContext.Measurements.Add(measurement6);
+        _dbContext.SaveChanges();
 
         var measurement7 = new Measurement(
             MeasurementId.Create(),
@@ -288,7 +298,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First measurement!"),
             new List<Step> { step7 },
             new List<Tag> { tag1, tag3, tag5 });
-        
+        _dbContext.Measurements.Add(measurement7);
+        _dbContext.SaveChanges();
+
         var measurement8 = new Measurement(
             MeasurementId.Create(),
             projectNobelium,
@@ -296,7 +308,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First measurement!"),
             new List<Step> { step8 },
             new List<Tag> { tag1, tag3, tag5 });
-        
+        _dbContext.Measurements.Add(measurement8);
+        _dbContext.SaveChanges();
+
         var measurement9 = new Measurement(
             MeasurementId.Create(),
             projectNobelium,
@@ -304,7 +318,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First measurement!"),
             new List<Step> { step9 },
             new List<Tag> { tag1, tag3, tag5 });
-        
+        _dbContext.Measurements.Add(measurement9);
+        _dbContext.SaveChanges();
+
         var measurement10 = new Measurement(
             MeasurementId.Create(),
             projectNitro,
@@ -312,7 +328,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First measurement!"),
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        
+        _dbContext.Measurements.Add(measurement10);
+        _dbContext.SaveChanges();
+
         #endregion
 
         #region add
@@ -331,19 +349,9 @@ internal sealed class TerminalDbSeeder
             bcParameter,
             hydrogenParameter,
             additionalGasesParameter);
-        _dbContext.AddRange(measurement1,
-            measurement2,
-            measurement3,
-            measurement4,
-            measurement5,
-            measurement6,
-            measurement7,
-            measurement8,
-            measurement9,
-            measurement10);
 
         #endregion
-        
+
         _dbContext.SaveChanges();
     }
 }

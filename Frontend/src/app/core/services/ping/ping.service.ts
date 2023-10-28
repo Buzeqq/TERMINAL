@@ -9,19 +9,18 @@ import { BehaviorSubject, catchError, map, Observable, of, tap } from "rxjs";
 export class PingService extends ApiService {
   constructor(http: HttpClient) {
     super(http);
-    this.ping()
+  }
+
+  get isOnline$(): Observable<boolean>
+  {
+    return this.ping()
       .pipe(
         map(_ => true),
         catchError(_ => of(false)),
-        tap(r => console.log(r))
-      ).subscribe(r => this.status.next(r));
-  }
-  get isOnline$(): Observable<boolean> {
-    return this.status.asObservable();
+      );
   }
 
   private ping(): Observable<boolean> {
     return this.get<boolean>("ping");
   }
-  private status = new BehaviorSubject<boolean>(window.navigator.onLine);
 }

@@ -22,7 +22,7 @@ internal class GetMeasurementQueryHandler : IRequestHandler<GetMeasurementQuery,
             // FIXME: .Include(m => m.Tags)
             .Select(m => new GetMeasurementDto
             {
-                Code = m.Code,
+                Code = m.Code.Value,
                 Comment = m.Comment,
                 CreatedAtUtc = m.CreatedAtUtc.ToString("o"),
                 Id = m.Id,

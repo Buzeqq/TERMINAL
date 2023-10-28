@@ -49,11 +49,12 @@ public static class Extensions
         if (!app.Configuration.GetOptions<PostgresOptions>("Postgres").Seed) return app;
         using var scope = app.Services.CreateScope();
         using var dbContext = scope.ServiceProvider.GetRequiredService<TerminalDbContext>();
-        // var seeder = new TerminalDbSeeder(dbContext);
-        // try
-        // {
-        //     seeder.Seed();
-        // } catch (Exception) { } // TODO
+        var seeder = new TerminalDbSeeder(dbContext);
+        try
+        {
+            seeder.Seed();
+        }
+        catch (Exception) { } // todo
 
         // var measurement = dbContext.Measurements
         //     .Include(m => m.Steps)

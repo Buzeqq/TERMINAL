@@ -27,6 +27,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -63,7 +66,10 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatMenuModule,
     MatTooltipModule,
     MatCardModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatChipsModule,
+    MatGridListModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

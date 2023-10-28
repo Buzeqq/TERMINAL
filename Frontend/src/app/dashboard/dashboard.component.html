@@ -8,7 +8,7 @@
           <h2>Recent measurements</h2>
         </div>
       </mat-card-header>
-      <div *ngIf="recentMeasurement$ | async else loading; let recentMeasurements;" class="recent-measurements__list">
+      <div *ngIf="recentMeasurement$ | async as recentMeasurements; else loading" class="recent-measurements__list">
         <mat-table class="recent-measurements__list-content mat-elevation-z8" [dataSource]="recentMeasurements">
           <ng-container matColumnDef="code">
             <mat-header-cell *matHeaderCellDef> Code </mat-header-cell>
@@ -26,11 +26,15 @@
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns" class="recent-measurements__list-header"></mat-header-row>
-          <mat-row mat-ripple *matRowDef="let row; columns: displayedColumns;" (click)="selectMeasurement(row)"></mat-row>
+          <mat-row
+            mat-ripple
+            *matRowDef="let row; columns: displayedColumns;"
+            (click)="selectMeasurement(row);"
+            [class.recent-measurements__row--is-clicked]="row.id === selectedMeasurementId"></mat-row>
         </mat-table>
       </div>
     </mat-card>
-    <app-measurement-details [measurementId]="selectedMeasurementId"></app-measurement-details>
+    <app-measurement-details class="measurement-details" *ngIf="selectedMeasurementId" [measurementId]="selectedMeasurementId"></app-measurement-details>
   </section>
 </section>
 

@@ -27,7 +27,7 @@ $light-theme: mat.define-light-theme((
 @include mat.all-component-themes($dark-theme);
 @include dashboard.theme($dark-theme);
 
-// Apply the light theme only when the user prefers light themes.
+// Apply the light theme only when the user prefers light styles.
 @media (prefers-color-scheme: light) {
   // Use the `-color` mixins to only apply color styles without reapplying the same
   // typography and density styles.

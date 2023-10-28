@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from "../api-service";
 import { HttpClient } from "@angular/common/http";
-import { map, Observable, tap } from "rxjs";
+import { map, Observable } from "rxjs";
 import { RecentMeasurement } from "../../models/measurements/recentMeasurement";
 
 @Injectable({
@@ -17,7 +17,9 @@ export class MeasurementsService extends ApiService {
         id: string,
         code: string,
         project: string,
-        createdAtUtc: string
+        createdAtUtc: string,
+        stepsIds: string[],
+        tags: string[],
       }[] }>(`measurements/recent?length=${length}`)
       .pipe(
         map(r => r.recentMeasurements),
@@ -29,6 +31,6 @@ export class MeasurementsService extends ApiService {
   }
 
   getMeasurementDetails(id: string): Observable<any> {
-    return this.get<any>(`measurements/${id}`).pipe(tap(r => console.log(r)));
+    return this.get<any>(`measurements/${id}`);
   }
 }
