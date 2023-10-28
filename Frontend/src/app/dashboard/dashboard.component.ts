@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { Observable, tap } from "rxjs";
 import { MeasurementsService } from "../core/services/measurements/measurements.service";
-import { RecentMeasurement } from "../core/models/measurements/recentMeasurement";
+import { Measurement } from "../core/models/measurements/recentMeasurement";
 
 @Component({
   selector: 'app-dashboard',
@@ -12,13 +12,13 @@ import { RecentMeasurement } from "../core/models/measurements/recentMeasurement
 export class DashboardComponent {
   displayedColumns: string[] = ['code', 'project', 'created'];
   selectedMeasurementId?: string;
-  recentMeasurement$: Observable<RecentMeasurement[]> = this.measurementService.getRecentMeasurements(10)
+  recentMeasurement$: Observable<Measurement[]> = this.measurementService.getRecentMeasurements(10)
     .pipe(tap(r => this.selectedMeasurementId = r[0].id));
 
   constructor(private readonly breakpointObserver: BreakpointObserver, private readonly measurementService: MeasurementsService) {
   }
 
-  selectMeasurement(row: RecentMeasurement) {
+  selectMeasurement(row: Measurement) {
     this.selectedMeasurementId = row.id;
   }
 }
