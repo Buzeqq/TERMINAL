@@ -2,11 +2,11 @@ import {Component, Input} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-item-details',
-  templateUrl: './item-details.component.html',
-  styleUrls: ['./item-details.component.scss']
+  selector: 'app-item-views',
+  templateUrl: './item-views.component.html',
+  styleUrls: ['./item-views.component.scss']
 })
-export class ItemDetailsComponent {
+export class ItemViewsComponent {
   constructor(
     protected readonly route: ActivatedRoute,
   ) {
@@ -20,13 +20,14 @@ export class ItemDetailsComponent {
     this.loading = 'determinate';
   }
 
+  
   @Input()
-  get itemId(): string | undefined {
-    return this._itemId;
+  get selectedItemId(): string | undefined{
+    return this._selectedItemId;
   }
 
-  set itemId(id: string | undefined) {
-    this._itemId = id;
+  set selectedItemId(id: string | undefined) {
+    this._selectedItemId = id;
   }
 
   @Input()
@@ -38,6 +39,6 @@ export class ItemDetailsComponent {
     return this._itemType;
   }
 
-  private _itemId?: string;
+  private _selectedItemId: string | undefined;
   private _itemType?: string;
 }
