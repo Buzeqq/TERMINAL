@@ -21,7 +21,7 @@ export class ProjectDetailsComponent extends ItemDetailsComponent {
     let projectName: string;
     this.projectDetails$ = this.projectService.getProject(id!)
       .pipe(tap(r => projectName = r.name));
-    this.numberOfMeasurements$ = this.measurementService.getAllMeasurements()
+    this.numberOfMeasurements$ = this.measurementService.getMeasurements(0, 10)
       .pipe(
         tap(_ => super.loaded()),
         map(measurements => measurements.filter(

@@ -21,9 +21,11 @@ internal sealed class SearchMeasurementQueryHandler : IRequestHandler<SearchMeas
             Measurements = await _measurements
                 .AsNoTracking()
                 .Include(m => m.Project)
-                .Where(m => EF.Functions.ToTsVector("english", "AX" + m.Code + " " + m.Comment)
-                    .Matches(request.SearchPhrase))
+                .Where(m => 
+                    EF.Functions.ToTsVector("english", "AX" + m.Code + " " + m.Comment).Matches(request.SearchPhrase) || 
+                    EF.Functions.ILike(m.Project.Name, $"%{request.SearchPhrase}%"))
                 .Select(m => new GetMeasurementsDto.MeasurementDto(m.Id, m.Code.Value, m.Project.Name, m.CreatedAtUtc.ToString("o"), m.Comment))
+                .Paginate(request.Parameters)
                 .ToListAsync(ct)
         };
 }

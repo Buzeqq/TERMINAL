@@ -9,7 +9,7 @@ public static class Extensions
     public static GetProjectsDto AsGetProjectsDto(this IEnumerable<Project> entities)
         => new()
         {
-            Projects = entities.Select(p => new GetProjectsDto.InnerProjectDto(p.Id, p.Name))
+            Projects = entities.Select(p => new GetProjectsDto.ProjectDto(p.Id, p.Name))
         };
 
     public static GetProjectDto AsGetProjectDto(this Project entity)

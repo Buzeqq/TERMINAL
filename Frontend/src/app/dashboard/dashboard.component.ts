@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Observable, tap } from "rxjs";
 import { MeasurementsService } from "../core/services/measurements/measurements.service";
-import { Measurement } from "../core/models/measurements/recentMeasurement";
+import { Measurement } from "../core/models/measurements/measurement";
 
 @Component({
   selector: 'app-dashboard',

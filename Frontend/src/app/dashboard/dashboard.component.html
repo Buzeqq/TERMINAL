@@ -1,5 +1,5 @@
 <section class="dashboard">
-  <app-quick-actions></app-quick-actions>
+  <app-search [filters]="{ 'measurements': true, 'projects': true, 'recipes': true }"></app-search>
   <section class="dashboard__cards">
     <mat-card class="recent-measurements">
       <mat-card-header>

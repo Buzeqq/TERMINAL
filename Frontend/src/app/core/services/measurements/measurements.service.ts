@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from "../api-service";
-import { HttpClient } from "@angular/common/http";
-import { catchError, map, Observable } from "rxjs";
-import { Measurement } from "../../models/measurements/recentMeasurement";
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { map, Observable } from "rxjs";
+import { Measurement } from "../../models/measurements/measurement";
 
 @Injectable({
   providedIn: 'root'
@@ -12,21 +12,16 @@ export class MeasurementsService extends ApiService {
     super(http);
   }
 
-// TODO: /api/measurements endpoint needed?
-  getAllMeasurements(): Observable<Measurement[]> {
-    return this.get<{ recentMeasurements: Measurement[] }>('measurements/recent?length=100')
+  getMeasurements(pageNumber: number, pageSize: number): Observable<Measurement[]>
+  {
+    return this.get<{measurements: Measurement[]}>(`measurements?pageNumber=${pageNumber}&pageSize=${pageSize}`)
       .pipe(
-        catchError(this.handleError),
-        map(r => r.recentMeasurements),
-        map(r => r.map(measurement => ({
-          ...measurement,
-          createdAtUtc: new Date(measurement.createdAtUtc)
-        })))
+        map(m => m.measurements)
       );
   }
 
   getRecentMeasurements(length: number): Observable<Measurement[]> {
-    return this.get<{ recentMeasurements: Measurement[] }>(`measurements/recent?length=${length}`)
+    return this.get<{ recentMeasurements: Measurement[] }>(`measurements/recent`)
       .pipe(
         map(r => r.recentMeasurements),
         map(r => r.map(measurement => ({

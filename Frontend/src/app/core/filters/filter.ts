@@ -1,6 +1,6 @@
 import {map, Observable} from "rxjs";
 import {Project} from "../models/projects/project";
-import {Measurement} from "../models/measurements/recentMeasurement";
+import {Measurement} from "../models/measurements/measurement";
 import {Injectable} from "@angular/core";
 
 @Injectable({

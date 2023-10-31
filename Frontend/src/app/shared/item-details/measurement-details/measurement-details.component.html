@@ -1,11 +1,21 @@
-<ng-container *ngIf="measurementDetails$ | async; let details">
-  <h2>Measurement {{ details.code }}</h2>
-  <h3 *ngIf="projectDetails$ | async; let project">Project: {{ project.name }}</h3>
-  <h3 *ngIf="details.tags.length">Tags: {{ details.tags }}</h3>
-  <h3>Created at: {{ details.createdAtUtc | date:'medium' }}</h3>
-  <h3>Comment:</h3>
-  <p>{{ details.comment ?? 'no comment' }}</p>
-  <mat-divider></mat-divider>
+<ng-container *ngIf="measurementId && (measurementDetails$ | async) as details">
+  <mat-card-content>
+    <article class="measurement-details">
+      <div class="measurement-details__header">Measurement {{details.code}}</div>
+      <div class="measurement-details__label">Created:</div>
+      <div>{{details.createdAtUtc | date:'medium'}}</div>
+      <div class="measurement-details__label">Tags: </div>
+      <div>
+        <mat-chip-set>
+          <mat-chip *ngFor="let tag of details.tags">{{tag}}</mat-chip>
+        </mat-chip-set>
+      </div>
+      <div class="measurement-details__label">Comment:</div>
+      <div>{{details.comment}}</div>
+      <div class="measurement-details__label">Number of steps:</div>
+      <div>{{details.stepIds.length}}</div>
+    </article>
+  </mat-card-content>
   <mat-card-actions>
     <button mat-button color="primary">
       <mat-icon>redo</mat-icon>
@@ -15,8 +25,12 @@
       <mat-icon>arrow_forward</mat-icon>
       Show steps
     </button>
+    <button mat-button color="primary">
+      <mat-icon>arrow_forward</mat-icon>
+      Show recipe
+    </button>
   </mat-card-actions>
+  <mat-card-footer>
+    <mat-progress-bar [mode]="loading"></mat-progress-bar>
+  </mat-card-footer>
 </ng-container>
-<mat-card-footer>
-  <mat-progress-bar [mode]="loading"></mat-progress-bar>
-</mat-card-footer>

@@ -64,5 +64,12 @@ public static class ProjectsModule
             await sender.Send(command, ct);
             return Results.Ok();
         });
+
+        app.MapGet("api/projects/search", async ([FromQuery] string searchPhrase, [FromQuery] int pageNumber, [FromQuery] int pageSize, ISender sender, CancellationToken ct) =>
+        {
+            var query = new SearchProjectQuery(searchPhrase, pageNumber, pageSize);
+            var projects = await sender.Send(query, ct);
+            return Results.Ok(projects);
+        });
     }
 }

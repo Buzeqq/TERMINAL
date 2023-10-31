@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { QuickActionsComponent } from './quick-actions.component';
+import { SearchComponent } from './search.component';
 
 describe('QuickActionsComponent', () => {
-  let component: QuickActionsComponent;
-  let fixture: ComponentFixture<QuickActionsComponent>;
+  let component: SearchComponent;
+  let fixture: ComponentFixture<SearchComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [QuickActionsComponent]
+      declarations: [SearchComponent]
     });
-    fixture = TestBed.createComponent(QuickActionsComponent);
+    fixture = TestBed.createComponent(SearchComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
