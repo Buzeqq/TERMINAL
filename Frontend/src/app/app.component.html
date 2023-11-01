@@ -14,6 +14,23 @@
         <mat-icon matListItemIcon>home</mat-icon>
         <span *ngIf="isExpanded">Home</span>
       </mat-list-item>
+
+      <mat-list-item routerLink="measurements">
+        <mat-icon matListItemIcon>science</mat-icon>
+        <span *ngIf="isExpanded">Measurements</span>
+      </mat-list-item>
+
+      <mat-list-item routerLink="recipes">
+        <mat-icon matListItemIcon>assignment</mat-icon>
+        <span *ngIf="isExpanded">recipes</span>
+      </mat-list-item>
+
+      <mat-list-item routerLink="projects">
+        <mat-icon matListItemIcon>folder</mat-icon>
+        <span *ngIf="isExpanded">Projects</span>
+      </mat-list-item>
+
+      
     </mat-nav-list>
   </mat-sidenav>
   <div class="grid-container">

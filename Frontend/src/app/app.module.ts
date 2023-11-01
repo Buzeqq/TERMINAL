@@ -36,6 +36,9 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
+import { ItemViewsComponent } from './shared/item-views/item-views.component';
+import { MeasurementViewsComponent } from './shared/item-views/measurement-views/measurement-views.component';
+import { ProjectViewsComponent } from './shared/item-views/project-views/project-views.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +50,9 @@ import { InfiniteScrollModule } from "ngx-infinite-scroll";
     ResultsListComponent,
     ItemDetailsComponent,
     ProjectDetailsComponent,
+    ItemViewsComponent,
+    MeasurementViewsComponent,
+    ProjectViewsComponent
   ],
   imports: [
     BrowserModule,

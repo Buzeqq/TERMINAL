@@ -4,6 +4,7 @@ import {MeasurementsService} from "../../../core/services/measurements/measureme
 import {ProjectsService} from "../../../core/services/projects/projects.service";
 import {map, Observable, tap} from "rxjs";
 import {Project} from "../../../core/models/projects/project";
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-project-details',
@@ -13,13 +14,14 @@ import {Project} from "../../../core/models/projects/project";
 export class ProjectDetailsComponent extends ItemDetailsComponent {
   constructor(
     private readonly measurementService: MeasurementsService,
-    private readonly projectService: ProjectsService
-  ) { super(); }
+    private readonly projectService: ProjectsService,
+    protected override readonly route: ActivatedRoute
+  ) { super(route); }
 
   set projectId(id: string | undefined) {
-    this._projectId = id;
+    this._projectId = id || this.route.snapshot.paramMap.get('id') || undefined;
     let projectName: string;
-    this.projectDetails$ = this.projectService.getProject(id!)
+    this.projectDetails$ = this.projectService.getProject(this._projectId!)
       .pipe(tap(r => projectName = r.name));
     this.numberOfMeasurements$ = this.measurementService.getMeasurements(0, 10)
       .pipe(

@@ -12,9 +12,13 @@ export class MeasurementsService extends ApiService {
     super(http);
   }
 
-  getMeasurements(pageNumber: number, pageSize: number): Observable<Measurement[]>
-  {
-    return this.get<{measurements: Measurement[]}>(`measurements?pageNumber=${pageNumber}&pageSize=${pageSize}`)
+  getMeasurements(pageNumber: number, pageSize: number): Observable<Measurement[]> {
+    return this.get<{measurements: Measurement[]}>('measurements', new HttpParams({
+      fromObject: {
+        pageNumber,
+        pageSize
+      }
+    }))
       .pipe(
         map(m => m.measurements)
       );
