@@ -1,9 +1,7 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
-import { BehaviorSubject, Observable, Subscription, switchMap, tap } from "rxjs";
+import { BehaviorSubject, combineLatestWith, filter, switchMap } from "rxjs";
 import { SearchItem, SearchService } from "../../core/services/search/search.service";
 import { SearchComponent } from "../../shared/search/search.component";
-import { CollectionViewer, DataSource } from "@angular/cdk/collections";
 
 @Component({
   selector: 'app-results-list',
@@ -11,26 +9,41 @@ import { CollectionViewer, DataSource } from "@angular/cdk/collections";
   styleUrls: ['./results-list.component.scss']
 })
 export class ResultsListComponent implements AfterViewInit {
-  private page = 0;
-  private readonly pageSize = 10;
-  private readonly threshold = 0.8;
-  searchItems$?: Observable<SearchItem[]>;
+  private readonly pageSize = 20;
+  private readonly page = new BehaviorSubject<number>(0);
+  private readonly searchResult = new BehaviorSubject<SearchItem[]>([]);
+  public get searchResult$() {
+    return this.searchResult.asObservable();
+  }
 
   selectedItemId?: string;
   selectedItemType: 'Measurement' | 'Project' | 'Recipe' | 'None' = 'Measurement';
 
   constructor(
     private readonly searchService: SearchService,
-    private route: ActivatedRoute
   ) {  }
 
   ngAfterViewInit(): void {
     if (this.search) {
       setTimeout(() => {
-        this.searchItems$ = this.search?.searchRequest$.pipe(
-          switchMap(({ searchPhrase, filterState }) => this.searchService.searchIn(filterState, searchPhrase, this.page, this.pageSize)),
-          tap(r => console.log(r))
-        );
+        this.search!.searchRequest$.pipe(
+          switchMap(({ searchPhrase, filterState }) => this.searchService.searchIn(filterState, searchPhrase, 0, this.pageSize)),
+        ).subscribe(r => {
+          this.page.next(0);
+          this.searchResult.next(r);
+        });
+
+        this.page.pipe(
+          combineLatestWith(this.search!.searchRequest$),
+          filter(([page, _]) => page !== 0),
+          switchMap(([page, { searchPhrase, filterState}]) =>
+            this.searchService.searchIn(filterState, searchPhrase, page, this.pageSize)
+          )
+        ).subscribe(r => {
+          if (r.length > 0) {
+            this.searchResult.next([...this.searchResult.value, ...r]);
+          }
+        })
       });
     }
   }
@@ -44,7 +57,7 @@ export class ResultsListComponent implements AfterViewInit {
   search?: SearchComponent;
 
   onScroll() {
-
+    this.page.next(this.page.value + 1);
   }
 }
 

@@ -75,9 +75,9 @@ public static class MeasurementsModule
             return Results.Ok(measurements);
         });
 
-        app.MapGet("api/measurements/search", async ([FromQuery] string phrase, ISender sender, CancellationToken ct) =>
+        app.MapGet("api/measurements/search", async ([FromQuery] string searchPhrase, [FromQuery] int pageNumber, [FromQuery] int pageSize, ISender sender, CancellationToken ct) =>
         {
-            var query = new SearchMeasurementQuery(phrase);
+            var query = new SearchMeasurementQuery(searchPhrase, pageNumber, pageSize);
 
             var measurements = await sender.Send(query, ct);
 

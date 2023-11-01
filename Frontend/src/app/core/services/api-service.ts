@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse, HttpParams, HttpParamsOptions } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http";
 import {Observable, throwError} from "rxjs";
 import { environment } from "../../../environments/environment";
 
@@ -6,8 +6,10 @@ export abstract class ApiService {
   private apiUrl = environment.apiUrl;
   protected constructor(protected readonly http: HttpClient) {}
 
-  protected get<T>(endpoint: string): Observable<T> {
-    return this.http.get<T>(this.apiUrl + endpoint);
+  protected get<T>(endpoint: string, params?: HttpParams): Observable<T> {
+    return this.http.get<T>(this.apiUrl + endpoint, {
+      params
+    });
   }
 
   protected post<T>(endpoint: string, body: any): Observable<T> {

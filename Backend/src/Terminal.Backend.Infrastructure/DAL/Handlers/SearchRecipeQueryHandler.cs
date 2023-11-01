@@ -1,6 +1,5 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Terminal.Backend.Api.Modules;
 using Terminal.Backend.Application.DTO;
 using Terminal.Backend.Application.Queries;
 using Terminal.Backend.Core.Entities;

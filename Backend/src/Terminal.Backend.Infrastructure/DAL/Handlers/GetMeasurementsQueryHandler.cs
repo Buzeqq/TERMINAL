@@ -22,7 +22,7 @@ internal sealed class GetMeasurementsQueryHandler : IRequestHandler<GetMeasureme
             .OrderByDescending(m => m.CreatedAtUtc)
             .Include(m => m.Project)
             .Include(m => m.Tags)
-            .Paginate(request.Parameters)
+            // .Paginate(request.Parameters)
             .Select(m => new GetMeasurementsDto.MeasurementDto(
                 m.Id, m.Code.Value, m.Project.Name, m.CreatedAtUtc.ToString("o"), m.Comment))
             .ToListAsync(ct);

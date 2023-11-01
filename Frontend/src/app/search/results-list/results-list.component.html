@@ -1,13 +1,18 @@
 <section class="search">
   <app-search [filters]="{ 'measurements': true, 'projects': true, 'recipes': true }"></app-search>
   <section class="search__cards">
+    <mat-card class="result-list">
+      <mat-card-title class="result-list__header">
+        Results
+      </mat-card-title>
       <mat-list infiniteScroll
+                class="result-list__content"
                 [infiniteScrollUpDistance]="2"
                 [infiniteScrollThrottle]="50"
                 (scrolled)="onScroll()"
                 [scrollWindow]="false"
-                *ngIf="searchItems$">
-          <ng-container *ngFor="let item of searchItems$ | async">
+                *ngIf="searchResult$">
+          <ng-container *ngFor="let item of searchResult$ | async">
             <ng-container *ngIf="item.type === 'Measurement'">
               <mat-list-item (click)="selectItem(item)" class="row">
                 <mat-icon matListItemIcon>science</mat-icon>
@@ -26,6 +31,12 @@
             <mat-divider></mat-divider>
           </ng-container>
       </mat-list>
+      <mat-card-footer class="result-list__footer">
+        <mat-card-actions>
+          <button mat-raised-button color="primary">Load more</button>
+        </mat-card-actions>
+      </mat-card-footer>
+    </mat-card>
     <app-item-details [itemType]="selectedItemType" [itemId]="selectedItemId"></app-item-details>
   </section>
 </section>

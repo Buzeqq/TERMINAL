@@ -21,7 +21,11 @@ export class MeasurementsService extends ApiService {
   }
 
   getRecentMeasurements(length: number): Observable<Measurement[]> {
-    return this.get<{ recentMeasurements: Measurement[] }>(`measurements/recent`)
+    return this.get<{ recentMeasurements: Measurement[] }>(`measurements/recent`, new HttpParams({
+      fromObject: {
+        length
+      }
+    }))
       .pipe(
         map(r => r.recentMeasurements),
         map(r => r.map(measurement => ({

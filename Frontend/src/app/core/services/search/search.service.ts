@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { map, Observable, zip } from "rxjs";
+import { map, Observable, of, tap, zip } from "rxjs";
 import { Measurement } from "../../models/measurements/measurement";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { ApiService } from "../api-service";
@@ -9,16 +9,16 @@ import { Project } from "../../models/projects/project";
   providedIn: 'root'
 })
 export class SearchService extends ApiService {
-
   constructor(http: HttpClient) { super(http); }
 
   public searchMeasurements(searchPhrase: string, pageNumber: number, pageSize: number): Observable<Measurement[]> {
-    // const params = new HttpParams().appendAll({
-    //   'phrase': searchPhrase,
-    //   'pageNumber': pageNumber,
-    //   'pageSize': pageSize
-    // });
-    return this.get<{measurements: Measurement[]}>('measurements/search')
+    return this.get<{measurements: Measurement[]}>('measurements/search', new HttpParams({
+      fromObject: {
+        searchPhrase,
+        pageNumber,
+        pageSize
+      }
+    }))
       .pipe(
         map(m => m.measurements),
         map(m => m.map(m => ({
@@ -29,12 +29,13 @@ export class SearchService extends ApiService {
   }
 
   public searchProjects(searchPhrase: string, pageNumber: number, pageSize: number): Observable<Project[]> {
-    // const params = new HttpParams().appendAll({
-    //   'searchPhrase': searchPhrase,
-    //   'pageNumber': pageNumber,
-    //   'pageSize': pageSize
-    // });
-    return this.get<{projects: Project[]}>('projects/search')
+    return this.get<{projects: Project[]}>('projects/search', new HttpParams({
+      fromObject: {
+        searchPhrase,
+        pageNumber,
+        pageSize
+      }
+    }))
       .pipe(
         map(p => p.projects)
       );
@@ -52,7 +53,7 @@ export class SearchService extends ApiService {
       item: p
     } as SearchItem)))));
 
-    return zip(apiCalls).pipe(map(r => r.flat()));
+    return apiCalls.length > 0 ? zip(apiCalls).pipe(map(r => r.flat())) : of([]);
   }
 }
 
