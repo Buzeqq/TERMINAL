@@ -2,20 +2,21 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Terminal.Backend.Application.DTO;
 using Terminal.Backend.Application.Queries;
+using Terminal.Backend.Core.Entities;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 
 internal sealed class GetProjectsQueryHandler : IRequestHandler<GetProjectsQuery, GetProjectsDto>
 {
-    private readonly TerminalDbContext _dbContext;
+    private readonly DbSet<Project> _projects;
 
-    public GetProjectsQueryHandler(TerminalDbContext dbContext) => _dbContext = dbContext;
+    public GetProjectsQueryHandler(TerminalDbContext dbContext) => _projects = dbContext.Projects;
 
     public async Task<GetProjectsDto> Handle(GetProjectsQuery request,
         CancellationToken ct)
-        => (await _dbContext
-            .Projects
+        => (await _projects
             .AsNoTracking()
             .Where(x => x.IsActive)
+            .Paginate(request.Parameters)
             .ToListAsync(ct)).AsGetProjectsDto();
 }

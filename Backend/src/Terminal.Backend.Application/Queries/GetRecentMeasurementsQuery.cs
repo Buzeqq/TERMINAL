@@ -1,6 +1,7 @@
 using System.Reflection;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Terminal.Backend.Application.DTO;
 
 namespace Terminal.Backend.Application.Queries;
 
@@ -18,9 +19,3 @@ public sealed record GetRecentMeasurementsQuery(int Length) : IRequest<GetRecent
     }
 }
 
-public class GetRecentMeasurementsDto
-{
-    public IEnumerable<RecentMeasurement> RecentMeasurements { get; set; }
-}
-
-public sealed record RecentMeasurement(Guid Id, string Code, string Project, string CreatedAtUtc);

@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import {catchError, Observable} from "rxjs";
-import {HttpClient} from "@angular/common/http";
-import {Project} from "../../models/projects/project";
-import {ApiService} from "../api-service";
-import { map } from 'rxjs/operators';
+import { catchError, map, Observable } from "rxjs";
+import { HttpClient } from "@angular/common/http";
+import { Project } from "../../models/projects/project";
+import { ApiService } from "../api-service";
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +13,11 @@ export class ProjectsService extends ApiService {
     http: HttpClient,
   ) { super(http); }
 
-  getAllProjects(): Observable<Project[]> {
-    return this.get<any>("projects")
+  getProjects(pageNumber: number, pageSize: number): Observable<Project[]> {
+    return this.get<{ projects: Project[] }>(`projects?pageNumber=${pageNumber}&pageSize=${pageSize}`)
       .pipe(
-        map(response => response["projects"] as Project[]),
-        catchError(this.handleError)
+          map(p => p.projects),
+          catchError(this.handleError)
       );
   }
 

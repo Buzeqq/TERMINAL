@@ -5,5 +5,4 @@ namespace Terminal.Backend.Application.Queries;
 
 public sealed class GetParametersQuery : IRequest<GetParametersDto>
 {
-    
 }

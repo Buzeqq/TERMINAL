@@ -1,8 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import { Measurement } from 'src/app/core/models/measurements/recentMeasurement';
+import { Measurement } from 'src/app/core/models/measurements/measurement';
 import { MeasurementsService } from 'src/app/core/services/measurements/measurements.service';
-import { ItemViewsComponent } from '../item-views.component';
 
 @Component({
   selector: 'app-measurement-views',
@@ -13,7 +12,7 @@ export class MeasurementViewsComponent {
   displayedColumns: string[] = ['code', 'project', 'created'];
   selectedItemId: string | undefined;
 
-  measurements$: Observable<Measurement[]> = this.measurementService.getAllMeasurements()
+  measurements$: Observable<Measurement[]> = this.measurementService.getMeasurements(0, 10)
     .pipe(tap(r => {
       this.selectedItemIdChangeEvent.emit(r[0].id);
       this.selectedItemId = r[0].id;

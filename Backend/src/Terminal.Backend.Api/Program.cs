@@ -31,6 +31,7 @@ app.UseInfrastructure();
 app.UsePingEndpoints();
 app.UseProjectsEndpoints();
 app.UseTagEndpoints();
+app.UseRecipesEndpoints();
 app.UseParametersEndpoints();
 app.UseMeasurementsEndpoints();
 app.Run();

@@ -1,25 +1,41 @@
 <section class="search">
-  <app-quick-actions></app-quick-actions>
+  <app-search [filters]="{ 'measurements': true, 'projects': true, 'recipes': true }"></app-search>
   <section class="search__cards">
-    <mat-card class="search-result-list">
-      <mat-list>
-        <section *ngFor="let measurement of measurements$ | async">
-          <mat-list-item (click)="selectItem(measurement)" class="row">
-            <mat-icon matListItemIcon>science</mat-icon>
-            <h3 matListItemTitle>{{measurement.code}}</h3>
-            <p matListItemLine>{{measurement.project}}, {{measurement.createdAtUtc | timeAgo}}</p>
-          </mat-list-item>
-          <mat-divider></mat-divider>
-        </section>
-        <section *ngFor="let project of projects$ | async">
-          <mat-list-item (click)="selectItem(project)" class="row">
-            <mat-icon matListItemIcon>folder</mat-icon>
-            <h3 matListItemTitle>{{project.name}}</h3>
-            <p matListItemLine>Project</p>
-          </mat-list-item>
-          <mat-divider></mat-divider>
-        </section>
+    <mat-card class="result-list">
+      <mat-card-title class="result-list__header">
+        Results
+      </mat-card-title>
+      <mat-list infiniteScroll
+                class="result-list__content"
+                [infiniteScrollUpDistance]="2"
+                [infiniteScrollThrottle]="50"
+                (scrolled)="onScroll()"
+                [scrollWindow]="false"
+                *ngIf="searchResult$">
+          <ng-container *ngFor="let item of searchResult$ | async">
+            <ng-container *ngIf="item.type === 'Measurement'">
+              <mat-list-item (click)="selectItem(item)" class="row">
+                <mat-icon matListItemIcon>science</mat-icon>
+                <div matListItemTitle>{{$any(item.item).code}}</div>
+                <div matListItemLine>{{$any(item.item).project}}, {{$any(item.item).createdAtUtc | timeAgo}}</div>
+              </mat-list-item>
+            </ng-container>
+
+            <ng-container *ngIf="item.type === 'Project'">
+              <mat-list-item (click)="selectItem(item)" class="row">
+                <mat-icon matListItemIcon>folder</mat-icon>
+                <div matListItemTitle>{{$any(item.item).name}}</div>
+                <div matListItemLine>Project</div>
+              </mat-list-item>
+            </ng-container>
+            <mat-divider></mat-divider>
+          </ng-container>
       </mat-list>
+      <mat-card-footer class="result-list__footer">
+        <mat-card-actions>
+          <button mat-raised-button color="primary">Load more</button>
+        </mat-card-actions>
+      </mat-card-footer>
     </mat-card>
     <app-item-details [itemType]="selectedItemType" [itemId]="selectedItemId"></app-item-details>
   </section>

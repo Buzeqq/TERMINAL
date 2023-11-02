@@ -19,5 +19,11 @@ internal sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
             .WithOne(m => m.Project)
             .HasForeignKey("ProjectId")
             .IsRequired();
+
+        // search index
+        // builder
+        //     .HasIndex(p => p.Name)
+        //     .HasMethod("GIN")
+        //     .IsTsVectorExpressionIndex("english");
     }
 }

@@ -22,7 +22,7 @@ public static class MeasurementsModule
             return Results.Created($"api/measurement/{id}", null);
         });
 
-        app.MapGet("api/measurements/example", async () =>
+        app.MapGet("api/measurements/example", () =>
         {
             var measurement = new CreateMeasurementCommand(MeasurementId.Create(), ProjectId.Create(), null, new[]
             {
@@ -62,9 +62,26 @@ public static class MeasurementsModule
             };
 
             var measurement = await sender.Send(query, ct);
-
-
+            
             return measurement is null ? Results.NotFound() : Results.Ok(measurement);
+        });
+
+        app.MapGet("api/measurements", async ([FromQuery] int pageNumber, [FromQuery] int pageSize, ISender sender, CancellationToken ct) =>
+        {
+            var query = new GetMeasurementsQuery(pageNumber, pageSize);
+
+            var measurements = await sender.Send(query, ct);
+            
+            return Results.Ok(measurements);
+        });
+
+        app.MapGet("api/measurements/search", async ([FromQuery] string searchPhrase, [FromQuery] int pageNumber, [FromQuery] int pageSize, ISender sender, CancellationToken ct) =>
+        {
+            var query = new SearchMeasurementQuery(searchPhrase, pageNumber, pageSize);
+
+            var measurements = await sender.Send(query, ct);
+
+            return Results.Ok(measurements);
         });
     }
 }

@@ -19,7 +19,7 @@ import { MatListModule } from "@angular/material/list";
 import { MatTableModule } from "@angular/material/table";
 import { CdkTableModule } from "@angular/cdk/table";
 import { MatSidenavModule } from "@angular/material/sidenav";
-import { QuickActionsComponent } from './shared/quick-actions/quick-actions.component';
+import { SearchComponent } from './shared/search/search.component';
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MeasurementDetailsComponent } from './shared/item-details/measurement-details/measurement-details.component';
@@ -35,6 +35,7 @@ import { ProjectDetailsComponent } from './shared/item-details/project-details/p
 import { MatChipsModule } from '@angular/material/chips';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { InfiniteScrollModule } from "ngx-infinite-scroll";
 import { ItemViewsComponent } from './shared/item-views/item-views.component';
 import { MeasurementViewsComponent } from './shared/item-views/measurement-views/measurement-views.component';
 import { ProjectViewsComponent } from './shared/item-views/project-views/project-views.component';
@@ -43,7 +44,7 @@ import { ProjectViewsComponent } from './shared/item-views/project-views/project
   declarations: [
     AppComponent,
     DashboardComponent,
-    QuickActionsComponent,
+    SearchComponent,
     MeasurementDetailsComponent,
     NotFoundComponent,
     ResultsListComponent,
@@ -86,7 +87,8 @@ import { ProjectViewsComponent } from './shared/item-views/project-views/project
     ReactiveFormsModule,
     MatChipsModule,
     MatGridListModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    InfiniteScrollModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -3,20 +3,19 @@
     <div class="quick-actions__search-input">
       <mat-form-field>
         <mat-label>Search</mat-label>
-        <input matInput type="text" [formControl]="searchControl"/>
-        <button *ngIf="searchControl" matSuffix mat-icon-button aria-label="Clear"
-                (click)="$event.preventDefault(); clearSearchControl()">
+        <input #searchInput matInput type="text" (input)="searchPhrase$.next(searchInput.value)"/>
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="searchInput.value = ''">
           <mat-icon>close</mat-icon>
         </button>
       </mat-form-field>
-      <button mat-fab class="quick-actions__search-button" (click)="$event.preventDefault(); goToSearch()">
+      <button mat-fab class="quick-actions__search-button">
         <mat-icon>search</mat-icon>
       </button>
     </div>
-    <div class="quick-actions__filters" [formGroup]="searchFilters">
-      <mat-checkbox formControlName="projects">Projects</mat-checkbox>
-      <mat-checkbox formControlName="measurements">Measurements</mat-checkbox>
-      <mat-checkbox formControlName="recipes">Recipes</mat-checkbox>
+    <div class="quick-actions__filters">
+      <mat-checkbox *ngFor="let filter of (filters$ | async)! | keyvalue" [checked]="filter.value" (change)="updateFilterState(filter.key!, $event)">
+        {{filter.key}}
+      </mat-checkbox>
     </div>
   </div>
   <div class="quick-actions__buttons">

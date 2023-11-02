@@ -1,6 +1,6 @@
 using Terminal.Backend.Application.DTO;
+using Terminal.Backend.Application.Queries.Parameters;
 using Terminal.Backend.Core.Entities;
-using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 
@@ -9,7 +9,7 @@ public static class Extensions
     public static GetProjectsDto AsGetProjectsDto(this IEnumerable<Project> entities)
         => new()
         {
-            Projects = entities.Select(p => new GetProjectsDto.InnerProjectDto(p.Id, p.Name))
+            Projects = entities.Select(p => new GetProjectsDto.ProjectDto(p.Id, p.Name))
         };
 
     public static GetProjectDto AsGetProjectDto(this Project entity)
@@ -33,4 +33,7 @@ public static class Extensions
             StepIds = entity.Steps.Select(s => s.Id.Value),
             Tags = entity.Tags.Select(t => t.Name.Value),
         };
+
+    public static IQueryable<T> Paginate<T>(this IQueryable<T> queryable, PagingParameters parameters)
+        => queryable.Skip(parameters.PageNumber * parameters.PageSize).Take(parameters.PageSize);
 }

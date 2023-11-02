@@ -35,6 +35,10 @@ internal sealed class GetTagsQueryHandler :
     public async Task<GetTagsDto> Handle(GetTagsQuery query, CancellationToken ct) 
         => new()
         {
-            Tags = (await _tags.AsNoTracking().ToListAsync(ct)).Select(t => t.Name.Value)
+            Tags = await _tags
+                .AsNoTracking()
+                .Select(t => t.Name.Value)
+                .Paginate(query.Parameters)
+                .ToListAsync(ct)
         };
 }

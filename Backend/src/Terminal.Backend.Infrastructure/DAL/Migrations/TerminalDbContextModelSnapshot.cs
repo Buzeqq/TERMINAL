@@ -65,6 +65,11 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
 
                     b.HasIndex("RecipeId");
 
+                    b.HasIndex("Code", "Comment")
+                        .HasAnnotation("Npgsql:TsVectorConfig", "english");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("Code", "Comment"), "GIN");
+
                     b.ToTable("Measurements");
                 });
 
@@ -148,6 +153,11 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RecipeName")
+                        .HasAnnotation("Npgsql:TsVectorConfig", "english");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("RecipeName"), "GIN");
 
                     b.ToTable("Recipes");
                 });
