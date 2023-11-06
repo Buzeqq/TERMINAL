@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { map, Observable } from "rxjs";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { PingService } from "./core/services/ping/ping.service";
+import { AddProjectDialogComponent } from "./core/components/dialogs/add-project-dialog.component";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: 'app-root',
@@ -16,6 +18,12 @@ export class AppComponent {
     .pipe(map(result => !result.matches));
   isOnline$: Observable<boolean> = this.pingService.isOnline$;
 
-  constructor(private readonly breakpointObserver: BreakpointObserver, private readonly pingService: PingService) {
+  constructor(private readonly breakpointObserver: BreakpointObserver,
+              private readonly pingService: PingService,
+              private readonly dialog: MatDialog) {
+  }
+
+  openAddProjectDialog() {
+    this.dialog.open(AddProjectDialogComponent);
   }
 }

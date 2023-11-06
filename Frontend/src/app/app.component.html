@@ -5,10 +5,24 @@
         <mat-icon matListItemIcon>menu</mat-icon>
       </mat-list-item>
 
-      <mat-list-item>
+      <mat-list-item [matMenuTriggerFor]="addMenu">
         <mat-icon matListItemIcon>add</mat-icon>
         <span *ngIf="isExpanded">Add</span>
       </mat-list-item>
+      <mat-menu #addMenu>
+        <button mat-menu-item>
+          <mat-icon>add</mat-icon>
+          Add measurement
+        </button>
+        <button mat-menu-item>
+          <mat-icon>assignment_add</mat-icon>
+          Add recipe
+        </button>
+        <button mat-menu-item (click)="openAddProjectDialog()">
+          <mat-icon>create_new_folder</mat-icon>
+          Add project
+        </button>
+      </mat-menu>
 
       <mat-list-item routerLink="home">
         <mat-icon matListItemIcon>home</mat-icon>
@@ -30,7 +44,7 @@
         <span *ngIf="isExpanded">Projects</span>
       </mat-list-item>
 
-      
+
     </mat-nav-list>
   </mat-sidenav>
   <div class="grid-container">
