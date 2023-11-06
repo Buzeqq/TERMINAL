@@ -2,6 +2,8 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { BehaviorSubject, combineLatestWith, filter, switchMap } from "rxjs";
 import { SearchItem, SearchService } from "../../core/services/search/search.service";
 import { SearchComponent } from "../../shared/search/search.component";
+import { ActivatedRoute } from "@angular/router";
+import { FiltersState } from "../../core/types/types";
 
 @Component({
   selector: 'app-results-list',
@@ -21,10 +23,16 @@ export class ResultsListComponent implements AfterViewInit {
 
   constructor(
     private readonly searchService: SearchService,
+    private readonly route: ActivatedRoute,
   ) {  }
 
   ngAfterViewInit(): void {
     if (this.search) {
+      const params = this.parseQueryParams();
+
+      this.search.filters = params.filtersState;
+      this.search.defaultSearchPhrase = params.searchPhrase;
+
       setTimeout(() => {
         this.search!.searchRequest$.pipe(
           switchMap(({ searchPhrase, filterState }) => this.searchService.searchIn(filterState, searchPhrase, 0, this.pageSize)),
@@ -58,6 +66,16 @@ export class ResultsListComponent implements AfterViewInit {
 
   onScroll() {
     this.page.next(this.page.value + 1);
+  }
+
+  private parseQueryParams(): { searchPhrase: string, filtersState: FiltersState } {
+    const params = this.route.snapshot.queryParams;
+    const searchPhrase = params['searchPhrase'];
+    const measurements = params['measurements'];
+    const projects = params['projects'];
+    const recipes = params['recipes'];
+
+    return { searchPhrase, filtersState: { measurements, projects, recipes }}
   }
 }
 

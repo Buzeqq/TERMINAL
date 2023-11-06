@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { map, Observable, of, tap, zip } from "rxjs";
+import { map, Observable, of, zip } from "rxjs";
 import { Measurement } from "../../models/measurements/measurement";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { ApiService } from "../api-service";
 import { Project } from "../../models/projects/project";
+import { FiltersState } from "../../types/types";
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +42,7 @@ export class SearchService extends ApiService {
       );
   }
 
-  public searchIn(filterState: Record<'measurements' | 'recipes' | 'projects', boolean>, searchPhrase: string, pageNumber: number, pageSize: number): Observable<SearchItem[]> {
+  public searchIn(filterState: FiltersState, searchPhrase: string, pageNumber: number, pageSize: number): Observable<SearchItem[]> {
     const apiCalls = [];
     if (filterState['measurements']) apiCalls.push(this.searchMeasurements(searchPhrase, pageNumber, pageSize).pipe(map(m => m.map(m => ({
       type: 'Measurement',
