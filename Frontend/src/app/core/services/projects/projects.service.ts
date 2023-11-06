@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable } from "rxjs";
+import { catchError, EMPTY, map, Observable, tap } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { Project } from "../../models/projects/project";
 import { ApiService } from "../api-service";
+import { NotificationService } from "../notification/notification.service";
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ export class ProjectsService extends ApiService {
 
   constructor(
     http: HttpClient,
+    private readonly notificationService: NotificationService
   ) { super(http); }
 
   getProjects(pageNumber: number, pageSize: number): Observable<Project[]> {
@@ -25,6 +27,19 @@ export class ProjectsService extends ApiService {
     return this.get<Project>(`projects/${id}`)
       .pipe(
         catchError(this.handleError)
+      );
+  }
+
+  addProject(name: string) {
+    return this.post<never>(`projects`, {
+      name
+    })
+      .pipe(
+        tap(_ => this.notificationService.notifySuccess(`Created new project: ${name}`)),
+        catchError((err, _) => {
+          this.notificationService.notifyError(err);
+          return EMPTY;
+        })
       );
   }
 }

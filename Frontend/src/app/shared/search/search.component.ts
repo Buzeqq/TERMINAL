@@ -9,6 +9,8 @@ import {
   ReplaySubject
 } from "rxjs";
 import { MatCheckboxChange } from "@angular/material/checkbox";
+import { MatDialog } from "@angular/material/dialog";
+import { AddProjectDialogComponent } from "../../core/components/dialogs/add-project-dialog.component";
 
 @Component({
   selector: 'app-search',
@@ -20,6 +22,9 @@ export class SearchComponent {
   protected readonly filters$ = new ReplaySubject();
   protected filtersState: Record<string, boolean> = {};
   private readonly filtersState$ = new ReplaySubject<Record<string, boolean>>();
+
+  constructor(private readonly dialog: MatDialog) {
+  }
 
   @Output('searchRequest')
   public readonly searchRequest$ = this.filtersState$.pipe(
@@ -43,5 +48,9 @@ export class SearchComponent {
   public updateFilterState(key: string, event: MatCheckboxChange) {
     this.filtersState[key] = event.checked;
     this.filtersState$.next(this.filtersState);
+  }
+
+  openAddProjectDialog() {
+    this.dialog.open(AddProjectDialogComponent);
   }
 }
