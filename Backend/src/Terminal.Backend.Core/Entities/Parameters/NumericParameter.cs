@@ -6,7 +6,7 @@ public abstract class NumericParameter : Parameter
 {
     public string Unit { get; private set; }
 
-    protected NumericParameter(ParameterName name, string unit, bool isActive) : base(name, isActive)
+    protected NumericParameter(ParameterId id, ParameterName name, string unit, bool isActive) : base(id, name, isActive)
     {
         Unit = unit;
     }

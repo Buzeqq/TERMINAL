@@ -34,13 +34,13 @@ internal class GetMeasurementQueryHandler : IRequestHandler<GetMeasurementQuery,
         
         var tags = await _dbContext.Measurements
             .AsNoTracking()
-            .Where(m => m.Id == request.Id)
+            .Where(m => m.Id.Value == request.Id)
             .SelectMany(m => m.Tags)
             .Select(t => t.Name.Value)
             .ToListAsync(ct);
         var stepIds = await _dbContext.Measurements
             .AsNoTracking()
-            .Where(m => m.Id == request.Id)
+            .Where(m => m.Id.Value == request.Id)
             .SelectMany(m => m.Steps)
             .Select(s => s.Id.Value)
             .ToListAsync(ct);

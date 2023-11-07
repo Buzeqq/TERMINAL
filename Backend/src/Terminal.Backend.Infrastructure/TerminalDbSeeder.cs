@@ -36,11 +36,11 @@ internal sealed class TerminalDbSeeder
 
         #region parameters
 
-        var bcParameter = new IntegerParameter("B/C", "ppm", 1);
-        var hydrogenParameter = new IntegerParameter("H\u2082", "sccm", 1);
-        var methaneParameter = new IntegerParameter("CH\u2084", "sccm", 1);
-        var diboranParameter = new IntegerParameter("B\u2082H\u2086", "sccm", 1);
-        var nucleationParameter = new TextParameter("Nucleation Method",
+        var bcParameter = new IntegerParameter(ParameterId.Create(), "B/C", "ppm", 1);
+        var hydrogenParameter = new IntegerParameter(ParameterId.Create(), "H\u2082", "sccm", 1);
+        var methaneParameter = new IntegerParameter(ParameterId.Create(), "CH\u2084", "sccm", 1);
+        var diboranParameter = new IntegerParameter(ParameterId.Create(), "B\u2082H\u2086", "sccm", 1);
+        var nucleationParameter = new TextParameter(ParameterId.Create(), "Nucleation Method",
             new List<string>
             {
                 "spin-coating",
@@ -48,11 +48,11 @@ internal sealed class TerminalDbSeeder
                 "dip-coating",
                 "without nucleation"
             });
-        var temperatureParameter = new IntegerParameter("Temperature", "C\u2070", 1);
-        var pressureParameter = new IntegerParameter("Pressure", "Torr", 1);
-        var powerParameter = new IntegerParameter("Pmw", "W", 1);
-        var timeParameter = new DecimalParameter("Time", "h", 0.1m);
-        var substrateParameter = new TextParameter("Substrate",
+        var temperatureParameter = new IntegerParameter(ParameterId.Create(), "Temperature", "C\u2070", 1);
+        var pressureParameter = new IntegerParameter(ParameterId.Create(), "Pressure", "Torr", 1);
+        var powerParameter = new IntegerParameter(ParameterId.Create(), "Pmw", "W", 1);
+        var timeParameter = new DecimalParameter(ParameterId.Create(), "Time", "h", 0.1m);
+        var substrateParameter = new TextParameter(ParameterId.Create(), "Substrate",
             new List<string>
             {
                 "silicon",
@@ -60,8 +60,8 @@ internal sealed class TerminalDbSeeder
                 "glass",
                 "tantalum"
             });
-        var bufferParameter = new DecimalParameter("Buffer", "h", 0.1m);
-        var additionalGasesParameter = new TextParameter("Additional gases", new List<string> { "nitrogen", "oxygen" });
+        var bufferParameter = new DecimalParameter(ParameterId.Create(), "Buffer", "h", 0.1m);
+        var additionalGasesParameter = new TextParameter(ParameterId.Create(), "Additional gases", new List<string> { "nitrogen", "oxygen" });
 
         #endregion
 

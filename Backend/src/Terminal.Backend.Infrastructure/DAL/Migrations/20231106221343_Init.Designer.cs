@@ -13,8 +13,8 @@ using Terminal.Backend.Infrastructure.DAL;
 namespace Terminal.Backend.Infrastructure.DAL.Migrations
 {
     [DbContext(typeof(TerminalDbContext))]
-    [Migration("20231028175357_AddedSearchIndexes")]
-    partial class AddedSearchIndexes
+    [Migration("20231106221343_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -85,9 +85,8 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("ParameterName")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid>("ParameterName")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("StepId")
                         .HasColumnType("uuid");
@@ -107,17 +106,21 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
 
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Parameters.Parameter", b =>
                 {
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Name");
+                    b.HasKey("Id");
 
                     b.ToTable("Parameters");
 

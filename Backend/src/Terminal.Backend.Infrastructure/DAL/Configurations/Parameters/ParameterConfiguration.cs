@@ -10,7 +10,13 @@ internal sealed class ParameterConfiguration : IEntityTypeConfiguration<Paramete
 {
     public void Configure(EntityTypeBuilder<Parameter> builder)
     {
-        builder.HasKey(p => p.Name);
+        builder.HasKey(p => p.Id);
+
+        builder
+            .Property(p => p.Id)
+            .HasConversion(p => p.Value,
+                p => new ParameterId(p));
+        
         builder
             .Property(p => p.Name)
             .HasConversion(n => n.Value, 
