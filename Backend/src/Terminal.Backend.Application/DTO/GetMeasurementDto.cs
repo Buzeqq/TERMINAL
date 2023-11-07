@@ -8,6 +8,6 @@ public class GetMeasurementDto
     public string CreatedAtUtc { get; set; }
     public string? Comment { get; set; }
     public Guid ProjectId { get; set; }
-    public IEnumerable<CreateMeasurementStepDto> Steps { get; set; }
+    public IEnumerable<GetMeasurementStepsDto> Steps { get; set; }
     public IEnumerable<string> Tags { get; set; }
 }

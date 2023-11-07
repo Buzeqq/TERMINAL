@@ -1,6 +1,8 @@
+using System.Text.Json.Serialization;
 using Terminal.Backend.Application.DTO;
 using Terminal.Backend.Application.Queries.Parameters;
 using Terminal.Backend.Core.Entities;
+using Terminal.Backend.Core.Entities.Parameters;
 using Terminal.Backend.Core.Entities.ParameterValues;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
@@ -35,15 +37,15 @@ public static class Extensions
     //         Tags = entity.Tags.Select(t => t.Name.Value)
     //     };
 
-    public static IEnumerable<CreateMeasurementStepDto> AsStepsDto(this IEnumerable<Step> steps)
-        => steps.Select(s => new CreateMeasurementStepDto(
+    public static IEnumerable<GetMeasurementStepsDto> AsStepsDto(this IEnumerable<Step> steps)
+        => steps.Select(s => new GetMeasurementStepsDto(
             s.Parameters.Select(p =>
             {
-                CreateMeasurementBaseParameterValueDto b = p switch
+                GetMeasurementBaseParameterValueDto b = p switch
                 {
-                    DecimalParameterValue d => new CreateMeasurementDecimalParameterValueDto(d.Parameter.Name, d.Value),
-                    IntegerParameterValue i => new CreateMeasurementIntegerParameterValueDto(i.Parameter.Name, i.Value),
-                    TextParameterValue t => new CreateMeasurementTextParameterValueDto(t.Parameter.Name, t.Value),
+                    DecimalParameterValue d => new GetMeasurementDecimalParameterValueDto(d.Parameter.Name, d.Value, (d.Parameter as DecimalParameter)!.Unit),
+                    IntegerParameterValue i => new GetMeasurementIntegerParameterValueDto(i.Parameter.Name, i.Value, (i.Parameter as IntegerParameter)!.Unit),
+                    TextParameterValue t => new GetMeasurementTextParameterValueDto(t.Parameter.Name, t.Value),
                     _ => throw new ArgumentOutOfRangeException(nameof(p))
                 };
                 return b;
