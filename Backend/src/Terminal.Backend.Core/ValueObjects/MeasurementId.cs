@@ -2,7 +2,7 @@ using Terminal.Backend.Core.Exceptions;
 
 namespace Terminal.Backend.Core.ValueObjects;
 
-public sealed class MeasurementId
+public sealed record MeasurementId
 {
     public Guid Value { get; }
 

@@ -56,10 +56,7 @@ public static class MeasurementsModule
 
         app.MapGet("api/measurements/{id:guid}", async (Guid id, ISender sender, CancellationToken ct) =>
         {
-            var query = new GetMeasurementQuery
-            {
-                Id = id
-            };
+            var query = new GetMeasurementQuery { Id = id };
 
             var measurement = await sender.Send(query, ct);
             

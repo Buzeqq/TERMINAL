@@ -5,6 +5,7 @@ import { NotFoundComponent } from "./not-found/not-found.component";
 import { ResultsListComponent } from "./search/results-list/results-list.component";
 import { ItemDetailsComponent } from './shared/item-details/item-details.component';
 import { ItemViewsComponent } from './shared/item-views/item-views.component';
+import { AddMeasurementComponent } from "./add-measurement/add-measurement.component";
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'measurements/:id', component: ItemDetailsComponent, data: {type: 'Measurement'}},
   { path: 'projects', component: ItemViewsComponent, data: {type: 'Project'}},
   { path: 'projects/:id', component: ItemDetailsComponent, data: {type: 'Project'}},
+  { path: 'add-measurement', component: AddMeasurementComponent },
 
   // must be the lasts
   { path: '**', component: NotFoundComponent },
