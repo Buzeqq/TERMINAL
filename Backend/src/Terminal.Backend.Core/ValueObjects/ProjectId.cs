@@ -2,7 +2,7 @@ using Terminal.Backend.Core.Exceptions;
 
 namespace Terminal.Backend.Core.ValueObjects;
 
-public sealed class ProjectId
+public sealed record ProjectId
 {
     public Guid Value { get; }
 

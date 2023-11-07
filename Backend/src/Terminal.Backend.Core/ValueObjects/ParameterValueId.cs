@@ -2,7 +2,7 @@ using Terminal.Backend.Core.Exceptions;
 
 namespace Terminal.Backend.Core.ValueObjects;
 
-public sealed class ParameterValueId
+public sealed record ParameterValueId
 {
     public Guid Value { get; }
 

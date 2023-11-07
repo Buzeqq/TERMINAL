@@ -3,6 +3,7 @@ using Terminal.Backend.Application.Commands.Parameter.ChangeStatus;
 using Terminal.Backend.Application.Commands.Parameter.Define;
 using Terminal.Backend.Application.DTO;
 using Terminal.Backend.Application.Queries;
+using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Api.Modules;
 
@@ -21,6 +22,7 @@ public static class ParametersModule
             ISender sender, 
             CancellationToken ct) =>
         {
+            parameterDto = parameterDto with { Id = ParameterId.Create() };
             await sender.Send(new DefineParameterCommand(parameterDto.AsParameter()), ct);
             return Results.Created($"api/parameters/{parameterDto.Name}", null);
         });
@@ -30,6 +32,7 @@ public static class ParametersModule
             ISender sender,
             CancellationToken ct) =>
         {
+            parameterDto = parameterDto with { Id = ParameterId.Create() };
             await sender.Send(new DefineParameterCommand(parameterDto.AsParameter()), ct);
             return Results.Created($"api/parameters/{parameterDto.Name}", null);
         });
@@ -39,16 +42,17 @@ public static class ParametersModule
             ISender sender,
             CancellationToken ct) =>
         {
+            parameter = parameter with { Id = ParameterId.Create() };
             await sender.Send(new DefineParameterCommand(parameter.AsParameter()), ct);
             return Results.Created($"api/parameters/{parameter.Name}", null);
         });
 
-        app.MapGet("api/parameters/{name}", async (
-            string name, 
+        app.MapGet("api/parameters/{id:guid}", async (
+            Guid id, 
             ISender sender, 
             CancellationToken ct) =>
         {
-            var parameter = await sender.Send(new GetParameterQuery { Name = name }, ct);
+            var parameter = await sender.Send(new GetParameterQuery { Id = id }, ct);
             return parameter is null ? Results.NotFound() : Results.Ok(parameter);
         });
         

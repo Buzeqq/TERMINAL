@@ -39,6 +39,7 @@ import { InfiniteScrollModule } from "ngx-infinite-scroll";
 import { ItemViewsComponent } from './shared/item-views/item-views.component';
 import { MeasurementViewsComponent } from './shared/item-views/measurement-views/measurement-views.component';
 import { ProjectViewsComponent } from './shared/item-views/project-views/project-views.component';
+import { AddMeasurementComponent } from './add-measurement/add-measurement.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { ProjectViewsComponent } from './shared/item-views/project-views/project
     ProjectDetailsComponent,
     ItemViewsComponent,
     MeasurementViewsComponent,
-    ProjectViewsComponent
+    ProjectViewsComponent,
+    AddMeasurementComponent
   ],
   imports: [
     BrowserModule,

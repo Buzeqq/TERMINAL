@@ -6,5 +6,5 @@ namespace Terminal.Backend.Application.Queries;
 
 public sealed class GetParameterQuery : IRequest<Parameter?>
 {
-    public ParameterName Name;
+    public ParameterId Id;
 }

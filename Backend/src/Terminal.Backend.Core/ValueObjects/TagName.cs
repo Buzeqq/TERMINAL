@@ -2,7 +2,7 @@ using Terminal.Backend.Core.Exceptions;
 
 namespace Terminal.Backend.Core.ValueObjects;
 
-public sealed class TagName
+public sealed record TagName
 {
     public string Value { get; }
 

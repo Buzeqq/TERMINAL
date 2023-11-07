@@ -16,7 +16,7 @@ internal sealed class GetParameterQueryHandler : IRequestHandler<GetParameterQue
     
     public async Task<Parameter?> Handle(GetParameterQuery query, CancellationToken ct)
     {
-        var name = query.Name;
-        return await _parameters.AsNoTracking().SingleOrDefaultAsync(p => p.Name == name, ct);
+        var id = query.Id;
+        return await _parameters.AsNoTracking().SingleOrDefaultAsync(p => p.Id == id, ct);
     }
 }

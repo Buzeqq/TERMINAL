@@ -6,8 +6,8 @@ public sealed class IntegerParameter : NumericParameter
 {
     public int Step { get; private set; }
 
-    public IntegerParameter(ParameterName name, string unit, int step, bool isActive = true) : 
-        base(name, unit, isActive)
+    public IntegerParameter(ParameterId id, ParameterName name, string unit, int step, bool isActive = true) : 
+        base(id, name, unit, isActive)
     {
         Step = step;
     }
