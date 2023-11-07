@@ -1,5 +1,3 @@
-using Terminal.Backend.Core.ValueObjects;
-
 namespace Terminal.Backend.Application.DTO;
 
 public class GetMeasurementDto

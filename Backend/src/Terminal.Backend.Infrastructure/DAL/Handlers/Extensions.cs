@@ -2,7 +2,6 @@ using Terminal.Backend.Application.DTO;
 using Terminal.Backend.Application.Queries.Parameters;
 using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.Entities.ParameterValues;
-using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 
