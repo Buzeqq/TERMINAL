@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { BehaviorSubject, combineLatestWith, filter, switchMap } from "rxjs";
-import { SearchItem, SearchService } from "../../core/services/search/search.service";
-import { SearchComponent } from "../../shared/search/search.component";
+import { SearchItem, SearchService } from "../../../core/services/search/search.service";
+import { SearchComponent } from "../../../core/components/search/search.component";
 
 @Component({
   selector: 'app-results-list',

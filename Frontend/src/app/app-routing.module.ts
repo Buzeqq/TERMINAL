@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from "./dashboard/dashboard.component";
-import { NotFoundComponent } from "./not-found/not-found.component";
-import { ResultsListComponent } from "./search/results-list/results-list.component";
-import { ItemDetailsComponent } from './shared/item-details/item-details.component';
-import { ItemViewsComponent } from './shared/item-views/item-views.component';
-import { AddMeasurementComponent } from "./add-measurement/add-measurement.component";
+import { DashboardComponent } from "./pages/dashboard/dashboard.component";
+import { NotFoundComponent } from "./pages/not-found/not-found.component";
+import { ResultsListComponent } from "./pages/search/results-list/results-list.component";
+import { ItemDetailsComponent } from './core/components/item-details/item-details.component';
+import { ItemViewsComponent } from './pages/item-views/item-views.component';
+import { AddMeasurementComponent } from "./pages/add-measurement/add-measurement.component";
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },

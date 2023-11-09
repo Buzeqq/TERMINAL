@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ParametersService } from "../core/services/parameters/parameters.service";
+import { ParametersService } from "../../core/services/parameters/parameters.service";
 
 @Component({
   selector: 'app-add-measurement',

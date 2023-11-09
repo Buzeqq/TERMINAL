@@ -1,9 +1,9 @@
 import {Component, Input} from '@angular/core';
 import {ItemDetailsComponent} from "../item-details.component";
-import {MeasurementsService} from "../../../core/services/measurements/measurements.service";
-import {ProjectsService} from "../../../core/services/projects/projects.service";
+import {MeasurementsService} from "../../../services/measurements/measurements.service";
+import {ProjectsService} from "../../../services/projects/projects.service";
 import {map, Observable, tap} from "rxjs";
-import {Project} from "../../../core/models/projects/project";
+import {Project} from "../../../models/projects/project";
 import { ActivatedRoute } from '@angular/router';
 
 @Component({

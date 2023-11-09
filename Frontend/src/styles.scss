@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @use '@angular/material' as mat;
-@use 'app/dashboard/dashboard-theme' as dashboard;
+@use 'app/pages/dashboard/dashboard-theme' as dashboard;
 
 @include mat.core();
 

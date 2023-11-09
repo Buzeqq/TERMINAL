@@ -3,8 +3,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { EMPTY, Observable, catchError, tap } from 'rxjs';
 import { MeasurementDetails } from 'src/app/core/models/measurements/measurementDetails';
 import { MeasurementsService } from 'src/app/core/services/measurements/measurements.service';
-import { ProjectsService } from "../../../core/services/projects/projects.service";
-import { Project } from "../../../core/models/projects/project";
+import { ProjectsService } from "../../../services/projects/projects.service";
+import { Project } from "../../../models/projects/project";
 import { ItemDetailsComponent } from "../item-details.component";
 import { ActivatedRoute } from '@angular/router';
 
@@ -32,7 +32,7 @@ export class MeasurementDetailsComponent extends ItemDetailsComponent {
     this._measurementId = id || this.route.snapshot.paramMap.get('id') || undefined;
     this.measurementDetails$ = this.measurementService.getMeasurementDetails(this._measurementId!)
       .pipe(
-        catchError((err, caught) => {
+        catchError((err, _) => {
           console.log(err);
           this.snackBar.open('Failed to load measurement', 'Close', {
             duration: 3000
