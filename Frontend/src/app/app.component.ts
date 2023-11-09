@@ -4,6 +4,7 @@ import { BreakpointObserver } from "@angular/cdk/layout";
 import { PingService } from "./core/services/ping/ping.service";
 import { AddProjectDialogComponent } from "./core/components/dialogs/add-project-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-root',
@@ -20,7 +21,8 @@ export class AppComponent {
 
   constructor(private readonly breakpointObserver: BreakpointObserver,
               private readonly pingService: PingService,
-              private readonly dialog: MatDialog) {
+              private readonly dialog: MatDialog,
+              protected readonly router: Router) {
   }
 
   openAddProjectDialog() {

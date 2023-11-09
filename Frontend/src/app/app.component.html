@@ -10,7 +10,7 @@
         <span *ngIf="isExpanded">Add</span>
       </mat-list-item>
       <mat-menu #addMenu>
-        <button mat-menu-item>
+        <button mat-menu-item (click)="router.navigate(['/add-measurement'])">
           <mat-icon>add</mat-icon>
           Add measurement
         </button>

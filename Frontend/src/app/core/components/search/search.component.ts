@@ -11,6 +11,7 @@ import {
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatDialog } from "@angular/material/dialog";
 import { AddProjectDialogComponent } from "../dialogs/add-project-dialog.component";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-search',
@@ -32,7 +33,7 @@ export class SearchComponent {
     map(([filterState, searchPhrase,]) => ({searchPhrase, filterState}))
   );
 
-  constructor(private readonly dialog: MatDialog) {
+  constructor(private readonly dialog: MatDialog, protected readonly router: Router) {
   }
 
   @Input({
