@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { Measurement } from 'src/app/core/models/measurements/measurement';
 import { MeasurementsService } from 'src/app/core/services/measurements/measurements.service';
@@ -11,7 +11,7 @@ import { MeasurementsService } from 'src/app/core/services/measurements/measurem
 export class MeasurementViewsComponent {
   displayedColumns: string[] = ['code', 'project', 'created'];
   selectedItemId: string | undefined;
-
+  @Output() selectedItemIdChangeEvent = new EventEmitter<string>();
   measurements$: Observable<Measurement[]> = this.measurementService.getMeasurements(0, 10)
     .pipe(tap(r => {
       this.selectedItemIdChangeEvent.emit(r[0].id);
@@ -22,8 +22,6 @@ export class MeasurementViewsComponent {
     private readonly measurementService: MeasurementsService,
   ) {
   }
-
-  @Output() selectedItemIdChangeEvent = new EventEmitter<string>();
 
   selectMeasurement(row: Measurement) {
     this.selectedItemIdChangeEvent.emit(row.id);

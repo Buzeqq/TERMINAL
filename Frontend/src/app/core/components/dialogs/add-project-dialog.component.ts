@@ -17,7 +17,7 @@ export class AddProjectDialogComponent {
     Validators.minLength(this.min),
     Validators.maxLength(this.max),
     whitespaceValidator
-    ]);
+  ]);
   matcher = new FormMatcher();
   newProjectName = '';
 

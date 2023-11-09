@@ -8,6 +8,7 @@ import { ParametersService } from "../../core/services/parameters/parameters.ser
 })
 export class AddMeasurementComponent {
   parameters$ = this.parameterService.getParameters();
+
   constructor(protected readonly parameterService: ParametersService) {
   }
 }

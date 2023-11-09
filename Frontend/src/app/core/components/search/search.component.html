@@ -3,31 +3,32 @@
     <div class="quick-actions__search-input">
       <mat-form-field>
         <mat-label>Search</mat-label>
-        <input #searchInput matInput type="text" (input)="searchPhrase$.next(searchInput.value)"/>
-        <button matSuffix mat-icon-button aria-label="Clear" (click)="searchInput.value = ''">
+        <input #searchInput (input)="searchPhrase$.next(searchInput.value)" matInput type="text"/>
+        <button (click)="searchInput.value = ''" aria-label="Clear" mat-icon-button matSuffix>
           <mat-icon>close</mat-icon>
         </button>
       </mat-form-field>
-      <button mat-fab class="quick-actions__search-button">
+      <button class="quick-actions__search-button" mat-fab>
         <mat-icon>search</mat-icon>
       </button>
     </div>
     <div class="quick-actions__filters">
-      <mat-checkbox *ngFor="let filter of (filters$ | async)! | keyvalue" [checked]="filter.value" (change)="updateFilterState(filter.key!, $event)">
+      <mat-checkbox (change)="updateFilterState(filter.key!, $event)" *ngFor="let filter of (filters$ | async)! | keyvalue"
+                    [checked]="filter.value">
         {{filter.key}}
       </mat-checkbox>
     </div>
   </div>
   <div class="quick-actions__buttons">
-    <button mat-raised-button color="primary">
+    <button color="primary" mat-raised-button>
       <mat-icon>add</mat-icon>
       Add measurement
     </button>
-    <button mat-raised-button color="primary">
+    <button color="primary" mat-raised-button>
       <mat-icon>assignment_add</mat-icon>
       Add recipe
     </button>
-    <button mat-raised-button color="primary" (click)="openAddProjectDialog()">
+    <button (click)="openAddProjectDialog()" color="primary" mat-raised-button>
       <mat-icon>create_new_folder</mat-icon>
       Add project
     </button>

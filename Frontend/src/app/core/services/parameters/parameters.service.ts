@@ -9,7 +9,9 @@ import { Parameter } from "../../models/parameters/parameter";
 })
 export class ParametersService extends ApiService {
 
-  constructor(httpClient: HttpClient) { super(httpClient); }
+  constructor(httpClient: HttpClient) {
+    super(httpClient);
+  }
 
   getParameters(): Observable<Parameter[]> {
     return this.get<{ parameters: Parameter[] }>('parameters')

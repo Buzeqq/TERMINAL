@@ -18,7 +18,7 @@
           <mat-icon>assignment_add</mat-icon>
           Add recipe
         </button>
-        <button mat-menu-item (click)="openAddProjectDialog()">
+        <button (click)="openAddProjectDialog()" mat-menu-item>
           <mat-icon>create_new_folder</mat-icon>
           Add project
         </button>
@@ -51,7 +51,7 @@
     <header>
       <mat-toolbar class="toolbar" color="primary">
         <ng-container *ngIf="!(menuOpened$ | async)">
-          <button mat-icon-button (click)="sidenav.toggle()">
+          <button (click)="sidenav.toggle()" mat-icon-button>
             <mat-icon>menu</mat-icon>
           </button>
         </ng-container>

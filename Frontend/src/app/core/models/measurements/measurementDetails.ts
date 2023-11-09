@@ -1,5 +1,4 @@
-export interface MeasurementDetails
-{
+export interface MeasurementDetails {
   measurementId: string;
   code: string;
   recipeId: string | null;

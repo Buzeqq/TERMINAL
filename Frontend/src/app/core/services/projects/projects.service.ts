@@ -13,13 +13,15 @@ export class ProjectsService extends ApiService {
   constructor(
     http: HttpClient,
     private readonly notificationService: NotificationService
-  ) { super(http); }
+  ) {
+    super(http);
+  }
 
   getProjects(pageNumber: number, pageSize: number): Observable<Project[]> {
     return this.get<{ projects: Project[] }>(`projects?pageNumber=${pageNumber}&pageSize=${pageSize}`)
       .pipe(
-          map(p => p.projects),
-          catchError(this.handleError)
+        map(p => p.projects),
+        catchError(this.handleError)
       );
   }
 

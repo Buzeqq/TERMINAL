@@ -22,10 +22,6 @@ export class SearchComponent {
   protected readonly filters$ = new ReplaySubject();
   protected filtersState: Record<string, boolean> = {};
   private readonly filtersState$ = new ReplaySubject<Record<string, boolean>>();
-
-  constructor(private readonly dialog: MatDialog) {
-  }
-
   @Output('searchRequest')
   public readonly searchRequest$ = this.filtersState$.pipe(
     combineLatestWith(this.searchPhrase$.pipe(
@@ -33,8 +29,11 @@ export class SearchComponent {
       debounceTime(500),
       distinctUntilChanged()
     )),
-    map(([filterState, searchPhrase, ]) => ({searchPhrase, filterState}))
+    map(([filterState, searchPhrase,]) => ({searchPhrase, filterState}))
   );
+
+  constructor(private readonly dialog: MatDialog) {
+  }
 
   @Input({
     required: true

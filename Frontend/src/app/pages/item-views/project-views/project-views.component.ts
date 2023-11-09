@@ -9,9 +9,9 @@ import { ProjectsService } from "../../../core/services/projects/projects.servic
   styleUrls: ['./project-views.component.scss']
 })
 export class ProjectViewsComponent {
-  displayedColumns: string[] = ['id','name'];
+  displayedColumns: string[] = ['id', 'name'];
   selectedItemId: string | undefined;
-
+  @Output() selectedItemIdChangeEvent = new EventEmitter<string>();
   projects$: Observable<Project[]> = this.projectService.getProjects(0, 10)
     .pipe(tap(r => {
       this.selectedItemIdChangeEvent.emit(r[0].id);
@@ -20,9 +20,8 @@ export class ProjectViewsComponent {
 
   constructor(
     private readonly projectService: ProjectsService,
-  ) { }
-
-  @Output() selectedItemIdChangeEvent = new EventEmitter<string>();
+  ) {
+  }
 
   selectProject(row: Project) {
     this.selectedItemIdChangeEvent.emit(row.id);

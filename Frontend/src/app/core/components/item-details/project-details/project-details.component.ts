@@ -1,9 +1,9 @@
-import {Component, Input} from '@angular/core';
-import {ItemDetailsComponent} from "../item-details.component";
-import {MeasurementsService} from "../../../services/measurements/measurements.service";
-import {ProjectsService} from "../../../services/projects/projects.service";
-import {map, Observable, tap} from "rxjs";
-import {Project} from "../../../models/projects/project";
+import { Component, Input } from '@angular/core';
+import { ItemDetailsComponent } from "../item-details.component";
+import { MeasurementsService } from "../../../services/measurements/measurements.service";
+import { ProjectsService } from "../../../services/projects/projects.service";
+import { map, Observable, tap } from "rxjs";
+import { Project } from "../../../models/projects/project";
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -12,11 +12,23 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./project-details.component.scss']
 })
 export class ProjectDetailsComponent extends ItemDetailsComponent {
+  numberOfMeasurements$: Observable<number> | undefined;
+  projectDetails$?: Observable<Project>;
+
   constructor(
     private readonly measurementService: MeasurementsService,
     private readonly projectService: ProjectsService,
     protected override readonly route: ActivatedRoute
-  ) { super(route); }
+  ) {
+    super(route);
+  }
+
+  private _projectId?: string;
+
+  @Input()
+  get projectId(): string | undefined {
+    return this._projectId;
+  }
 
   set projectId(id: string | undefined) {
     this._projectId = id || this.route.snapshot.paramMap.get('id') || undefined;
@@ -27,18 +39,9 @@ export class ProjectDetailsComponent extends ItemDetailsComponent {
       .pipe(
         tap(_ => super.loaded()),
         map(measurements => measurements.filter(
-          m => m.project == projectName
+            m => m.project == projectName
           ).length
         )
       );
   }
-
-  @Input()
-  get projectId(): string | undefined {
-    return this._projectId;
-  }
-
-  private _projectId?: string;
-  numberOfMeasurements$: Observable<number> | undefined;
-  projectDetails$?: Observable<Project>;
 }

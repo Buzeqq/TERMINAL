@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -7,6 +7,8 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./item-details.component.scss']
 })
 export class ItemDetailsComponent {
+  loading: 'determinate' | 'indeterminate' | 'buffer' | 'query' = 'query';
+
   constructor(
     protected readonly route: ActivatedRoute,
   ) {
@@ -15,10 +17,7 @@ export class ItemDetailsComponent {
     });
   }
 
-  loading: 'determinate' | 'indeterminate' | 'buffer' | 'query' = 'query';
-  loaded(): void {
-    this.loading = 'determinate';
-  }
+  private _itemId?: string;
 
   @Input()
   get itemId(): string | undefined {
@@ -29,15 +28,18 @@ export class ItemDetailsComponent {
     this._itemId = id;
   }
 
-  @Input()
-  set itemType(type: string | undefined) {
-    this._itemType = type;
-  }
+  private _itemType?: string;
 
   get itemType() {
     return this._itemType;
   }
 
-  private _itemId?: string;
-  private _itemType?: string;
+  @Input()
+  set itemType(type: string | undefined) {
+    this._itemType = type;
+  }
+
+  loaded(): void {
+    this.loading = 'determinate';
+  }
 }

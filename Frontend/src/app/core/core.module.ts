@@ -11,7 +11,9 @@ import { MatInputModule } from "@angular/material/input";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatChipsModule } from '@angular/material/chips';
 import { ItemDetailsComponent } from "./components/item-details/item-details.component";
-import { MeasurementDetailsComponent } from "./components/item-details/measurement-details/measurement-details.component";
+import {
+  MeasurementDetailsComponent
+} from "./components/item-details/measurement-details/measurement-details.component";
 import { ProjectDetailsComponent } from "./components/item-details/project-details/project-details.component";
 import { SearchComponent } from "./components/search/search.component";
 import { MatCardModule } from "@angular/material/card";
@@ -31,11 +33,11 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
     ProjectDetailsComponent,
     SearchComponent
   ],
-    exports: [
-      TimeAgoPipe,
-      SearchComponent,
-      ItemDetailsComponent
-    ],
+  exports: [
+    TimeAgoPipe,
+    SearchComponent,
+    ItemDetailsComponent
+  ],
   imports: [
     CommonModule,
     MatButtonModule,
@@ -53,4 +55,5 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
     MatCheckboxModule
   ]
 })
-export class CoreModule { }
+export class CoreModule {
+}

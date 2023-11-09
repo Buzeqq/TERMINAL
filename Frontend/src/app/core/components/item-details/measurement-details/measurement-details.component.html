@@ -4,7 +4,7 @@
       <div class="measurement-details__header">Measurement {{details.code}}</div>
       <div class="measurement-details__label">Created:</div>
       <div>{{details.createdAtUtc | date:'medium'}}</div>
-      <div class="measurement-details__label">Tags: </div>
+      <div class="measurement-details__label">Tags:</div>
       <div>
         <mat-chip-set>
           <mat-chip *ngFor="let tag of details.tags">{{tag}}</mat-chip>
@@ -17,15 +17,15 @@
     </article>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-button color="primary">
+    <button color="primary" mat-button>
       <mat-icon>redo</mat-icon>
       Redo
     </button>
-    <button mat-button color="primary" [routerLink]="['/measurements', measurementId]">
+    <button [routerLink]="['/measurements', measurementId]" color="primary" mat-button>
       <mat-icon>arrow_forward</mat-icon>
       Show steps
     </button>
-    <button mat-button color="primary">
+    <button color="primary" mat-button>
       <mat-icon>arrow_forward</mat-icon>
       Show recipe
     </button>

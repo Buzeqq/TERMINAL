@@ -1,9 +1,10 @@
 <div class="add-project-dialog">
-  <h1 mat-dialog-title class="add-project-dialog__title">Add new project</h1>
+  <h1 class="add-project-dialog__title" mat-dialog-title>Add new project</h1>
   <div class="add-project-dialog__hint">Project name must be between {{min}} and {{max}} characters long</div>
   <mat-form-field class="add-project-dialog__form">
     <mat-label>New project name</mat-label>
-    <input matInput type="text" [formControl]="newProjectNameControl" [errorStateMatcher]="matcher" [(ngModel)]="newProjectName">
+    <input [(ngModel)]="newProjectName" [errorStateMatcher]="matcher" [formControl]="newProjectNameControl" matInput
+           type="text">
     <mat-error *ngIf="!newProjectNameControl.hasError('whitespace') && newProjectNameControl.hasError('required')">
       Project name is <strong>required</strong>
     </mat-error>
@@ -16,12 +17,14 @@
     <mat-error *ngIf="newProjectNameControl.hasError('whitespace')">
       Please enter <strong>valid</strong> project name
     </mat-error>
-    <button *ngIf="newProjectName" matSuffix mat-icon-button aria-label="Clear" (click)="newProjectName=''">
+    <button (click)="newProjectName=''" *ngIf="newProjectName" aria-label="Clear" mat-icon-button matSuffix>
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
   <div mat-dialog-actions>
     <button mat-button mat-dialog-close>Close</button>
-    <button mat-raised-button color="primary" [disabled]="newProjectNameControl.invalid" (click)="addProject()"  [mat-dialog-close]="true">Add</button>
+    <button (click)="addProject()" [disabled]="newProjectNameControl.invalid" [mat-dialog-close]="true" color="primary"
+            mat-raised-button>Add
+    </button>
   </div>
 </div>

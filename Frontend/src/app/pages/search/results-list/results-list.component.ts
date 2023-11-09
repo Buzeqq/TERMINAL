@@ -9,25 +9,31 @@ import { SearchComponent } from "../../../core/components/search/search.componen
   styleUrls: ['./results-list.component.scss']
 })
 export class ResultsListComponent implements AfterViewInit {
+  selectedItemId?: string;
+  selectedItemType: 'Measurement' | 'Project' | 'Recipe' | 'None' = 'Measurement';
+  @ViewChild(SearchComponent)
+  search?: SearchComponent;
   private readonly pageSize = 20;
   private readonly page = new BehaviorSubject<number>(0);
   private readonly searchResult = new BehaviorSubject<SearchItem[]>([]);
-  public get searchResult$() {
-    return this.searchResult.asObservable();
-  }
-
-  selectedItemId?: string;
-  selectedItemType: 'Measurement' | 'Project' | 'Recipe' | 'None' = 'Measurement';
 
   constructor(
     private readonly searchService: SearchService,
-  ) {  }
+  ) {
+  }
+
+  public get searchResult$() {
+    return this.searchResult.asObservable();
+  }
 
   ngAfterViewInit(): void {
     if (this.search) {
       setTimeout(() => {
         this.search!.searchRequest$.pipe(
-          switchMap(({ searchPhrase, filterState }) => this.searchService.searchIn(filterState, searchPhrase, 0, this.pageSize)),
+          switchMap(({
+                       searchPhrase,
+                       filterState
+                     }) => this.searchService.searchIn(filterState, searchPhrase, 0, this.pageSize)),
         ).subscribe(r => {
           this.page.next(0);
           this.searchResult.next(r);
@@ -36,7 +42,7 @@ export class ResultsListComponent implements AfterViewInit {
         this.page.pipe(
           combineLatestWith(this.search!.searchRequest$),
           filter(([page, _]) => page !== 0),
-          switchMap(([page, { searchPhrase, filterState}]) =>
+          switchMap(([page, {searchPhrase, filterState}]) =>
             this.searchService.searchIn(filterState, searchPhrase, page, this.pageSize)
           )
         ).subscribe(r => {
@@ -52,9 +58,6 @@ export class ResultsListComponent implements AfterViewInit {
     this.selectedItemId = row.item.id;
     this.selectedItemType = row.type;
   }
-
-  @ViewChild(SearchComponent)
-  search?: SearchComponent;
 
   onScroll() {
     this.page.next(this.page.value + 1);
