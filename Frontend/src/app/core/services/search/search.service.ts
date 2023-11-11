@@ -43,6 +43,19 @@ export class SearchService extends ApiService {
       );
   }
 
+  public searchTags(searchPhrase: string, pageNumber: number, pageSize: number): Observable<string[]> {
+    return this.get<{ tags: string[] }>('tags/search', new HttpParams({
+      fromObject: {
+        searchPhrase,
+        pageNumber,
+        pageSize
+      }
+    }))
+      .pipe(
+        map(t => t.tags)
+      );
+  }
+
   public searchIn(filterState: Record<'measurements' | 'recipes' | 'projects', boolean>, searchPhrase: string, pageNumber: number, pageSize: number): Observable<SearchItem[]> {
     const apiCalls = [];
     if (filterState['measurements']) apiCalls.push(this.searchMeasurements(searchPhrase, pageNumber, pageSize).pipe(map(m => m.map(m => ({

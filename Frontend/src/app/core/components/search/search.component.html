@@ -13,14 +13,15 @@
       </button>
     </div>
     <div class="quick-actions__filters">
-      <mat-checkbox (change)="updateFilterState(filter.key!, $event)" *ngFor="let filter of (filters$ | async)! | keyvalue"
+      <mat-checkbox (change)="updateFilterState(filter.key!, $event)"
+                    *ngFor="let filter of (filters$ | async)! | keyvalue"
                     [checked]="filter.value">
         {{filter.key}}
       </mat-checkbox>
     </div>
   </div>
   <div class="quick-actions__buttons">
-    <button color="primary" mat-raised-button (click)="router.navigate(['/add-measurement'])">
+    <button (click)="router.navigate(['/add-measurement'])" color="primary" mat-raised-button>
       <mat-icon>add</mat-icon>
       Add measurement
     </button>

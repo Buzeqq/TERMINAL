@@ -35,6 +35,11 @@ import { AddMeasurementComponent } from './pages/add-measurement/add-measurement
 import { MeasurementViewsComponent } from "./pages/item-views/measurement-views/measurement-views.component";
 import { ProjectViewsComponent } from "./pages/item-views/project-views/project-views.component";
 import { ItemViewsComponent } from "./pages/item-views/item-views.component";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MtxDatetimepickerModule } from '@ng-matero/extensions/datetimepicker';
+import { MtxNativeDatetimeModule } from "@ng-matero/extensions/core";
+import { MatChipsModule } from "@angular/material/chips";
+import { MatTabsModule } from "@angular/material/tabs";
 
 @NgModule({
   declarations: [
@@ -80,7 +85,12 @@ import { ItemViewsComponent } from "./pages/item-views/item-views.component";
     ReactiveFormsModule,
     MatGridListModule,
     MatSnackBarModule,
-    InfiniteScrollModule
+    InfiniteScrollModule,
+    MatAutocompleteModule,
+    MtxDatetimepickerModule,
+    MtxNativeDatetimeModule,
+    MatChipsModule,
+    MatTabsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,13 +1,111 @@
-<mat-card>
+<mat-card class="add-measurement">
   <mat-card-header>
-    <mat-card-title>Add measurement</mat-card-title>
+    <mat-card-title>
+      <mat-icon>science</mat-icon>
+      Add measurement
+    </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <ul>
-      <li *ngFor="let parameter of parameters$ | async">
-        {{parameter.name}}
-      </li>
-    </ul>
+    <form class="add-measurement__main">
+      <mat-card>
+        <mat-form-field>
+          <mat-label>Date</mat-label>
+          <mtx-datetimepicker #datetimepicker timeInput="true" touchUi="true" type="datetime"></mtx-datetimepicker>
+          <input [formControl]="timeDateControl" [mtxDatetimepicker]="datetimepicker" matInput required>
+          <mtx-datetimepicker-toggle [for]="datetimepicker" matSuffix></mtx-datetimepicker-toggle>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Project</mat-label>
+          <input #projectInput [formControl]="projectControl" [matAutocomplete]="projectAutocomplete"
+                 matInput placeholder="Choose project" type="text" (keyup)="projectInputValue.next(projectInput.value)" required>
+          <mat-autocomplete autoActiveFirstOption #projectAutocomplete requireSelection="true">
+            <ng-container *ngIf="projectInput.value.length > 0">
+              <mat-option *ngFor="let projectOption of filteredProjects$ | async;" [value]="projectOption.name">
+                {{projectOption.name}}
+              </mat-option>
+            </ng-container>
+            <ng-container *ngIf="projectInput.value === ''">
+              <mat-option *ngFor="let projectOption of recentProjects$ | async" [value]="projectOption.name">
+                {{projectOption.name}}
+              </mat-option>
+            </ng-container>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Recipe</mat-label>
+          <input #recipeInput [formControl]="recipeControl" [matAutocomplete]="recipeAutocomplete"
+                 matInput placeholder="Choose recipe" type="text">
+          <mat-autocomplete autoActiveFirstOption #recipeAutocomplete requireSelection="true">
+            <mat-option value="None">
+              None
+            </mat-option>
+            <mat-option value="Recipe 1">
+              Recipe 1
+            </mat-option>
+            <mat-option value="Recipe 2">
+              Recipe 2
+            </mat-option>
+            <mat-option value="Recipe 3">
+              Recipe 3
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Tags</mat-label>
+          <mat-chip-grid #chipGrid>
+            <mat-chip-row *ngFor="let tag of chosenTags$ | async" [editable]='true' (removed)="removeTag(tag)">
+              {{tag}}
+              <button matChipRemove>
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip-row>
+            <input #tagInput [matChipInputFor]="chipGrid" matChipInputAddOnBlur="true" [formControl]="tagControl" [matAutocomplete]="tagAutocomplete">
+            <mat-autocomplete #tagAutocomplete (optionSelected)="selectedTag($event)">
+              <ng-container *ngIf="tagInput.value.length > 0">
+                <mat-option *ngFor="let tag of filteredTags$ | async">
+                  {{tag}}
+                </mat-option>
+              </ng-container>
+              <ng-container *ngIf="tagControl.value === ''">
+                <mat-option *ngFor="let tag of recentTags$ | async">
+                  {{tag}}
+                </mat-option>
+              </ng-container>
+            </mat-autocomplete>
+          </mat-chip-grid>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Comment</mat-label>
+          <textarea matInput></textarea>
+        </mat-form-field>
+      </mat-card>
+      <mat-card>
+        <mat-card-content>
+          <ng-container *ngIf="recipeChosen$ | async; else stepCreator">
+            <h2>Recipe chosen!</h2>
+          </ng-container>
+          <ng-template #stepCreator>
+            <h2>Steps</h2>
+            <mat-tab-group>
+              <mat-tab *ngFor="let tab of tabs; index as i" [label]="getLabel(i)">
+                <mat-form-field *ngFor="let parameterControl of parameterControls.controls; let i = index">
+                  <mat-label>{{parameters[i].name}}</mat-label>
+                  <input matInput [type]="getInputTypeOfParameter(parameters[i])" [formControl]="$any(parameterControl)">
+                </mat-form-field>
+                <mat-card-actions>
+                  <button mat-raised-button color="primary" (click)="addStep(i)">Add step</button>
+                  <button mat-raised-button color="primary" (click)="deleteStep(i)" [disabled]="i === 0">Delete step</button>
+                </mat-card-actions>
+              </mat-tab>
+            </mat-tab-group>
+          </ng-template>
+        </mat-card-content>
+      </mat-card>
+    </form>
   </mat-card-content>
   <mat-card-footer>
     <mat-card-actions>

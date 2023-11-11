@@ -1,0 +1,9 @@
+.add-measurement {
+  height: 100%;
+
+  &__main {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1em;
+  }
+}
