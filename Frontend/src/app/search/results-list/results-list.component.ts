@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { BehaviorSubject, combineLatestWith, filter, switchMap } from "rxjs";
 import { SearchItem, SearchService } from "../../core/services/search/search.service";
 import { SearchComponent } from "../../shared/search/search.component";
+import { SelectedItem } from "../../core/models/items/selected-item";
 
 @Component({
   selector: 'app-results-list',
@@ -12,12 +13,10 @@ export class ResultsListComponent implements AfterViewInit {
   private readonly pageSize = 20;
   private readonly page = new BehaviorSubject<number>(0);
   private readonly searchResult = new BehaviorSubject<SearchItem[]>([]);
+  selectedItem?: SelectedItem;
   public get searchResult$() {
     return this.searchResult.asObservable();
   }
-
-  selectedItemId?: string;
-  selectedItemType: 'Measurement' | 'Project' | 'Recipe' | 'None' = 'Measurement';
 
   constructor(
     private readonly searchService: SearchService,
@@ -49,8 +48,7 @@ export class ResultsListComponent implements AfterViewInit {
   }
 
   selectItem(row: SearchItem) {
-    this.selectedItemId = row.item.id;
-    this.selectedItemType = row.type;
+    this.selectedItem = {type: row.type, id: row.item.id};
   }
 
   @ViewChild(SearchComponent)

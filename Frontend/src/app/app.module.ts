@@ -43,6 +43,7 @@ import { AddMeasurementComponent } from './add-measurement/add-measurement.compo
 import { StatusbarComponent } from './shared/statusbar/statusbar.component';
 import { AuthInterceptor } from "./core/interceptors/auth/auth.interceptor";
 import { MatDialogModule } from "@angular/material/dialog";
+import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, ScrollingModule } from "@angular/cdk/scrolling";
 
 @NgModule({
   declarations: [
@@ -96,9 +97,14 @@ import { MatDialogModule } from "@angular/material/dialog";
     MatGridListModule,
     MatSnackBarModule,
     InfiniteScrollModule,
-    MatDialogModule
+    MatDialogModule,
+    CdkFixedSizeVirtualScroll,
+    CdkVirtualForOf,
+    ScrollingModule
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

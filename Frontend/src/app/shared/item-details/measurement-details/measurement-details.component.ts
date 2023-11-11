@@ -14,6 +14,10 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./measurement-details.component.scss']
 })
 export class MeasurementDetailsComponent extends ItemDetailsComponent {
+  private _measurementId?: string;
+  measurementDetails$?: Observable<MeasurementDetails>;
+  projectDetails$?: Observable<Project>;
+
   constructor(
     private readonly measurementService: MeasurementsService,
     private readonly snackBar: MatSnackBar,
@@ -45,8 +49,4 @@ export class MeasurementDetailsComponent extends ItemDetailsComponent {
         })
       );
   }
-
-  private _measurementId?: string;
-  measurementDetails$?: Observable<MeasurementDetails>;
-  projectDetails$?: Observable<Project>;
 }
