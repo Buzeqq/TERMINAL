@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { map, Observable } from "rxjs";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { PingService } from "./core/services/ping/ping.service";
-import { AddProjectDialogComponent } from "./core/components/dialogs/add-project-dialog.component";
+import { AddProjectDialogComponent } from "./core/components/dialogs/add-project/add-project-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 
 @Component({
@@ -12,16 +12,14 @@ import { MatDialog } from "@angular/material/dialog";
 })
 export class AppComponent {
   isExpanded: boolean = false;
-  user: string = 'John Doe';
 
   menuOpened$: Observable<boolean> = this.breakpointObserver.observe('(max-width: 768px)')
     .pipe(map(result => !result.matches));
-  isOnline$: Observable<boolean> = this.pingService.isOnline$;
 
-  constructor(private readonly breakpointObserver: BreakpointObserver,
-              private readonly pingService: PingService,
-              private readonly dialog: MatDialog) {
-  }
+  constructor(
+    private readonly breakpointObserver: BreakpointObserver,
+    private readonly dialog: MatDialog
+  ) {  }
 
   openAddProjectDialog() {
     this.dialog.open(AddProjectDialogComponent);

@@ -1,0 +1,37 @@
+<section class="grid-container">
+  <h1 mat-dialog-title>Sign In</h1>
+  <mat-dialog-content [formGroup]="form">
+
+    <mat-form-field class="grid-element">
+      <mat-label>Username</mat-label>
+      <input type="text" matInput [formControl]="usernameFormControl" name="username"
+             placeholder="Username">
+      <mat-error *ngIf="usernameFormControl.hasError('required')">
+        Username is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="grid-element">
+      <mat-label>Password</mat-label>
+      <input type="password" matInput [formControl]="passwordFormControl"
+             placeholder="Password">
+      <mat-error *ngIf="passwordFormControl.hasError('required')">
+        Password is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-dialog-actions>
+      <button mat-raised-button color="primary"
+              [mat-dialog-close]="true">
+        Cancel
+      </button>
+      <button mat-raised-button color="primary"
+              (click)="login()"
+              [disabled]="form.invalid"
+              [mat-dialog-close]="true">
+        Login
+      </button>
+    </mat-dialog-actions>
+
+  </mat-dialog-content>
+</section>

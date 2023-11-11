@@ -1,6 +1,6 @@
 import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 
 import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -40,6 +40,9 @@ import { ItemViewsComponent } from './shared/item-views/item-views.component';
 import { MeasurementViewsComponent } from './shared/item-views/measurement-views/measurement-views.component';
 import { ProjectViewsComponent } from './shared/item-views/project-views/project-views.component';
 import { AddMeasurementComponent } from './add-measurement/add-measurement.component';
+import { StatusbarComponent } from './shared/statusbar/statusbar.component';
+import { AuthInterceptor } from "./core/interceptors/auth/auth.interceptor";
+import { MatDialogModule } from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
@@ -54,7 +57,9 @@ import { AddMeasurementComponent } from './add-measurement/add-measurement.compo
     ItemViewsComponent,
     MeasurementViewsComponent,
     ProjectViewsComponent,
-    AddMeasurementComponent
+    AddMeasurementComponent,
+    StatusbarComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -90,9 +95,10 @@ import { AddMeasurementComponent } from './add-measurement/add-measurement.compo
     MatChipsModule,
     MatGridListModule,
     MatSnackBarModule,
-    InfiniteScrollModule
+    InfiniteScrollModule,
+    MatDialogModule
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
