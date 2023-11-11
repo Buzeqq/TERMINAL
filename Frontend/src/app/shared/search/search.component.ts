@@ -10,7 +10,7 @@ import {
 } from "rxjs";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatDialog } from "@angular/material/dialog";
-import { AddProjectDialogComponent } from "../../core/components/dialogs/add-project-dialog.component";
+import { AddProjectDialogComponent } from "../../core/components/dialogs/add-project/add-project-dialog.component";
 
 @Component({
   selector: 'app-search',
