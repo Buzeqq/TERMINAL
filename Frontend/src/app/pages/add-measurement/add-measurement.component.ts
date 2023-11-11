@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ParametersService } from "../../core/services/parameters/parameters.service";
-import { FormArray, FormBuilder, FormControl, Validators } from "@angular/forms";
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import {
   BehaviorSubject,
   combineLatestWith,
@@ -16,7 +16,7 @@ import { Project } from "../../core/models/projects/project";
 import { ProjectsService } from "../../core/services/projects/projects.service";
 import { TagsService } from "../../core/services/tags/tags.service";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
-import { isText, Parameter } from "../../core/models/parameters/parameter";
+import { isNumeric, isText, Parameter } from "../../core/models/parameters/parameter";
 
 @Component({
   selector: 'app-add-measurement',
@@ -59,7 +59,7 @@ export class AddMeasurementComponent implements OnInit {
   });
 
   get parameterControls() {
-    return this.measurementForm.get('steps') as FormArray;
+    return this.measurementForm.get('steps') as FormArray<FormGroup<Record<string, FormControl>>>;
   }
 
   @ViewChild('tagInput') tagInput?: ElementRef<HTMLInputElement>;
@@ -102,9 +102,8 @@ export class AddMeasurementComponent implements OnInit {
       }
 
       const stepsControl = this.parameterControls;
-      for (let control of Object.values(stepControl)) {
-        stepsControl.push(control);
-      }
+      const firstStep = new FormGroup(stepControl);
+      stepsControl.push(firstStep);
     });
   }
 
@@ -116,7 +115,7 @@ export class AddMeasurementComponent implements OnInit {
 
     this.chosenTags.next([newTag ,...this.chosenTags.value]);
     this.tagInput!.nativeElement.value = '';
-    this.tagControl.setValue(null);
+    this.tagControl.setValue('');
   }
 
   removeTag(tag: string) {
@@ -130,20 +129,24 @@ export class AddMeasurementComponent implements OnInit {
 
   addStep(i: number) {
     this.tabs.push({ });
+    this.parameterControls.push(Object.create(this.parameterControls.controls[i]));
   }
 
   deleteStep(i: number) {
     this.tabs.splice(i, 1);
-
+    this.parameterControls.removeAt(i);
   }
 
   getLabel = (i: number) => `Step ${i + 1}`;
 
-  getInputTypeOfParameter(parameter: Parameter) {
-    if (isText(parameter)) {
-      return 'text';
-    }
-    return 'number';
+  getInputTypeOfParameter(name: string) {
+    const parameter = this.parameters.find(p => p.name === name);
+    if (!parameter) return 'text';
+    return isNumeric(parameter) ? 'number' : 'text';
+  }
+
+  getGroupForTab(tabIndex: number): Record<string, FormControl<string | number | null>> | undefined {
+    return this.parameterControls.controls.at(tabIndex)?.controls;
   }
 }
 

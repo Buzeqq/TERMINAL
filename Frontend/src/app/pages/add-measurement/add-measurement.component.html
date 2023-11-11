@@ -56,7 +56,7 @@
         <mat-form-field>
           <mat-label>Tags</mat-label>
           <mat-chip-grid #chipGrid>
-            <mat-chip-row *ngFor="let tag of chosenTags$ | async" [editable]='true' (removed)="removeTag(tag)">
+            <mat-chip-row *ngFor="let tag of chosenTags$ | async" [editable]='false' (removed)="removeTag(tag)">
               {{tag}}
               <button matChipRemove>
                 <mat-icon>cancel</mat-icon>
@@ -91,15 +91,17 @@
           <ng-template #stepCreator>
             <h2>Steps</h2>
             <mat-tab-group>
-              <mat-tab *ngFor="let tab of tabs; index as i" [label]="getLabel(i)">
-                <mat-form-field *ngFor="let parameterControl of parameterControls.controls; let i = index">
-                  <mat-label>{{parameters[i].name}}</mat-label>
-                  <input matInput [type]="getInputTypeOfParameter(parameters[i])" [formControl]="$any(parameterControl)">
-                </mat-form-field>
-                <mat-card-actions>
-                  <button mat-raised-button color="primary" (click)="addStep(i)">Add step</button>
-                  <button mat-raised-button color="primary" (click)="deleteStep(i)" [disabled]="i === 0">Delete step</button>
-                </mat-card-actions>
+              <mat-tab *ngFor="let tab of tabs; let tabIndex = index" [label]="getLabel(tabIndex)">
+                <ng-container *ngIf="getGroupForTab(tabIndex) as stepGroup; else loading">
+                  <mat-form-field *ngFor="let parameterControl of stepGroup | keyvalue">
+                    <mat-label>{{parameterControl.key}}</mat-label>
+                    <input matInput [type]="getInputTypeOfParameter(parameterControl.key)" [formControl]="parameterControl.value">
+                  </mat-form-field>
+                  <mat-card-actions>
+                    <button mat-raised-button color="primary" (click)="addStep(tabIndex)" [disabled]="!parameterControls.controls[tabIndex].valid">Add step</button>
+                    <button mat-raised-button color="primary" (click)="deleteStep(tabIndex)" [disabled]="tabIndex === 0">Delete step</button>
+                  </mat-card-actions>
+                </ng-container>
               </mat-tab>
             </mat-tab-group>
           </ng-template>
@@ -116,3 +118,7 @@
     </mat-card-actions>
   </mat-card-footer>
 </mat-card>
+
+<ng-template #loading>
+  <mat-progress-spinner></mat-progress-spinner>
+</ng-template>
