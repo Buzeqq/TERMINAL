@@ -1,0 +1,28 @@
+.project-details {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1em;
+  align-items: center;
+
+  &__header {
+    grid-column: span 2;
+    font-size: x-large;
+  }
+
+  &__label {
+    font-weight: 500;
+    font-size: large;
+  }
+}
+
+mat-card-title {
+  font-size:xx-large;
+}
+
+mat-card-header {
+  margin-bottom: 1em;
+}
+
+mat-card-content {
+  padding: 1em;
+}
