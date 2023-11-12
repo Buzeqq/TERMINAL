@@ -18,7 +18,7 @@
           <mat-icon>assignment_add</mat-icon>
           Add recipe
         </button>
-        <button (click)="openAddProjectDialog()" mat-menu-item>
+        <button mat-menu-item (click)="openAddProjectDialog()">
           <mat-icon>create_new_folder</mat-icon>
           Add project
         </button>
@@ -49,26 +49,7 @@
   </mat-sidenav>
   <div class="grid-container">
     <header>
-      <mat-toolbar class="toolbar" color="primary">
-        <ng-container *ngIf="!(menuOpened$ | async)">
-          <button (click)="sidenav.toggle()" mat-icon-button>
-            <mat-icon>menu</mat-icon>
-          </button>
-        </ng-container>
-        <span>Welcome, {{user}}</span>
-        <span class="toolbar__spacer"></span>
-        <ng-container *ngIf="isOnline$ | async as status; else loading;">
-          <ng-container *ngIf="status; else offline;">
-            <mat-icon>wifi</mat-icon>
-          </ng-container>
-          <ng-template #offline>
-            <mat-icon>wifi_off</mat-icon>
-          </ng-template>
-        </ng-container>
-        <button class="toolbar__logout" mat-flat-button>
-          Logout
-        </button>
-      </mat-toolbar>
+      <app-statusbar></app-statusbar>
     </header>
     <main>
       <router-outlet></router-outlet>

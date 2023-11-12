@@ -5,7 +5,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { CastPipe } from './pipes/cast.pipe';
-import { AddProjectDialogComponent } from "./components/dialogs/add-project-dialog.component";
+import { AddProjectDialogComponent } from "./components/dialogs/add-project/add-project-dialog.component";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatInputModule } from "@angular/material/input";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -21,6 +21,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { AppRoutingModule } from "../app-routing.module";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatCheckboxModule } from "@angular/material/checkbox";
+import { LoginDialogComponent } from "./components/dialogs/login/login-dialog.component";
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
     TimeAgoPipe,
     CastPipe,
     AddProjectDialogComponent,
+    LoginDialogComponent,
     ItemDetailsComponent,
     MeasurementDetailsComponent,
     ProjectDetailsComponent,
@@ -55,5 +57,4 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
     MatCheckboxModule
   ]
 })
-export class CoreModule {
-}
+export class CoreModule { }

@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
-import { ProjectsService } from "../../services/projects/projects.service";
+import { ProjectsService } from "../../../services/projects/projects.service";
 import { FormControl, Validators } from "@angular/forms";
-import { FormMatcher } from "../matchers/formMatcher";
-import { whitespaceValidator } from "../validators/whitespaceValidator";
+import { FormMatcher } from "../../matchers/formMatcher";
+import { whitespaceValidator } from "../../validators/whitespaceValidator";
 
 @Component({
   selector: 'app-add-project-dialog',

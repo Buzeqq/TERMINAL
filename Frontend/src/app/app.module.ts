@@ -1,6 +1,6 @@
 import { isDevMode, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 
 import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -40,6 +40,9 @@ import { MtxDatetimepickerModule } from '@ng-matero/extensions/datetimepicker';
 import { MtxNativeDatetimeModule } from "@ng-matero/extensions/core";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatTabsModule } from "@angular/material/tabs";
+import { StatusbarComponent } from './shared/statusbar/statusbar.component';
+import { AuthInterceptor } from "./core/interceptors/auth/auth.interceptor";
+import { MatDialogModule } from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
@@ -50,7 +53,8 @@ import { MatTabsModule } from "@angular/material/tabs";
     AddMeasurementComponent,
     MeasurementViewsComponent,
     ProjectViewsComponent,
-    ItemViewsComponent
+    ItemViewsComponent,
+    StatusbarComponent
   ],
   imports: [
     BrowserModule,
@@ -86,14 +90,14 @@ import { MatTabsModule } from "@angular/material/tabs";
     MatGridListModule,
     MatSnackBarModule,
     InfiniteScrollModule,
+    MatDialogModule,
     MatAutocompleteModule,
     MtxDatetimepickerModule,
     MtxNativeDatetimeModule,
     MatChipsModule,
     MatTabsModule
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule { }
