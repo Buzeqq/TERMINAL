@@ -49,4 +49,13 @@ export class MeasurementDetailsComponent extends ItemDetailsComponent {
         })
       );
   }
+
+  isDetailView(): boolean{
+    return this.route.snapshot.paramMap.get('id') !== null;
+  }
+
+  hasRecipe(detail: MeasurementDetails): boolean{
+    return detail.recipeId !== null;
+  }
+
 }
