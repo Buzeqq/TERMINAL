@@ -3,6 +3,7 @@ import { ApiService } from "../api-service";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { map, Observable } from "rxjs";
 import { Measurement } from "../../models/measurements/measurement";
+import { AddMeasurement } from "../../models/measurements/addMeasurement";
 
 @Injectable({
   providedIn: 'root'
@@ -41,5 +42,9 @@ export class MeasurementsService extends ApiService {
 
   getMeasurementDetails(id: string): Observable<any> {
     return this.get<any>(`measurements/${id}`);
+  }
+
+  addMeasurement(form: AddMeasurement) {
+    return this.post<never>(`measurements`, form);
   }
 }

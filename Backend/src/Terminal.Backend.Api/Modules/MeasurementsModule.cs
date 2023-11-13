@@ -28,9 +28,9 @@ public static class MeasurementsModule
             {
                 new CreateMeasurementStepDto(new CreateMeasurementBaseParameterValueDto[]
                 {
-                    new CreateMeasurementDecimalParameterValueDto("decimal", 0.111m),
-                    new CreateMeasurementIntegerParameterValueDto("integer", 2137),
-                    new CreateMeasurementTextParameterValueDto("text", "text")
+                    new CreateMeasurementDecimalParameterValueDto(Guid.NewGuid(), 0.111m),
+                    new CreateMeasurementIntegerParameterValueDto(Guid.NewGuid(), 2137),
+                    new CreateMeasurementTextParameterValueDto(Guid.NewGuid(), "text")
                 },
                     "comment")
             },

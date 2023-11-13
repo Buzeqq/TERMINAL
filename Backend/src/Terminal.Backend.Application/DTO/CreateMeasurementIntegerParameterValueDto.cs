@@ -1,4 +1,4 @@
 namespace Terminal.Backend.Application.DTO;
 
-public sealed record CreateMeasurementIntegerParameterValueDto(string Name, int Value)
-    : CreateMeasurementBaseParameterValueDto(Name);
+public sealed record CreateMeasurementIntegerParameterValueDto(Guid Id, int Value)
+    : CreateMeasurementBaseParameterValueDto(Id);

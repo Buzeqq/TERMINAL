@@ -6,5 +6,5 @@ export interface MeasurementDetails {
   comment: string | null;
   projectId: string;
   tags: string[];
-  stepIds: string[];
+  steps: [];
 }

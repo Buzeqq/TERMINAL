@@ -6,4 +6,12 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 1em;
   }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    height: 400px;
+    padding: 2em 1em;
+  }
 }
