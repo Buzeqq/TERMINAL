@@ -3,6 +3,7 @@ import { ApiService } from "../api-service";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { map, Observable } from "rxjs";
 import { Measurement } from "../../models/measurements/measurement";
+import {MeasurementDetails} from "../../models/measurements/measurementDetails";
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,11 @@ export class MeasurementsService extends ApiService {
       }
     }))
       .pipe(
-        map(m => m.measurements)
+        map(m => m.measurements),
+        map(r => r.map(measurement => ({
+          ...measurement,
+          createdAtUtc: new Date(measurement.createdAtUtc)
+        })))
       );
   }
 
@@ -39,7 +44,13 @@ export class MeasurementsService extends ApiService {
       );
   }
 
-  getMeasurementDetails(id: string): Observable<any> {
-    return this.get<any>(`measurements/${id}`);
+  getMeasurementDetails(id: string): Observable<MeasurementDetails> {
+    return this.get<MeasurementDetails>(`measurements/${id}`)
+      .pipe(
+        map(measurement => ({
+          ...measurement,
+            createdAtUtc: new Date(measurement.createdAtUtc)
+        }))
+      );
   }
 }

@@ -1,17 +1,16 @@
-<section class="dashboard">
-    <section class="dashboard__cards">
-        <mat-card class="recent-measurements">
+<section class="item-view">
+    <section class="item-view__cards">
+        <mat-card class="item-list">
             <mat-card-header>
-                <div class="recent-measurements__header mat-h1">
-                    <h2>{{itemType}}s</h2>
+                <div class="item-list__header mat-h1">
+                    <h2>{{selectedItem?.type}}s</h2>
                 </div>
             </mat-card-header>
-            <div [ngSwitch]="itemType">
-                <app-measurement-views *ngSwitchCase="'Measurement'" (selectedItemIdChangeEvent)="selectedItemId = $event"></app-measurement-views>
-                <app-project-views *ngSwitchCase="'Project'" (selectedItemIdChangeEvent)="selectedItemId = $event"></app-project-views>
+            <div [ngSwitch]="selectedItem?.type">
+                <app-measurement-views *ngSwitchCase="'Measurement'" (selectedItemChangeEvent)="selectedItem = $event"></app-measurement-views>
+                <app-project-views *ngSwitchCase="'Project'" (selectedItemChangeEvent)="selectedItem = $event"></app-project-views>
             </div>
         </mat-card>
-        <app-item-details class="measurement-details" [itemId]="selectedItemId"
-            [itemType]="itemType"></app-item-details>
+        <app-item-details class="item-details" [item]="selectedItem"></app-item-details>
     </section>
 </section>

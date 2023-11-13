@@ -3,8 +3,8 @@
     <mat-card-title>Details</mat-card-title>
   </mat-card-header>
   <mat-divider></mat-divider>
-  <ng-container [ngSwitch]="itemType">
-    <app-measurement-details *ngSwitchCase="'Measurement'" [measurementId]="itemId"></app-measurement-details>
-    <app-project-details *ngSwitchCase="'Project'" [projectId]="itemId"></app-project-details>
+  <ng-container [ngSwitch]="item?.type">
+    <app-measurement-details *ngSwitchCase="'Measurement'" [measurementId]="item?.id"></app-measurement-details>
+    <app-project-details *ngSwitchCase="'Project'" [projectId]="item?.id"></app-project-details>
   </ng-container>
 </mat-card>

@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { SelectedItem } from "../../core/models/items/selected-item";
 
 @Component({
   selector: 'app-item-details',
@@ -7,37 +8,22 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./item-details.component.scss']
 })
 export class ItemDetailsComponent {
+  private _item?: SelectedItem;
+  loading: 'determinate' | 'indeterminate' | 'buffer' | 'query' = 'query';
+
   constructor(
     protected readonly route: ActivatedRoute,
   ) {
     this.route.data.subscribe(data => {
-      this._itemType = data['type'];
+      this._item = {type: data['type'], id: ''};
     });
   }
 
-  loading: 'determinate' | 'indeterminate' | 'buffer' | 'query' = 'query';
-  loaded(): void {
-    this.loading = 'determinate';
+  get item() {
+    return this._item;
   }
-
   @Input()
-  get itemId(): string | undefined {
-    return this._itemId;
+  set item(item: SelectedItem | undefined) {
+    this._item = item;
   }
-
-  set itemId(id: string | undefined) {
-    this._itemId = id;
-  }
-
-  @Input()
-  set itemType(type: string | undefined) {
-    this._itemType = type;
-  }
-
-  get itemType() {
-    return this._itemType;
-  }
-
-  private _itemId?: string;
-  private _itemType?: string;
 }

@@ -1,11 +1,13 @@
+import {Step} from "../steps/step";
+
 export interface MeasurementDetails
 {
-  measurementId: string;
+  id: string;
   code: string;
   recipeId: string | null;
   createdAtUtc: Date;
   comment: string | null;
   projectId: string;
+  steps: Step[];
   tags: string[];
-  stepIds: string[];
 }
