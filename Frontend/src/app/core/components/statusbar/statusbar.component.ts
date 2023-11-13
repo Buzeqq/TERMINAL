@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
 import {Observable} from "rxjs";
-import {PingService} from "../../core/services/ping/ping.service";
+import {PingService} from "../../services/ping/ping.service";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
-import {LoginDialogComponent} from "../../core/components/dialogs/login/login-dialog.component";
-import {AuthService} from "../../core/services/auth/auth.service";
+import {LoginDialogComponent} from "../dialogs/login/login-dialog.component";
+import {AuthService} from "../../services/auth/auth.service";
 
 @Component({
   selector: 'app-statusbar',

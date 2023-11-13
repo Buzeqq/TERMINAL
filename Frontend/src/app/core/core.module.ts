@@ -10,11 +10,6 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MatInputModule } from "@angular/material/input";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatChipsModule } from '@angular/material/chips';
-import { ItemDetailsComponent } from "./components/item-details/item-details.component";
-import {
-  MeasurementDetailsComponent
-} from "./components/item-details/measurement-details/measurement-details.component";
-import { ProjectDetailsComponent } from "./components/item-details/project-details/project-details.component";
 import { SearchComponent } from "./components/search/search.component";
 import { MatCardModule } from "@angular/material/card";
 import { MatDividerModule } from '@angular/material/divider';
@@ -22,6 +17,14 @@ import { AppRoutingModule } from "../app-routing.module";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { LoginDialogComponent } from "./components/dialogs/login/login-dialog.component";
+import { ItemDetailsComponent } from "./components/item-details/item-details/item-details.component";
+import {
+  MeasurementDetailsComponent
+} from "./components/item-details/item-details/measurement-details/measurement-details.component";
+import {
+  ProjectDetailsComponent
+} from "./components/item-details/item-details/project-details/project-details.component";
+import { MatTableModule } from "@angular/material/table";
 
 
 @NgModule({
@@ -54,7 +57,8 @@ import { LoginDialogComponent } from "./components/dialogs/login/login-dialog.co
     MatDividerModule,
     AppRoutingModule,
     MatProgressBarModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatTableModule
   ]
 })
 export class CoreModule { }

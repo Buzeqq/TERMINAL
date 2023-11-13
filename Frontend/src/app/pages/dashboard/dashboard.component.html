@@ -27,15 +27,14 @@
 
           <mat-header-row *matHeaderRowDef="displayedColumns" class="recent-measurements__list-header"></mat-header-row>
           <mat-row
-            (click)="selectMeasurement(row);"
+            mat-ripple
             *matRowDef="let row; columns: displayedColumns;"
-            [class.recent-measurements__row--is-clicked]="row.id === selectedMeasurementId"
-            mat-ripple></mat-row>
+            (click)="selectMeasurement(row);"
+            [class.recent-measurements__row--is-clicked]="row.id === selectedMeasurement?.id"></mat-row>
         </mat-table>
       </div>
     </mat-card>
-    <app-item-details [itemId]="selectedMeasurementId" [itemType]="'Measurement'"
-                      class="measurement-details"></app-item-details>
+    <app-item-details class="measurement-details" [item]="selectedMeasurement"></app-item-details>
   </section>
 </section>
 

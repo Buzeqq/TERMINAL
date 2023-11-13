@@ -1,0 +1,10 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Details</mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <ng-container [ngSwitch]="item?.type">
+    <app-measurement-details *ngSwitchCase="'Measurement'" [measurementId]="item?.id"></app-measurement-details>
+    <app-project-details *ngSwitchCase="'Project'" [projectId]="item?.id"></app-project-details>
+  </ng-container>
+</mat-card>

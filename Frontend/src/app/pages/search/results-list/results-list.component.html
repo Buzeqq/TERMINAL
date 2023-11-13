@@ -5,38 +5,38 @@
       <mat-card-title class="result-list__header">
         Results
       </mat-card-title>
-      <mat-list (scrolled)="onScroll()"
-                *ngIf="searchResult$"
-                [infiniteScrollThrottle]="50"
-                [infiniteScrollUpDistance]="2"
-                [scrollWindow]="false"
+      <mat-list infiniteScroll
                 class="result-list__content"
-                infiniteScroll>
-        <ng-container *ngFor="let item of searchResult$ | async">
-          <ng-container *ngIf="item.type === 'Measurement'">
-            <mat-list-item (click)="selectItem(item)" class="row">
-              <mat-icon matListItemIcon>science</mat-icon>
-              <div matListItemTitle>{{$any(item.item).code}}</div>
-              <div matListItemLine>{{$any(item.item).project}}, {{$any(item.item).createdAtUtc | timeAgo}}</div>
-            </mat-list-item>
-          </ng-container>
+                [infiniteScrollUpDistance]="2"
+                [infiniteScrollThrottle]="50"
+                (scrolled)="onScroll()"
+                [scrollWindow]="false"
+                *ngIf="searchResult$">
+          <ng-container *ngFor="let item of searchResult$ | async">
+            <ng-container *ngIf="item.type === 'Measurement'">
+              <mat-list-item (click)="selectItem(item)" class="row">
+                <mat-icon matListItemIcon>science</mat-icon>
+                <div matListItemTitle>{{$any(item.item).code}}</div>
+                <div matListItemLine>{{$any(item.item).project}}, {{$any(item.item).createdAtUtc | timeAgo}}</div>
+              </mat-list-item>
+            </ng-container>
 
-          <ng-container *ngIf="item.type === 'Project'">
-            <mat-list-item (click)="selectItem(item)" class="row">
-              <mat-icon matListItemIcon>folder</mat-icon>
-              <div matListItemTitle>{{$any(item.item).name}}</div>
-              <div matListItemLine>Project</div>
-            </mat-list-item>
+            <ng-container *ngIf="item.type === 'Project'">
+              <mat-list-item (click)="selectItem(item)" class="row">
+                <mat-icon matListItemIcon>folder</mat-icon>
+                <div matListItemTitle>{{$any(item.item).name}}</div>
+                <div matListItemLine>Project</div>
+              </mat-list-item>
+            </ng-container>
+            <mat-divider></mat-divider>
           </ng-container>
-          <mat-divider></mat-divider>
-        </ng-container>
       </mat-list>
       <mat-card-footer class="result-list__footer">
         <mat-card-actions>
-          <button color="primary" mat-raised-button>Load more</button>
+          <button mat-raised-button color="primary">Load more</button>
         </mat-card-actions>
       </mat-card-footer>
     </mat-card>
-    <app-item-details [itemId]="selectedItemId" [itemType]="selectedItemType"></app-item-details>
+    <app-item-details [item]="selectedItem"></app-item-details>
   </section>
 </section>

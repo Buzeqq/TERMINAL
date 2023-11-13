@@ -32,18 +32,19 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
 import { AddMeasurementComponent } from './pages/add-measurement/add-measurement.component';
-import { MeasurementViewsComponent } from "./pages/item-views/measurement-views/measurement-views.component";
-import { ProjectViewsComponent } from "./pages/item-views/project-views/project-views.component";
-import { ItemViewsComponent } from "./pages/item-views/item-views.component";
+import { MeasurementViewsComponent } from "./core/components/item-views/measurement-views/measurement-views.component";
+import { ItemViewsComponent } from "./core/components/item-views/item-views.component";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MtxDatetimepickerModule } from '@ng-matero/extensions/datetimepicker';
 import { MtxNativeDatetimeModule } from "@ng-matero/extensions/core";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatTabsModule } from "@angular/material/tabs";
-import { StatusbarComponent } from './shared/statusbar/statusbar.component';
+import { StatusbarComponent } from './core/components/statusbar/statusbar.component';
 import { AuthInterceptor } from "./core/interceptors/auth/auth.interceptor";
 import { MatDialogModule } from "@angular/material/dialog";
+import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, ScrollingModule } from "@angular/cdk/scrolling";
 import { MatSelectModule } from "@angular/material/select";
+import { ProjectViewsComponent } from "./core/components/item-views/project-views/project-views.component";
 
 @NgModule({
   declarations: [
@@ -97,9 +98,15 @@ import { MatSelectModule } from "@angular/material/select";
     MtxNativeDatetimeModule,
     MatChipsModule,
     MatTabsModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDialogModule,
+    CdkFixedSizeVirtualScroll,
+    CdkVirtualForOf,
+    ScrollingModule
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

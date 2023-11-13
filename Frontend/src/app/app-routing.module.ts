@@ -3,9 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from "./pages/dashboard/dashboard.component";
 import { NotFoundComponent } from "./pages/not-found/not-found.component";
 import { ResultsListComponent } from "./pages/search/results-list/results-list.component";
-import { ItemDetailsComponent } from './core/components/item-details/item-details.component';
-import { ItemViewsComponent } from './pages/item-views/item-views.component';
+import { ItemViewsComponent } from './core/components/item-views/item-views.component';
 import { AddMeasurementComponent } from "./pages/add-measurement/add-measurement.component";
+import { ItemDetailsComponent } from "./core/components/item-details/item-details/item-details.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
