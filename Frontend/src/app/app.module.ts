@@ -43,6 +43,7 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { StatusbarComponent } from './shared/statusbar/statusbar.component';
 import { AuthInterceptor } from "./core/interceptors/auth/auth.interceptor";
 import { MatDialogModule } from "@angular/material/dialog";
+import { MatSelectModule } from "@angular/material/select";
 
 @NgModule({
   declarations: [
@@ -95,7 +96,8 @@ import { MatDialogModule } from "@angular/material/dialog";
     MtxDatetimepickerModule,
     MtxNativeDatetimeModule,
     MatChipsModule,
-    MatTabsModule
+    MatTabsModule,
+    MatSelectModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent]

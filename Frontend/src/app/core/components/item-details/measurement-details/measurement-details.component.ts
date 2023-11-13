@@ -14,7 +14,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./measurement-details.component.scss']
 })
 export class MeasurementDetailsComponent extends ItemDetailsComponent {
-  measurementDetails$?: Observable<MeasurementDetails>;
+  measurementDetails$: Observable<MeasurementDetails> = new Observable<MeasurementDetails>();
   projectDetails$?: Observable<Project>;
 
   constructor(
@@ -45,6 +45,7 @@ export class MeasurementDetailsComponent extends ItemDetailsComponent {
           return EMPTY;
         }),
         tap(m => {
+          console.log(m);
           this.loading = 'determinate';
           this.projectDetails$ = this.projectService.getProject(m.projectId)
         })

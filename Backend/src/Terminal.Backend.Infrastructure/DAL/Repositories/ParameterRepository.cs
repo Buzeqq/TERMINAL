@@ -14,9 +14,9 @@ internal sealed class ParameterRepository : IParameterRepository
         _parameters = dbContext.Parameters;
     }
 
-    public async Task<T?> GetAsync<T>(ParameterName name, CancellationToken ct)
+    public async Task<T?> GetAsync<T>(ParameterId id, CancellationToken ct)
     where T : Parameter
-        => await _parameters.SingleOrDefaultAsync(p => p.Name == name, ct) as T;
+        => await _parameters.SingleOrDefaultAsync(p => p.Id == id, ct) as T;
     
     public async Task AddAsync(Parameter parameter, CancellationToken ct)
         => await _parameters.AddAsync(parameter, ct);

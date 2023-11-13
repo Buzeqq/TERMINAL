@@ -40,6 +40,7 @@ $light-theme: mat.define-light-theme((
 
 html, body {
   height: 100%;
+  color-scheme: light dark;
 }
 
 body {
