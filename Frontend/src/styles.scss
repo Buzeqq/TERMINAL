@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @use '@angular/material' as mat;
-@use 'app/dashboard/dashboard-theme' as dashboard;
+@use 'app/pages/dashboard/dashboard-theme' as dashboard;
+@use '@ng-matero/extensions' as mtx;
 
 @include mat.core();
 
@@ -26,6 +27,7 @@ $light-theme: mat.define-light-theme((
 // Apply the dark theme by default
 @include mat.all-component-themes($dark-theme);
 @include dashboard.theme($dark-theme);
+@include mtx.all-component-themes($dark-theme);
 
 // Apply the light theme only when the user prefers light styles.
 @media (prefers-color-scheme: light) {
@@ -33,8 +35,16 @@ $light-theme: mat.define-light-theme((
   // typography and density styles.
   @include mat.all-component-colors($light-theme);
   @include dashboard.theme($light-theme);
+  @include mtx.all-component-themes($light-theme);
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 

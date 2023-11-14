@@ -12,7 +12,7 @@ public sealed class UnknownParameterTypeException : TerminalException
     }
 
     public UnknownParameterTypeException(CreateMeasurementBaseParameterValueDto dto) :
-        base($"Unknown type of parameter: {dto.Name}")
+        base($"Unknown type of parameter: {dto.Id}")
     {
     }
 }

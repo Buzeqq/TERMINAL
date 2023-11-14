@@ -51,6 +51,25 @@ public static class Extensions
                 return b;
             }), s.Comment));
 
+    public static GetParametersDto AsGetParametersDto(this IEnumerable<Parameter> parameters)
+    {
+        return new GetParametersDto
+        {
+            Parameters = parameters.Select(MapParameters)
+        };
+    }
+
+    private static GetParameterDto MapParameters(Parameter parameter)
+    {
+        return parameter switch
+        {
+            IntegerParameter i => new GetIntegerParameterDto(i.Id, i.Name, i.Unit, i.Step),
+            DecimalParameter d => new GetDecimalParameterDto(d.Id, d.Name, d.Unit, d.Step),
+            TextParameter t => new GetTextParameterDto(t.Id, t.Name, t.AllowedValues),
+            _ => throw new ArgumentOutOfRangeException(nameof(parameter))
+        };
+    }
+
     public static IQueryable<T> Paginate<T>(this IQueryable<T> queryable, PagingParameters parameters)
         => queryable.Skip(parameters.PageNumber * parameters.PageSize).Take(parameters.PageSize);
 }

@@ -21,8 +21,8 @@ internal sealed class GetRecentMeasurementsQueryHandler :
         => new()
         {
             RecentMeasurements = await _measurements
-                .Take(request.Length)
                 .OrderByDescending(m => m.CreatedAtUtc)
+                .Take(request.Length)
                 .Select(m => new GetMeasurementsDto.MeasurementDto(m.Id, m.Code.Value, m.Project.Name, m.CreatedAtUtc.ToString("o"), m.Comment))
                 .ToListAsync(cancellationToken)
         };

@@ -9,10 +9,12 @@ import { Project } from "../../models/projects/project";
   providedIn: 'root'
 })
 export class SearchService extends ApiService {
-  constructor(http: HttpClient) { super(http); }
+  constructor(http: HttpClient) {
+    super(http);
+  }
 
   public searchMeasurements(searchPhrase: string, pageNumber: number, pageSize: number): Observable<Measurement[]> {
-    return this.get<{measurements: Measurement[]}>('measurements/search', new HttpParams({
+    return this.get<{ measurements: Measurement[] }>('measurements/search', new HttpParams({
       fromObject: {
         searchPhrase,
         pageNumber,
@@ -29,7 +31,7 @@ export class SearchService extends ApiService {
   }
 
   public searchProjects(searchPhrase: string, pageNumber: number, pageSize: number): Observable<Project[]> {
-    return this.get<{projects: Project[]}>('projects/search', new HttpParams({
+    return this.get<{ projects: Project[] }>('projects/search', new HttpParams({
       fromObject: {
         searchPhrase,
         pageNumber,
@@ -38,6 +40,19 @@ export class SearchService extends ApiService {
     }))
       .pipe(
         map(p => p.projects)
+      );
+  }
+
+  public searchTags(searchPhrase: string, pageNumber: number, pageSize: number): Observable<string[]> {
+    return this.get<{ tags: string[] }>('tags/search', new HttpParams({
+      fromObject: {
+        searchPhrase,
+        pageNumber,
+        pageSize
+      }
+    }))
+      .pipe(
+        map(t => t.tags)
       );
   }
 

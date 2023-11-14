@@ -3,7 +3,8 @@ import { ApiService } from "../api-service";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { map, Observable } from "rxjs";
 import { Measurement } from "../../models/measurements/measurement";
-import {MeasurementDetails} from "../../models/measurements/measurementDetails";
+import { AddMeasurement } from "../../models/measurements/addMeasurement";
+import { MeasurementDetails } from "../../models/measurements/measurementDetails";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class MeasurementsService extends ApiService {
   }
 
   getMeasurements(pageNumber: number, pageSize: number): Observable<Measurement[]> {
-    return this.get<{measurements: Measurement[]}>('measurements', new HttpParams({
+    return this.get<{ measurements: Measurement[] }>('measurements', new HttpParams({
       fromObject: {
         pageNumber,
         pageSize
@@ -52,5 +53,9 @@ export class MeasurementsService extends ApiService {
             createdAtUtc: new Date(measurement.createdAtUtc)
         }))
       );
+  }
+
+  addMeasurement(form: AddMeasurement) {
+    return this.post<never>(`measurements`, form);
   }
 }

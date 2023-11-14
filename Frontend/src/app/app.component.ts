@@ -4,6 +4,7 @@ import { BreakpointObserver } from "@angular/cdk/layout";
 import { PingService } from "./core/services/ping/ping.service";
 import { AddProjectDialogComponent } from "./core/components/dialogs/add-project/add-project-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-root',
@@ -16,10 +17,10 @@ export class AppComponent {
   menuOpened$: Observable<boolean> = this.breakpointObserver.observe('(max-width: 768px)')
     .pipe(map(result => !result.matches));
 
-  constructor(
-    private readonly breakpointObserver: BreakpointObserver,
-    private readonly dialog: MatDialog
-  ) {  }
+  constructor(private readonly breakpointObserver: BreakpointObserver,
+              private readonly dialog: MatDialog,
+              protected readonly router: Router) {
+  }
 
   openAddProjectDialog() {
     this.dialog.open(AddProjectDialogComponent);

@@ -1,7 +1,6 @@
-import {Step} from "../steps/step";
+import { Step } from "../steps/step";
 
-export interface MeasurementDetails
-{
+export interface MeasurementDetails {
   id: string;
   code: string;
   recipeId: string | null;

@@ -1,16 +1,12 @@
-import {map, Observable} from "rxjs";
-import {Project} from "../models/projects/project";
-import {Measurement} from "../models/measurements/measurement";
-import {Injectable} from "@angular/core";
+import { map, Observable } from "rxjs";
+import { Project } from "../models/projects/project";
+import { Measurement } from "../models/measurements/measurement";
+import { Injectable } from "@angular/core";
 
 @Injectable({
   providedIn: 'root'
 })
 export class Filter {
-
-  private phraseMatch(a:string, b:string) {
-    return a.toLowerCase().includes(b.toLowerCase());
-  }
 
   filterProjects(
     projects$: Observable<Project[]>,
@@ -21,7 +17,7 @@ export class Filter {
     if (filter) {
       return projects$.pipe(
         map(projects => projects.filter(
-          p=> this.phraseMatch(p.name, phrase)
+          p => this.phraseMatch(p.name, phrase)
         )));
     } else {
       return new Observable<Project[]>();
@@ -45,6 +41,10 @@ export class Filter {
     } else {
       return new Observable<Measurement[]>();
     }
+  }
+
+  private phraseMatch(a: string, b: string) {
+    return a.toLowerCase().includes(b.toLowerCase());
   }
 
 }

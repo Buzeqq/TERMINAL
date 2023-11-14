@@ -56,22 +56,22 @@ public static class ParametersModule
             return parameter is null ? Results.NotFound() : Results.Ok(parameter);
         });
         
-        app.MapPost("api/parameters/{name}/activate", async (
-            string name,
+        app.MapPost("api/parameters/{id:guid}/activate", async (
+            Guid id,
             ISender sender,
             CancellationToken ct) =>
         {
-            var command = new ChangeParameterStatusCommand(name, true);
+            var command = new ChangeParameterStatusCommand(id, true);
             await sender.Send(command, ct);
             return Results.Ok();
         });
         
-        app.MapPost("api/parameters/{name}/deactivate", async (
-            string name,
+        app.MapPost("api/parameters/{id:guid}/deactivate", async (
+            Guid id,
             ISender sender,
             CancellationToken ct) =>
         {
-            var command = new ChangeParameterStatusCommand(name, false);
+            var command = new ChangeParameterStatusCommand(id, false);
             await sender.Send(command, ct);
             return Results.Ok();
         });

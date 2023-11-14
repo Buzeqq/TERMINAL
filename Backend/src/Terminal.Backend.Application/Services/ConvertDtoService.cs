@@ -33,14 +33,14 @@ internal sealed class ConvertDtoService : IConvertDtoService
                 ParameterValue parameter = parameterDto switch
                 {
                     CreateMeasurementDecimalParameterValueDto @decimal 
-                        => new DecimalParameterValue(id, await _parameterRepository.GetAsync<DecimalParameter>(@decimal.Name, ct) 
-                                                     ?? throw new ParameterNotFoundException(@decimal.Name), @decimal.Value),
+                        => new DecimalParameterValue(id, await _parameterRepository.GetAsync<DecimalParameter>(@decimal.Id, ct) 
+                                                     ?? throw new ParameterNotFoundException(@decimal.Id), @decimal.Value),
                     CreateMeasurementIntegerParameterValueDto integer 
-                        => new IntegerParameterValue(id, await _parameterRepository.GetAsync<IntegerParameter>(integer.Name, ct) 
-                                                         ?? throw new ParameterNotFoundException(integer.Name), integer.Value),
+                        => new IntegerParameterValue(id, await _parameterRepository.GetAsync<IntegerParameter>(integer.Id, ct) 
+                                                         ?? throw new ParameterNotFoundException(integer.Id), integer.Value),
                     CreateMeasurementTextParameterValueDto text 
-                        => new TextParameterValue(id, await _parameterRepository.GetAsync<TextParameter>(text.Name, ct) 
-                                                      ?? throw new ParameterNotFoundException(text.Name), text.Value),
+                        => new TextParameterValue(id, await _parameterRepository.GetAsync<TextParameter>(text.Id, ct) 
+                                                      ?? throw new ParameterNotFoundException(text.Id), text.Value),
                     _ => throw new UnknownParameterTypeException(parameterDto)
                 };
                 

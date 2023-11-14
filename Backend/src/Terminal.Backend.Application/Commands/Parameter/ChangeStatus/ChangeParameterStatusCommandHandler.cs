@@ -15,12 +15,12 @@ internal class ChangeParameterStatusCommandHandler : IRequestHandler<ChangeParam
 
     public async Task Handle(ChangeParameterStatusCommand command, CancellationToken ct)
     {
-        var (name, status) = command;
-        var parameter = await _repository.GetAsync<Core.Entities.Parameters.Parameter>(name, ct);
+        var (id, status) = command;
+        var parameter = await _repository.GetAsync<Core.Entities.Parameters.Parameter>(id, ct);
 
         if (parameter is null)
         {
-            throw new ParameterNotFoundException(name);
+            throw new ParameterNotFoundException(id);
         }
 
         parameter.ChangeStatus(status);

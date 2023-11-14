@@ -1,0 +1,35 @@
+@use 'sass:map';
+@use '../../../../../node_modules/@angular/material/index' as mat;
+
+
+.search {
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 30px;
+  }
+}
+
+.row:hover {
+  background-color: mat.get-color-from-palette(mat.$grey-palette, 700);
+  cursor: pointer;
+}
+
+.result-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 700px;
+
+  &__header {
+    flex-shrink: 0;
+  }
+
+  &__content {
+    overflow-y: auto;
+  }
+
+  &__footer {
+    flex-shrink: 0;
+  }
+}
+

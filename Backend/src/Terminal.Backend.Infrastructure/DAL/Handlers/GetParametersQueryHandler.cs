@@ -15,13 +15,10 @@ internal sealed class GetParametersQueryHandler : IRequestHandler<GetParametersQ
         _parameters = dbContext.Parameters;
     }
 
-    public async Task<GetParametersDto> Handle(GetParametersQuery request, CancellationToken ct) =>
-        new()
-        {
-            Parameters = await _parameters
+    public async Task<GetParametersDto> Handle(GetParametersQuery request, CancellationToken ct) 
+        => (await _parameters
                 .AsNoTracking()
                 .Where(p => p.IsActive)
-                .Select(p => new GetParametersDto.ParameterDto(p.Id, p.Name))
-                .ToListAsync(ct)
-        };
+                .ToListAsync(ct))
+            .AsGetParametersDto();
 }
