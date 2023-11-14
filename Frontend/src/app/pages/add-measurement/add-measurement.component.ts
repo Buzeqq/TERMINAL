@@ -1,23 +1,21 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ParametersService } from "../../core/services/parameters/parameters.service";
 import {
-  AbstractControl,
   FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
-  Validators,
-  ɵTypedOrUntyped
+  Validators
 } from "@angular/forms";
 import {
-  BehaviorSubject,
+  BehaviorSubject, catchError,
   combineLatestWith,
-  debounceTime,
+  debounceTime, EMPTY,
   filter,
   map,
   Observable,
   startWith,
-  switchMap, tap
+  switchMap
 } from "rxjs";
 import { SearchService } from "../../core/services/search/search.service";
 import { Project } from "../../core/models/projects/project";
@@ -27,6 +25,8 @@ import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { isNumeric, isText, Parameter, TextParameter } from "../../core/models/parameters/parameter";
 import { AddMeasurement, ParameterValue, Step } from "../../core/models/measurements/addMeasurement";
 import { MeasurementsService } from "../../core/services/measurements/measurements.service";
+import { NotificationService } from "../../core/services/notification/notification.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-add-measurement',
@@ -76,7 +76,9 @@ export class AddMeasurementComponent implements OnInit {
               private readonly projectService: ProjectsService,
               private readonly tagsService: TagsService,
               private readonly formBuilder: FormBuilder,
-              private readonly measurementService: MeasurementsService) {
+              private readonly measurementService: MeasurementsService,
+              private readonly notificationService: NotificationService,
+              private readonly router: Router) {
   }
 
   ngOnInit(): void {
@@ -180,8 +182,16 @@ export class AddMeasurementComponent implements OnInit {
       comment: form.comment,
       steps: form.steps!.map(s => this.mapToStep(s))
     };
-    // console.log(addMeasurement)
-    this.measurementService.addMeasurement(addMeasurement).subscribe();
+
+    this.measurementService.addMeasurement(addMeasurement).pipe(
+      catchError((err, _) => {
+        this.notificationService.notifyError(err);
+        return EMPTY;
+      })
+    ).subscribe(_ => {
+      this.router.navigate(['/measurements'])
+        .then(_ => this.notificationService.notifySuccess('Measurement added!'));
+    });
   }
   private mapToStep(s: Record<string, string | number | null>): Step {
     let parameters: ParameterValue[] = [];
