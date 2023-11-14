@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Terminal.Backend.Application.Abstractions;
 using Terminal.Backend.Application.Services;
 
 namespace Terminal.Backend.Application;
@@ -13,6 +14,7 @@ public static class Extensions
         });
 
         services.AddScoped<IConvertDtoService, ConvertDtoService>();
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
         
         return services;
     }

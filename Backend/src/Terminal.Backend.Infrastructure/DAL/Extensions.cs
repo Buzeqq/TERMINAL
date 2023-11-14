@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.Repositories;
 using Terminal.Backend.Infrastructure.DAL.Repositories;
 
@@ -29,6 +30,7 @@ internal static class Extensions
         services.AddScoped<IRecipeRepository, RecipeRepository>();
         services.AddScoped<IStepsRepository, StepsRepository>();
         services.AddScoped<IMeasurementRepository, MeasurementRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
         
         return services;
     }

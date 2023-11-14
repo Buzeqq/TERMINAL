@@ -2,9 +2,9 @@ using Terminal.Backend.Application.DTO;
 using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.ValueObjects;
 
-namespace Terminal.Backend.Application.Services;
+namespace Terminal.Backend.Application.Abstractions;
 
-public interface IConvertDtoService
+internal interface IConvertDtoService
 {
     Task<IEnumerable<Step>> ConvertAsync(IEnumerable<CreateMeasurementStepDto> stepsDto, CancellationToken ct);
     Task<IEnumerable<Tag>> ConvertAsync(IEnumerable<TagName> tagNames, CancellationToken ct);
