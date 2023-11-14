@@ -1,4 +1,5 @@
 using MediatR;
+using Terminal.Backend.Application.Abstractions;
 using Terminal.Backend.Application.Exceptions;
 using Terminal.Backend.Application.Services;
 using Terminal.Backend.Core.Entities;

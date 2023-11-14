@@ -1,8 +1,12 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Terminal.Backend.Application.Abstractions;
+using Terminal.Backend.Infrastructure.Authentication;
+using Terminal.Backend.Infrastructure.Authentication.OptionsSetup;
 using Terminal.Backend.Infrastructure.DAL;
 using Terminal.Backend.Infrastructure.DAL.Behaviours;
 using Terminal.Backend.Infrastructure.Middleware;
@@ -25,6 +29,12 @@ public static class Extensions
             cfg.RegisterServicesFromAssembly(AssemblyReference.Assembly);
             cfg.AddOpenBehavior(typeof(UnitOfWorkBehaviour<,>));
         });
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer();
+
+        services.ConfigureOptions<JwtOptionsSetup>();
+        services.ConfigureOptions<JwtBearerOptionsSetup>();
+        services.AddScoped<IJwtProvider, JwtProvider>();
 
         return services;
     }
@@ -42,8 +52,8 @@ public static class Extensions
                 .AllowAnyOrigin());
         }
 
-        // app.UseAuthentication();
-        // app.UseAuthorization();
+        app.UseAuthentication();
+        app.UseAuthorization();
         app.MapControllers();
         
         using var scope = app.Services.CreateScope();

@@ -202,6 +202,27 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                     b.ToTable("Tags");
                 });
 
+            modelBuilder.Entity("Terminal.Backend.Core.Entities.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("Terminal.Backend.Core.Entities.ParameterValues.DecimalParameterValue", b =>
                 {
                     b.HasBaseType("Terminal.Backend.Core.Entities.ParameterValues.ParameterValue");

@@ -34,6 +34,7 @@ app.UseTagEndpoints();
 app.UseRecipesEndpoints();
 app.UseParametersEndpoints();
 app.UseMeasurementsEndpoints();
+app.UseUsersEndpoints();
 app.Run();
 
 namespace Terminal.Backend.Api

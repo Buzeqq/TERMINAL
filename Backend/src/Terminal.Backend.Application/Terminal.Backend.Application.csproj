@@ -25,4 +25,9 @@
       </Reference>
       <Reference Include="Microsoft.AspNetCore.Http.Features" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="Commands\Users\Logout\" />
+      <Folder Include="Commands\Users\Register\" />
+    </ItemGroup>
 </Project>
