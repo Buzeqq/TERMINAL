@@ -14,11 +14,10 @@ import { ProjectsService } from "../../../../services/projects/projects.service"
 })
 export class ProjectDetailsComponent extends ItemDetailsComponent {
   private _projectId?: string;
-  numberOfMeasurements$: Observable<number> = new Observable<number>();
+  numberOfMeasurements?: number;
   projectDetails$: Observable<Project> = new Observable<Project>();
 
   constructor(
-    private readonly measurementService: MeasurementsService,
     private readonly projectService: ProjectsService,
     protected override readonly route: ActivatedRoute,
     private readonly snackBar: MatSnackBar,
@@ -31,7 +30,6 @@ export class ProjectDetailsComponent extends ItemDetailsComponent {
 
   set projectId(id: string | undefined) {
     this._projectId = id || this.route.snapshot.paramMap.get('id') || undefined;
-    let projectName: string;
     if (!id) return;
 
     console.log(this._projectId);
@@ -45,16 +43,9 @@ export class ProjectDetailsComponent extends ItemDetailsComponent {
           return EMPTY;
         }),
         tap(r => {
-          projectName = r.name;
+          this.numberOfMeasurements = r.measurementsIds.length;
           this.loading = 'determinate';
         })
-      );
-    this.numberOfMeasurements$ = this.measurementService.getMeasurements(0, 10)
-      .pipe(
-        map(measurements => measurements.filter(
-            m => m.project == projectName
-          ).length
-        )
       );
   }
 }

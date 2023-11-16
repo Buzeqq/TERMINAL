@@ -1,14 +1,10 @@
 <cdk-virtual-scroll-viewport itemSize="50" class="items-viewport" (scroll)="onScroll($event)">
   <div *ngIf="projects$ | async as projects; else loading">
     <mat-table [dataSource]="projects">
-      <ng-component matColumnDef="id">
-        <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
-        <mat-cell *matCellDef="let measurement"> {{measurement.id}} </mat-cell>
-      </ng-component>
 
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-        <mat-cell *matCellDef="let measurement"> {{measurement.name}} </mat-cell>
+        <mat-cell *matCellDef="let project"> {{project.name}} </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
