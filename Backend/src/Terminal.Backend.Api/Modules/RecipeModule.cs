@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Terminal.Backend.Application.Queries;
+using Terminal.Backend.Application.Queries.Recipes.Search;
 
 namespace Terminal.Backend.Api.Modules;
 

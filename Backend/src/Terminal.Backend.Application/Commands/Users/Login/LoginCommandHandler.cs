@@ -1,7 +1,7 @@
 using MediatR;
 using Terminal.Backend.Application.Abstractions;
 using Terminal.Backend.Application.Exceptions;
-using Terminal.Backend.Core.Repositories;
+using Terminal.Backend.Core.Abstractions.Repositories;
 using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Commands.Users.Login;

@@ -2,7 +2,7 @@ using MediatR;
 using Terminal.Backend.Application.Commands.Parameter.ChangeStatus;
 using Terminal.Backend.Application.Commands.Parameter.Define;
 using Terminal.Backend.Application.DTO;
-using Terminal.Backend.Application.Queries;
+using Terminal.Backend.Application.Queries.Parameters.Get;
 using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Api.Modules;

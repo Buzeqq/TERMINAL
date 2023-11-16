@@ -27,7 +27,7 @@
     </ItemGroup>
     
     <ItemGroup>
+      <Folder Include="Commands\Users\Get\" />
       <Folder Include="Commands\Users\Logout\" />
-      <Folder Include="Commands\Users\Register\" />
     </ItemGroup>
 </Project>

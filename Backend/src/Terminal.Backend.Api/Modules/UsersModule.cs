@@ -1,8 +1,9 @@
 using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Application.Commands.Users.Login;
-using Terminal.Backend.Application.Queries;
+using Terminal.Backend.Application.Queries.Users;
+using Terminal.Backend.Core.Entities;
+using Terminal.Backend.Core.Enums;
 
 namespace Terminal.Backend.Api.Modules;
 
@@ -30,6 +31,6 @@ public static class UsersModule
             var response = await sender.Send(query, ct);
 
             return response is not null ? Results.Ok(response) : Results.NotFound();
-        }).RequireAuthorization();
+        }).RequireAuthorization(Role.Registered);
     }
 }

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Terminal.Backend.Core.Abstractions.Repositories;
 using Terminal.Backend.Core.Entities;
-using Terminal.Backend.Core.Repositories;
 
 namespace Terminal.Backend.Infrastructure.DAL.Repositories;
 

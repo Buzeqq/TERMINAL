@@ -29,9 +29,10 @@ public static class Extensions
             cfg.RegisterServicesFromAssembly(AssemblyReference.Assembly);
             cfg.AddOpenBehavior(typeof(UnitOfWorkBehaviour<,>));
         });
+        
+        services.AddAuthorization();
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer();
-
         services.ConfigureOptions<JwtOptionsSetup>();
         services.ConfigureOptions<JwtBearerOptionsSetup>();
         services.AddScoped<IJwtProvider, JwtProvider>();

@@ -1,6 +1,5 @@
-using System.Text.Json.Serialization;
 using Terminal.Backend.Application.DTO;
-using Terminal.Backend.Application.Queries.Parameters;
+using Terminal.Backend.Application.Queries.QueryParameters;
 using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.Entities.Parameters;
 using Terminal.Backend.Core.Entities.ParameterValues;

@@ -2,8 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Terminal.Backend.Core.Entities;
-using Terminal.Backend.Core.Repositories;
+using Terminal.Backend.Core.Abstractions.Repositories;
 using Terminal.Backend.Infrastructure.DAL.Repositories;
 
 namespace Terminal.Backend.Infrastructure.DAL;

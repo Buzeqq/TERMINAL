@@ -2,7 +2,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Application.Commands.Measurement.Create;
 using Terminal.Backend.Application.DTO;
-using Terminal.Backend.Application.Queries;
+using Terminal.Backend.Application.Queries.Measurements.Get;
+using Terminal.Backend.Application.Queries.Measurements.Search;
 using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Api.Modules;
@@ -14,7 +15,7 @@ public static class MeasurementsModule
         app.MapPost("api/measurements", async (
             CreateMeasurementCommand command,
             ISender sender,
-        CancellationToken ct) =>
+            CancellationToken ct) =>
         {
             var id = MeasurementId.Create();
             command = command with { MeasurementId = id };
@@ -28,9 +29,9 @@ public static class MeasurementsModule
             {
                 new CreateMeasurementStepDto(new CreateMeasurementBaseParameterValueDto[]
                 {
-                    new CreateMeasurementDecimalParameterValueDto(Guid.NewGuid(), 0.111m),
-                    new CreateMeasurementIntegerParameterValueDto(Guid.NewGuid(), 2137),
-                    new CreateMeasurementTextParameterValueDto(Guid.NewGuid(), "text")
+                    new CreateMeasurementDecimalParameterValueDto(ParameterId.Create(), 0.111m),
+                    new CreateMeasurementIntegerParameterValueDto(ParameterId.Create(), 2137),
+                    new CreateMeasurementTextParameterValueDto(ParameterId.Create(), "text")
                 },
                     "comment")
             },

@@ -2,7 +2,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Application.Commands.Project.ChangeStatus;
 using Terminal.Backend.Application.Commands.Project.Create;
-using Terminal.Backend.Application.Queries;
+using Terminal.Backend.Application.Queries.Projects.Get;
+using Terminal.Backend.Application.Queries.Projects.Search;
 using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Api.Modules;
