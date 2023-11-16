@@ -41,7 +41,9 @@ import { MatTableModule } from "@angular/material/table";
   exports: [
     TimeAgoPipe,
     SearchComponent,
-    ItemDetailsComponent
+    ItemDetailsComponent,
+    MeasurementDetailsComponent,
+    ProjectDetailsComponent
   ],
   imports: [
     CommonModule,

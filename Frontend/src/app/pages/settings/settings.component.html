@@ -1,0 +1,69 @@
+<div>
+  <h2>Settings</h2>
+</div>
+<section class="settings">
+  <section class="settings__cards">
+    <mat-card>
+      <mat-tab-group>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">folder</mat-icon>
+            Projects
+          </ng-template>
+          <ng-template matTabContent>
+            <app-project-views (selectedItemChangeEvent)="selectedItem = $event"></app-project-views>
+          </ng-template>
+        </mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">science</mat-icon>
+            Measurements
+          </ng-template>
+          <ng-template matTabContent>
+            <app-measurement-views (selectedItemChangeEvent)="selectedItem = $event"></app-measurement-views>
+          </ng-template>
+        </mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">assignment</mat-icon>
+            Recipes
+          </ng-template>
+          <ng-template matTabContent>
+      <!--      TODO-->
+          </ng-template>
+        </mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">label</mat-icon>
+            Tags
+          </ng-template>
+          <ng-template matTabContent>
+      <!--      TODO-->
+          </ng-template>
+        </mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">group</mat-icon>
+            Users
+          </ng-template>
+          <ng-template matTabContent>
+            <!--      TODO-->
+          </ng-template>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card>
+
+    <section>
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Edit</mat-card-title>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <ng-container [ngSwitch]="selectedItem?.type">
+        <app-project-edit-view class="edit-item-card" *ngSwitchCase="'Project'" [projectId]="selectedItem?.id"></app-project-edit-view>
+        <app-measurement-details *ngSwitchCase="'Measurement'" [measurementId]="selectedItem?.id"></app-measurement-details>
+      </ng-container>
+    </mat-card>
+    </section>
+  </section>
+</section>

@@ -1,0 +1,23 @@
+.settings {
+  display: flex;
+  flex-direction: column;
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 30px;
+  }
+}
+
+h2 {
+  margin-bottom: 10px;
+  font-size: xx-large;
+}
+
+mat-card-header {
+  margin-bottom: 5px;
+}
+
+.tab-icon {
+  margin-right: 8px;
+}

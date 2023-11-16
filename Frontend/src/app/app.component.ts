@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { map, Observable } from "rxjs";
 import { BreakpointObserver } from "@angular/cdk/layout";
-import { PingService } from "./core/services/ping/ping.service";
 import { AddProjectDialogComponent } from "./core/components/dialogs/add-project/add-project-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
