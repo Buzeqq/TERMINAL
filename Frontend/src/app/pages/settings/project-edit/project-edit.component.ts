@@ -8,11 +8,11 @@ import {ProjectDetails} from "../../../core/models/projects/project-details";
 import {ProjectsService} from "../../../core/services/projects/projects.service";
 
 @Component({
-  selector: 'app-project-edit-view',
-  templateUrl: './project-edit-view.component.html',
-  styleUrls: ['./project-edit-view.component.scss']
+  selector: 'app-project-edit',
+  templateUrl: './project-edit.component.html',
+  styleUrls: ['./project-edit.component.scss']
 })
-export class ProjectEditViewComponent {
+export class ProjectEditComponent {
   private _projectId?: string;
   projectDetails$: Observable<Project> = new Observable<Project>();
   private projectDetails?: ProjectDetails;
@@ -58,14 +58,19 @@ export class ProjectEditViewComponent {
   }
 
   resetForm() {
-    if (this.projectDetails) {
-      this.projectNameFormControl.setValue(this.projectDetails.name);
-      this.isActiveToggleButton.setValue(this.projectDetails.isActive);
-    } else {
-      this.projectNameFormControl.setValue('');
-      this.isActiveToggleButton.setValue(false);
-    }
+    this.projectNameFormControl.setValue(this.projectDetails!.name);
+    this.isActiveToggleButton.setValue(this.projectDetails!.isActive);
   }
+
+  readyToSubmit() {
+    return this.dirtyForm() && this.projectNameFormControl.valid;
+  }
+
+  dirtyForm() {
+    return this.projectDetails!.name !== this.projectNameFormControl.value
+      || this.projectDetails!.isActive !== this.isActiveToggleButton.value
+  }
+
   editProject() {
     // TODO send a request with new form values
   }

@@ -27,15 +27,20 @@
     </mat-form-field>
 
     <mat-card-actions class="project-edit__form-buttons">
-      <button mat-raised-button color="primary"
-              (click)="resetForm()">
-        Reset
-      </button>
-      <button mat-raised-button color="primary"
-              (click)="editProject()"
-              [disabled]="projectNameFormControl.invalid">
-        Submit changes
-      </button>
+      <section matTooltip="No changes apllied" [matTooltipDisabled]="dirtyForm()">
+        <button mat-raised-button color="primary"
+                (click)="resetForm()"
+                [disabled]="!dirtyForm()">
+          Reset
+        </button>
+      </section>
+      <section matTooltip="No changes apllied or invalid values are set" [matTooltipDisabled]="readyToSubmit()">
+        <button mat-raised-button color="primary"
+                (click)="editProject()"
+                [disabled]="!readyToSubmit()">
+          Submit changes
+        </button>
+      </section>
     </mat-card-actions>
 
   </mat-card-content>

@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProjectEditViewComponent } from './project-edit-view.component';
+import { ProjectEditComponent } from './project-edit.component';
 
 describe('ProjectsManagementViewComponent', () => {
-  let component: ProjectEditViewComponent;
-  let fixture: ComponentFixture<ProjectEditViewComponent>;
+  let component: ProjectEditComponent;
+  let fixture: ComponentFixture<ProjectEditComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ProjectEditViewComponent]
+      declarations: [ProjectEditComponent]
     });
-    fixture = TestBed.createComponent(ProjectEditViewComponent);
+    fixture = TestBed.createComponent(ProjectEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
