@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Terminal.Backend.Application.Abstractions;
+using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Infrastructure.Authentication;
 using Terminal.Backend.Infrastructure.Authentication.OptionsSetup;
+using Terminal.Backend.Infrastructure.Authentication.Requirements;
 using Terminal.Backend.Infrastructure.DAL;
 using Terminal.Backend.Infrastructure.DAL.Behaviours;
 using Terminal.Backend.Infrastructure.Middleware;
@@ -31,6 +34,25 @@ public static class Extensions
         });
         
         services.AddAuthorization();
+        services.AddAuthorizationBuilder()
+            .AddPolicy(Role.Registered, policy =>
+            {
+                policy.AddRequirements(new RoleRequirement(Role.Registered));
+            })
+            .AddPolicy(Role.Guest, policy =>
+            {
+                policy.AddRequirements(new RoleRequirement(Role.Guest));
+            })
+            .AddPolicy(Role.Moderator, policy =>
+            {
+                policy.AddRequirements(new RoleRequirement(Role.Registered));
+            })
+            .AddPolicy(Role.Administrator, policy =>
+            {
+                policy.AddRequirements(new RoleRequirement(Role.Administrator));
+            });
+        services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
+        services.AddSingleton<IAuthorizationHandler, RoleAuthorizationHandler>();
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer();
         services.ConfigureOptions<JwtOptionsSetup>();

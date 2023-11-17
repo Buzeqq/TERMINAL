@@ -15,5 +15,7 @@ internal sealed class UserRepository : IUserRepository
     }
 
     public async Task<User?> GetUserByEmail(Email email, CancellationToken ct)
-        => await _users.SingleOrDefaultAsync(u => u.Email == email, ct);
+        => await _users
+            .Include(u => u.Role)
+            .SingleOrDefaultAsync(u => u.Email == email, ct);
 }

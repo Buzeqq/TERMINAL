@@ -16,4 +16,7 @@ public sealed class Role : Enumeration<Role, RoleId>
 
     public ICollection<Permission> Permissions { get; private set; } = new List<Permission>();
     public ICollection<User> Users { get; private set; } = new List<User>();
+
+    public static bool IsSatisfied(Role minimalRole, Role userRole)
+        => minimalRole.Value.Value < userRole.Value.Value;
 }
