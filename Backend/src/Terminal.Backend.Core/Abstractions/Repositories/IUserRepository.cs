@@ -5,5 +5,6 @@ namespace Terminal.Backend.Core.Abstractions.Repositories;
 
 public interface IUserRepository
 {
-    Task<User?> GetUserByEmail(Email email, CancellationToken ct);
+    Task<User?> GetUserByEmailAsync(Email email, CancellationToken ct);
+    Task AddUserAsync(User user, CancellationToken ct);
 }

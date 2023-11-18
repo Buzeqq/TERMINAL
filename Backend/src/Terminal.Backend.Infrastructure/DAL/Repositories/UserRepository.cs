@@ -14,8 +14,12 @@ internal sealed class UserRepository : IUserRepository
         _users = context.Users;
     }
 
-    public async Task<User?> GetUserByEmail(Email email, CancellationToken ct)
+    public async Task<User?> GetUserByEmailAsync(Email email, CancellationToken ct)
         => await _users
             .Include(u => u.Role)
             .SingleOrDefaultAsync(u => u.Email == email, ct);
+
+    public async Task AddUserAsync(User user, CancellationToken ct)
+        => await _users
+            .AddAsync(user, ct);
 }

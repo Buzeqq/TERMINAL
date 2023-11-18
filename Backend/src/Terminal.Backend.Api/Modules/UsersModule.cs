@@ -1,5 +1,7 @@
+using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Terminal.Backend.Application.Commands.Users.Create;
 using Terminal.Backend.Application.Commands.Users.Login;
 using Terminal.Backend.Application.Commands.Users.Register;
 using Terminal.Backend.Application.Queries.Users;
@@ -16,10 +18,10 @@ public static class UsersModule
             ISender sender,
             CancellationToken ct) =>
         {
-            var result = await sender.Send(command, ct);
+            var token = await sender.Send(command, ct);
 
-            return result;
-        });
+            return token;
+        }).AllowAnonymous();
 
         app.MapGet("api/users/{id:guid}", async (
             Guid id,
@@ -28,17 +30,17 @@ public static class UsersModule
         {
             var query = new GetUserQuery(id);
 
-            var response = await sender.Send(query, ct);
+            var user = await sender.Send(query, ct);
 
-            return response is not null ? Results.Ok(response) : Results.NotFound();
+            return user is not null ? Results.Ok(user) : Results.NotFound();
         }).RequireAuthorization(Role.Registered);
 
         app.MapPost("api/users", async (
-            RegisterUserCommand command,
+            [FromBody] CreateUserCommand command,
             ISender sender,
             CancellationToken ct) =>
         {
-            
+            var invitation = await sender.Send(command, ct);
         }).RequireAuthorization(Role.Administrator);
     }
 }

@@ -23,7 +23,7 @@ internal sealed class LoginCommandHandler : IRequestHandler<LoginCommand, JwtTok
     {
         var email = new Email(request.Email);
 
-        var user = await _userRepository.GetUserByEmail(email, cancellationToken);
+        var user = await _userRepository.GetUserByEmailAsync(email, cancellationToken);
         if (user is null)
         {
             throw new UserNotFoundException(email);
