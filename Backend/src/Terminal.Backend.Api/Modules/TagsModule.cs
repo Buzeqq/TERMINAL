@@ -4,6 +4,7 @@ using Terminal.Backend.Application.Commands.Tag.ChangeStatus;
 using Terminal.Backend.Application.Commands.Tag.Create;
 using Terminal.Backend.Application.Queries.Tags.Get;
 using Terminal.Backend.Application.Queries.Tags.Search;
+using Terminal.Backend.Core.Enums;
 
 namespace Terminal.Backend.Api.Modules;
 
@@ -16,7 +17,8 @@ public static class TagsModule
             [FromQuery] int pageSize,
             ISender sender,
             CancellationToken ct
-            ) => await sender.Send(new GetTagsQuery(pageNumber, pageSize), ct));
+            ) => await sender.Send(new GetTagsQuery(pageNumber, pageSize), ct))
+            .RequireAuthorization(Permission.TagRead.ToString());
         
         app.MapPost("api/tags", async (
                 CreateTagCommand command, 
@@ -25,7 +27,7 @@ public static class TagsModule
             {
                 await sender.Send(command, ct);
                 return Results.Created("api/tags", null);
-            });
+            }).RequireAuthorization(Permission.TagWrite.ToString());
 
         // app.MapPatch("api/tags/{name}", async (
         //     string name, 
@@ -46,7 +48,7 @@ public static class TagsModule
             var command = new ChangeTagStatusCommand(name, true);
             await sender.Send(command, ct);
             return Results.Ok();
-        });
+        }).RequireAuthorization(Permission.TagUpdate.ToString());
         
         app.MapPost("api/tags/{name}/deactivate", async (
             string name,
@@ -56,7 +58,7 @@ public static class TagsModule
             var command = new ChangeTagStatusCommand(name, false);
             await sender.Send(command, ct);
             return Results.Ok();
-        });
+        }).RequireAuthorization(Permission.TagUpdate.ToString());
 
         app.MapGet("api/tags/search", async (
             [FromQuery] string searchPhrase,
@@ -68,6 +70,6 @@ public static class TagsModule
             var tags = await sender.Send(query, ct);
 
             return Results.Ok(tags);
-        });
+        }).RequireAuthorization(Permission.TagRead.ToString());
     }
 }

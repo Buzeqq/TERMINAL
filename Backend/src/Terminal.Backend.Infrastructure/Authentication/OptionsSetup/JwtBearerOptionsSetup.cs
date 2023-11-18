@@ -5,13 +5,17 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Terminal.Backend.Infrastructure.Authentication.OptionsSetup;
 
-internal sealed class JwtBearerOptionsSetup : IConfigureOptions<JwtBearerOptions>
+internal sealed class JwtBearerOptionsSetup : IConfigureNamedOptions<JwtBearerOptions>
 {
     private readonly JwtOptions _options;
 
     public JwtBearerOptionsSetup(IOptions<JwtOptions> options)
     {
         _options = options.Value;
+    }
+    public void Configure(string? name, JwtBearerOptions options)
+    {
+        Configure(options);
     }
 
     public void Configure(JwtBearerOptions options)

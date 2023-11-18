@@ -33,6 +33,8 @@ public static class Extensions
             cfg.AddOpenBehavior(typeof(UnitOfWorkBehaviour<,>));
         });
         
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer();
         services.AddAuthorization();
         services.AddAuthorizationBuilder()
             .AddPolicy(Role.Registered, policy =>
@@ -51,10 +53,9 @@ public static class Extensions
             {
                 policy.AddRequirements(new RoleRequirement(Role.Administrator));
             });
+        services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
         services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
         services.AddSingleton<IAuthorizationHandler, RoleAuthorizationHandler>();
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer();
         services.ConfigureOptions<JwtOptionsSetup>();
         services.ConfigureOptions<JwtBearerOptionsSetup>();
         services.AddScoped<IJwtProvider, JwtProvider>();
