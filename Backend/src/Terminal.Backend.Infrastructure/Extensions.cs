@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Terminal.Backend.Application.Abstractions;
 using Terminal.Backend.Core.Entities;
+using Terminal.Backend.Core.ValueObjects;
+using Terminal.Backend.Infrastructure.Administrator;
 using Terminal.Backend.Infrastructure.Authentication;
 using Terminal.Backend.Infrastructure.Authentication.OptionsSetup;
 using Terminal.Backend.Infrastructure.Authentication.Requirements;
@@ -58,6 +60,7 @@ public static class Extensions
         services.AddSingleton<IAuthorizationHandler, RoleAuthorizationHandler>();
         services.ConfigureOptions<JwtOptionsSetup>();
         services.ConfigureOptions<JwtBearerOptionsSetup>();
+        services.ConfigureOptions<AdministratorOptionsSetup>();
         services.AddScoped<IJwtProvider, JwtProvider>();
 
         return services;
@@ -82,7 +85,28 @@ public static class Extensions
         
         using var scope = app.Services.CreateScope();
         using var dbContext = scope.ServiceProvider.GetRequiredService<TerminalDbContext>();
-
+        var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
+        var adminOptions = app.Configuration.GetOptions<AdministratorOptions>(AdministratorOptionsSetup.SectionName);
+        try
+        {
+            var administratorExists = dbContext.Users.Any(u => u.Role == Role.Administrator);
+            if (!administratorExists)
+            {
+                var adminRole = Role.Administrator;
+                dbContext.Attach(adminRole);
+                var admin = new User(UserId.Create(), new Email(adminOptions.Email),
+                    passwordHasher.Hash(adminOptions.Password), true);
+                admin.SetRole(adminRole);
+                dbContext.Users.Add(admin);
+                
+                dbContext.SaveChanges();
+            }
+        }
+        catch (Exception e)
+        {
+            // log admin already exists, skipping...
+        }
+        
         if (app.Environment.IsDevelopment())
         {
             if (!app.Configuration.GetOptions<PostgresOptions>("Postgres").Seed) return app;
@@ -99,7 +123,6 @@ public static class Extensions
         if (!app.Environment.IsProduction()) return app;
         dbContext.Database.Migrate();
         
-
         return app;
     }
 

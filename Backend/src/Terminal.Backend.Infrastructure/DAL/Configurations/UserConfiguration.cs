@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.Extensions.Options;
+using Terminal.Backend.Application.Abstractions;
 using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.ValueObjects;
+using Terminal.Backend.Infrastructure.Administrator;
 
 namespace Terminal.Backend.Infrastructure.DAL.Configurations;
 

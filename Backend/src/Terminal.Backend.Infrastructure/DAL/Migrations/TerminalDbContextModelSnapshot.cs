@@ -38,6 +38,28 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                     b.ToTable("MeasurementTag");
                 });
 
+            modelBuilder.Entity("Terminal.Backend.Core.Entities.Invitation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ExpiersIn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Invitations");
+                });
+
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Measurement", b =>
                 {
                     b.Property<Guid>("Id")
@@ -741,6 +763,9 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("Activated")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
@@ -855,6 +880,17 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                         .HasForeignKey("TagsName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Terminal.Backend.Core.Entities.Invitation", b =>
+                {
+                    b.HasOne("Terminal.Backend.Core.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Measurement", b =>

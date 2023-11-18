@@ -1,12 +1,9 @@
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Application.Commands.Users.Login;
+using Terminal.Backend.Application.Commands.Users.Register;
 using Terminal.Backend.Application.Queries.Users;
 using Terminal.Backend.Core.Entities;
-using Terminal.Backend.Core.Enums;
-using Terminal.Backend.Infrastructure.Authentication;
-using Permission = Terminal.Backend.Core.Enums.Permission;
 
 namespace Terminal.Backend.Api.Modules;
 
@@ -35,5 +32,13 @@ public static class UsersModule
 
             return response is not null ? Results.Ok(response) : Results.NotFound();
         }).RequireAuthorization(Role.Registered);
+
+        app.MapPost("api/users", async (
+            RegisterUserCommand command,
+            ISender sender,
+            CancellationToken ct) =>
+        {
+            
+        }).RequireAuthorization(Role.Administrator);
     }
 }
