@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from "../api-service";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { map, Observable } from "rxjs";
+import {catchError, map, Observable} from "rxjs";
+import {Tag} from "../../models/tags/tag";
+import {TagDetails} from "../../models/tags/tag-details";
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +14,8 @@ export class TagsService extends ApiService {
     super(http);
   }
 
-  getTags(pageNumber: number, pageSize: number): Observable<string[]> {
-    return this.get<{ tags: string[] }>('tags', new HttpParams({
+  getTags(pageNumber: number, pageSize: number): Observable<Tag[]> {
+    return this.get<{ tags: Tag[] }>('tags', new HttpParams({
       fromObject: {
         pageNumber,
         pageSize
@@ -21,5 +23,13 @@ export class TagsService extends ApiService {
     })).pipe(
       map(t => t.tags)
     );
+  }
+
+  // TODO id is the name of the tag for now
+  getTag(id: string): Observable<TagDetails> {
+    return this.get<TagDetails>(`tags/${id}`)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 }

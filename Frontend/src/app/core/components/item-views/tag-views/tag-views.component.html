@@ -1,0 +1,19 @@
+<cdk-virtual-scroll-viewport itemSize="50" class="items-viewport" (scroll)="onScroll($event)">
+  <div *ngIf="tags$ | async as tags; else loading">
+    <mat-table [dataSource]="tags">
+
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+        <mat-cell *matCellDef="let tag"> {{tag}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row mat-ripple *matRowDef="let row; columns: displayedColumns;" (click)="selectTag(row);"
+               [class.recent-measurements__row--is-clicked]="row.id === selectedItem?.id"></mat-row>
+    </mat-table>
+  </div>
+</cdk-virtual-scroll-viewport>
+
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>

@@ -46,8 +46,10 @@ import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, ScrollingModule } from "@an
 import { MatSelectModule } from "@angular/material/select";
 import { ProjectViewsComponent } from "./core/components/item-views/project-views/project-views.component";
 import { SettingsComponent } from './pages/settings/settings.component';
-import { ProjectEditViewComponent } from './pages/settings/project-edit-view/project-edit-view.component';
+import { ProjectEditComponent } from './pages/settings/project-edit/project-edit.component';
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import { MeasurementEditComponent } from './pages/settings/measurement-edit/measurement-edit.component';
+import { TagEditComponent } from './pages/settings/tag-edit/tag-edit.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +63,9 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
     ItemViewsComponent,
     StatusbarComponent,
     SettingsComponent,
-    ProjectEditViewComponent
+    ProjectEditComponent,
+    MeasurementEditComponent,
+    TagEditComponent
   ],
   imports: [
     BrowserModule,
