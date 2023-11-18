@@ -13,7 +13,7 @@ import {TagsService} from "../../../core/services/tags/tags.service";
   styleUrls: ['./tag-edit.component.scss']
 })
 export class TagEditComponent {
-  private _tagId?: string; // TODO for now id is the name of the tag
+  private _tagId?: string;
   tagDetails$: Observable<Tag> = new Observable<Tag>();
   private tagDetails?: TagDetails;
   loading: 'determinate' | 'indeterminate' | 'buffer' | 'query' = 'query';

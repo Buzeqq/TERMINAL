@@ -29,8 +29,7 @@ export class TagViewsComponent implements AfterViewInit {
   }
 
   selectTag(t: Tag) {
-    const name = t as unknown as string; // this is needed bcs tag is actually a string
-    this.selectedItem = {type: 'Tag', id: name};
+    this.selectedItem = {type: 'Tag', id: t.id};
     this.selectedItemChangeEvent.emit(this.selectedItem);
   }
 

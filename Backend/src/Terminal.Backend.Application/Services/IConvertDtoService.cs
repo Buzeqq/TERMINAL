@@ -7,5 +7,5 @@ namespace Terminal.Backend.Application.Services;
 public interface IConvertDtoService
 {
     Task<IEnumerable<Step>> ConvertAsync(IEnumerable<CreateMeasurementStepDto> stepsDto, CancellationToken ct);
-    Task<IEnumerable<Tag>> ConvertAsync(IEnumerable<TagName> tagNames, CancellationToken ct);
+    Task<IEnumerable<Tag>> ConvertAsync(IEnumerable<TagId> tagIds, CancellationToken ct);
 }

@@ -25,7 +25,6 @@ export class TagsService extends ApiService {
     );
   }
 
-  // TODO id is the name of the tag for now
   getTag(id: string): Observable<TagDetails> {
     return this.get<TagDetails>(`tags/${id}`)
       .pipe(

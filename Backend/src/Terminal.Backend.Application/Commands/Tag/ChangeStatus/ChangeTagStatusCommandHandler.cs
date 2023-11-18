@@ -16,11 +16,11 @@ internal sealed class ChangeTagStatusCommandHandler : IRequestHandler<ChangeTagS
 
     public async Task Handle(ChangeTagStatusCommand command, CancellationToken ct)
     {
-        var (name, status) = command;
-        var tag = await _tagRepository.GetAsync(name, ct);
+        var (id, status) = command;
+        var tag = await _tagRepository.GetAsync(id, ct);
         if (tag is null)
         {
-            throw new TagNotFoundException(name);
+            throw new TagNotFoundException(id);
         }
 
         tag.ChangeStatus(status);

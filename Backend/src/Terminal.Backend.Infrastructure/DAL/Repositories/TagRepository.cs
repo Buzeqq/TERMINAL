@@ -17,8 +17,8 @@ internal sealed class TagRepository : ITagRepository
     public async Task AddAsync(Tag tag, CancellationToken ct)
         => await _tags.AddAsync(tag, ct);
 
-    public async Task<Tag?> GetAsync(TagName name, CancellationToken ct)
-        => await _tags.SingleOrDefaultAsync(t => t.Name == name, ct);
+    public async Task<Tag?> GetAsync(TagId id, CancellationToken ct)
+        => await _tags.SingleOrDefaultAsync(t => t.Id == id, ct);
 
     public Task UpdateAsync(Tag tag)
     {
@@ -26,6 +26,6 @@ internal sealed class TagRepository : ITagRepository
         return Task.CompletedTask;
     }
 
-    public async Task<IEnumerable<Tag>> GetManyAsync(IEnumerable<TagName> tagNames, CancellationToken ct)
-        => await _tags.Where(t => tagNames.Contains(t.Name)).ToListAsync(ct);
+    public async Task<IEnumerable<Tag>> GetManyAsync(IEnumerable<TagId> tagIds, CancellationToken ct)
+        => await _tags.Where(t => tagIds.Equals(t.Id)).ToListAsync(ct);
 }

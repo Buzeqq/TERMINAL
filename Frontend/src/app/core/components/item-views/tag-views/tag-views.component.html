@@ -4,7 +4,7 @@
 
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-        <mat-cell *matCellDef="let tag"> {{tag}} </mat-cell>
+        <mat-cell *matCellDef="let tag"> {{tag.name}} </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

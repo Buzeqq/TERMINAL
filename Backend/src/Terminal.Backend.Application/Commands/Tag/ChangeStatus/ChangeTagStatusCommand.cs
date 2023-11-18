@@ -3,4 +3,4 @@ using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Commands.Tag.ChangeStatus;
 
-public sealed record ChangeTagStatusCommand(TagName Name, bool IsActive) : IRequest;
+public sealed record ChangeTagStatusCommand(TagId Id, bool IsActive) : IRequest;
