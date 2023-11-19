@@ -32,7 +32,7 @@ internal sealed class PasswordHasher : IPasswordHasher
         ));
     }
 
-    public bool Verify(Password input, Password password)
+    public bool Verify(string input, Password password)
     {
         var segments = password.Value.Split(SegmentDelimiter);
         var hash = Convert.FromHexString(segments[0]);
@@ -40,7 +40,7 @@ internal sealed class PasswordHasher : IPasswordHasher
         var iterations = int.Parse(segments[2]);
         var algorithm = new HashAlgorithmName(segments[3]);
         var inputHash = Rfc2898DeriveBytes.Pbkdf2(
-            input.Value,
+            input,
             salt,
             iterations,
             algorithm,

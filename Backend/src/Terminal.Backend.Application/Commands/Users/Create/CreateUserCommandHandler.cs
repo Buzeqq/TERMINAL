@@ -10,36 +10,49 @@ namespace Terminal.Backend.Application.Commands.Users.Create;
 
 internal sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, InvitationDto>
 {
-    private readonly ITemporaryPasswordGenerator _temporaryPasswordGenerator;
     private readonly IUserRepository _userRepository;
     private readonly IInvitationFactory _invitationFactory;
-    private readonly IInvitationRepository _invitationRepository;
     private readonly IMailService _mailService;
+    private readonly IRoleRepository _roleRepository;
 
-    public CreateUserCommandHandler(ITemporaryPasswordGenerator temporaryPasswordGenerator,
-        IUserRepository userRepository, IInvitationFactory invitationFactory,
-        IInvitationRepository invitationRepository, IMailService mailService)
+    public CreateUserCommandHandler(IUserRepository userRepository, IInvitationFactory invitationFactory,
+        IMailService mailService, IRoleRepository roleRepository)
     {
-        _temporaryPasswordGenerator = temporaryPasswordGenerator;
         _userRepository = userRepository;
         _invitationFactory = invitationFactory;
-        _invitationRepository = invitationRepository;
         _mailService = mailService;
+        _roleRepository = roleRepository;
     }
 
     public async Task<InvitationDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var (email, role) = request;
-        var temporaryPassword = _temporaryPasswordGenerator.Generate();
-        var newUser = new User(UserId.Create(), email, temporaryPassword.PasswordHashed, false);
-        var newUserRole = Role.FromName(role) ?? throw new RoleNotFoundException(role);
-        newUser.SetRole(newUserRole);
+        var user = await _userRepository.GetUserByEmailAsync(email, cancellationToken);
         
-        await _userRepository.AddUserAsync(newUser, cancellationToken);
-        var invitation = _invitationFactory.Crate(newUser);
-        await _invitationRepository.AddAsync(invitation, cancellationToken);
+        if (user is null)
+        {
+            user = User.CreateInactiveUser(UserId.Create(), email);
+            var newUserRole = await _roleRepository.GetByNameAsync(role, cancellationToken)
+                              ?? throw new RoleNotFoundException(role);
+            user.SetRole(newUserRole);
+            await _userRepository.AddUserAsync(user, cancellationToken);
+
+        }
+
+        if (user.Activated)
+        {
+            throw new UserAlreadyExistsException(email);
+        }
+        var invitation = await _invitationFactory.CrateAsync(user, cancellationToken);
         await _mailService.SendInvitation(invitation);
 
         return new InvitationDto(invitation.Link, invitation.ExpiresIn.ToString("d"));
+    }
+}
+
+public class UserAlreadyExistsException : TerminalException
+{
+    public UserAlreadyExistsException(string email) : base("User already exists")
+    {
     }
 }

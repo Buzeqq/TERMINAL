@@ -1,9 +1,7 @@
-using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Application.Commands.Users.Create;
 using Terminal.Backend.Application.Commands.Users.Login;
-using Terminal.Backend.Application.Commands.Users.Register;
 using Terminal.Backend.Application.Queries.Users;
 using Terminal.Backend.Core.Entities;
 
@@ -41,6 +39,8 @@ public static class UsersModule
             CancellationToken ct) =>
         {
             var invitation = await sender.Send(command, ct);
+
+            return invitation;
         }).RequireAuthorization(Role.Administrator);
     }
 }

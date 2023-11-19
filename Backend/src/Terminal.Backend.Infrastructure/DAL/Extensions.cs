@@ -30,6 +30,8 @@ internal static class Extensions
         services.AddScoped<IStepsRepository, StepsRepository>();
         services.AddScoped<IMeasurementRepository, MeasurementRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IInvitationRepository, InvitationRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
         
         return services;
     }

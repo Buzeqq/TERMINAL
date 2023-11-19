@@ -2,7 +2,6 @@ using MediatR;
 using Terminal.Backend.Application.Abstractions;
 using Terminal.Backend.Application.Exceptions;
 using Terminal.Backend.Core.Abstractions.Repositories;
-using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Commands.Users.Login;
 
@@ -21,7 +20,7 @@ internal sealed class LoginCommandHandler : IRequestHandler<LoginCommand, JwtTok
 
     public async Task<JwtToken> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var email = new Email(request.Email);
+        var (email, password) = request;
 
         var user = await _userRepository.GetUserByEmailAsync(email, cancellationToken);
         if (user is null)
@@ -29,11 +28,10 @@ internal sealed class LoginCommandHandler : IRequestHandler<LoginCommand, JwtTok
             throw new UserNotFoundException(email);
         }
         
-        // var password = _passwordHasher.Hash(request.Password);
-        // if (!_passwordHasher.Verify(password, user.Password))
-        // {
-        //     throw new InvalidCredentialsException();
-        // }
+        if (!_passwordHasher.Verify(password, user.Password))
+        {
+            throw new InvalidCredentialsException();
+        }
 
         return _jwtProvider.Generate(user);
     }

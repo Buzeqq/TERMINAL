@@ -18,5 +18,5 @@ public sealed class Role : Enumeration<Role, RoleId>
     public ICollection<User> Users { get; private set; } = new List<User>();
 
     public static bool IsSatisfied(Role minimalRole, Role userRole)
-        => minimalRole.Value.Value < userRole.Value.Value;
+        => minimalRole.Value.Value <= userRole.Value.Value;
 }

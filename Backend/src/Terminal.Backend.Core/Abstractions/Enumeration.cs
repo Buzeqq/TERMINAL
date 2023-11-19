@@ -26,7 +26,7 @@ public abstract class Enumeration<TEnum, TId> : IEquatable<Enumeration<TEnum, TI
     {
         return Enumerations!
             .Values
-            .SingleOrDefault(e => e.Name == name);
+            .SingleOrDefault(e => string.Equals(e.Name, name, StringComparison.OrdinalIgnoreCase));
     }
 
     public override string ToString()

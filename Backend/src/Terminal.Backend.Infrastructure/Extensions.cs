@@ -14,6 +14,7 @@ using Terminal.Backend.Infrastructure.Authentication.OptionsSetup;
 using Terminal.Backend.Infrastructure.Authentication.Requirements;
 using Terminal.Backend.Infrastructure.DAL;
 using Terminal.Backend.Infrastructure.DAL.Behaviours;
+using Terminal.Backend.Infrastructure.Mails;
 using Terminal.Backend.Infrastructure.Middleware;
 
 namespace Terminal.Backend.Infrastructure;
@@ -62,6 +63,7 @@ public static class Extensions
         services.ConfigureOptions<JwtBearerOptionsSetup>();
         services.ConfigureOptions<AdministratorOptionsSetup>();
         services.AddScoped<IJwtProvider, JwtProvider>();
+        services.AddScoped<IMailService, MailService>();
 
         return services;
     }
@@ -92,17 +94,16 @@ public static class Extensions
             var administratorExists = dbContext.Users.Any(u => u.Role == Role.Administrator);
             if (!administratorExists)
             {
-                var adminRole = Role.Administrator;
-                dbContext.Attach(adminRole);
-                var admin = new User(UserId.Create(), new Email(adminOptions.Email),
-                    passwordHasher.Hash(adminOptions.Password), true);
+                var adminRole = dbContext.Attach(Role.Administrator).Entity;
+                var admin = User.CreateActiveUser(UserId.Create(), new Email(adminOptions.Email),
+                    passwordHasher.Hash(adminOptions.Password));
                 admin.SetRole(adminRole);
                 dbContext.Users.Add(admin);
                 
                 dbContext.SaveChanges();
             }
         }
-        catch (Exception e)
+        catch (Exception)
         {
             // log admin already exists, skipping...
         }

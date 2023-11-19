@@ -5,4 +5,5 @@ namespace Terminal.Backend.Core.Abstractions.Repositories;
 public interface IInvitationRepository
 {
     Task AddAsync(Invitation invitation, CancellationToken ct);
+    Task DeleteAllForUserAsync(User user, CancellationToken ct);
 }

@@ -10,7 +10,7 @@ public sealed class User
     public Role Role { get; private set; }
     public bool Activated { get; private set; }
     
-    public User(UserId id, Email email, Password password, bool activated)
+    private User(UserId id, Email email, Password password, bool activated)
     {
         Id = id;
         Email = email;
@@ -18,6 +18,12 @@ public sealed class User
         Activated = activated;
     }
 
+    public static User CreateInactiveUser(UserId id, Email email) =>
+        new(id, email, new Password("not-active-user"), false);
+
+    public static User CreateActiveUser(UserId id, Email email, Password password)
+        => new(id, email, password, true);
+    
     public void SetRole(Role role)
     {
         Role = role;

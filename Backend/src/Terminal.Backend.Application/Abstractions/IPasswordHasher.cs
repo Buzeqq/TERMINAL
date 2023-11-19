@@ -6,5 +6,5 @@ public interface IPasswordHasher
 {
     Password Hash(string password);
 
-    bool Verify(Password input, Password password);
+    bool Verify(string input, Password password);
 }

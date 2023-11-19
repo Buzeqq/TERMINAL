@@ -13,7 +13,7 @@ using Terminal.Backend.Infrastructure.DAL;
 namespace Terminal.Backend.Infrastructure.DAL.Migrations
 {
     [DbContext(typeof(TerminalDbContext))]
-    [Migration("20231118160824_UserInvitationsAdminInit")]
+    [Migration("20231119132532_UserInvitationsAdminInit")]
     partial class UserInvitationsAdminInit
     {
         /// <inheritdoc />
@@ -46,7 +46,7 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("ExpiersIn")
+                    b.Property<DateTime>("ExpiresIn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Link")
@@ -162,7 +162,7 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permission");
+                    b.ToTable("Permissions", (string)null);
 
                     b.HasData(
                         new
@@ -357,7 +357,7 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
 
                     b.HasKey("Value");
 
-                    b.ToTable("Role");
+                    b.ToTable("Roles", (string)null);
 
                     b.HasData(
                         new

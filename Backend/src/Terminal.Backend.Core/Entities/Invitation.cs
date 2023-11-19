@@ -15,4 +15,13 @@ public sealed class Invitation
         Link = link;
         ExpiresIn = expiresIn;
     }
+
+    public static Invitation CreateFor(User user, InvitationId id, InvitationLink link, DateTime expiresIn)
+    {
+        var invitation = new Invitation(id, link, expiresIn)
+        {
+            User = user
+        };
+        return invitation;
+    }
 }

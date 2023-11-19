@@ -43,7 +43,7 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("ExpiersIn")
+                    b.Property<DateTime>("ExpiresIn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Link")
@@ -159,7 +159,7 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permission");
+                    b.ToTable("Permissions", (string)null);
 
                     b.HasData(
                         new
@@ -354,7 +354,7 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
 
                     b.HasKey("Value");
 
-                    b.ToTable("Role");
+                    b.ToTable("Roles", (string)null);
 
                     b.HasData(
                         new

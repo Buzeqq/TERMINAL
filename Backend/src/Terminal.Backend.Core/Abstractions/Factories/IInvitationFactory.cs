@@ -4,5 +4,5 @@ namespace Terminal.Backend.Core.Abstractions.Factories;
 
 public interface IInvitationFactory
 {
-    Invitation Crate(User user);
+    Task<Invitation> CrateAsync(User user, CancellationToken ct);
 }

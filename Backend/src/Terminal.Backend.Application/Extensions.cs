@@ -1,6 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Terminal.Backend.Application.Abstractions;
+using Terminal.Backend.Application.Invitations;
+using Terminal.Backend.Application.Invitations.Factories;
 using Terminal.Backend.Application.Services;
+using Terminal.Backend.Core.Abstractions.Factories;
 
 namespace Terminal.Backend.Application;
 
@@ -13,8 +16,10 @@ public static class Extensions
             cfg.RegisterServicesFromAssembly(AssemblyReference.Assembly);
         });
 
+        services.ConfigureOptions<InvitationOptionsSetup>();
         services.AddScoped<IConvertDtoService, ConvertDtoService>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<IInvitationFactory, InvitationFactory>();
         
         return services;
     }
