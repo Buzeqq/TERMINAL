@@ -5,11 +5,11 @@ using Terminal.Backend.Infrastructure.DAL;
 
 namespace Terminal.Backend.Infrastructure.Authentication;
 
-internal sealed class PermissionService : IAuthorizationService
+internal sealed class AuthorizationService : IAuthorizationService
 {
     private readonly DbSet<User> _users;
 
-    public PermissionService(TerminalDbContext dbContext)
+    public AuthorizationService(TerminalDbContext dbContext)
     {
         _users = dbContext.Users;
     }

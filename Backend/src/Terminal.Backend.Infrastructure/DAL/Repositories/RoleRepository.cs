@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Terminal.Backend.Application.Commands.Users.Create;
 using Terminal.Backend.Core.Abstractions.Repositories;
 using Terminal.Backend.Core.Entities;
 

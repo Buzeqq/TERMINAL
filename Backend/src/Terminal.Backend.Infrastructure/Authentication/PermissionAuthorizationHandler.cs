@@ -1,6 +1,6 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Terminal.Backend.Core.ValueObjects;
 using Terminal.Backend.Infrastructure.Authentication.Requirements;
 
@@ -21,7 +21,7 @@ internal sealed class PermissionAuthorizationHandler
         PermissionRequirement requirement)
     {
         var userIdFromClaims = context.User.Claims
-            .FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub)?.Value;
+            .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
         if (!Guid.TryParse(userIdFromClaims, out var parsedUserId))
         {

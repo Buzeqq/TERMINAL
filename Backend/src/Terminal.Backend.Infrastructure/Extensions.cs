@@ -16,6 +16,7 @@ using Terminal.Backend.Infrastructure.DAL;
 using Terminal.Backend.Infrastructure.DAL.Behaviours;
 using Terminal.Backend.Infrastructure.Mails;
 using Terminal.Backend.Infrastructure.Middleware;
+using IAuthorizationService = Terminal.Backend.Infrastructure.Authentication.IAuthorizationService;
 
 namespace Terminal.Backend.Infrastructure;
 
@@ -56,6 +57,7 @@ public static class Extensions
             {
                 policy.AddRequirements(new RoleRequirement(Role.Administrator));
             });
+        services.AddScoped<IAuthorizationService, AuthorizationService>();
         services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
         services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
         services.AddSingleton<IAuthorizationHandler, RoleAuthorizationHandler>();
