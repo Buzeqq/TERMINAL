@@ -45,6 +45,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, ScrollingModule } from "@angular/cdk/scrolling";
 import { MatSelectModule } from "@angular/material/select";
 import { ProjectViewsComponent } from "./core/components/item-views/project-views/project-views.component";
+import {LoginComponent} from "./pages/login/login.component";
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { ProjectViewsComponent } from "./core/components/item-views/project-view
     MeasurementViewsComponent,
     ProjectViewsComponent,
     ItemViewsComponent,
-    StatusbarComponent
+    StatusbarComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

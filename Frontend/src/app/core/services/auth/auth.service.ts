@@ -1,96 +1,85 @@
 import { Injectable } from '@angular/core';
 import {ApiService} from "../api-service";
-import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, of, tap} from "rxjs";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {BehaviorSubject, catchError, shareReplay, tap, throwError} from "rxjs";
 import * as moment from "moment";
-import {NotificationService} from "../notification/notification.service";
+import {jwtDecode} from "jwt-decode";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService extends ApiService {
-  private loginButtonSubject  = new BehaviorSubject<string>('Sign In');
-  public loginButtonLabel$ = this.loginButtonSubject.asObservable();
-  private usernameLabelSubject  = new BehaviorSubject<string>('');
-  public usernameLabel$ = this.usernameLabelSubject.asObservable();
+  private loggedOut = new BehaviorSubject<boolean>(true);
 
   constructor(
     http: HttpClient,
-    private readonly notificationService: NotificationService
   ) {
     super(http)
-    // TODO AD
     // reload issue, if we reload the page a new Auth Service is created so we need to set labels again
     if (this.isLoggedIn()) {
-      let username = localStorage.getItem('username');
-      this.usernameLabelSubject.next(username ?? '');
-      this.loginButtonSubject.next('Sign Out');
+      this.loggedOut.next(false);
     }
   }
 
-  login(username: string, password: string ){
-    // no login endpoint available for now
-    return of({expiresIn: 3000, idToken:'dummyToken-xxxyyyzzz123', role: 'user', username: 'John Doe'})
+  login(email: string, password: string ){
+    return this.post<successfulLoginResponse>('users/login', {email, password})
       .pipe(
-        tap(r => this.successfulLogin(r, username))
-      );
-
-    // TODO AD: success -> setSession, failure -> send info back, (login form might need it)
-/*    return this.http.post<JwtToken>('/api/login', {email, password})
-      .pipe(
-        tap(r => this.successfulLogin(r, username)),
-        shareReplay() // prevents double form submit
-      )*/
+        catchError(this.handleAuthError),
+        tap(r => this.manageResponse(r)),
+        shareReplay() // apparently prevents from double POST request
+      )
   }
 
-  private successfulLogin(authResult: JwtToken, username: string) {
-    this.setSession(authResult);
-    this.updateStatusBar(username, 'Sign Out');
-    this.notificationService.notifySuccess('Logged in successfully');
+  private handleAuthError(err: HttpErrorResponse) {
+    return throwError(() => Error('Invalid credentials.'))
   }
 
-  private setSession(authResult: JwtToken) {
-    const expiresAt = moment().add(authResult.expiresIn,'second');
-    localStorage.setItem('id_token', authResult.idToken);
-    localStorage.setItem('user_role', authResult.role);
-    localStorage.setItem('username', authResult.username);
+  private manageResponse(r: successfulLoginResponse) {
+    const decoded = jwtDecode(r.token) as decodedJWT;
+    this.setSession(decoded, r.token);
+    this.loggedOut.next(false);
+  }
+
+  private setSession(payload: decodedJWT, token: string) {
+    const expiresAt = moment().add(payload.exp,'second');
+    localStorage.setItem('token', token);
     localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()));
+    localStorage.setItem('user_role', payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]);
   }
 
   logout() {
-    localStorage.removeItem("id_token");
+    localStorage.removeItem("token");
     localStorage.removeItem("expires_at");
     localStorage.removeItem("user_role");
-    localStorage.removeItem("username");
-    this.updateStatusBar('', 'Sign In');
-    this.notificationService.notifySuccess('Logged out successfully');
-    // TODO AD: return info about success?
+    this.loggedOut.next(true)
   }
 
-  public isLoggedIn() {
+  private isLoggedIn() {
     return moment().isBefore(this.getExpiration());
   }
 
   isLoggedOut() {
-    return !this.isLoggedIn();
+    return this.loggedOut.asObservable();
   }
 
+  // TODO handle session expiration
   getExpiration() {
     const expiration = localStorage.getItem("expires_at");
     const expiresAt = expiration ? JSON.parse(expiration) : null;
     return moment(expiresAt);
   }
-
-  private updateStatusBar(username: string, buttonLabel: string) {
-    this.usernameLabelSubject.next(username);
-    this.loginButtonSubject.next(buttonLabel);
-  }
 }
 
-export interface JwtToken {
-  expiresIn: number,
-  idToken: string // jwtBearerToken
-  role: string // TODO AD: create an Enum for roles
-  username: string
+export interface successfulLoginResponse {
+  token: string
+}
+
+export interface decodedJWT {
+  sub: string // token
+  email: string
+  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": string
+  exp: number // expiration time
+  iss: string // terminal
+  aud: string // terminal-clients
 }
 

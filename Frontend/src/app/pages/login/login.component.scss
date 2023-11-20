@@ -1,0 +1,32 @@
+.grid-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  mat-card-content {
+    width: 30%;
+  }
+
+  h1 {
+    margin-top: 1%;
+    padding: 4px;
+    font-size: xx-large;
+  }
+
+  .login-form {
+    margin-top: 10px;
+  }
+
+  .grid-element {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  mat-card-actions {
+    justify-content: center;
+
+    .wide-button {
+      width: 8rem;
+    }
+  }
+}

@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
 import {Observable} from "rxjs";
 import {PingService} from "../../services/ping/ping.service";
-import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
-import {LoginDialogComponent} from "../dialogs/login/login-dialog.component";
 import {AuthService} from "../../services/auth/auth.service";
+import {Router} from "@angular/router";
+import {NotificationService} from "../../services/notification/notification.service";
 
 @Component({
   selector: 'app-statusbar',
@@ -11,27 +11,19 @@ import {AuthService} from "../../services/auth/auth.service";
   styleUrls: ['./statusbar.component.scss']
 })
 export class StatusbarComponent {
-
-  dialogConfig: MatDialogConfig;
   isOnline$: Observable<boolean> = this.pingService.isOnline$;
-  usernameLabel$ = this.authService.usernameLabel$;
-  loginButtonLabel$ = this.authService.loginButtonLabel$;
+  isLoggedOut$ = this.authService.isLoggedOut();
 
   constructor(
     private readonly pingService: PingService,
-    private readonly dialog: MatDialog,
-    protected readonly authService: AuthService
-  ) {
-    this.dialogConfig = new MatDialogConfig();
-    this.dialogConfig.width = '600px';
-    this.dialogConfig.height = '400px';
-  }
+    protected readonly authService: AuthService,
+    private readonly router: Router,
+    private readonly notificationService: NotificationService
+  ) {  }
 
-  openLoginDialog() {
-    if (this.authService.isLoggedOut()) {
-      this.dialog.open(LoginDialogComponent, this.dialogConfig);
-    } else {
-      this.authService.logout();
-    }
+  logOutButtonClicked() {
+    this.authService.logout();
+    this.router.navigate([''])
+      .then(_ => this.notificationService.notifySuccess('Logged out successfully.'))
   }
 }

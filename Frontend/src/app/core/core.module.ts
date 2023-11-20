@@ -16,7 +16,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { AppRoutingModule } from "../app-routing.module";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatCheckboxModule } from "@angular/material/checkbox";
-import { LoginDialogComponent } from "./components/dialogs/login/login-dialog.component";
 import { ItemDetailsComponent } from "./components/item-details/item-details/item-details.component";
 import {
   MeasurementDetailsComponent
@@ -25,6 +24,7 @@ import {
   ProjectDetailsComponent
 } from "./components/item-details/item-details/project-details/project-details.component";
 import { MatTableModule } from "@angular/material/table";
+import {SvgComponent} from "./components/svg/svg.component";
 
 
 @NgModule({
@@ -32,16 +32,17 @@ import { MatTableModule } from "@angular/material/table";
     TimeAgoPipe,
     CastPipe,
     AddProjectDialogComponent,
-    LoginDialogComponent,
     ItemDetailsComponent,
     MeasurementDetailsComponent,
     ProjectDetailsComponent,
-    SearchComponent
+    SearchComponent,
+    SvgComponent
   ],
   exports: [
     TimeAgoPipe,
     SearchComponent,
-    ItemDetailsComponent
+    ItemDetailsComponent,
+    SvgComponent
   ],
   imports: [
     CommonModule,

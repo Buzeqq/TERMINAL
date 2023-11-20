@@ -6,9 +6,11 @@ import { ResultsListComponent } from "./pages/search/results-list/results-list.c
 import { ItemViewsComponent } from './core/components/item-views/item-views.component';
 import { AddMeasurementComponent } from "./pages/add-measurement/add-measurement.component";
 import { ItemDetailsComponent } from "./core/components/item-details/item-details/item-details.component";
+import {LoginComponent} from "./pages/login/login.component";
 
 const routes: Routes = [
-  {path: '', redirectTo: 'home', pathMatch: 'full'},
+  {path: '', redirectTo: 'login', pathMatch: 'full'},
+  {path: 'login', component: LoginComponent},
   {path: 'home', component: DashboardComponent},
   {path: 'search', component: ResultsListComponent},
   {path: 'search/:searchPhrase', component: ResultsListComponent},
@@ -18,7 +20,7 @@ const routes: Routes = [
   {path: 'projects/:id', component: ItemDetailsComponent, data: {type: 'Project'}},
   {path: 'add-measurement', component: AddMeasurementComponent},
 
-  // must be the lasts
+  // must be the last
   {path: '**', component: NotFoundComponent},
 ];
 
