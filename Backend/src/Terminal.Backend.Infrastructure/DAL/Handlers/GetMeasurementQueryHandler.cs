@@ -46,7 +46,7 @@ internal class GetMeasurementQueryHandler : IRequestHandler<GetMeasurementQuery,
             .ThenInclude(p => p.Parameter)
             .ToListAsync(ct);
         
-        measurement.Tags = tags;
+        measurement.Tags = tags.Select(t => t.Value);
         measurement.Steps = steps.AsStepsDto();
         return measurement;
     }

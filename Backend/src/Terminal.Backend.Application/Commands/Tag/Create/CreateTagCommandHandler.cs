@@ -1,6 +1,5 @@
 using MediatR;
 using Terminal.Backend.Core.Abstractions.Repositories;
-using Terminal.Backend.Core.Repositories;
 using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Commands.Tag.Create;
