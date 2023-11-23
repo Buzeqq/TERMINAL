@@ -2,7 +2,9 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Application.Commands.Measurement.Create;
 using Terminal.Backend.Application.DTO;
-using Terminal.Backend.Application.Queries;
+using Terminal.Backend.Application.Queries.Measurements.Get;
+using Terminal.Backend.Application.Queries.Measurements.Search;
+using Terminal.Backend.Core.Enums;
 using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Api.Modules;
@@ -14,13 +16,13 @@ public static class MeasurementsModule
         app.MapPost("api/measurements", async (
             CreateMeasurementCommand command,
             ISender sender,
-        CancellationToken ct) =>
+            CancellationToken ct) =>
         {
             var id = MeasurementId.Create();
             command = command with { MeasurementId = id };
             await sender.Send(command, ct);
             return Results.Created($"api/measurement/{id}", null);
-        });
+        }).RequireAuthorization(Permission.MeasurementWrite.ToString());
 
         app.MapGet("api/measurements/example", () =>
         {
@@ -28,9 +30,9 @@ public static class MeasurementsModule
             {
                 new CreateMeasurementStepDto(new CreateMeasurementBaseParameterValueDto[]
                 {
-                    new CreateMeasurementDecimalParameterValueDto(Guid.NewGuid(), 0.111m),
-                    new CreateMeasurementIntegerParameterValueDto(Guid.NewGuid(), 2137),
-                    new CreateMeasurementTextParameterValueDto(Guid.NewGuid(), "text")
+                    new CreateMeasurementDecimalParameterValueDto(ParameterId.Create(), 0.111m),
+                    new CreateMeasurementIntegerParameterValueDto(ParameterId.Create(), 2137),
+                    new CreateMeasurementTextParameterValueDto(ParameterId.Create(), "text")
                 },
                     "comment")
             },
@@ -52,7 +54,7 @@ public static class MeasurementsModule
 
             var recentMeasurements = await sender.Send(new GetRecentMeasurementsQuery(length), ct);
             return Results.Ok(recentMeasurements);
-        });
+        }).RequireAuthorization(Permission.MeasurementRead.ToString());
 
         app.MapGet("api/measurements/{id:guid}", async (Guid id, ISender sender, CancellationToken ct) =>
         {
@@ -61,7 +63,7 @@ public static class MeasurementsModule
             var measurement = await sender.Send(query, ct);
             
             return measurement is null ? Results.NotFound() : Results.Ok(measurement);
-        });
+        }).RequireAuthorization(Permission.MeasurementRead.ToString());
 
         app.MapGet("api/measurements", async ([FromQuery] int pageNumber, [FromQuery] int pageSize, ISender sender, CancellationToken ct) =>
         {
@@ -70,7 +72,7 @@ public static class MeasurementsModule
             var measurements = await sender.Send(query, ct);
             
             return Results.Ok(measurements);
-        });
+        }).RequireAuthorization(Permission.MeasurementRead.ToString());
 
         app.MapGet("api/measurements/search", async ([FromQuery] string searchPhrase, [FromQuery] int pageNumber, [FromQuery] int pageSize, ISender sender, CancellationToken ct) =>
         {
@@ -79,6 +81,6 @@ public static class MeasurementsModule
             var measurements = await sender.Send(query, ct);
 
             return Results.Ok(measurements);
-        });
+        }).RequireAuthorization(Permission.MeasurementRead.ToString());
     }
 }

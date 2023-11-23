@@ -13,8 +13,12 @@ internal sealed class TagConfiguration : IEntityTypeConfiguration<Tag>
         builder.Property(s => s.Id)
             .HasConversion(i => i.Value,
                 i => new TagId(i));
-        builder.HasIndex(t => t.Name).IsUnique();
 
+        builder.Property(t => t.Name)
+            .HasConversion(n => n.Value,
+                n => new TagName(n));
+        
+        builder.HasIndex(t => t.Name).IsUnique();
         // search index
         // builder.HasIndex(t => t.Name)
         //     .HasMethod("GIN")

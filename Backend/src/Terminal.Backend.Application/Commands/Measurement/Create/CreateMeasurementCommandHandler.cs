@@ -1,9 +1,9 @@
 using MediatR;
+using Terminal.Backend.Application.Abstractions;
 using Terminal.Backend.Application.Exceptions;
-using Terminal.Backend.Application.Services;
+using Terminal.Backend.Core.Abstractions.Repositories;
 using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.Exceptions;
-using Terminal.Backend.Core.Repositories;
 using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Commands.Measurement.Create;

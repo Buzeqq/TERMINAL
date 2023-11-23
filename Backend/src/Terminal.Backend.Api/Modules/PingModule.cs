@@ -18,6 +18,6 @@ public static class PingModule
         {
             var response = await sender.Send(new PingQuery(), ct);
             return Results.Ok(response);
-        });
+        }).AllowAnonymous();
     }
 }

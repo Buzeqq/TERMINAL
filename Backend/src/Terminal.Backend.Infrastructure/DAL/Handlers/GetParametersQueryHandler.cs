@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Terminal.Backend.Application.DTO;
-using Terminal.Backend.Application.Queries;
+using Terminal.Backend.Application.Queries.Parameters.Get;
 using Terminal.Backend.Core.Entities.Parameters;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;

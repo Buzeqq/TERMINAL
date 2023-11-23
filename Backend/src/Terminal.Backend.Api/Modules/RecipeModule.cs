@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Terminal.Backend.Application.Queries;
+using Terminal.Backend.Application.Queries.Recipes.Search;
+using Terminal.Backend.Core.Enums;
 
 namespace Terminal.Backend.Api.Modules;
 
@@ -14,6 +15,6 @@ public static class RecipeModule
             var recipes = await sender.Send(query, ct);
 
             return Results.Ok(recipes);
-        });
+        }).RequireAuthorization(Permission.RecipeRead.ToString());
     }
 }

@@ -2,7 +2,8 @@ using MediatR;
 using Terminal.Backend.Application.Commands.Parameter.ChangeStatus;
 using Terminal.Backend.Application.Commands.Parameter.Define;
 using Terminal.Backend.Application.DTO;
-using Terminal.Backend.Application.Queries;
+using Terminal.Backend.Application.Queries.Parameters.Get;
+using Terminal.Backend.Core.Enums;
 using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Api.Modules;
@@ -15,7 +16,7 @@ public static class ParametersModule
         {
             var parameters = await sender.Send(new GetParametersQuery(), ct);
             return Results.Ok(parameters);
-        });
+        }).RequireAuthorization(Permission.ParameterRead.ToString());
         
         app.MapPost("api/parameters/define/text", async (
             CreateTextParameterDto parameterDto, 
@@ -25,7 +26,7 @@ public static class ParametersModule
             parameterDto = parameterDto with { Id = ParameterId.Create() };
             await sender.Send(new DefineParameterCommand(parameterDto.AsParameter()), ct);
             return Results.Created($"api/parameters/{parameterDto.Name}", null);
-        });
+        }).RequireAuthorization(Permission.ParameterWrite.ToString());
         
         app.MapPost("api/parameters/define/decimal", async (
             CreateDecimalParameterDto parameterDto,
@@ -35,7 +36,7 @@ public static class ParametersModule
             parameterDto = parameterDto with { Id = ParameterId.Create() };
             await sender.Send(new DefineParameterCommand(parameterDto.AsParameter()), ct);
             return Results.Created($"api/parameters/{parameterDto.Name}", null);
-        });
+        }).RequireAuthorization(Permission.ParameterWrite.ToString());
         
         app.MapPost("api/parameters/define/integer", async (
             CreateIntegerParameterDto parameter,
@@ -45,7 +46,7 @@ public static class ParametersModule
             parameter = parameter with { Id = ParameterId.Create() };
             await sender.Send(new DefineParameterCommand(parameter.AsParameter()), ct);
             return Results.Created($"api/parameters/{parameter.Name}", null);
-        });
+        }).RequireAuthorization(Permission.ParameterWrite.ToString());
 
         app.MapGet("api/parameters/{id:guid}", async (
             Guid id, 
@@ -54,7 +55,7 @@ public static class ParametersModule
         {
             var parameter = await sender.Send(new GetParameterQuery { Id = id }, ct);
             return parameter is null ? Results.NotFound() : Results.Ok(parameter);
-        });
+        }).RequireAuthorization(Permission.ParameterRead.ToString());
         
         app.MapPost("api/parameters/{id:guid}/activate", async (
             Guid id,
@@ -64,7 +65,7 @@ public static class ParametersModule
             var command = new ChangeParameterStatusCommand(id, true);
             await sender.Send(command, ct);
             return Results.Ok();
-        });
+        }).RequireAuthorization(Permission.ParameterUpdate.ToString());
         
         app.MapPost("api/parameters/{id:guid}/deactivate", async (
             Guid id,
@@ -74,6 +75,6 @@ public static class ParametersModule
             var command = new ChangeParameterStatusCommand(id, false);
             await sender.Send(command, ct);
             return Results.Ok();
-        });
+        }).RequireAuthorization(Permission.ParameterUpdate.ToString());
     }
 }

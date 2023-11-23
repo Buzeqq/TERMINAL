@@ -1,6 +1,6 @@
 using MediatR;
+using Terminal.Backend.Core.Abstractions.Repositories;
 using Terminal.Backend.Core.Exceptions;
-using Terminal.Backend.Core.Repositories;
 
 namespace Terminal.Backend.Application.Commands.Tag.ChangeStatus;
 

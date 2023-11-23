@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Terminal.Backend.Application.DTO;
-using Terminal.Backend.Application.Queries;
+using Terminal.Backend.Application.Queries.Measurements.Get;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 internal class GetMeasurementQueryHandler : IRequestHandler<GetMeasurementQuery, GetMeasurementDto?>
@@ -46,7 +46,7 @@ internal class GetMeasurementQueryHandler : IRequestHandler<GetMeasurementQuery,
             .ThenInclude(p => p.Parameter)
             .ToListAsync(ct);
         
-        measurement.Tags = tags;
+        measurement.Tags = tags.Select(t => t.Value);
         measurement.Steps = steps.AsStepsDto();
         return measurement;
     }
