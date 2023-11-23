@@ -8,5 +8,5 @@ public sealed record CreateMeasurementCommand(
     Guid ProjectId,
     Guid? RecipeId, 
     IEnumerable<CreateMeasurementStepDto>? Steps, 
-    IEnumerable<string> Tags, 
+    IEnumerable<Guid> TagIds, 
     string Comment) : IRequest;

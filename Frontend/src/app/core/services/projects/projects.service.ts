@@ -4,6 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { Project } from "../../models/projects/project";
 import { ApiService } from "../api-service";
 import { NotificationService } from "../notification/notification.service";
+import {ProjectDetails} from "../../models/projects/project-details";
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +26,8 @@ export class ProjectsService extends ApiService {
       );
   }
 
-  getProject(id: string): Observable<Project> {
-    return this.get<Project>(`projects/${id}`)
+  getProject(id: string): Observable<ProjectDetails> {
+    return this.get<ProjectDetails>(`projects/${id}`)
       .pipe(
         catchError(this.handleError)
       );

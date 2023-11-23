@@ -28,12 +28,12 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                     b.Property<Guid>("MeasurementId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("TagsName")
-                        .HasColumnType("text");
+                    b.Property<Guid>("TagsId")
+                        .HasColumnType("uuid");
 
-                    b.HasKey("MeasurementId", "TagsName");
+                    b.HasKey("MeasurementId", "TagsId");
 
-                    b.HasIndex("TagsName");
+                    b.HasIndex("TagsId");
 
                     b.ToTable("MeasurementTag");
                 });
@@ -747,13 +747,20 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
 
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Tag", b =>
                 {
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
-                    b.HasKey("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Tags");
                 });
@@ -877,7 +884,7 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
 
                     b.HasOne("Terminal.Backend.Core.Entities.Tag", null)
                         .WithMany()
-                        .HasForeignKey("TagsName")
+                        .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
