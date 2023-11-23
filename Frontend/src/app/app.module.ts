@@ -45,6 +45,11 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, ScrollingModule } from "@angular/cdk/scrolling";
 import { MatSelectModule } from "@angular/material/select";
 import { ProjectViewsComponent } from "./core/components/item-views/project-views/project-views.component";
+import { SettingsComponent } from './pages/settings/settings.component';
+import { ProjectEditComponent } from './pages/settings/project-edit/project-edit.component';
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import { MeasurementEditComponent } from './pages/settings/measurement-edit/measurement-edit.component';
+import { TagEditComponent } from './pages/settings/tag-edit/tag-edit.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +61,11 @@ import { ProjectViewsComponent } from "./core/components/item-views/project-view
     MeasurementViewsComponent,
     ProjectViewsComponent,
     ItemViewsComponent,
-    StatusbarComponent
+    StatusbarComponent,
+    SettingsComponent,
+    ProjectEditComponent,
+    MeasurementEditComponent,
+    TagEditComponent
   ],
   imports: [
     BrowserModule,
@@ -102,7 +111,8 @@ import { ProjectViewsComponent } from "./core/components/item-views/project-view
     MatDialogModule,
     CdkFixedSizeVirtualScroll,
     CdkVirtualForOf,
-    ScrollingModule
+    ScrollingModule,
+    MatSlideToggleModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

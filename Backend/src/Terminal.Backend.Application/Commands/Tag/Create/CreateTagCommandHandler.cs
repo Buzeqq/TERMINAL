@@ -1,5 +1,6 @@
 using MediatR;
 using Terminal.Backend.Core.Repositories;
+using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Commands.Tag.Create;
 
@@ -14,9 +15,8 @@ internal sealed class CreateTagCommandHandler : IRequestHandler<CreateTagCommand
 
     public async Task Handle(CreateTagCommand command, CancellationToken ct)
     {
-        var name = command.Name;
-        var newTag = new Core.Entities.Tag(name);
-        
+        var newTagId = TagId.Create();
+        var newTag = new Core.Entities.Tag(newTagId, command.Name);
         await _tagRepository.AddAsync(newTag, ct);
     }
 }

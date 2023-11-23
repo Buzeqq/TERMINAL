@@ -37,22 +37,22 @@ public static class TagsModule
         //     return Results.Ok();
         // });
         
-        app.MapPost("api/tags/{name}/activate", async (
-            string name,
+        app.MapPost("api/tags/{id:guid}/activate", async (
+            Guid id,
             ISender sender,
             CancellationToken ct) =>
         {
-            var command = new ChangeTagStatusCommand(name, true);
+            var command = new ChangeTagStatusCommand(id, true);
             await sender.Send(command, ct);
             return Results.Ok();
         });
         
-        app.MapPost("api/tags/{name}/deactivate", async (
-            string name,
+        app.MapPost("api/tags/{id:guid}/deactivate", async (
+            Guid id,
             ISender sender,
             CancellationToken ct) =>
         {
-            var command = new ChangeTagStatusCommand(name, false);
+            var command = new ChangeTagStatusCommand(id, false);
             await sender.Send(command, ct);
             return Results.Ok();
         });
@@ -67,6 +67,15 @@ public static class TagsModule
             var tags = await sender.Send(query, ct);
 
             return Results.Ok(tags);
+        });
+
+        app.MapGet("api/tags/{id:guid}", async (
+            Guid id,
+            ISender sender,
+            CancellationToken ct) =>
+        {
+            var tag = await sender.Send(new GetTagQuery { TagId = id }, ct);
+            return tag is null ? Results.NotFound() : Results.Ok(tag);
         });
     }
 }
