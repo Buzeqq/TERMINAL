@@ -1,5 +1,8 @@
 <mat-sidenav-container autosize>
-  <mat-sidenav #sidenav [mode]="(menuOpened$ | async) ? 'side' : 'over'" [opened]="(menuOpened$ | async) ?? false">
+  <mat-sidenav #sidenav
+               [mode]="(menuOpened$ | async) ? 'side' : 'over'"
+               [opened]="!(isLoggedOut$ | async) ?? false"
+  >
     <mat-nav-list>
       <mat-list-item (click)="isExpanded = !isExpanded;">
         <mat-icon matListItemIcon>menu</mat-icon>
@@ -36,7 +39,7 @@
 
       <mat-list-item routerLink="recipes">
         <mat-icon matListItemIcon>assignment</mat-icon>
-        <span *ngIf="isExpanded">recipes</span>
+        <span *ngIf="isExpanded">Recipes</span>
       </mat-list-item>
 
       <mat-list-item routerLink="projects">

@@ -7,9 +7,11 @@ import { ItemViewsComponent } from './core/components/item-views/item-views.comp
 import { AddMeasurementComponent } from "./pages/add-measurement/add-measurement.component";
 import { ItemDetailsComponent } from "./core/components/item-details/item-details/item-details.component";
 import {SettingsComponent} from "./pages/settings/settings.component";
+import {LoginComponent} from "./pages/login/login.component";
 
 const routes: Routes = [
-  {path: '', redirectTo: 'home', pathMatch: 'full'},
+  {path: '', redirectTo: 'login', pathMatch: 'full'},
+  {path: 'login', component: LoginComponent},
   {path: 'home', component: DashboardComponent},
   {path: 'search', component: ResultsListComponent},
   {path: 'search/:searchPhrase', component: ResultsListComponent},

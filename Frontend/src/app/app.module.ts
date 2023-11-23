@@ -50,6 +50,7 @@ import { ProjectEditComponent } from './pages/settings/project-edit/project-edit
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import { MeasurementEditComponent } from './pages/settings/measurement-edit/measurement-edit.component';
 import { TagEditComponent } from './pages/settings/tag-edit/tag-edit.component';
+import {LoginComponent} from "./pages/login/login.component";
 
 @NgModule({
   declarations: [
@@ -65,7 +66,9 @@ import { TagEditComponent } from './pages/settings/tag-edit/tag-edit.component';
     SettingsComponent,
     ProjectEditComponent,
     MeasurementEditComponent,
-    TagEditComponent
+    TagEditComponent,
+    StatusbarComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

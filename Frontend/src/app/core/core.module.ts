@@ -16,7 +16,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { AppRoutingModule } from "../app-routing.module";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatCheckboxModule } from "@angular/material/checkbox";
-import { LoginDialogComponent } from "./components/dialogs/login/login-dialog.component";
 import { ItemDetailsComponent } from "./components/item-details/item-details/item-details.component";
 import {
   MeasurementDetailsComponent
@@ -28,6 +27,7 @@ import { MatTableModule } from "@angular/material/table";
 import { TagViewsComponent } from './components/item-views/tag-views/tag-views.component';
 import {CdkFixedSizeVirtualScroll, CdkVirtualScrollViewport} from "@angular/cdk/scrolling";
 import {MatRippleModule} from "@angular/material/core";
+import {SvgComponent} from "./components/svg/svg.component";
 
 
 @NgModule({
@@ -35,12 +35,13 @@ import {MatRippleModule} from "@angular/material/core";
     TimeAgoPipe,
     CastPipe,
     AddProjectDialogComponent,
-    LoginDialogComponent,
     ItemDetailsComponent,
     MeasurementDetailsComponent,
     ProjectDetailsComponent,
     SearchComponent,
-    TagViewsComponent
+    TagViewsComponent,
+    SearchComponent,
+    SvgComponent
   ],
   exports: [
     TimeAgoPipe,
@@ -48,7 +49,9 @@ import {MatRippleModule} from "@angular/material/core";
     ItemDetailsComponent,
     MeasurementDetailsComponent,
     ProjectDetailsComponent,
-    TagViewsComponent
+    TagViewsComponent,
+    ItemDetailsComponent,
+    SvgComponent
   ],
   imports: [
     CommonModule,
