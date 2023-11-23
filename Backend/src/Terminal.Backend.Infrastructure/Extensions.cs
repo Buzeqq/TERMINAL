@@ -139,17 +139,15 @@ public static class Extensions
             // log admin already exists, skipping...
         }
         
-        if (app.Environment.IsDevelopment())
+        if (!app.Configuration.GetOptions<PostgresOptions>("Postgres").Seed ||
+            !app.Environment.IsDevelopment()) return app;
+        var seeder = new TerminalDbSeeder(dbContext);
+        try
         {
-            if (!app.Configuration.GetOptions<PostgresOptions>("Postgres").Seed) return app;
-            var seeder = new TerminalDbSeeder(dbContext);
-            try
-            {
-                seeder.Seed();
-            }
-            catch (Exception)
-            {
-            }
+            seeder.Seed();
+        }
+        catch (Exception)
+        {
         }
         
         if (!app.Environment.IsProduction()) return app;

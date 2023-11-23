@@ -1,4 +1,4 @@
-services: 
+services:
   terminal.reverse-proxy:
     image: nginx:latest
     ports:
@@ -15,6 +15,11 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - Postgres__ConnectionString
+      - Jwt__Issuer
+      - Jwt__Audience
+      - Jwt__SecretKey
+      - Administrator__Email
+      - Administrator__Password
     depends_on:
       - terminal.postgres
 
@@ -31,4 +36,4 @@ services:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
     volumes:
-       - ~/terminal-data:/var/lib/postgresql/data
+      - ~/terminal-data:/var/lib/postgresql/data
