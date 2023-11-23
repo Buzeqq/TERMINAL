@@ -4,7 +4,7 @@ namespace Terminal.Backend.Core.Exceptions;
 
 public sealed class TagNotFoundException : TerminalException
 {
-    public TagNotFoundException(TagName name) : base($"Tag with name: {name} not found")
+    public TagNotFoundException(TagId id) : base($"Tag with id: {id} not found")
     {
     }
 }

@@ -1,7 +1,7 @@
 <ng-container *ngIf="projectDetails$ | async; let details">
   <mat-card-content class="project-details">
     <h2 class="project-details__header">Project {{ details.name }}</h2>
-    <p class="project-details__label">{{ numberOfMeasurements$ | async }} measurements</p>
+    <p class="project-details__label">{{ numberOfMeasurements }} measurements</p>
   </mat-card-content>
   <mat-divider></mat-divider>
 

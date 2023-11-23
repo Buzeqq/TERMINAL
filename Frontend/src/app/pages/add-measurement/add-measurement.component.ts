@@ -45,7 +45,7 @@ export class AddMeasurementComponent implements OnInit {
   }
   recentTags$ = this.tagsService.getTags(0, 5).pipe(
     combineLatestWith(this.chosenTags$),
-    map(([recentTags, chosenTags]) => recentTags.filter(t1 => !chosenTags.find(t2 => t1 === t2))),
+    map(([recentTags, chosenTags]) => recentTags.filter(t1 => !chosenTags.find(t2 => t1.name === t2))),
   );
   filteredTags$: Observable<string[]> = new Observable<string[]>();
 
@@ -98,7 +98,7 @@ export class AddMeasurementComponent implements OnInit {
       filter(phrase => !!phrase),
       switchMap(phrase => this.searchService.searchTags(phrase!, 0, 10)),
       combineLatestWith(this.recentTags$),
-      map(([filteredTags, chosenTags]) => filteredTags.filter(t1 => chosenTags.find(t2 => t1 === t2))),
+      map(([filteredTags, chosenTags]) => filteredTags.filter(t1 => chosenTags.find(t2 => t1 === t2.name))),
     );
 
     this.parameterService.getParameters().subscribe(p => {

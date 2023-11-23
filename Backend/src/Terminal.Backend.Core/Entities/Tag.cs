@@ -4,11 +4,13 @@ namespace Terminal.Backend.Core.Entities;
 
 public sealed class Tag
 {
+    public TagId Id { get; private set; }
     public TagName Name { get; private set; }
     public bool IsActive { get; private set; }
 
-    public Tag(TagName name, bool isActive = true)
+    public Tag(TagId id, TagName name, bool isActive = true)
     {
+        Id = id;
         Name = name;
         IsActive = isActive;
     }

@@ -14,7 +14,7 @@ export class MeasurementViewsComponent implements AfterViewInit {
   private readonly pageSize = 10;
   private page = 0;
   private readonly measurementsSubject = new BehaviorSubject<Measurement[]>([]);
-  measurements$ = this.measurementsSubject.asObservable().pipe(tap(console.log));
+  measurements$ = this.measurementsSubject.asObservable();
   selectedItem: SelectedItem | undefined;
   @Output() selectedItemChangeEvent = new EventEmitter<SelectedItem>();
 

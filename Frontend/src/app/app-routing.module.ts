@@ -6,6 +6,7 @@ import { ResultsListComponent } from "./pages/search/results-list/results-list.c
 import { ItemViewsComponent } from './core/components/item-views/item-views.component';
 import { AddMeasurementComponent } from "./pages/add-measurement/add-measurement.component";
 import { ItemDetailsComponent } from "./core/components/item-details/item-details/item-details.component";
+import {SettingsComponent} from "./pages/settings/settings.component";
 import {LoginComponent} from "./pages/login/login.component";
 
 const routes: Routes = [
@@ -19,6 +20,7 @@ const routes: Routes = [
   {path: 'projects', component: ItemViewsComponent, data: {type: 'Project'}},
   {path: 'projects/:id', component: ItemDetailsComponent, data: {type: 'Project'}},
   {path: 'add-measurement', component: AddMeasurementComponent},
+  {path: 'settings', component: SettingsComponent},
 
   // must be the last
   {path: '**', component: NotFoundComponent},

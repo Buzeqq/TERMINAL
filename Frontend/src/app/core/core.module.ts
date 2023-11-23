@@ -24,6 +24,9 @@ import {
   ProjectDetailsComponent
 } from "./components/item-details/item-details/project-details/project-details.component";
 import { MatTableModule } from "@angular/material/table";
+import { TagViewsComponent } from './components/item-views/tag-views/tag-views.component';
+import {CdkFixedSizeVirtualScroll, CdkVirtualScrollViewport} from "@angular/cdk/scrolling";
+import {MatRippleModule} from "@angular/material/core";
 import {SvgComponent} from "./components/svg/svg.component";
 
 
@@ -36,11 +39,17 @@ import {SvgComponent} from "./components/svg/svg.component";
     MeasurementDetailsComponent,
     ProjectDetailsComponent,
     SearchComponent,
+    TagViewsComponent,
+    SearchComponent,
     SvgComponent
   ],
   exports: [
     TimeAgoPipe,
     SearchComponent,
+    ItemDetailsComponent,
+    MeasurementDetailsComponent,
+    ProjectDetailsComponent,
+    TagViewsComponent,
     ItemDetailsComponent,
     SvgComponent
   ],
@@ -59,7 +68,10 @@ import {SvgComponent} from "./components/svg/svg.component";
     AppRoutingModule,
     MatProgressBarModule,
     MatCheckboxModule,
-    MatTableModule
+    MatTableModule,
+    CdkFixedSizeVirtualScroll,
+    CdkVirtualScrollViewport,
+    MatRippleModule
   ]
 })
 export class CoreModule { }

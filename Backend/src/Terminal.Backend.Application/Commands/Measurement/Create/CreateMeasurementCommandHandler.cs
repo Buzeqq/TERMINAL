@@ -50,7 +50,7 @@ internal sealed class CreateMeasurementCommandHandler : IRequestHandler<CreateMe
             recipe = await _recipeRepository.GetAsync(recipeId, ct);
         }
 
-        var tags = await _convertService.ConvertAsync(tagsDto.Select(t => new TagName(t)), ct);
+        var tags = await _convertService.ConvertAsync(tagsDto.Select(t => new TagId(t)), ct);
         var project = await _projectRepository.GetAsync(projectId, ct) ?? throw new ProjectNotFoundException(projectId);
         var measurement = new Core.Entities.Measurement(measurementId, project, recipe, new Comment(comment), steps.ToList(), tags.ToList());
         project.Measurements.Add(measurement);

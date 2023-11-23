@@ -18,11 +18,11 @@ internal sealed class TerminalDbSeeder
     public void Seed()
     {
         #region tags
-        var tag1 = new Tag("new-measurement");
-        var tag2 = new Tag("methane-rich");
-        var tag3 = new Tag("popular-measurement");
-        var tag4 = new Tag("hot");
-        var tag5 = new Tag("high-pressure");
+        var tag1 = new Tag(TagId.Create(), "new-measurement");
+        var tag2 = new Tag(TagId.Create(), "methane-rich");
+        var tag3 = new Tag(TagId.Create(), "popular-measurement");
+        var tag4 = new Tag(TagId.Create(), "hot");
+        var tag5 = new Tag(TagId.Create(), "high-pressure");
         #endregion
 
         #region projects

@@ -36,9 +36,9 @@ public static class MeasurementsModule
                 },
                     "comment")
             },
-            new[]
+            new List<Guid>()
             {
-                "tag1", "tag2", "tag3"
+                TagId.Create(), TagId.Create(), TagId.Create()
             },
             "comment");
 

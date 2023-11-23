@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Application.Commands.Tag.ChangeStatus;
 using Terminal.Backend.Application.Commands.Tag.Create;
+using Terminal.Backend.Application.Queries;
 using Terminal.Backend.Application.Queries.Tags.Get;
 using Terminal.Backend.Application.Queries.Tags.Search;
 using Terminal.Backend.Core.Enums;
@@ -40,22 +41,22 @@ public static class TagsModule
         //     return Results.Ok();
         // });
         
-        app.MapPost("api/tags/{name}/activate", async (
-            string name,
+        app.MapPost("api/tags/{id:guid}/activate", async (
+            Guid id,
             ISender sender,
             CancellationToken ct) =>
         {
-            var command = new ChangeTagStatusCommand(name, true);
+            var command = new ChangeTagStatusCommand(id, true);
             await sender.Send(command, ct);
             return Results.Ok();
         }).RequireAuthorization(Permission.TagUpdate.ToString());
         
-        app.MapPost("api/tags/{name}/deactivate", async (
-            string name,
+        app.MapPost("api/tags/{id:guid}/deactivate", async (
+            Guid id,
             ISender sender,
             CancellationToken ct) =>
         {
-            var command = new ChangeTagStatusCommand(name, false);
+            var command = new ChangeTagStatusCommand(id, false);
             await sender.Send(command, ct);
             return Results.Ok();
         }).RequireAuthorization(Permission.TagUpdate.ToString());
@@ -71,5 +72,14 @@ public static class TagsModule
 
             return Results.Ok(tags);
         }).RequireAuthorization(Permission.TagRead.ToString());
+
+        app.MapGet("api/tags/{id:guid}", async (
+            Guid id,
+            ISender sender,
+            CancellationToken ct) =>
+        {
+            var tag = await sender.Send(new GetTagQuery { TagId = id }, ct);
+            return tag is null ? Results.NotFound() : Results.Ok(tag);
+        });
     }
 }

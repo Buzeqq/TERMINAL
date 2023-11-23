@@ -9,7 +9,7 @@ import { ProjectsService } from "../../../services/projects/projects.service";
   styleUrls: ['./project-views.component.scss']
 })
 export class ProjectViewsComponent implements AfterViewInit {
-  displayedColumns: string[] = ['id','name'];
+  displayedColumns: string[] = ['name'];
   private readonly pageSize = 10;
   private page = 0;
   private readonly projectsSubject = new BehaviorSubject<Project[]>([]);

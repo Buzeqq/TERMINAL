@@ -36,7 +36,7 @@ internal class GetMeasurementQueryHandler : IRequestHandler<GetMeasurementQuery,
             .AsNoTracking()
             .Where(m => m.Id.Equals(request.Id))
             .SelectMany(m => m.Tags)
-            .Select(t => t.Name.Value)
+            .Select(t => t.Name)
             .ToListAsync(ct);
         var steps = await _dbContext.Measurements
             .AsNoTracking()
@@ -46,7 +46,7 @@ internal class GetMeasurementQueryHandler : IRequestHandler<GetMeasurementQuery,
             .ThenInclude(p => p.Parameter)
             .ToListAsync(ct);
         
-        measurement.Tags = tags;
+        measurement.Tags = tags.Select(t => t.Value);
         measurement.Steps = steps.AsStepsDto();
         return measurement;
     }
