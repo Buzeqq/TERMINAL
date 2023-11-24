@@ -70,6 +70,10 @@
       <mat-icon>arrow_forward</mat-icon>
       Show recipe
     </button>
+    <button mat-button color="primary" *ngIf="isDetailView()" (click)="export(details)">
+      <mat-icon>file_download</mat-icon>
+      Export to CSV
+    </button>
   </mat-card-actions>
 
   <mat-card-footer>

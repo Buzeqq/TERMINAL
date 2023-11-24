@@ -7,6 +7,7 @@ import { ItemDetailsComponent } from "../item-details.component";
 import { ActivatedRoute } from '@angular/router';
 import { Project } from "../../../../models/projects/project";
 import { ProjectsService } from "../../../../services/projects/projects.service";
+import { ExportService } from 'src/app/core/services/export/export.service';
 
 @Component({
   selector: 'app-measurement-details',
@@ -22,6 +23,7 @@ export class MeasurementDetailsComponent extends ItemDetailsComponent {
     private readonly measurementService: MeasurementsService,
     private readonly snackBar: MatSnackBar,
     private readonly projectService: ProjectsService,
+    private readonly exportService: ExportService,
     protected override readonly route: ActivatedRoute
   ) {
     super(route);
@@ -56,6 +58,12 @@ export class MeasurementDetailsComponent extends ItemDetailsComponent {
 
   hasRecipe(detail: MeasurementDetails): boolean{
     return detail.recipeId !== null;
+  }
+
+  export(details: MeasurementDetails) {
+    this.projectDetails$?.subscribe(project => {
+      this.exportService.exportMeasurement(details, project);
+    });
   }
 
 }
