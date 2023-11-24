@@ -27,6 +27,7 @@ import { AddMeasurement, ParameterValue, Step } from "../../core/models/measurem
 import { MeasurementsService } from "../../core/services/measurements/measurements.service";
 import { NotificationService } from "../../core/services/notification/notification.service";
 import { Router } from "@angular/router";
+import { Tag } from "../../core/models/tags/tag";
 
 @Component({
   selector: 'app-add-measurement',
@@ -38,16 +39,16 @@ export class AddMeasurementComponent implements OnInit {
   recentProjects$ = this.projectService.getProjects(0, 5);
   filteredProjects$: Observable<Project[]> = new Observable<Project[]>();
 
-  private chosenTags = new BehaviorSubject<string[]>([]);
+  private chosenTags = new BehaviorSubject<Tag[]>([]);
   selectedProject?: Project;
   get chosenTags$() {
     return this.chosenTags.asObservable();
   }
   recentTags$ = this.tagsService.getTags(0, 5).pipe(
     combineLatestWith(this.chosenTags$),
-    map(([recentTags, chosenTags]) => recentTags.filter(t1 => !chosenTags.find(t2 => t1.name === t2))),
+    map(([recentTags, chosenTags]) => recentTags.filter(t1 => !chosenTags.find(t2 => t1.id === t2.id))),
   );
-  filteredTags$: Observable<string[]> = new Observable<string[]>();
+  filteredTags$: Observable<Tag[]> = new Observable<Tag[]>();
 
   // TODO recentRecipes$: Observable<Recipes[]>
   // TODO filteredRecipes$: Observable<Recipes[]> = new Observable<Recipes[]>();
@@ -98,7 +99,7 @@ export class AddMeasurementComponent implements OnInit {
       filter(phrase => !!phrase),
       switchMap(phrase => this.searchService.searchTags(phrase!, 0, 10)),
       combineLatestWith(this.recentTags$),
-      map(([filteredTags, chosenTags]) => filteredTags.filter(t1 => chosenTags.find(t2 => t1 === t2.name))),
+      map(([filteredTags, chosenTags]) => filteredTags.filter(t1 => chosenTags.find(t2 => t1.id === t2.id))),
     );
 
     this.parameterService.getParameters().subscribe(p => {
@@ -120,8 +121,9 @@ export class AddMeasurementComponent implements OnInit {
   }
 
   selectedTag(event: MatAutocompleteSelectedEvent) {
-    const newTag = event.option.viewValue;
-    if (this.chosenTags.value.find(t => t === newTag)) {
+    const newTag = event.option.value;
+    console.log(newTag);
+    if (this.chosenTags.value.find(t => t.id === newTag)) {
       return;
     }
 
@@ -130,7 +132,9 @@ export class AddMeasurementComponent implements OnInit {
     this.measurementForm.controls.tags.setValue('');
   }
 
-  removeTag(tag: string) {
+  removeTag(tagId: string) {
+    const tag = this.chosenTags.value.find(t => t.id == tagId);
+    if (!tag) return;
     const index = this.chosenTags.value.indexOf(tag);
 
     if (index >= 0) {
@@ -172,13 +176,13 @@ export class AddMeasurementComponent implements OnInit {
 
   addMeasurement() {
     let form = {...this.measurementForm.value} as MeasurementForm;
-    form.tags = this.chosenTags.value;
+    form.tagIds = this.chosenTags.value.map(t => t.id);
     form.project = this.selectedProject!.id;
-    console.log(form.steps);
+    console.log(form.tagIds);
     const addMeasurement: AddMeasurement = {
       projectId: form.project,
       recipeId: null,
-      tags: form.tags,
+      tagIds: form.tagIds,
       comment: form.comment,
       steps: form.steps!.map(s => this.mapToStep(s))
     };
@@ -238,6 +242,6 @@ export type MeasurementForm =  Partial<{
   dateTime: Date | null,
   project: string | null,
   recipe: string | null,
-  tags: string[] | null,
+  tagIds: string[] | null,
   comment: string | null,
   steps: Record<string, string | number | null>[]}>
