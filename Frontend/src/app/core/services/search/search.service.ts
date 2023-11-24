@@ -4,6 +4,7 @@ import { Measurement } from "../../models/measurements/measurement";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { ApiService } from "../api-service";
 import { Project } from "../../models/projects/project";
+import { Tag } from "../../models/tags/tag";
 
 @Injectable({
   providedIn: 'root'
@@ -43,8 +44,8 @@ export class SearchService extends ApiService {
       );
   }
 
-  public searchTags(searchPhrase: string, pageNumber: number, pageSize: number): Observable<string[]> {
-    return this.get<{ tags: string[] }>('tags/search', new HttpParams({
+  public searchTags(searchPhrase: string, pageNumber: number, pageSize: number): Observable<Tag[]> {
+    return this.get<{ tags: Tag[] }>('tags/search', new HttpParams({
       fromObject: {
         searchPhrase,
         pageNumber,

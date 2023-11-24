@@ -2,7 +2,7 @@ export interface AddMeasurement {
   projectId: string;
   recipeId: string | null;
   steps: Step[];
-  tags: string[];
+  tagIds: string[];
   comment: string | null | undefined;
 }
 

@@ -23,6 +23,7 @@ import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {MeasurementDetails} from "../../../core/models/measurements/measurementDetails";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ProjectDetails} from "../../../core/models/projects/project-details";
+import { Tag } from "../../../core/models/tags/tag";
 
 @Component({
   selector: 'app-measurement-edit',
@@ -54,7 +55,7 @@ export class MeasurementEditComponent implements OnInit {
     combineLatestWith(this.chosenTags$),
     map(([recentTags, chosenTags]) => recentTags.filter(t1 => !chosenTags.find(t2 => t1.name === t2))),
   );
-  filteredTags$: Observable<string[]> = new Observable<string[]>();
+  filteredTags$: Observable<Tag[]> = new Observable<Tag[]>();
   @ViewChild('tagInput') tagInput?: ElementRef<HTMLInputElement>;
 
   constructor(protected readonly parameterService: ParametersService,
@@ -75,7 +76,7 @@ export class MeasurementEditComponent implements OnInit {
       filter(phrase => !!phrase),
       switchMap(phrase => this.searchService.searchTags(phrase!, 0, 10)),
       combineLatestWith(this.recentTags$),
-      map(([filteredTags, chosenTags]) => filteredTags.filter(t1 => chosenTags.find(t2 => t1 === t2.name))),
+      map(([filteredTags, chosenTags]) => filteredTags.filter(t1 => chosenTags.find(t2 => t1.id === t2.id))),
     );
   }
 
