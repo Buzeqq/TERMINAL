@@ -35,20 +35,25 @@ export class ExportService {
   private buildCSV(details: MeasurementDetails, project: Project): string {
     const csvRows = [];
 
-    var headers = "Code,Date,Project,Comment";
-
-    var data = details.code + "," + details.createdAtUtc + "," + project.name + "," + details.comment;
+    let headers = "Code,Date,Project,Comment";
+    let data = `${details.code},${details.createdAtUtc},${project.name},${details.comment}`;
 
     const parameters = this.groupParametersInColumns(details);
 
     for (let i = 0; i < details.steps.length; i++) {
-      for (let [name, values] of Object.entries(parameters)) {
-        if (i === 0){
-          headers += "," + name;
+      for (const [name, values] of Object.entries(parameters)) {
+        if (i === 0) {
+          headers += `,${name}`;
+          if (values[0].unit) {
+            headers += ` [${values[0].unit}]`;
+          }
         }
-        data += "," + values[i].value;
+        data += `,${values[i].value}`;
       }
-      data += "\n,,,";
+      if (i === 0) {
+        headers += ",Comment";
+      }
+      data += `,${details.steps[i].comment}\n,,,`;
     }
 
     csvRows.push(headers);
