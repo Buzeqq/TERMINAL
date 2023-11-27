@@ -3,7 +3,7 @@ using Terminal.Backend.Application.DTO;
 
 namespace Terminal.Backend.Application.Queries.Measurements.Get;
 
-public class GetMeasurementQuery : IRequest<GetMeasurementDto?>
+public class GetSampleQuery : IRequest<GetSampleDto?>
 {
     public Guid Id { get; set; }
 }

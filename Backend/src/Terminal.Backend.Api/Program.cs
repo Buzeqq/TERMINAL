@@ -33,7 +33,7 @@ app.UseProjectsEndpoints();
 app.UseTagEndpoints();
 app.UseRecipesEndpoints();
 app.UseParametersEndpoints();
-app.UseMeasurementsEndpoints();
+app.UseSamplesEndpoints();
 app.UseUsersEndpoints();
 app.Run();
 

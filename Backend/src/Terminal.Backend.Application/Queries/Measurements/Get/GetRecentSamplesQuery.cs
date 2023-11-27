@@ -5,17 +5,17 @@ using Terminal.Backend.Application.DTO;
 
 namespace Terminal.Backend.Application.Queries.Measurements.Get;
 
-public sealed record GetRecentMeasurementsQuery(int Length) : IRequest<GetRecentMeasurementsDto>
+public sealed record GetRecentSamplesQuery(int Length) : IRequest<GetRecentSamplesDto>
 {
-    public static ValueTask<GetRecentMeasurementsQuery?> BindAsync(HttpContext context, ParameterInfo parameter)
+    public static ValueTask<GetRecentSamplesQuery?> BindAsync(HttpContext context, ParameterInfo parameter)
     {
         const string numberKey = "len";
         var parsed = int.TryParse(context.Request.Query[numberKey], out var length);
         length = parsed ? length : 5;
         
-        var result = new GetRecentMeasurementsQuery(length);
+        var result = new GetRecentSamplesQuery(length);
 
-        return ValueTask.FromResult<GetRecentMeasurementsQuery?>(result);
+        return ValueTask.FromResult<GetRecentSamplesQuery?>(result);
     }
 }
 

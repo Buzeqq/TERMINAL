@@ -6,7 +6,7 @@ namespace Terminal.Backend.Application.Exceptions;
 
 public sealed class AmbiguousCreateMeasurementRequestException : TerminalException
 {
-    public AmbiguousCreateMeasurementRequestException(RecipeId? id, IEnumerable<CreateMeasurementStepDto>? steps) 
+    public AmbiguousCreateMeasurementRequestException(RecipeId? id, IEnumerable<CreateSampleStepDto>? steps) 
         : base($"Ambiguous create measurement request: recipe - {id}, steps - {steps}.")
     {
     }

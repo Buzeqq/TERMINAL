@@ -4,11 +4,11 @@ using Terminal.Backend.Application.Queries.QueryParameters;
 
 namespace Terminal.Backend.Application.Queries.Measurements.Get;
 
-public sealed class GetMeasurementsQuery : IRequest<GetMeasurementsDto>
+public sealed class GetSamplesQuery : IRequest<GetSamplesDto>
 {
     public PagingParameters Parameters { get; set; }
 
-    public GetMeasurementsQuery(int pageNumber, int pageSize)
+    public GetSamplesQuery(int pageNumber, int pageSize)
     {
         Parameters = new PagingParameters { PageNumber = pageNumber, PageSize = pageSize };
     }

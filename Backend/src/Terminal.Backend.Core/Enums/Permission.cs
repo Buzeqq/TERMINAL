@@ -6,7 +6,7 @@ public enum Permission
     ProjectRead, ProjectWrite, ProjectUpdate, ProjectDelete, // Project
     RecipeRead, RecipeWrite, RecipeUpdate, RecipeDelete, // Recipe
     TagRead, TagWrite, TagUpdate, TagDelete, // Tag
-    MeasurementRead, MeasurementWrite, MeasurementUpdate, MeasurementDelete, // Measurement
+    SampleRead, SampleWrite, SampleUpdate, SampleDelete, // Measurement
     ParameterRead, ParameterWrite, ParameterUpdate, ParameterDelete, // Parameter
     StepRead, StepWrite, StepUpdate, StepDelete // Step
 }

@@ -6,7 +6,7 @@ using Terminal.Backend.Core.Entities;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 
-internal sealed class SearchMeasurementQueryHandler : IRequestHandler<SearchMeasurementQuery, GetMeasurementsDto>
+internal sealed class SearchMeasurementQueryHandler : IRequestHandler<SearchSampleQuery, GetSamplesDto>
 {
     private readonly DbSet<Measurement> _measurements;
 
@@ -15,16 +15,16 @@ internal sealed class SearchMeasurementQueryHandler : IRequestHandler<SearchMeas
         _measurements = dbContext.Measurements;
     }
 
-    public async Task<GetMeasurementsDto> Handle(SearchMeasurementQuery request, CancellationToken ct)
+    public async Task<GetSamplesDto> Handle(SearchSampleQuery request, CancellationToken ct)
         => new()
         {
-            Measurements = await _measurements
+            Samples = await _measurements
                 .AsNoTracking()
                 .Include(m => m.Project)
                 .Where(m => 
                     EF.Functions.ToTsVector("english", "AX" + m.Code + " " + m.Comment).Matches(request.SearchPhrase) || 
                     EF.Functions.ILike(m.Project.Name, $"%{request.SearchPhrase}%"))
-                .Select(m => new GetMeasurementsDto.MeasurementDto(m.Id, m.Code.Value, m.Project.Name, m.CreatedAtUtc.ToString("o"), m.Comment))
+                .Select(m => new GetSamplesDto.SampleDto(m.Id, m.Code.Value, m.Project.Name, m.CreatedAtUtc.ToString("o"), m.Comment))
                 .Paginate(request.Parameters)
                 .ToListAsync(ct)
         };

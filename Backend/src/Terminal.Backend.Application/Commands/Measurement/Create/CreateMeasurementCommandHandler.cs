@@ -8,7 +8,7 @@ using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Commands.Measurement.Create;
 
-internal sealed class CreateMeasurementCommandHandler : IRequestHandler<CreateMeasurementCommand>
+internal sealed class CreateMeasurementCommandHandler : IRequestHandler<CreateSampleCommand>
 {
     private readonly IStepsRepository _stepsRepository;
     private readonly IConvertDtoService _convertService;
@@ -25,7 +25,7 @@ internal sealed class CreateMeasurementCommandHandler : IRequestHandler<CreateMe
         _projectRepository = projectRepository;
     }
 
-    public async Task Handle(CreateMeasurementCommand command, CancellationToken ct)
+    public async Task Handle(CreateSampleCommand command, CancellationToken ct)
     {
         var (measurementId, projectId, recipeId, stepsDto, tagsDto, comment) = command;
 

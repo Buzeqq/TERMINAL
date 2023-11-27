@@ -6,7 +6,7 @@ using Terminal.Backend.Core.Entities;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 
-internal sealed class GetMeasurementsQueryHandler : IRequestHandler<GetMeasurementsQuery, GetMeasurementsDto>
+internal sealed class GetMeasurementsQueryHandler : IRequestHandler<GetSamplesQuery, GetSamplesDto>
 {
     private readonly DbSet<Measurement> _measurements;
 
@@ -15,7 +15,7 @@ internal sealed class GetMeasurementsQueryHandler : IRequestHandler<GetMeasureme
         _measurements = dbContext.Measurements;
     }
     
-    public async Task<GetMeasurementsDto> Handle(GetMeasurementsQuery request, CancellationToken ct)
+    public async Task<GetSamplesDto> Handle(GetSamplesQuery request, CancellationToken ct)
     {
         var measurements = await _measurements
             .AsNoTracking()
@@ -23,10 +23,10 @@ internal sealed class GetMeasurementsQueryHandler : IRequestHandler<GetMeasureme
             .Include(m => m.Project)
             .Include(m => m.Tags)
             .Paginate(request.Parameters)
-            .Select(m => new GetMeasurementsDto.MeasurementDto(
+            .Select(m => new GetSamplesDto.SampleDto(
                 m.Id, m.Code.Value, m.Project.Name, m.CreatedAtUtc.ToString("o"), m.Comment))
             .ToListAsync(ct);
 
-        return new GetMeasurementsDto { Measurements = measurements };
+        return new GetSamplesDto { Samples = measurements };
     }
 }

@@ -4,7 +4,7 @@ using Terminal.Backend.Application.DTO;
 using Terminal.Backend.Application.Queries.Measurements.Get;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
-internal class GetMeasurementQueryHandler : IRequestHandler<GetMeasurementQuery, GetMeasurementDto?>
+internal class GetMeasurementQueryHandler : IRequestHandler<GetSampleQuery, GetSampleDto?>
 {
     private readonly TerminalDbContext _dbContext;
     public GetMeasurementQueryHandler(TerminalDbContext dbContext)
@@ -12,7 +12,7 @@ internal class GetMeasurementQueryHandler : IRequestHandler<GetMeasurementQuery,
         _dbContext = dbContext;
     }
 
-    public async Task<GetMeasurementDto?> Handle(GetMeasurementQuery request, CancellationToken ct)
+    public async Task<GetSampleDto?> Handle(GetSampleQuery request, CancellationToken ct)
     {
         var measurement = await _dbContext.Measurements
             .AsNoTracking()
@@ -20,7 +20,7 @@ internal class GetMeasurementQueryHandler : IRequestHandler<GetMeasurementQuery,
             .Include(m => m.Recipe)
             // FIXME: .Include(m => m.Steps)
             // FIXME: .Include(m => m.Tags)
-            .Select(m => new GetMeasurementDto
+            .Select(m => new GetSampleDto
             {
                 Code = m.Code.Value,
                 Comment = m.Comment,

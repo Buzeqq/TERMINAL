@@ -1,5 +1,3 @@
-using MediatR;
-
 namespace Terminal.Backend.Application.DTO;
 
 public class GetTagDto
