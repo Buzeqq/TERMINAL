@@ -1,9 +1,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Terminal.Backend.Application.Commands.Measurement.Create;
+using Terminal.Backend.Application.Commands.Sample.Create;
 using Terminal.Backend.Application.DTO;
-using Terminal.Backend.Application.Queries.Measurements.Get;
-using Terminal.Backend.Application.Queries.Measurements.Search;
+using Terminal.Backend.Application.Queries.Samples.Get;
+using Terminal.Backend.Application.Queries.Samples.Search;
 using Terminal.Backend.Core.Enums;
 using Terminal.Backend.Core.ValueObjects;
 

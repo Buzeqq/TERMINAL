@@ -6,9 +6,9 @@ using Terminal.Backend.Infrastructure.DAL.ValueGenerators;
 
 namespace Terminal.Backend.Infrastructure.DAL.Configurations;
 
-internal sealed class MeasurementConfiguration : IEntityTypeConfiguration<Measurement>
+internal sealed class MeasurementConfiguration : IEntityTypeConfiguration<Sample>
 {
-    public void Configure(EntityTypeBuilder<Measurement> builder)
+    public void Configure(EntityTypeBuilder<Sample> builder)
     {
         builder.HasKey(m => m.Id);
 
@@ -17,7 +17,7 @@ internal sealed class MeasurementConfiguration : IEntityTypeConfiguration<Measur
                 i => new SampleId(i));
         builder.Property(m => m.Code)
             .HasConversion(c => c.Number,
-                c => new MeasurementCode(c))
+                c => new SampleCode(c))
             .HasValueGenerator(typeof(MeasurementCodeValueGenerator));
         builder.Property(m => m.Comment)
             .HasConversion(c => c.Value, 

@@ -231,7 +231,7 @@ internal sealed class TerminalDbSeeder
 
         #region measurements
 
-        var measurement1 = new Measurement(
+        var measurement1 = new Sample(
             SampleId.Create(),
             projectUpturn,
             null,
@@ -241,7 +241,7 @@ internal sealed class TerminalDbSeeder
         _dbContext.Measurements.Add(measurement1);
         _dbContext.SaveChanges();
 
-        var measurement2 = new Measurement(
+        var measurement2 = new Sample(
             SampleId.Create(),
             projectUpturn,
             null,
@@ -251,7 +251,7 @@ internal sealed class TerminalDbSeeder
         _dbContext.Measurements.Add(measurement2);
         _dbContext.SaveChanges();
 
-        var measurement3 = new Measurement(
+        var measurement3 = new Sample(
             SampleId.Create(),
             projectBessy2,
             null,
@@ -261,7 +261,7 @@ internal sealed class TerminalDbSeeder
         _dbContext.Measurements.Add(measurement3);
         _dbContext.SaveChanges();
 
-        var measurement4 = new Measurement(
+        var measurement4 = new Sample(
             SampleId.Create(),
             projectBessy2,
             null,
@@ -271,7 +271,7 @@ internal sealed class TerminalDbSeeder
         _dbContext.Measurements.Add(measurement4);
         _dbContext.SaveChanges();
 
-        var measurement5 = new Measurement(
+        var measurement5 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -281,7 +281,7 @@ internal sealed class TerminalDbSeeder
         _dbContext.Measurements.Add(measurement5);
         _dbContext.SaveChanges();
 
-        var measurement6 = new Measurement(
+        var measurement6 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -291,7 +291,7 @@ internal sealed class TerminalDbSeeder
         _dbContext.Measurements.Add(measurement6);
         _dbContext.SaveChanges();
 
-        var measurement7 = new Measurement(
+        var measurement7 = new Sample(
             SampleId.Create(),
             projectNobelium,
             null,
@@ -301,7 +301,7 @@ internal sealed class TerminalDbSeeder
         _dbContext.Measurements.Add(measurement7);
         _dbContext.SaveChanges();
 
-        var measurement8 = new Measurement(
+        var measurement8 = new Sample(
             SampleId.Create(),
             projectNobelium,
             null,
@@ -311,7 +311,7 @@ internal sealed class TerminalDbSeeder
         _dbContext.Measurements.Add(measurement8);
         _dbContext.SaveChanges();
 
-        var measurement9 = new Measurement(
+        var measurement9 = new Sample(
             SampleId.Create(),
             projectNobelium,
             null,
@@ -320,7 +320,7 @@ internal sealed class TerminalDbSeeder
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement9);
         _dbContext.SaveChanges();
-        var measurement10 = new Measurement(
+        var measurement10 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -329,7 +329,7 @@ internal sealed class TerminalDbSeeder
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement10);
         _dbContext.SaveChanges();
-        var measurement11 = new Measurement(
+        var measurement11 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -338,7 +338,7 @@ internal sealed class TerminalDbSeeder
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement11);_dbContext.SaveChanges();
         _dbContext.SaveChanges();
-        var measurement12 = new Measurement(
+        var measurement12 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -347,7 +347,7 @@ internal sealed class TerminalDbSeeder
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement12);_dbContext.SaveChanges();
         _dbContext.SaveChanges();
-        var measurement13 = new Measurement(
+        var measurement13 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -356,7 +356,7 @@ internal sealed class TerminalDbSeeder
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement13);_dbContext.SaveChanges();
         _dbContext.SaveChanges();
-        var measurement14 = new Measurement(
+        var measurement14 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -365,7 +365,7 @@ internal sealed class TerminalDbSeeder
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement14);_dbContext.SaveChanges();
         _dbContext.SaveChanges();
-        var measurement15 = new Measurement(
+        var measurement15 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -373,7 +373,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement15);_dbContext.SaveChanges();
-        var measurement16 = new Measurement(
+        var measurement16 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -381,7 +381,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement16);_dbContext.SaveChanges();
-        var measurement17 = new Measurement(
+        var measurement17 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -389,7 +389,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement17);_dbContext.SaveChanges();
-        var measurement18 = new Measurement(
+        var measurement18 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -397,7 +397,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement18);_dbContext.SaveChanges();
-        var measurement19 = new Measurement(
+        var measurement19 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -405,7 +405,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement19);_dbContext.SaveChanges();
-        var measurement20 = new Measurement(
+        var measurement20 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -413,7 +413,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement20);_dbContext.SaveChanges();
-        var measurement21 = new Measurement(
+        var measurement21 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -421,7 +421,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement21);_dbContext.SaveChanges();
-        var measurement22 = new Measurement(
+        var measurement22 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -429,7 +429,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement22);_dbContext.SaveChanges();
-        var measurement23 = new Measurement(
+        var measurement23 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -437,7 +437,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement23);_dbContext.SaveChanges();
-        var measurement24 = new Measurement(
+        var measurement24 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -445,7 +445,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement24);_dbContext.SaveChanges();
-        var measurement25 = new Measurement(
+        var measurement25 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -453,7 +453,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement25);_dbContext.SaveChanges();
-        var measurement26 = new Measurement(
+        var measurement26 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -461,7 +461,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement26);_dbContext.SaveChanges();
-        var measurement27 = new Measurement(
+        var measurement27 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -469,7 +469,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement27);_dbContext.SaveChanges();
-        var measurement28 = new Measurement(
+        var measurement28 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -477,7 +477,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement28);_dbContext.SaveChanges();
-        var measurement29 = new Measurement(
+        var measurement29 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -485,7 +485,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement29);_dbContext.SaveChanges();
-        var measurement30 = new Measurement(
+        var measurement30 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -493,7 +493,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement30);_dbContext.SaveChanges();
-        var measurement31 = new Measurement(
+        var measurement31 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -501,7 +501,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement31);_dbContext.SaveChanges();
-        var measurement32 = new Measurement(
+        var measurement32 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -509,7 +509,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement32);_dbContext.SaveChanges();
-        var measurement33 = new Measurement(
+        var measurement33 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -517,7 +517,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement33);_dbContext.SaveChanges();
-        var measurement34 = new Measurement(
+        var measurement34 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -525,7 +525,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement34);_dbContext.SaveChanges();
-        var measurement35 = new Measurement(
+        var measurement35 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -533,7 +533,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement35);_dbContext.SaveChanges();
-        var measurement36 = new Measurement(
+        var measurement36 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -541,7 +541,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement36);_dbContext.SaveChanges();
-        var measurement37 = new Measurement(
+        var measurement37 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -549,7 +549,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement37);_dbContext.SaveChanges();
-        var measurement38 = new Measurement(
+        var measurement38 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -557,7 +557,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement38);_dbContext.SaveChanges();
-        var measurement39 = new Measurement(
+        var measurement39 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -565,7 +565,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement39);_dbContext.SaveChanges();
-        var measurement40 = new Measurement(
+        var measurement40 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -573,7 +573,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement40);_dbContext.SaveChanges();
-        var measurement41 = new Measurement(
+        var measurement41 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -581,7 +581,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement41);_dbContext.SaveChanges();
-        var measurement42 = new Measurement(
+        var measurement42 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -589,7 +589,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement42);_dbContext.SaveChanges();
-        var measurement43 = new Measurement(
+        var measurement43 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -597,7 +597,7 @@ internal sealed class TerminalDbSeeder
             new List<Step> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Measurements.Add(measurement43);_dbContext.SaveChanges();
-        var measurement44 = new Measurement(
+        var measurement44 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,
@@ -607,7 +607,7 @@ internal sealed class TerminalDbSeeder
         _dbContext.Measurements.Add(measurement44);
         _dbContext.SaveChanges();
         
-        var measurement45 = new Measurement(
+        var measurement45 = new Sample(
             SampleId.Create(),
             projectNitro,
             null,

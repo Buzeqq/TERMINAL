@@ -2,7 +2,7 @@ using MediatR;
 using Terminal.Backend.Application.DTO;
 using Terminal.Backend.Application.Queries.QueryParameters;
 
-namespace Terminal.Backend.Application.Queries.Measurements.Search;
+namespace Terminal.Backend.Application.Queries.Samples.Search;
 
 public sealed class SearchSampleQuery : IRequest<GetSamplesDto>
 {

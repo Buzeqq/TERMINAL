@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Terminal.Backend.Application.DTO;
-using Terminal.Backend.Application.Queries.Measurements.Get;
+using Terminal.Backend.Application.Queries.Samples.Get;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 internal class GetMeasurementQueryHandler : IRequestHandler<GetSampleQuery, GetSampleDto?>

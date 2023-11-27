@@ -10,7 +10,7 @@ internal sealed class GetTagsQueryHandler :
     // IRequestHandler<GetMostPopularTagsQuery, GetTagsDto>,
     IRequestHandler<GetTagsQuery, GetTagsDto>
 {
-    private readonly DbSet<Measurement> _measurements;
+    private readonly DbSet<Sample> _measurements;
     private readonly DbSet<Tag> _tags;
 
     public GetTagsQueryHandler(TerminalDbContext dbContext)

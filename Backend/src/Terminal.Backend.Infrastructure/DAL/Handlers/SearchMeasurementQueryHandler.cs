@@ -1,14 +1,14 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Terminal.Backend.Application.DTO;
-using Terminal.Backend.Application.Queries.Measurements.Search;
+using Terminal.Backend.Application.Queries.Samples.Search;
 using Terminal.Backend.Core.Entities;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 
 internal sealed class SearchMeasurementQueryHandler : IRequestHandler<SearchSampleQuery, GetSamplesDto>
 {
-    private readonly DbSet<Measurement> _measurements;
+    private readonly DbSet<Sample> _measurements;
 
     public SearchMeasurementQueryHandler(TerminalDbContext dbContext)
     {

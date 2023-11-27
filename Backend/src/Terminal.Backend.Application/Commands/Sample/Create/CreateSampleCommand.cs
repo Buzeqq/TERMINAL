@@ -1,7 +1,7 @@
 using MediatR;
 using Terminal.Backend.Application.DTO;
 
-namespace Terminal.Backend.Application.Commands.Measurement.Create;
+namespace Terminal.Backend.Application.Commands.Sample.Create;
 
 public sealed record CreateSampleCommand(
     Guid SampleId,

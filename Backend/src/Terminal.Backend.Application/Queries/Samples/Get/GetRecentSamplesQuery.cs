@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Terminal.Backend.Application.DTO;
 
-namespace Terminal.Backend.Application.Queries.Measurements.Get;
+namespace Terminal.Backend.Application.Queries.Samples.Get;
 
 public sealed record GetRecentSamplesQuery(int Length) : IRequest<GetRecentSamplesDto>
 {

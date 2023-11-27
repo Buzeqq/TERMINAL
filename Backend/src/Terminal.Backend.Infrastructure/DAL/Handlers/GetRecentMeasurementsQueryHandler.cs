@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Terminal.Backend.Application.DTO;
-using Terminal.Backend.Application.Queries.Measurements.Get;
+using Terminal.Backend.Application.Queries.Samples.Get;
 using Terminal.Backend.Core.Entities;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
@@ -9,7 +9,7 @@ namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 internal sealed class GetRecentMeasurementsQueryHandler : 
     IRequestHandler<GetRecentSamplesQuery, GetRecentSamplesDto>
 {
-    private readonly DbSet<Measurement> _measurements;
+    private readonly DbSet<Sample> _measurements;
 
     public GetRecentMeasurementsQueryHandler(TerminalDbContext dbContext)
     {

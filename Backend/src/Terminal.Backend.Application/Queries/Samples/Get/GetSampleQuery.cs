@@ -1,7 +1,7 @@
 using MediatR;
 using Terminal.Backend.Application.DTO;
 
-namespace Terminal.Backend.Application.Queries.Measurements.Get;
+namespace Terminal.Backend.Application.Queries.Samples.Get;
 
 public class GetSampleQuery : IRequest<GetSampleDto?>
 {
