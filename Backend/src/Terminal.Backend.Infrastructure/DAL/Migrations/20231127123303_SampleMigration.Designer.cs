@@ -13,8 +13,8 @@ using Terminal.Backend.Infrastructure.DAL;
 namespace Terminal.Backend.Infrastructure.DAL.Migrations
 {
     [DbContext(typeof(TerminalDbContext))]
-    [Migration("20231123191751_TagIdAndTagName")]
-    partial class TagIdAndTagName
+    [Migration("20231127123303_SampleMigration")]
+    partial class SampleMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,19 +26,19 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("MeasurementTag", b =>
+            modelBuilder.Entity("SampleTag", b =>
                 {
-                    b.Property<Guid>("MeasurementId")
+                    b.Property<Guid>("SampleId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("TagsId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("MeasurementId", "TagsId");
+                    b.HasKey("SampleId", "TagsId");
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("MeasurementTag");
+                    b.ToTable("SampleTag");
                 });
 
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Invitation", b =>
@@ -61,41 +61,6 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Invitations");
-                });
-
-            modelBuilder.Entity("Terminal.Backend.Core.Entities.Measurement", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<ulong>("Code")
-                        .HasColumnType("numeric(20,0)");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("ProjectId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("RecipeId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("RecipeId");
-
-                    b.HasIndex("Code", "Comment")
-                        .HasAnnotation("Npgsql:TsVectorConfig", "english");
-
-                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("Code", "Comment"), "GIN");
-
-                    b.ToTable("Measurements");
                 });
 
             modelBuilder.Entity("Terminal.Backend.Core.Entities.ParameterValues.ParameterValue", b =>
@@ -248,22 +213,22 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                         new
                         {
                             Id = 17,
-                            Name = "MeasurementRead"
+                            Name = "SampleRead"
                         },
                         new
                         {
                             Id = 18,
-                            Name = "MeasurementWrite"
+                            Name = "SampleWrite"
                         },
                         new
                         {
                             Id = 19,
-                            Name = "MeasurementUpdate"
+                            Name = "SampleUpdate"
                         },
                         new
                         {
                             Id = 20,
-                            Name = "MeasurementDelete"
+                            Name = "SampleDelete"
                         },
                         new
                         {
@@ -724,6 +689,41 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Terminal.Backend.Core.Entities.Sample", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<ulong>("Code")
+                        .HasColumnType("numeric(20,0)");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("RecipeId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("RecipeId");
+
+                    b.HasIndex("Code", "Comment")
+                        .HasAnnotation("Npgsql:TsVectorConfig", "english");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("Code", "Comment"), "GIN");
+
+                    b.ToTable("Samples");
+                });
+
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Step", b =>
                 {
                     b.Property<Guid>("Id")
@@ -733,17 +733,17 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("MeasurementId")
+                    b.Property<Guid?>("RecipeId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("RecipeId")
+                    b.Property<Guid>("SampleId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MeasurementId");
-
                     b.HasIndex("RecipeId");
+
+                    b.HasIndex("SampleId");
 
                     b.ToTable("Steps");
                 });
@@ -877,11 +877,11 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                     b.HasDiscriminator().HasValue("IntegerParameter");
                 });
 
-            modelBuilder.Entity("MeasurementTag", b =>
+            modelBuilder.Entity("SampleTag", b =>
                 {
-                    b.HasOne("Terminal.Backend.Core.Entities.Measurement", null)
+                    b.HasOne("Terminal.Backend.Core.Entities.Sample", null)
                         .WithMany()
-                        .HasForeignKey("MeasurementId")
+                        .HasForeignKey("SampleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -901,23 +901,6 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Terminal.Backend.Core.Entities.Measurement", b =>
-                {
-                    b.HasOne("Terminal.Backend.Core.Entities.Project", "Project")
-                        .WithMany("Measurements")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Terminal.Backend.Core.Entities.Recipe", "Recipe")
-                        .WithMany()
-                        .HasForeignKey("RecipeId");
-
-                    b.Navigation("Project");
-
-                    b.Navigation("Recipe");
                 });
 
             modelBuilder.Entity("Terminal.Backend.Core.Entities.ParameterValues.ParameterValue", b =>
@@ -952,17 +935,34 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Terminal.Backend.Core.Entities.Step", b =>
+            modelBuilder.Entity("Terminal.Backend.Core.Entities.Sample", b =>
                 {
-                    b.HasOne("Terminal.Backend.Core.Entities.Measurement", null)
-                        .WithMany("Steps")
-                        .HasForeignKey("MeasurementId")
+                    b.HasOne("Terminal.Backend.Core.Entities.Project", "Project")
+                        .WithMany("Samples")
+                        .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Terminal.Backend.Core.Entities.Recipe", "Recipe")
+                        .WithMany()
+                        .HasForeignKey("RecipeId");
+
+                    b.Navigation("Project");
+
+                    b.Navigation("Recipe");
+                });
+
+            modelBuilder.Entity("Terminal.Backend.Core.Entities.Step", b =>
+                {
+                    b.HasOne("Terminal.Backend.Core.Entities.Recipe", "Recipe")
                         .WithMany("Steps")
                         .HasForeignKey("RecipeId");
+
+                    b.HasOne("Terminal.Backend.Core.Entities.Sample", null)
+                        .WithMany("Steps")
+                        .HasForeignKey("SampleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Recipe");
                 });
@@ -978,14 +978,9 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Terminal.Backend.Core.Entities.Measurement", b =>
-                {
-                    b.Navigation("Steps");
-                });
-
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Project", b =>
                 {
-                    b.Navigation("Measurements");
+                    b.Navigation("Samples");
                 });
 
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Recipe", b =>
@@ -996,6 +991,11 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Role", b =>
                 {
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Terminal.Backend.Core.Entities.Sample", b =>
+                {
+                    b.Navigation("Steps");
                 });
 
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Step", b =>
