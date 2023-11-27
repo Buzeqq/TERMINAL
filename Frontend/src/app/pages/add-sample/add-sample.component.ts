@@ -163,6 +163,13 @@ export class AddSampleComponent implements OnInit {
     return isNumeric(parameter) ? 'number' : 'text';
   }
 
+  getParameterUnit(name: string) {
+    if (name === 'comment') return undefined;
+    const parameter = this.parameters.find(p => p.name === name);
+    if (!parameter) return undefined;
+    return isNumeric(parameter) ? parameter.unit : undefined;
+  }
+
   getGroupForTab(tabIndex: number): Record<string, FormControl<string | number | null>> | undefined {
     return this.parameterControls.controls.at(tabIndex)?.controls;
   }
