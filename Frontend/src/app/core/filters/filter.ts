@@ -1,6 +1,6 @@
 import { map, Observable } from "rxjs";
 import { Project } from "../models/projects/project";
-import { Measurement } from "../models/measurements/measurement";
+import { Sample } from "../models/samples/sample";
 import { Injectable } from "@angular/core";
 
 @Injectable({
@@ -21,25 +21,24 @@ export class Filter {
         )));
     } else {
       return new Observable<Project[]>();
-
     }
   }
 
-  filterMeasurements(
-    measurements$: Observable<Measurement[]>,
+  filterSamples(
+    samples$: Observable<Sample[]>,
     phrase: string,
     filter: boolean
-  ): Observable<Measurement[]> {
+  ): Observable<Sample[]> {
 
     if (filter) {
-      // TODO: filter by comment? comments are not returned by /api/measurements/recent
-      return measurements$.pipe(
-        map(measurements => measurements.filter(
-          m => this.phraseMatch(m.code, phrase)
-            || this.phraseMatch(m.project, phrase)
+      // TODO: filter by comment? comments are not returned by /api/samples/recent
+      return samples$.pipe(
+        map(samples => samples.filter(
+          s => this.phraseMatch(s.code, phrase)
+            || this.phraseMatch(s.project, phrase)
         )));
     } else {
-      return new Observable<Measurement[]>();
+      return new Observable<Sample[]>();
     }
   }
 

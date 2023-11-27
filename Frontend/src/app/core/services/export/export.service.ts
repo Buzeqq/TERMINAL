@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MeasurementDetails } from '../../models/measurements/measurementDetails';
+import { SampleDetails } from '../../models/samples/sampleDetails';
 import { Project } from '../../models/projects/project';
 import { ParameterValue } from '../../models/parameters/parameter-value';
 
@@ -10,14 +10,14 @@ export class ExportService {
 
   constructor() { }
 
-  public exportMeasurement(details: MeasurementDetails, project: Project) {
+  public exportSamples(details: SampleDetails, project: Project) {
     const csvContent = this.buildCSV(details, project);
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     window.open(url);
   }
 
-  private groupParametersInColumns(details: MeasurementDetails): Record<string, ParameterValue[]> {
+  private groupParametersInColumns(details: SampleDetails): Record<string, ParameterValue[]> {
     const dict : Record<string,ParameterValue[]> = {};
 
     details.steps.forEach(s => {
@@ -32,7 +32,7 @@ export class ExportService {
     return dict;
   }
 
-  private buildCSV(details: MeasurementDetails, project: Project): string {
+  private buildCSV(details: SampleDetails, project: Project): string {
     const csvRows = [];
 
     let headers = "Code,Date,Project,Comment";

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { map, Observable, of, zip } from "rxjs";
-import { Measurement } from "../../models/measurements/measurement";
+import { Sample } from "../../models/samples/sample";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { ApiService } from "../api-service";
 import { Project } from "../../models/projects/project";
@@ -14,8 +14,8 @@ export class SearchService extends ApiService {
     super(http);
   }
 
-  public searchMeasurements(searchPhrase: string, pageNumber: number, pageSize: number): Observable<Measurement[]> {
-    return this.get<{ measurements: Measurement[] }>('measurements/search', new HttpParams({
+  public searchSamples(searchPhrase: string, pageNumber: number, pageSize: number): Observable<Sample[]> {
+    return this.get<{ samples: Sample[] }>('samples/search', new HttpParams({
       fromObject: {
         searchPhrase,
         pageNumber,
@@ -23,10 +23,10 @@ export class SearchService extends ApiService {
       }
     }))
       .pipe(
-        map(m => m.measurements),
-        map(m => m.map(m => ({
-          ...m,
-          createdAtUtc: new Date(m.createdAtUtc)
+        map(s => s.samples),
+        map(samples => samples.map(s => ({
+          ...s,
+          createdAtUtc: new Date(s.createdAtUtc)
         })))
       );
   }
@@ -57,11 +57,11 @@ export class SearchService extends ApiService {
       );
   }
 
-  public searchIn(filterState: Record<'measurements' | 'recipes' | 'projects', boolean>, searchPhrase: string, pageNumber: number, pageSize: number): Observable<SearchItem[]> {
+  public searchIn(filterState: Record<'samples' | 'recipes' | 'projects', boolean>, searchPhrase: string, pageNumber: number, pageSize: number): Observable<SearchItem[]> {
     const apiCalls = [];
-    if (filterState['measurements']) apiCalls.push(this.searchMeasurements(searchPhrase, pageNumber, pageSize).pipe(map(m => m.map(m => ({
-      type: 'Measurement',
-      item: m
+    if (filterState['samples']) apiCalls.push(this.searchSamples(searchPhrase, pageNumber, pageSize).pipe(map(samples => samples.map(s => ({
+      type: 'Sample',
+      item: s
     } as SearchItem)))));
     // if (filterState['recipes']) apiCalls.push(this.searchRecipes(searchPhrase));
     if (filterState['projects']) apiCalls.push(this.searchProjects(searchPhrase, pageNumber, pageSize).pipe(map(p => p.map(p => ({
@@ -74,6 +74,6 @@ export class SearchService extends ApiService {
 }
 
 export interface SearchItem {
-  type: 'Measurement' | 'Project' | 'Recipe';
-  item: Measurement | Project; // | Recipe
+  type: 'Sample' | 'Project' | 'Recipe';
+  item: Sample | Project; // | Recipe
 }

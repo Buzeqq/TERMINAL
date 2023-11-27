@@ -21,7 +21,7 @@ internal sealed class ConvertDtoService : IConvertDtoService
         _tagRepository = tagRepository;
     }
 
-    public async Task<IEnumerable<Step>> ConvertAsync(IEnumerable<CreateMeasurementStepDto> stepsDto,
+    public async Task<IEnumerable<Step>> ConvertAsync(IEnumerable<CreateSampleStepDto> stepsDto,
         CancellationToken ct)
     {
         var steps = new List<Step>();
@@ -33,13 +33,13 @@ internal sealed class ConvertDtoService : IConvertDtoService
                 var id = ParameterValueId.Create();
                 ParameterValue parameter = parameterDto switch
                 {
-                    CreateMeasurementDecimalParameterValueDto @decimal 
+                    CreateSampleDecimalParameterValueDto @decimal 
                         => new DecimalParameterValue(id, await _parameterRepository.GetAsync<DecimalParameter>(@decimal.Id, ct) 
                                                      ?? throw new ParameterNotFoundException(@decimal.Id), @decimal.Value),
-                    CreateMeasurementIntegerParameterValueDto integer 
+                    CreateSampleIntegerParameterValueDto integer 
                         => new IntegerParameterValue(id, await _parameterRepository.GetAsync<IntegerParameter>(integer.Id, ct) 
                                                          ?? throw new ParameterNotFoundException(integer.Id), integer.Value),
-                    CreateMeasurementTextParameterValueDto text 
+                    CreateSampleTextParameterValueDto text 
                         => new TextParameterValue(id, await _parameterRepository.GetAsync<TextParameter>(text.Id, ct) 
                                                       ?? throw new ParameterNotFoundException(text.Id), text.Value),
                     _ => throw new UnknownParameterTypeException(parameterDto)

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Observable, tap } from "rxjs";
-import { MeasurementsService } from "../../core/services/measurements/measurements.service";
-import { Measurement } from "../../core/models/measurements/measurement";
+import { SamplesService } from "../../core/services/samples/samples.service";
+import { Sample } from "../../core/models/samples/sample";
 import { SelectedItem } from "../../core/models/items/selected-item";
 
 @Component({
@@ -11,14 +11,14 @@ import { SelectedItem } from "../../core/models/items/selected-item";
 })
 export class DashboardComponent {
   displayedColumns: string[] = ['code', 'project', 'created'];
-  selectedMeasurement?: SelectedItem;
-  recentMeasurement$: Observable<Measurement[]> = this.measurementService.getRecentMeasurements(10)
-    .pipe(tap(r => this.selectedMeasurement = {type: 'Measurement', id: r[0].id}));
+  selectedSample?: SelectedItem;
+  recentSamples$: Observable<Sample[]> = this.samplesService.getRecentSamples(10)
+    .pipe(tap(r => this.selectedSample = {type: 'Sample', id: r[0].id}));
 
-  constructor(private readonly measurementService: MeasurementsService) {
+  constructor(private readonly samplesService: SamplesService) {
   }
 
-  selectMeasurement(m: Measurement) {
-    this.selectedMeasurement = {type: 'Measurement', id: m.id};
+  selectSample(m: Sample) {
+    this.selectedSample = {type: 'Sample', id: m.id};
   }
 }

@@ -18,10 +18,10 @@
           <mat-tab>
             <ng-template mat-tab-label>
               <mat-icon class="tab-icon">science</mat-icon>
-              Measurements
+              Samples
             </ng-template>
             <ng-template matTabContent>
-              <app-measurement-views (selectedItemChangeEvent)="selectedItem = $event"></app-measurement-views>
+              <app-sample-views (selectedItemChangeEvent)="selectedItem = $event"></app-sample-views>
             </ng-template>
           </mat-tab>
           <mat-tab>
@@ -63,7 +63,7 @@
       <mat-divider></mat-divider>
       <ng-container [ngSwitch]="selectedItem?.type">
         <app-project-edit *ngSwitchCase="'Project'" [projectId]="selectedItem?.id"></app-project-edit>
-        <app-measurement-edit *ngSwitchCase="'Measurement'" [measurementId]="selectedItem?.id"></app-measurement-edit>
+        <app-sample-edit *ngSwitchCase="'Sample'" [sampleId]="selectedItem?.id"></app-sample-edit>
         <app-tag-edit *ngSwitchCase="'Tag'" [tagId]="selectedItem?.id"></app-tag-edit>
       </ng-container>
     </mat-card>

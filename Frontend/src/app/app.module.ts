@@ -31,8 +31,8 @@ import { ResultsListComponent } from './pages/search/results-list/results-list.c
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
-import { AddMeasurementComponent } from './pages/add-measurement/add-measurement.component';
-import { MeasurementViewsComponent } from "./core/components/item-views/measurement-views/measurement-views.component";
+import { AddSampleComponent } from './pages/add-sample/add-sample.component';
+import { SampleViewsComponent } from "./core/components/item-views/sample-views/sample-views.component";
 import { ItemViewsComponent } from "./core/components/item-views/item-views.component";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MtxDatetimepickerModule } from '@ng-matero/extensions/datetimepicker';
@@ -48,7 +48,7 @@ import { ProjectViewsComponent } from "./core/components/item-views/project-view
 import { SettingsComponent } from './pages/settings/settings.component';
 import { ProjectEditComponent } from './pages/settings/project-edit/project-edit.component';
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
-import { MeasurementEditComponent } from './pages/settings/measurement-edit/measurement-edit.component';
+import { SampleEditComponent } from './pages/settings/sample-edit/sample-edit.component';
 import { TagEditComponent } from './pages/settings/tag-edit/tag-edit.component';
 import {LoginComponent} from "./pages/login/login.component";
 
@@ -58,14 +58,14 @@ import {LoginComponent} from "./pages/login/login.component";
     DashboardComponent,
     NotFoundComponent,
     ResultsListComponent,
-    AddMeasurementComponent,
-    MeasurementViewsComponent,
+    AddSampleComponent,
+    SampleViewsComponent,
     ProjectViewsComponent,
     ItemViewsComponent,
     StatusbarComponent,
     SettingsComponent,
     ProjectEditComponent,
-    MeasurementEditComponent,
+    SampleEditComponent,
     TagEditComponent,
     StatusbarComponent,
     LoginComponent

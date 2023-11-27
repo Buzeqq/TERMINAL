@@ -7,7 +7,7 @@
         </div>
       </mat-card-header>
       <mat-card-content [ngSwitch]="selectedItem?.type">
-        <app-measurement-views *ngSwitchCase="'Measurement'" (selectedItemChangeEvent)="selectedItem = $event"></app-measurement-views>
+        <app-sample-views *ngSwitchCase="'Sample'" (selectedItemChangeEvent)="selectedItem = $event"></app-sample-views>
         <app-project-views *ngSwitchCase="'Project'" (selectedItemChangeEvent)="selectedItem = $event"></app-project-views>
       </mat-card-content>
     </mat-card>

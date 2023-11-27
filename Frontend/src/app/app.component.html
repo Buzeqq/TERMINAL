@@ -13,9 +13,9 @@
         <span *ngIf="isExpanded">Add</span>
       </mat-list-item>
       <mat-menu #addMenu>
-        <button (click)="router.navigate(['/add-measurement'])" mat-menu-item>
+        <button (click)="router.navigate(['/add-sample'])" mat-menu-item>
           <mat-icon>add</mat-icon>
-          Add measurement
+          Add sample
         </button>
         <button mat-menu-item>
           <mat-icon>assignment_add</mat-icon>
@@ -32,9 +32,9 @@
         <span *ngIf="isExpanded">Home</span>
       </mat-list-item>
 
-      <mat-list-item routerLink="measurements">
+      <mat-list-item routerLink="samples">
         <mat-icon matListItemIcon>science</mat-icon>
-        <span *ngIf="isExpanded">Measurements</span>
+        <span *ngIf="isExpanded">Samples</span>
       </mat-list-item>
 
       <mat-list-item routerLink="recipes">

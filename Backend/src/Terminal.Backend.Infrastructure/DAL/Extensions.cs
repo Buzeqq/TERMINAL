@@ -28,7 +28,7 @@ internal static class Extensions
         services.AddScoped<IParameterValueRepository, ParameterValueRepository>();
         services.AddScoped<IRecipeRepository, RecipeRepository>();
         services.AddScoped<IStepsRepository, StepsRepository>();
-        services.AddScoped<IMeasurementRepository, MeasurementRepository>();
+        services.AddScoped<ISampleRepository, SampleRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IInvitationRepository, InvitationRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();

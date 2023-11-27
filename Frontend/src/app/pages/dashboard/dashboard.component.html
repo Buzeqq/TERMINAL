@@ -1,40 +1,40 @@
 <section class="dashboard">
-  <app-search [filters]="{ 'measurements': true, 'projects': true, 'recipes': true }"></app-search>
+  <app-search [filters]="{ 'samples': true, 'projects': true, 'recipes': true }"></app-search>
   <section class="dashboard__cards">
-    <mat-card class="recent-measurements">
+    <mat-card class="recent-samples">
       <mat-card-header>
-        <div class="recent-measurements__header mat-h1">
+        <div class="recent-samples__header mat-h1">
           <mat-icon [inline]="true" fontIcon="history"></mat-icon>
-          <h2>Recent measurements</h2>
+          <h2>Recent samples</h2>
         </div>
       </mat-card-header>
-      <div *ngIf="recentMeasurement$ | async as recentMeasurements; else loading" class="recent-measurements__list">
-        <mat-table [dataSource]="recentMeasurements" class="recent-measurements__list-content mat-elevation-z8">
+      <div *ngIf="recentSamples$ | async as recentSamples; else loading" class="recent-samples__list">
+        <mat-table [dataSource]="recentSamples" class="recent-samples__list-content mat-elevation-z8">
           <ng-container matColumnDef="code">
             <mat-header-cell *matHeaderCellDef> Code</mat-header-cell>
-            <mat-cell *matCellDef="let measurement"> {{measurement.code}} </mat-cell>
+            <mat-cell *matCellDef="let sample"> {{sample.code}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="project">
             <mat-header-cell *matHeaderCellDef> Project</mat-header-cell>
-            <mat-cell *matCellDef="let measurement"> {{measurement.project}} </mat-cell>
+            <mat-cell *matCellDef="let sample"> {{sample.project}} </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="created">
             <mat-header-cell *matHeaderCellDef> Created</mat-header-cell>
-            <mat-cell *matCellDef="let measurement"> {{measurement.createdAtUtc | timeAgo}} </mat-cell>
+            <mat-cell *matCellDef="let sample"> {{sample.createdAtUtc | timeAgo}} </mat-cell>
           </ng-container>
 
-          <mat-header-row *matHeaderRowDef="displayedColumns" class="recent-measurements__list-header"></mat-header-row>
+          <mat-header-row *matHeaderRowDef="displayedColumns" class="recent-samples__list-header"></mat-header-row>
           <mat-row
             mat-ripple
             *matRowDef="let row; columns: displayedColumns;"
-            (click)="selectMeasurement(row);"
-            [class.recent-measurements__row--is-clicked]="row.id === selectedMeasurement?.id"></mat-row>
+            (click)="selectSample(row);"
+            [class.recent-samples__row--is-clicked]="row.id === selectedSample?.id"></mat-row>
         </mat-table>
       </div>
     </mat-card>
-    <app-item-details class="measurement-details" [item]="selectedMeasurement"></app-item-details>
+    <app-item-details class="sample-details" [item]="selectedSample"></app-item-details>
   </section>
 </section>
 

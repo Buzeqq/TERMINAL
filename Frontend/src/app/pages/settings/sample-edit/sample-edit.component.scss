@@ -1,0 +1,22 @@
+.sample-edit {
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    grid-column: span 2;
+    font-size: x-large;
+  }
+
+  &__form-fields {
+    width: 80%;
+  }
+
+  &__hint_below {
+    margin-bottom: 10px;
+  }
+
+  &__form-buttons {
+    width: 50%;
+    gap: 1rem;
+  }
+}
