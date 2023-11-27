@@ -6,4 +6,5 @@ namespace Terminal.Backend.Core.Abstractions.Repositories;
 public interface IRecipeRepository
 {
     Task<Recipe?> GetAsync(RecipeId recipeId, CancellationToken ct);
+    Task AddAsync(Recipe recipe, CancellationToken ct);
 }

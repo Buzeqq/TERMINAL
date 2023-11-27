@@ -41,7 +41,7 @@ public static class SamplesModule
             {
                 TagId.Create(), TagId.Create(), TagId.Create()
             },
-            "comment");
+            "comment", false);
 
             return Results.Ok(sample);
         });

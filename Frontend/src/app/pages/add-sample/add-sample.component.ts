@@ -191,7 +191,9 @@ export class AddSampleComponent implements OnInit {
       recipeId: null,
       tagIds: form.tagIds,
       comment: form.comment,
-      steps: form.steps!.map(s => this.mapToStep(s))
+      steps: form.steps!.map(s => this.mapToStep(s)),
+      saveAsRecipe: this.saveAsRecipeFormControl.value ?? false,
+      recipeName: this.recipeNameFormControl.value
     };
 
     this.samplesService.addSample(addSample).pipe(
@@ -204,6 +206,10 @@ export class AddSampleComponent implements OnInit {
         .then(_ => this.notificationService.notifySuccess('Sample added!'));
     });
   }
+
+  saveAsRecipeFormControl = new FormControl(false);
+  recipeNameFormControl = new FormControl('')
+
   private mapToStep(s: Record<string, string | number | null>): Step {
     let parameters: ParameterValue[] = [];
 
@@ -219,7 +225,6 @@ export class AddSampleComponent implements OnInit {
         value: value!
       })
     }
-    console.log(s);
     return {
       parameters,
       comment: s['comment'] as string

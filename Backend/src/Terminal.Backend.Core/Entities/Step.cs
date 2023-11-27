@@ -3,12 +3,10 @@ using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Core.Entities;
 
-public sealed class Step
+public class Step
 {
     public StepId Id { get; private set; }
     public Comment Comment { get; private set; }
-
-    public Recipe? Recipe { get; private set; }
     public ICollection<ParameterValue> Parameters { get; private set; } = new List<ParameterValue>();
 
     public Step(StepId id, Comment comment, ICollection<ParameterValue> parameters)
