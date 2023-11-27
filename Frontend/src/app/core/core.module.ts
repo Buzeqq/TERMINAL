@@ -18,16 +18,16 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { ItemDetailsComponent } from "./components/item-details/item-details/item-details.component";
 import {
-  MeasurementDetailsComponent
-} from "./components/item-details/item-details/measurement-details/measurement-details.component";
+  SampleDetailsComponent
+} from "./components/item-details/item-details/sample-details/sample-details.component";
 import {
   ProjectDetailsComponent
 } from "./components/item-details/item-details/project-details/project-details.component";
 import { MatTableModule } from "@angular/material/table";
 import { TagViewsComponent } from './components/item-views/tag-views/tag-views.component';
-import {CdkFixedSizeVirtualScroll, CdkVirtualScrollViewport} from "@angular/cdk/scrolling";
-import {MatRippleModule} from "@angular/material/core";
-import {SvgComponent} from "./components/svg/svg.component";
+import { CdkFixedSizeVirtualScroll, CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
+import { MatRippleModule } from "@angular/material/core";
+import { SvgComponent } from "./components/svg/svg.component";
 
 
 @NgModule({
@@ -36,7 +36,7 @@ import {SvgComponent} from "./components/svg/svg.component";
     CastPipe,
     AddProjectDialogComponent,
     ItemDetailsComponent,
-    MeasurementDetailsComponent,
+    SampleDetailsComponent,
     ProjectDetailsComponent,
     SearchComponent,
     TagViewsComponent,
@@ -47,7 +47,7 @@ import {SvgComponent} from "./components/svg/svg.component";
     TimeAgoPipe,
     SearchComponent,
     ItemDetailsComponent,
-    MeasurementDetailsComponent,
+    SampleDetailsComponent,
     ProjectDetailsComponent,
     TagViewsComponent,
     ItemDetailsComponent,

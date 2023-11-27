@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EMPTY, Observable, catchError, tap } from 'rxjs';
-import { MeasurementDetails } from 'src/app/core/models/measurements/measurementDetails';
-import { MeasurementsService } from 'src/app/core/services/measurements/measurements.service';
+import { SampleDetails } from 'src/app/core/models/samples/sampleDetails';
+import { SamplesService } from 'src/app/core/services/samples/samples.service';
 import { ItemDetailsComponent } from "../item-details.component";
 import { ActivatedRoute } from '@angular/router';
 import { Project } from "../../../../models/projects/project";
@@ -10,17 +10,17 @@ import { ProjectsService } from "../../../../services/projects/projects.service"
 import { ExportService } from 'src/app/core/services/export/export.service';
 
 @Component({
-  selector: 'app-measurement-details',
-  templateUrl: './measurement-details.component.html',
-  styleUrls: ['./measurement-details.component.scss']
+  selector: 'app-sample-details',
+  templateUrl: './sample-details.component.html',
+  styleUrls: ['./sample-details.component.scss']
 })
-export class MeasurementDetailsComponent extends ItemDetailsComponent {
-  private _measurementId?: string;
-  measurementDetails$?: Observable<MeasurementDetails>;
+export class SampleDetailsComponent extends ItemDetailsComponent {
+  private _sampleId?: string;
+  sampleDetails$?: Observable<SampleDetails>;
   projectDetails$?: Observable<Project>;
 
   constructor(
-    private readonly measurementService: MeasurementsService,
+    private readonly samplesService: SamplesService,
     private readonly snackBar: MatSnackBar,
     private readonly projectService: ProjectsService,
     private readonly exportService: ExportService,
@@ -30,17 +30,17 @@ export class MeasurementDetailsComponent extends ItemDetailsComponent {
   }
 
   @Input()
-  get measurementId(): string | undefined {
-    return this._measurementId;
+  get sampleId(): string | undefined {
+    return this._sampleId;
   }
 
-  set measurementId(id: string | undefined) {
-    this._measurementId = id || this.route.snapshot.paramMap.get('id') || undefined;
-    this.measurementDetails$ = this.measurementService.getMeasurementDetails(this._measurementId!)
+  set sampleId(id: string | undefined) {
+    this._sampleId = id || this.route.snapshot.paramMap.get('id') || undefined;
+    this.sampleDetails$ = this.samplesService.getSampleDetails(this._sampleId!)
       .pipe(
         catchError((err, _) => {
           console.log(err);
-          this.snackBar.open('Failed to load measurement', 'Close', {
+          this.snackBar.open('Failed to load sample', 'Close', {
             duration: 3000
           });
           return EMPTY;
@@ -56,13 +56,13 @@ export class MeasurementDetailsComponent extends ItemDetailsComponent {
     return this.route.snapshot.paramMap.get('id') !== null;
   }
 
-  hasRecipe(detail: MeasurementDetails): boolean{
+  hasRecipe(detail: SampleDetails): boolean{
     return detail.recipeId !== null;
   }
 
-  export(details: MeasurementDetails) {
+  export(details: SampleDetails) {
     this.projectDetails$?.subscribe(project => {
-      this.exportService.exportMeasurement(details, project);
+      this.exportService.exportSamples(details, project);
     });
   }
 

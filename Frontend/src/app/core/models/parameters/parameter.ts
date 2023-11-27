@@ -16,7 +16,6 @@ export interface NumericParameter {
 export type Parameter = TextParameter | NumericParameter;
 
 export function isText(parameter: Parameter): parameter is TextParameter {
-  console.log()
   return parameter.$type === 'text';
 }
 

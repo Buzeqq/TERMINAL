@@ -9,7 +9,7 @@
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row mat-ripple *matRowDef="let row; columns: displayedColumns;" (click)="selectTag(row);"
-               [class.recent-measurements__row--is-clicked]="row.id === selectedItem?.id"></mat-row>
+               [class.recent-samples__row--is-clicked]="row.id === selectedItem?.id"></mat-row>
     </mat-table>
   </div>
 </cdk-virtual-scroll-viewport>

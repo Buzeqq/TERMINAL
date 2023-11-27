@@ -1,18 +1,18 @@
-<ng-container *ngIf="measurementId && (measurementDetails$ | async) as details">
+<ng-container *ngIf="sampleId && (sampleDetails$ | async) as details">
   <mat-card-content>
-    <article class="measurement-details">
-      <div class="measurement-details__header">Measurement {{details.code}}</div>
-      <div class="measurement-details__label">Created:</div>
+    <article class="sample-details">
+      <div class="sample-details__header">Sample {{details.code}}</div>
+      <div class="sample-details__label">Created:</div>
       <div>{{details.createdAtUtc | date:'medium'}}</div>
-      <div class="measurement-details__label">Tags: </div>
+      <div class="sample-details__label">Tags: </div>
       <div>
         <mat-chip-set>
           <mat-chip *ngFor="let tag of details.tags">{{tag}}</mat-chip>
         </mat-chip-set>
       </div>
-      <div class="measurement-details__label">Comment:</div>
+      <div class="sample-details__label">Comment:</div>
       <div>{{details.comment}}</div>
-      <div class="measurement-details__label">Number of steps:</div>
+      <div class="sample-details__label">Number of steps:</div>
       <div>{{details.steps.length}}</div>
     </article>
 
@@ -62,7 +62,7 @@
       <mat-icon>redo</mat-icon>
       Redo
     </button>
-    <button mat-button color="primary" *ngIf="!isDetailView()" [routerLink]="['/measurements', measurementId]">
+    <button mat-button color="primary" *ngIf="!isDetailView()" [routerLink]="['/samples', sampleId]">
       <mat-icon>arrow_forward</mat-icon>
       Show steps
     </button>

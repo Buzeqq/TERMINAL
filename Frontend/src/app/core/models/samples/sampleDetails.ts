@@ -1,6 +1,6 @@
 import { Step } from "../steps/step";
 
-export interface MeasurementDetails {
+export interface SampleDetails {
   id: string;
   code: string;
   recipeId: string | null;

@@ -11,7 +11,7 @@
   }
 }
 
-.recent-measurements {
+.recent-samples {
   display: flex;
   flex-direction: column;
 
@@ -53,7 +53,7 @@
 }
 
 @include md() {
-  .measurement-details {
+  .sample-details {
     display: none;
   }
 

@@ -1,4 +1,4 @@
 export interface SelectedItem {
-  type: 'Measurement' | 'Project' | 'Recipe' | 'Tag'
+  type: 'Sample' | 'Project' | 'Recipe' | 'Tag'
   id: string
 }

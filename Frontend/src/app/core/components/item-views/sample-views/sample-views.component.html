@@ -1,24 +1,24 @@
 <cdk-virtual-scroll-viewport itemSize="50" class="items-viewport" (scroll)="onScroll($event)">
-  <div *ngIf="measurements$ | async as measurements else loading">
-    <mat-table [dataSource]="measurements">
+  <div *ngIf="samples$ | async as samples else loading">
+    <mat-table [dataSource]="samples">
       <ng-container matColumnDef="code">
         <mat-header-cell *matHeaderCellDef> Code </mat-header-cell>
-        <mat-cell *matCellDef="let measurement"> {{measurement.code}} </mat-cell>
+        <mat-cell *matCellDef="let sample"> {{sample.code}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="project">
         <mat-header-cell *matHeaderCellDef> Project </mat-header-cell>
-        <mat-cell *matCellDef="let measurement"> {{measurement.project}} </mat-cell>
+        <mat-cell *matCellDef="let sample"> {{sample.project}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="created">
         <mat-header-cell *matHeaderCellDef> Created </mat-header-cell>
-        <mat-cell *matCellDef="let measurement"> {{measurement.createdAtUtc | timeAgo}} </mat-cell>
+        <mat-cell *matCellDef="let sample"> {{sample.createdAtUtc | timeAgo}} </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row mat-ripple *matRowDef="let row; columns: displayedColumns;" (click)="selectMeasurement(row);"
-               [class.recent-measurements__row--is-clicked]="row.id === selectedItem?.id"></mat-row>
+      <mat-row mat-ripple *matRowDef="let row; columns: displayedColumns;" (click)="selectSample(row);"
+               [class.recent-samples__row--is-clicked]="row.id === selectedItem?.id"></mat-row>
     </mat-table>
   </div>
 </cdk-virtual-scroll-viewport>

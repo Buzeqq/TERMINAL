@@ -1,4 +1,4 @@
-export interface AddMeasurement {
+export interface AddSample {
   projectId: string;
   recipeId: string | null;
   steps: Step[];

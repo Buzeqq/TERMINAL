@@ -23,18 +23,18 @@ import { ProjectsService } from "../../core/services/projects/projects.service";
 import { TagsService } from "../../core/services/tags/tags.service";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { isNumeric, isText, Parameter, TextParameter } from "../../core/models/parameters/parameter";
-import { AddMeasurement, ParameterValue, Step } from "../../core/models/measurements/addMeasurement";
-import { MeasurementsService } from "../../core/services/measurements/measurements.service";
+import { AddSample, ParameterValue, Step } from "../../core/models/samples/addSample";
+import { SamplesService } from "../../core/services/samples/samples.service";
 import { NotificationService } from "../../core/services/notification/notification.service";
 import { Router } from "@angular/router";
 import { Tag } from "../../core/models/tags/tag";
 
 @Component({
-  selector: 'app-add-measurement',
-  templateUrl: './add-measurement.component.html',
-  styleUrls: ['./add-measurement.component.scss']
+  selector: 'app-add-sample',
+  templateUrl: './add-sample.component.html',
+  styleUrls: ['./add-sample.component.scss']
 })
-export class AddMeasurementComponent implements OnInit {
+export class AddSampleComponent implements OnInit {
   parameters: Parameter[] = [];
   recentProjects$ = this.projectService.getProjects(0, 5);
   filteredProjects$: Observable<Project[]> = new Observable<Project[]>();
@@ -56,7 +56,7 @@ export class AddMeasurementComponent implements OnInit {
   projectInputValue = new BehaviorSubject<string>('');
   recipeChosen$ = new Observable<boolean>();
 
-  measurementForm = this.formBuilder.group({
+  sampleForm = this.formBuilder.group({
     dateTime: [new Date(), [Validators.required]],
     project: ['', [Validators.required]],
     recipe: ['', [Validators.required]],
@@ -66,7 +66,7 @@ export class AddMeasurementComponent implements OnInit {
   });
 
   get parameterControls() {
-    return this.measurementForm.get('steps') as FormArray<FormGroup<Record<string, FormControl>>>;
+    return this.sampleForm.get('steps') as FormArray<FormGroup<Record<string, FormControl>>>;
   }
 
   @ViewChild('tagInput') tagInput?: ElementRef<HTMLInputElement>;
@@ -77,7 +77,7 @@ export class AddMeasurementComponent implements OnInit {
               private readonly projectService: ProjectsService,
               private readonly tagsService: TagsService,
               private readonly formBuilder: FormBuilder,
-              private readonly measurementService: MeasurementsService,
+              private readonly samplesService: SamplesService,
               private readonly notificationService: NotificationService,
               private readonly router: Router) {
   }
@@ -89,11 +89,11 @@ export class AddMeasurementComponent implements OnInit {
       switchMap(phrase => this.searchService.searchProjects(phrase!, 0, 10)),
     );
 
-    this.recipeChosen$ = this.measurementForm.controls.recipe.valueChanges.pipe(
+    this.recipeChosen$ = this.sampleForm.controls.recipe.valueChanges.pipe(
       map(s => s !== 'None')
     );
 
-    this.filteredTags$ = this.measurementForm.controls.tags.valueChanges.pipe(
+    this.filteredTags$ = this.sampleForm.controls.tags.valueChanges.pipe(
       startWith(''),
       debounceTime(500),
       filter(phrase => !!phrase),
@@ -117,7 +117,7 @@ export class AddMeasurementComponent implements OnInit {
       stepsControl.push(firstStep);
     });
 
-    this.measurementForm.controls.recipe.setValue('None');
+    this.sampleForm.controls.recipe.setValue('None');
   }
 
   selectedTag(event: MatAutocompleteSelectedEvent) {
@@ -129,7 +129,7 @@ export class AddMeasurementComponent implements OnInit {
 
     this.chosenTags.next([newTag ,...this.chosenTags.value]);
     this.tagInput!.nativeElement.value = '';
-    this.measurementForm.controls.tags.setValue('');
+    this.sampleForm.controls.tags.setValue('');
   }
 
   removeTag(tagId: string) {
@@ -174,12 +174,12 @@ export class AddMeasurementComponent implements OnInit {
     return (parameter as TextParameter).allowedValues;
   }
 
-  addMeasurement() {
-    let form = {...this.measurementForm.value} as MeasurementForm;
+  addSample() {
+    let form = {...this.sampleForm.value} as SampleForm;
     form.tagIds = this.chosenTags.value.map(t => t.id);
     form.project = this.selectedProject!.id;
     console.log(form.tagIds);
-    const addMeasurement: AddMeasurement = {
+    const addSample: AddSample = {
       projectId: form.project,
       recipeId: null,
       tagIds: form.tagIds,
@@ -187,14 +187,14 @@ export class AddMeasurementComponent implements OnInit {
       steps: form.steps!.map(s => this.mapToStep(s))
     };
 
-    this.measurementService.addMeasurement(addMeasurement).pipe(
+    this.samplesService.addSample(addSample).pipe(
       catchError((err, _) => {
         this.notificationService.notifyError(err);
         return EMPTY;
       })
     ).subscribe(_ => {
-      this.router.navigate(['/measurements'])
-        .then(_ => this.notificationService.notifySuccess('Measurement added!'));
+      this.router.navigate(['/samples'])
+        .then(_ => this.notificationService.notifySuccess('Sample added!'));
     });
   }
   private mapToStep(s: Record<string, string | number | null>): Step {
@@ -222,7 +222,7 @@ export class AddMeasurementComponent implements OnInit {
 
   selectProject(event: MatAutocompleteSelectedEvent) {
     this.selectedProject = event.option.value;
-    this.measurementForm.controls.project.setValue(this.selectedProject!.name);
+    this.sampleForm.controls.project.setValue(this.selectedProject!.name);
   }
 
   private copyStep(formGroup: FormGroup<Record<string, FormControl>>): FormGroup<Record<string, FormControl>> {
@@ -238,7 +238,7 @@ export interface StepTab {
 
 }
 
-export type MeasurementForm =  Partial<{
+export type SampleForm =  Partial<{
   dateTime: Date | null,
   project: string | null,
   recipe: string | null,

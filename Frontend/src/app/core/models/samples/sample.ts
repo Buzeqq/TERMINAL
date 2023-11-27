@@ -1,4 +1,4 @@
-export interface Measurement {
+export interface Sample {
   id: string;
   code: string;
   project: string;

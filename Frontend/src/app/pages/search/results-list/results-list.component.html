@@ -1,5 +1,5 @@
 <section class="search">
-  <app-search [filters]="{ 'measurements': true, 'projects': true, 'recipes': true }"></app-search>
+  <app-search [filters]="{ 'samples': true, 'projects': true, 'recipes': true }"></app-search>
   <section class="search__cards">
     <mat-card class="result-list">
       <mat-card-title class="result-list__header">
@@ -13,7 +13,7 @@
                 [scrollWindow]="false"
                 *ngIf="searchResult$">
           <ng-container *ngFor="let item of searchResult$ | async">
-            <ng-container *ngIf="item.type === 'Measurement'">
+            <ng-container *ngIf="item.type === 'Sample'">
               <mat-list-item (click)="selectItem(item)" class="row">
                 <mat-icon matListItemIcon>science</mat-icon>
                 <div matListItemTitle>{{$any(item.item).code}}</div>

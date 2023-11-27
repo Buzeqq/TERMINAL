@@ -16,24 +16,24 @@ import {SearchService} from "../../../core/services/search/search.service";
 import {ProjectsService} from "../../../core/services/projects/projects.service";
 import {TagsService} from "../../../core/services/tags/tags.service";
 import {FormBuilder, Validators} from "@angular/forms";
-import {MeasurementsService} from "../../../core/services/measurements/measurements.service";
+import {SamplesService} from "../../../core/services/samples/samples.service";
 import {NotificationService} from "../../../core/services/notification/notification.service";
 import {Router} from "@angular/router";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
-import {MeasurementDetails} from "../../../core/models/measurements/measurementDetails";
+import {SampleDetails} from "../../../core/models/samples/sampleDetails";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ProjectDetails} from "../../../core/models/projects/project-details";
 import { Tag } from "../../../core/models/tags/tag";
 
 @Component({
-  selector: 'app-measurement-edit',
-  templateUrl: './measurement-edit.component.html',
-  styleUrls: ['./measurement-edit.component.scss']
+  selector: 'app-sample-edit',
+  templateUrl: './sample-edit.component.html',
+  styleUrls: ['./sample-edit.component.scss']
 })
-export class MeasurementEditComponent implements OnInit {
+export class SampleEditComponent implements OnInit {
   loading: 'determinate' | 'indeterminate' | 'buffer' | 'query' = 'query';
 
-  measurementForm = this.formBuilder.group({
+  sampleForm = this.formBuilder.group({
     project: ['', [Validators.required]],
     recipe: ['', [Validators.required]],
     tags: [''],
@@ -41,8 +41,8 @@ export class MeasurementEditComponent implements OnInit {
     // steps: this.formBuilder.array([]) // TODO
   });
 
-  private _measurementId?: string;
-  measurementDetails$: Observable<MeasurementDetails> = new Observable<MeasurementDetails>();
+  private _sampleId?: string;
+  sampleDetails$: Observable<SampleDetails> = new Observable<SampleDetails>();
 
   projectDetails$: Observable<ProjectDetails> = new Observable<ProjectDetails>();
   projects$: Observable<Project[]> = new Observable<Project[]>();
@@ -63,14 +63,14 @@ export class MeasurementEditComponent implements OnInit {
               private readonly projectService: ProjectsService,
               private readonly tagsService: TagsService,
               private readonly formBuilder: FormBuilder,
-              private readonly measurementService: MeasurementsService,
+              private readonly samplesService: SamplesService,
               private readonly notificationService: NotificationService,
               private readonly router: Router,
               private readonly snackBar: MatSnackBar
   ) {  }
 
   ngOnInit(): void {
-    this.filteredTags$ = this.measurementForm.controls.tags.valueChanges.pipe(
+    this.filteredTags$ = this.sampleForm.controls.tags.valueChanges.pipe(
       startWith(''),
       debounceTime(500),
       filter(phrase => !!phrase),
@@ -81,36 +81,36 @@ export class MeasurementEditComponent implements OnInit {
   }
 
   @Input()
-  get measurementId(): string | undefined {
-    return this._measurementId;
+  get sampleId(): string | undefined {
+    return this._sampleId;
   }
 
-  set measurementId(id: string | undefined) {
-    this.measurementDetails$ = this.measurementService.getMeasurementDetails(id!)
+  set sampleId(id: string | undefined) {
+    this.sampleDetails$ = this.samplesService.getSampleDetails(id!)
       .pipe(
         catchError((err, _) => {
           console.log(err);
-          this.snackBar.open('Failed to load measurement', 'Close', {duration: 3000});
+          this.snackBar.open('Failed to load sample', 'Close', {duration: 3000});
           return EMPTY;
         }),
-        tap(measurement => {
-          this.initForm(measurement);
+        tap(sample => {
+          this.initForm(sample);
           this.loading = 'determinate';
         })
       );
   }
 
-  private initForm(m: MeasurementDetails) {
+  private initForm(m: SampleDetails) {
     // set initial values in form controls
 
     this.projectDetails$ = this.projectService.getProject(m.projectId)
-      .pipe(tap(p => this.measurementForm.controls.project.setValue(p.name)));
+      .pipe(tap(p => this.sampleForm.controls.project.setValue(p.name)));
     this.projects$ = this.projectService.getProjects(0, 30); // TODO get all projects for a dropdown list?
 
-    this.measurementForm.controls.recipe.setValue('None') // TODO
+    this.sampleForm.controls.recipe.setValue('None') // TODO
 
     this.chosenTags.next(m.tags);
-    this.measurementForm.controls.comment.setValue(m.comment);
+    this.sampleForm.controls.comment.setValue(m.comment);
   }
 
   selectedTag(event: MatAutocompleteSelectedEvent) {
@@ -121,7 +121,7 @@ export class MeasurementEditComponent implements OnInit {
 
     this.chosenTags.next([newTag ,...this.chosenTags.value]);
     this.tagInput!.nativeElement.value = '';
-    this.measurementForm.controls.tags.setValue('');
+    this.sampleForm.controls.tags.setValue('');
   }
 
   removeTag(tag: string) {

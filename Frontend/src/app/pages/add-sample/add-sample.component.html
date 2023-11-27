@@ -1,23 +1,23 @@
-<mat-card class="add-measurement">
+<mat-card class="add-sample">
   <mat-card-header>
     <mat-card-title>
       <mat-icon>science</mat-icon>
-      Add measurement
+      Add sample
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <form class="add-measurement__main">
+    <form class="add-sample__main">
       <mat-card>
         <mat-form-field>
           <mat-label>Date</mat-label>
           <mtx-datetimepicker #datetimepicker timeInput="true" touchUi="true" type="datetime"></mtx-datetimepicker>
-          <input [formControl]="measurementForm.controls.dateTime" [mtxDatetimepicker]="datetimepicker" matInput required>
+          <input [formControl]="sampleForm.controls.dateTime" [mtxDatetimepicker]="datetimepicker" matInput required>
           <mtx-datetimepicker-toggle [for]="datetimepicker" matSuffix></mtx-datetimepicker-toggle>
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Project</mat-label>
-          <input #projectInput [formControl]="measurementForm.controls.project" [matAutocomplete]="projectAutocomplete"
+          <input #projectInput [formControl]="sampleForm.controls.project" [matAutocomplete]="projectAutocomplete"
                  matInput placeholder="Choose project" type="text" (keyup)="projectInputValue.next(projectInput.value)" required>
           <mat-autocomplete autoActiveFirstOption #projectAutocomplete requireSelection="true" (optionSelected)="selectProject($event)">
             <ng-container *ngIf="projectInput.value.length > 0">
@@ -35,7 +35,7 @@
 
         <mat-form-field>
           <mat-label>Recipe</mat-label>
-          <input #recipeInput [formControl]="measurementForm.controls.recipe" [matAutocomplete]="recipeAutocomplete"
+          <input #recipeInput [formControl]="sampleForm.controls.recipe" [matAutocomplete]="recipeAutocomplete"
                  matInput placeholder="Choose recipe" type="text">
           <mat-autocomplete autoActiveFirstOption #recipeAutocomplete requireSelection="true">
             <mat-option value="None">
@@ -62,14 +62,14 @@
                 <mat-icon>cancel</mat-icon>
               </button>
             </mat-chip-row>
-            <input #tagInput [matChipInputFor]="chipGrid" matChipInputAddOnBlur="true" [formControl]="measurementForm.controls.tags" [matAutocomplete]="tagAutocomplete">
+            <input #tagInput [matChipInputFor]="chipGrid" matChipInputAddOnBlur="true" [formControl]="sampleForm.controls.tags" [matAutocomplete]="tagAutocomplete">
             <mat-autocomplete #tagAutocomplete (optionSelected)="selectedTag($event)">
               <ng-container *ngIf="tagInput.value.length > 0">
                 <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
                   {{tag.name}}
                 </mat-option>
               </ng-container>
-              <ng-container *ngIf="measurementForm.controls.tags.value === ''">
+              <ng-container *ngIf="sampleForm.controls.tags.value === ''">
                 <mat-option *ngFor="let tag of recentTags$ | async" [value]="tag">
                   {{tag.name}}
                 </mat-option>
@@ -80,7 +80,7 @@
 
         <mat-form-field>
           <mat-label>Comment</mat-label>
-          <textarea [formControl]="measurementForm.controls.comment" matInput></textarea>
+          <textarea [formControl]="sampleForm.controls.comment" matInput></textarea>
         </mat-form-field>
       </mat-card>
       <mat-card>
@@ -93,7 +93,7 @@
             <mat-tab-group>
               <mat-tab *ngFor="let _ of tabs; let tabIndex = index" [label]="getLabel(tabIndex)">
                 <ng-container *ngIf="getGroupForTab(tabIndex) as stepGroup; else loading">
-                  <div class="add-measurement__form">
+                  <div class="add-sample__form">
                     <ng-container *ngFor="let parameterControl of stepGroup | keyvalue">
                       <ng-container [ngSwitch]="getInputTypeOfParameter(parameterControl.key)">
                         <mat-form-field *ngSwitchCase="'text'">
@@ -127,9 +127,9 @@
   </mat-card-content>
   <mat-card-footer>
     <mat-card-actions>
-      <button mat-raised-button [disabled]="!measurementForm.valid" (click)="addMeasurement()">
+      <button mat-raised-button [disabled]="!sampleForm.valid" (click)="addSample()">
         <mat-icon>add</mat-icon>
-        Add measurement
+        Add sample
       </button>
       <mat-checkbox #recipeCheckbox>Save as recipe</mat-checkbox>
       <ng-container *ngIf="recipeCheckbox.checked">

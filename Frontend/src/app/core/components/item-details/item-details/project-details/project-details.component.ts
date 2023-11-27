@@ -4,7 +4,7 @@ import { catchError, EMPTY, map, Observable, tap } from "rxjs";
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Project } from "../../../../models/projects/project";
-import { MeasurementsService } from "../../../../services/measurements/measurements.service";
+import { SamplesService } from "../../../../services/samples/samples.service";
 import { ProjectsService } from "../../../../services/projects/projects.service";
 
 @Component({
@@ -14,7 +14,7 @@ import { ProjectsService } from "../../../../services/projects/projects.service"
 })
 export class ProjectDetailsComponent extends ItemDetailsComponent {
   private _projectId?: string;
-  numberOfMeasurements?: number;
+  numberOfSamples?: number;
   projectDetails$: Observable<Project> = new Observable<Project>();
 
   constructor(
@@ -43,7 +43,7 @@ export class ProjectDetailsComponent extends ItemDetailsComponent {
           return EMPTY;
         }),
         tap(r => {
-          this.numberOfMeasurements = r.measurementsIds.length;
+          this.numberOfSamples = r.samplesIds.length;
           this.loading = 'determinate';
         })
       );
