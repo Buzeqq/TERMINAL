@@ -6,18 +6,18 @@ using Terminal.Backend.Core.Entities;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 
-internal sealed class GetMeasurementsQueryHandler : IRequestHandler<GetSamplesQuery, GetSamplesDto>
+internal sealed class GetSamplesQueryHandler : IRequestHandler<GetSamplesQuery, GetSamplesDto>
 {
-    private readonly DbSet<Sample> _measurements;
+    private readonly DbSet<Sample> _samples;
 
-    public GetMeasurementsQueryHandler(TerminalDbContext dbContext)
+    public GetSamplesQueryHandler(TerminalDbContext dbContext)
     {
-        _measurements = dbContext.Measurements;
+        _samples = dbContext.Samples;
     }
     
     public async Task<GetSamplesDto> Handle(GetSamplesQuery request, CancellationToken ct)
     {
-        var measurements = await _measurements
+        var samples = await _samples
             .AsNoTracking()
             .OrderByDescending(m => m.CreatedAtUtc)
             .Include(m => m.Project)
@@ -27,6 +27,6 @@ internal sealed class GetMeasurementsQueryHandler : IRequestHandler<GetSamplesQu
                 m.Id, m.Code.Value, m.Project.Name, m.CreatedAtUtc.ToString("o"), m.Comment))
             .ToListAsync(ct);
 
-        return new GetSamplesDto { Samples = measurements };
+        return new GetSamplesDto { Samples = samples };
     }
 }

@@ -6,19 +6,19 @@ using Terminal.Backend.Core.Entities;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 
-internal sealed class SearchMeasurementQueryHandler : IRequestHandler<SearchSampleQuery, GetSamplesDto>
+internal sealed class SearchSampleQueryHandler : IRequestHandler<SearchSampleQuery, GetSamplesDto>
 {
-    private readonly DbSet<Sample> _measurements;
+    private readonly DbSet<Sample> _samples;
 
-    public SearchMeasurementQueryHandler(TerminalDbContext dbContext)
+    public SearchSampleQueryHandler(TerminalDbContext dbContext)
     {
-        _measurements = dbContext.Measurements;
+        _samples = dbContext.Samples;
     }
 
     public async Task<GetSamplesDto> Handle(SearchSampleQuery request, CancellationToken ct)
         => new()
         {
-            Samples = await _measurements
+            Samples = await _samples
                 .AsNoTracking()
                 .Include(m => m.Project)
                 .Where(m => 

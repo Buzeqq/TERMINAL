@@ -6,21 +6,21 @@ using Terminal.Backend.Core.Entities;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 
-internal sealed class GetRecentMeasurementsQueryHandler : 
+internal sealed class GetRecentSamplesQueryHandler : 
     IRequestHandler<GetRecentSamplesQuery, GetRecentSamplesDto>
 {
-    private readonly DbSet<Sample> _measurements;
+    private readonly DbSet<Sample> _samples;
 
-    public GetRecentMeasurementsQueryHandler(TerminalDbContext dbContext)
+    public GetRecentSamplesQueryHandler(TerminalDbContext dbContext)
     {
-        _measurements = dbContext.Measurements;
+        _samples = dbContext.Samples;
     }
 
     public async Task<GetRecentSamplesDto> Handle(GetRecentSamplesQuery request,
         CancellationToken cancellationToken)
         => new()
         {
-            RecentSamples = await _measurements
+            RecentSamples = await _samples
                 .OrderByDescending(m => m.CreatedAtUtc)
                 .Take(request.Length)
                 .Select(m => new GetSamplesDto.SampleDto(m.Id, m.Code.Value, m.Project.Name, m.CreatedAtUtc.ToString("o"), m.Comment))

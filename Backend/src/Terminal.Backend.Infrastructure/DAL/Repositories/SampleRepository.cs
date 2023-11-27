@@ -6,13 +6,13 @@ namespace Terminal.Backend.Infrastructure.DAL.Repositories;
 
 internal sealed class SampleRepository : ISampleRepository
 {
-    private readonly DbSet<Sample> _measurements;
+    private readonly DbSet<Sample> _samples;
 
     public SampleRepository(TerminalDbContext dbContext)
     {
-        _measurements = dbContext.Measurements;
+        _samples = dbContext.Samples;
     }
 
     public async Task AddAsync(Sample sample, CancellationToken ct)
-        => await _measurements.AddAsync(sample, ct);
+        => await _samples.AddAsync(sample, ct);
 }

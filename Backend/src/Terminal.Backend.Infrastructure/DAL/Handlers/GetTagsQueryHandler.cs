@@ -10,17 +10,17 @@ internal sealed class GetTagsQueryHandler :
     // IRequestHandler<GetMostPopularTagsQuery, GetTagsDto>,
     IRequestHandler<GetTagsQuery, GetTagsDto>
 {
-    private readonly DbSet<Sample> _measurements;
+    private readonly DbSet<Sample> _samples;
     private readonly DbSet<Tag> _tags;
 
     public GetTagsQueryHandler(TerminalDbContext dbContext)
     {
-        _measurements = dbContext.Measurements;
+        _samples = dbContext.Samples;
         _tags = dbContext.Tags;
     }
     
     // public async Task<GetTagsDto> Handle(GetMostPopularTagsQuery query, CancellationToken ct)
-    //     => (await _measurements
+    //     => (await _samples
     //         .AsNoTracking()
     //         .SelectMany(m => m.Tags)
     //         .GroupBy(t => t)

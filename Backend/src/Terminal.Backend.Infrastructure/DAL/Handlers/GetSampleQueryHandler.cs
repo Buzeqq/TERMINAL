@@ -4,17 +4,17 @@ using Terminal.Backend.Application.DTO;
 using Terminal.Backend.Application.Queries.Samples.Get;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers;
-internal class GetMeasurementQueryHandler : IRequestHandler<GetSampleQuery, GetSampleDto?>
+internal class GetSampleQueryHandler : IRequestHandler<GetSampleQuery, GetSampleDto?>
 {
     private readonly TerminalDbContext _dbContext;
-    public GetMeasurementQueryHandler(TerminalDbContext dbContext)
+    public GetSampleQueryHandler(TerminalDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
     public async Task<GetSampleDto?> Handle(GetSampleQuery request, CancellationToken ct)
     {
-        var measurement = await _dbContext.Measurements
+        var sample = await _dbContext.Samples
             .AsNoTracking()
             .Include(m => m.Project)
             .Include(m => m.Recipe)
@@ -30,15 +30,15 @@ internal class GetMeasurementQueryHandler : IRequestHandler<GetSampleQuery, GetS
                 RecipeId = m.Recipe!.Id
             })
             .SingleOrDefaultAsync(m => m.Id == request.Id, ct);
-        if (measurement is null) return measurement;
+        if (sample is null) return sample;
         
-        var tags = await _dbContext.Measurements
+        var tags = await _dbContext.Samples
             .AsNoTracking()
             .Where(m => m.Id.Equals(request.Id))
             .SelectMany(m => m.Tags)
             .Select(t => t.Name)
             .ToListAsync(ct);
-        var steps = await _dbContext.Measurements
+        var steps = await _dbContext.Samples
             .AsNoTracking()
             .Where(m => m.Id.Equals(request.Id))
             .SelectMany(m => m.Steps)
@@ -46,8 +46,8 @@ internal class GetMeasurementQueryHandler : IRequestHandler<GetSampleQuery, GetS
             .ThenInclude(p => p.Parameter)
             .ToListAsync(ct);
         
-        measurement.Tags = tags.Select(t => t.Value);
-        measurement.Steps = steps.AsStepsDto();
-        return measurement;
+        sample.Tags = tags.Select(t => t.Value);
+        sample.Steps = steps.AsStepsDto();
+        return sample;
     }
 }

@@ -20,7 +20,7 @@ public static class Extensions
             Id = entity.Id,
             Name = entity.Name,
             IsActive = entity.IsActive,
-            MeasurementsIds = entity.Measurements.Select(m => m.Id.Value)
+            SamplesIds = entity.Samples.Select(m => m.Id.Value)
         };
 
     public static GetTagsDto AsGetTagsDto(this IEnumerable<Tag> entities)
@@ -37,7 +37,7 @@ public static class Extensions
             IsActive = entity.IsActive
         };
     
-    // public static GetMeasurementDto AsGetMeasurementDto(this Measurement entity)
+    // public static GetSampleDto AsGetSampleDto(this Sample entity)
     //     => new()
     //     {
     //         Id = entity.Id,
