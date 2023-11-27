@@ -22,7 +22,7 @@ public sealed record SampleCode
         
         if (!isValid)
         {
-            throw new InvalidMeasurementCodeException(code);
+            throw new InvalidSampleCodeException(code);
         }
 
         Number = number;
