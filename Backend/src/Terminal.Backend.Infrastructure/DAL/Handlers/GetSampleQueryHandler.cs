@@ -20,17 +20,17 @@ internal class GetSampleQueryHandler : IRequestHandler<GetSampleQuery, GetSample
             .Include(s => s.Recipe)
             .Include(s => s.Steps) // FIXME
             .Include(s => s.Tags) // FIXME
-            .Select(s => new GetSampleDto
-            {
-                Code = s.Code.Value,
-                Comment = s.Comment,
-                CreatedAtUtc = s.CreatedAtUtc.ToString("o"),
-                Id = s.Id,
-                ProjectId = s.Project.Id,
-                RecipeId = s.Recipe!.Id
-            })
-            .SingleOrDefaultAsync(s => s.Id == request.Id, ct);
-        if (sample is null) return sample;
+            .SingleOrDefaultAsync(s => s.Id.Equals(request.Id), ct);
+        if (sample is null) return null;
+
+        GetRecipeDto? recipeDto = null;
+        if (sample is { Recipe: not null })
+        {
+            recipeDto = sample.Recipe.AsDto();
+        }
+
+        var dto = new GetSampleDto(sample.Id, sample.Code, recipeDto, sample.CreatedAtUtc.ToString("o"), sample.Comment,
+            sample.Project.Id, sample.Steps.AsStepsDto(), sample.Tags.Select(t => t.Name.Value));
         
         var tags = await _dbContext.Samples
             .AsNoTracking()
@@ -46,8 +46,8 @@ internal class GetSampleQueryHandler : IRequestHandler<GetSampleQuery, GetSample
             .ThenInclude(p => p.Parameter)
             .ToListAsync(ct);
         
-        sample.Tags = tags.Select(t => t.Value);
-        sample.Steps = steps.AsStepsDto();
-        return sample;
+        dto.Tags = tags.Select(t => t.Value);
+        dto.Steps = steps.AsStepsDto();
+        return dto;
     }
 }

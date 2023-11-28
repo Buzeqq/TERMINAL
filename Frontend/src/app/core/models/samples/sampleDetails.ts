@@ -1,9 +1,10 @@
 import { Step } from "../steps/step";
+import { Recipe } from "../recipes/Recipe";
 
 export interface SampleDetails {
   id: string;
   code: string;
-  recipeId: string | null;
+  recipe: Recipe | null;
   createdAtUtc: Date;
   comment: string | null;
   projectId: string;

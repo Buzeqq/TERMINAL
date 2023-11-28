@@ -57,7 +57,7 @@ export class SampleDetailsComponent extends ItemDetailsComponent {
   }
 
   hasRecipe(detail: SampleDetails): boolean{
-    return detail.recipeId !== null;
+    return detail.recipe !== null;
   }
 
   export(details: SampleDetails) {

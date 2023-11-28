@@ -100,13 +100,5 @@ public static class Extensions
     public static IQueryable<T> Paginate<T>(this IQueryable<T> queryable, PagingParameters parameters)
         => queryable.Skip(parameters.PageNumber * parameters.PageSize).Take(parameters.PageSize);
 
-    public static GetRecipeDto AsDto(this Recipe recipe)
-    {
-        return new GetRecipeDto
-        {
-            Id = recipe.Id,
-            Name = recipe.RecipeName,
-            Steps = recipe.Steps.AsStepsDto()
-        };
-    }
+    public static GetRecipeDto AsDto(this Recipe recipe) => new(recipe.Id, recipe.RecipeName);
 }
