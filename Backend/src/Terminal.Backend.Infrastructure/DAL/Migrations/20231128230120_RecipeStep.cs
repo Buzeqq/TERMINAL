@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Terminal.Backend.Infrastructure.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class SampleMigration : Migration
+    public partial class RecipeStep : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -95,6 +95,48 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ParameterValues",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ParameterName = table.Column<Guid>(type: "uuid", nullable: false),
+                    Discriminator = table.Column<string>(type: "text", nullable: false),
+                    StepId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DecimalParameterValue_Value = table.Column<decimal>(type: "numeric", nullable: true),
+                    IntegerParameterValue_Value = table.Column<int>(type: "integer", nullable: true),
+                    TextParameterValue_Value = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ParameterValues", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ParameterValues_Parameters_ParameterName",
+                        column: x => x.ParameterName,
+                        principalTable: "Parameters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RecipeSteps",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Comment = table.Column<string>(type: "text", nullable: false),
+                    RecipeId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeSteps", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RecipeSteps_Recipes_RecipeId",
+                        column: x => x.RecipeId,
+                        principalTable: "Recipes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Samples",
                 columns: table => new
                 {
@@ -167,6 +209,25 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SampleSteps",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Comment = table.Column<string>(type: "text", nullable: false),
+                    SampleId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SampleSteps", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SampleSteps_Samples_SampleId",
+                        column: x => x.SampleId,
+                        principalTable: "Samples",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SampleTag",
                 columns: table => new
                 {
@@ -191,31 +252,6 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Steps",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Comment = table.Column<string>(type: "text", nullable: false),
-                    RecipeId = table.Column<Guid>(type: "uuid", nullable: true),
-                    SampleId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Steps", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Steps_Recipes_RecipeId",
-                        column: x => x.RecipeId,
-                        principalTable: "Recipes",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Steps_Samples_SampleId",
-                        column: x => x.SampleId,
-                        principalTable: "Samples",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Invitations",
                 columns: table => new
                 {
@@ -231,35 +267,6 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                         name: "FK_Invitations_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ParameterValues",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ParameterName = table.Column<Guid>(type: "uuid", nullable: false),
-                    Discriminator = table.Column<string>(type: "text", nullable: false),
-                    StepId = table.Column<Guid>(type: "uuid", nullable: false),
-                    DecimalParameterValue_Value = table.Column<decimal>(type: "numeric", nullable: true),
-                    IntegerParameterValue_Value = table.Column<int>(type: "integer", nullable: true),
-                    TextParameterValue_Value = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ParameterValues", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ParameterValues_Parameters_ParameterName",
-                        column: x => x.ParameterName,
-                        principalTable: "Parameters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ParameterValues_Steps_StepId",
-                        column: x => x.StepId,
-                        principalTable: "Steps",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -411,6 +418,11 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                 .Annotation("Npgsql:TsVectorConfig", "english");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RecipeSteps_RecipeId",
+                table: "RecipeSteps",
+                column: "RecipeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RolePermission_RoleId",
                 table: "RolePermission",
                 column: "RoleId");
@@ -433,19 +445,14 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                 column: "RecipeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SampleSteps_SampleId",
+                table: "SampleSteps",
+                column: "SampleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SampleTag_TagsId",
                 table: "SampleTag",
                 column: "TagsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Steps_RecipeId",
-                table: "Steps",
-                column: "RecipeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Steps_SampleId",
-                table: "Steps",
-                column: "SampleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tags_Name",
@@ -475,7 +482,13 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                 name: "ParameterValues");
 
             migrationBuilder.DropTable(
+                name: "RecipeSteps");
+
+            migrationBuilder.DropTable(
                 name: "RolePermission");
+
+            migrationBuilder.DropTable(
+                name: "SampleSteps");
 
             migrationBuilder.DropTable(
                 name: "SampleTag");
@@ -487,19 +500,16 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                 name: "Parameters");
 
             migrationBuilder.DropTable(
-                name: "Steps");
+                name: "Permissions");
 
             migrationBuilder.DropTable(
-                name: "Permissions");
+                name: "Samples");
 
             migrationBuilder.DropTable(
                 name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "Roles");
-
-            migrationBuilder.DropTable(
-                name: "Samples");
 
             migrationBuilder.DropTable(
                 name: "Projects");

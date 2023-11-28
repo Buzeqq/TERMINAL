@@ -7,7 +7,7 @@ public sealed class Recipe
     public RecipeId Id { get; private set; }
     public RecipeName RecipeName { get; private set; }
     
-    public ICollection<Step> Steps { get; private set; } = new List<Step>();
+    public ICollection<RecipeStep> Steps { get; private set; } = new List<RecipeStep>();
 
     public Recipe(RecipeId id, RecipeName recipeName)
     {
@@ -15,8 +15,9 @@ public sealed class Recipe
         RecipeName = recipeName;
     }
 
-    public void AddStep(Step step)
+    public void AddStep(RecipeStep step)
     {
         Steps.Add(step);
+        step.Recipe = this;
     }
 }

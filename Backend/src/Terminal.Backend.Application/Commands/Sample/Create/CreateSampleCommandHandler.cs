@@ -40,7 +40,8 @@ internal sealed class CreateSampleCommandHandler : IRequestHandler<CreateSampleC
             recipe = new Recipe(RecipeId.Create(), recipeName);
             foreach (var step in steps)
             {
-                recipe.Steps.Add(step);
+                // assigns new id
+                recipe.Steps.Add(AsRecipeStep(step, recipe));
             }
             await _recipeRepository.AddAsync(recipe, ct);
         }
@@ -59,5 +60,12 @@ internal sealed class CreateSampleCommandHandler : IRequestHandler<CreateSampleC
             tags.ToList());
         project.Samples.Add(sample);
         await _sampleRepository.AddAsync(sample, ct);
+    }
+    
+    private static RecipeStep AsRecipeStep(Step step, Recipe recipe)
+    {
+        var recipeStep = new RecipeStep(StepId.Create(), step.Comment, step.Parameters, recipe);
+        recipe.AddStep(recipeStep);
+        return recipeStep;
     }
 }

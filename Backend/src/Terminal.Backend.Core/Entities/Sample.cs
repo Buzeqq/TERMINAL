@@ -11,10 +11,10 @@ public sealed class Sample
     
     public Project Project { get; private set; }
     public Recipe? Recipe { get; private set; }
-    public ICollection<Step> Steps { get; private set; } = new List<Step>();
+    public ICollection<SampleStep> Steps { get; private set; } = new List<SampleStep>();
     public ICollection<Tag> Tags { get; private set; } = new List<Tag>();
 
-    public Sample(SampleId id, Project project, Recipe? recipe, Comment comment, ICollection<Step> steps, ICollection<Tag> tags)
+    public Sample(SampleId id, Project project, Recipe? recipe, Comment comment, ICollection<SampleStep> steps, ICollection<Tag> tags)
     {
         Id = id;
         Recipe = recipe;

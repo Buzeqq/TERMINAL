@@ -21,10 +21,10 @@ internal sealed class ConvertDtoService : IConvertDtoService
         _tagRepository = tagRepository;
     }
 
-    public async Task<IEnumerable<Step>> ConvertAsync(IEnumerable<CreateSampleStepDto> stepsDto,
+    public async Task<IEnumerable<SampleStep>> ConvertAsync(IEnumerable<CreateSampleStepDto> stepsDto,
         CancellationToken ct)
     {
-        var steps = new List<Step>();
+        var steps = new List<SampleStep>();
         foreach (var stepDto in stepsDto)
         {
             var parameters = new List<ParameterValue>();
@@ -48,7 +48,7 @@ internal sealed class ConvertDtoService : IConvertDtoService
                 parameters.Add(parameter);
             }
             
-            steps.Add(new Step(StepId.Create(), new Comment(stepDto.Comment), parameters));
+            steps.Add(new SampleStep(StepId.Create(), new Comment(stepDto.Comment), parameters));
         }
         
         return steps;

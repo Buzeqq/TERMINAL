@@ -16,32 +16,32 @@ internal class GetSampleQueryHandler : IRequestHandler<GetSampleQuery, GetSample
     {
         var sample = await _dbContext.Samples
             .AsNoTracking()
-            .Include(m => m.Project)
-            .Include(m => m.Recipe)
-            // FIXME: .Include(m => m.Steps)
-            // FIXME: .Include(m => m.Tags)
-            .Select(m => new GetSampleDto
+            .Include(s => s.Project)
+            .Include(s => s.Recipe)
+            .Include(s => s.Steps) // FIXME
+            .Include(s => s.Tags) // FIXME
+            .Select(s => new GetSampleDto
             {
-                Code = m.Code.Value,
-                Comment = m.Comment,
-                CreatedAtUtc = m.CreatedAtUtc.ToString("o"),
-                Id = m.Id,
-                ProjectId = m.Project.Id,
-                RecipeId = m.Recipe!.Id
+                Code = s.Code.Value,
+                Comment = s.Comment,
+                CreatedAtUtc = s.CreatedAtUtc.ToString("o"),
+                Id = s.Id,
+                ProjectId = s.Project.Id,
+                RecipeId = s.Recipe!.Id
             })
-            .SingleOrDefaultAsync(m => m.Id == request.Id, ct);
+            .SingleOrDefaultAsync(s => s.Id == request.Id, ct);
         if (sample is null) return sample;
         
         var tags = await _dbContext.Samples
             .AsNoTracking()
-            .Where(m => m.Id.Equals(request.Id))
-            .SelectMany(m => m.Tags)
+            .Where(s => s.Id.Equals(request.Id))
+            .SelectMany(s => s.Tags)
             .Select(t => t.Name)
             .ToListAsync(ct);
         var steps = await _dbContext.Samples
             .AsNoTracking()
-            .Where(m => m.Id.Equals(request.Id))
-            .SelectMany(m => m.Steps)
+            .Where(s => s.Id.Equals(request.Id))
+            .SelectMany(s => s.Steps)
             .Include(s => s.Parameters)
             .ThenInclude(p => p.Parameter)
             .ToListAsync(ct);

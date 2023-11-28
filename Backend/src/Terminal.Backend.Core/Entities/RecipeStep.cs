@@ -3,11 +3,23 @@ using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Core.Entities;
 
-public class RecipeStep : Step
+public sealed class RecipeStep : Step
 {
-    public Recipe? Recipe { get; private set; }
+    public Recipe Recipe { get; set; }
+
+    public RecipeStep(StepId id, Comment comment, Recipe recipe) : base(id, comment)
+    {
+        Recipe = recipe;
+    }
+
+    public RecipeStep(StepId id, Comment comment, ICollection<ParameterValue> parameters, Recipe recipe) : base(id,
+        comment, parameters)
+    {
+        Recipe = recipe;
+    }
     
-    public RecipeStep(StepId id, Comment comment, ICollection<ParameterValue> parameters) : base(id, comment, parameters)
+
+    private RecipeStep(StepId id, Comment comment) : base(id, comment)
     {
     }
 }

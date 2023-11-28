@@ -13,8 +13,8 @@ using Terminal.Backend.Infrastructure.DAL;
 namespace Terminal.Backend.Infrastructure.DAL.Migrations
 {
     [DbContext(typeof(TerminalDbContext))]
-    [Migration("20231127123303_SampleMigration")]
-    partial class SampleMigration
+    [Migration("20231128230120_RecipeStep")]
+    partial class RecipeStep
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -733,19 +733,11 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("RecipeId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("SampleId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("RecipeId");
+                    b.ToTable((string)null);
 
-                    b.HasIndex("SampleId");
-
-                    b.ToTable("Steps");
+                    b.UseTpcMappingStrategy();
                 });
 
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Tag", b =>
@@ -855,6 +847,30 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                     b.HasDiscriminator().HasValue("TextParameter");
                 });
 
+            modelBuilder.Entity("Terminal.Backend.Core.Entities.RecipeStep", b =>
+                {
+                    b.HasBaseType("Terminal.Backend.Core.Entities.Step");
+
+                    b.Property<Guid>("RecipeId")
+                        .HasColumnType("uuid");
+
+                    b.HasIndex("RecipeId");
+
+                    b.ToTable("RecipeSteps");
+                });
+
+            modelBuilder.Entity("Terminal.Backend.Core.Entities.SampleStep", b =>
+                {
+                    b.HasBaseType("Terminal.Backend.Core.Entities.Step");
+
+                    b.Property<Guid>("SampleId")
+                        .HasColumnType("uuid");
+
+                    b.HasIndex("SampleId");
+
+                    b.ToTable("SampleSteps");
+                });
+
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Parameters.DecimalParameter", b =>
                 {
                     b.HasBaseType("Terminal.Backend.Core.Entities.Parameters.NumericParameter");
@@ -952,21 +968,6 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                     b.Navigation("Recipe");
                 });
 
-            modelBuilder.Entity("Terminal.Backend.Core.Entities.Step", b =>
-                {
-                    b.HasOne("Terminal.Backend.Core.Entities.Recipe", "Recipe")
-                        .WithMany("Steps")
-                        .HasForeignKey("RecipeId");
-
-                    b.HasOne("Terminal.Backend.Core.Entities.Sample", null)
-                        .WithMany("Steps")
-                        .HasForeignKey("SampleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Recipe");
-                });
-
             modelBuilder.Entity("Terminal.Backend.Core.Entities.User", b =>
                 {
                     b.HasOne("Terminal.Backend.Core.Entities.Role", "Role")
@@ -976,6 +977,26 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Terminal.Backend.Core.Entities.RecipeStep", b =>
+                {
+                    b.HasOne("Terminal.Backend.Core.Entities.Recipe", "Recipe")
+                        .WithMany("Steps")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Recipe");
+                });
+
+            modelBuilder.Entity("Terminal.Backend.Core.Entities.SampleStep", b =>
+                {
+                    b.HasOne("Terminal.Backend.Core.Entities.Sample", null)
+                        .WithMany("Steps")
+                        .HasForeignKey("SampleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Project", b =>

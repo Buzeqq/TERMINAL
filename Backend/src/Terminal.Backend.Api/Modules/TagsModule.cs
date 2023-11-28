@@ -2,7 +2,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Application.Commands.Tag.ChangeStatus;
 using Terminal.Backend.Application.Commands.Tag.Create;
-using Terminal.Backend.Application.Queries;
 using Terminal.Backend.Application.Queries.Tags.Get;
 using Terminal.Backend.Application.Queries.Tags.Search;
 using Terminal.Backend.Core.Enums;

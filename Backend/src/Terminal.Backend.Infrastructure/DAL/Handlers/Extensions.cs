@@ -50,7 +50,21 @@ public static class Extensions
     //         Tags = entity.Tags.Select(t => t.Name.Value)
     //     };
 
-    public static IEnumerable<GetSampleStepsDto> AsStepsDto(this IEnumerable<Step> steps)
+    public static IEnumerable<GetSampleStepsDto> AsStepsDto(this IEnumerable<SampleStep> steps)
+        => steps.Select(s => new GetSampleStepsDto(
+            s.Parameters.Select(p =>
+            {
+                GetSampleBaseParameterValueDto b = p switch
+                {
+                    DecimalParameterValue d => new GetSampleDecimalParameterValueDto(d.Parameter.Name, d.Value, (d.Parameter as DecimalParameter)!.Unit),
+                    IntegerParameterValue i => new GetSampleIntegerParameterValueDto(i.Parameter.Name, i.Value, (i.Parameter as IntegerParameter)!.Unit),
+                    TextParameterValue t => new GetSampleTextParameterValueDto(t.Parameter.Name, t.Value),
+                    _ => throw new ArgumentOutOfRangeException(nameof(p))
+                };
+                return b;
+            }), s.Comment));
+    
+    public static IEnumerable<GetSampleStepsDto> AsStepsDto(this IEnumerable<RecipeStep> steps)
         => steps.Select(s => new GetSampleStepsDto(
             s.Parameters.Select(p =>
             {

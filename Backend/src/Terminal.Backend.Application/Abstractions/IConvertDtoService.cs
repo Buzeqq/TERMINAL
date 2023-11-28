@@ -6,6 +6,6 @@ namespace Terminal.Backend.Application.Abstractions;
 
 internal interface IConvertDtoService
 {
-    Task<IEnumerable<Step>> ConvertAsync(IEnumerable<CreateSampleStepDto> stepsDto, CancellationToken ct);
+    Task<IEnumerable<SampleStep>> ConvertAsync(IEnumerable<CreateSampleStepDto> stepsDto, CancellationToken ct);
     Task<IEnumerable<Tag>> ConvertAsync(IEnumerable<TagId> tagIds, CancellationToken ct);
 }
