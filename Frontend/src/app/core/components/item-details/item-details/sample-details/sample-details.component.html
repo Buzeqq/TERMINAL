@@ -42,15 +42,17 @@
                 <mat-cell *matCellDef="let parameter">{{parameter.unit}}</mat-cell>
               </ng-container>
 
-              <ng-container matColumnDef="$type">
-                <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
-                <mat-cell *matCellDef="let parameter">{{parameter.$type}}</mat-cell>
-              </ng-container>
-
-              <mat-header-row *matHeaderRowDef="['name', 'value', 'unit', '$type']"></mat-header-row>
-              <mat-row *matRowDef="let row; columns: ['name', 'value', 'unit', '$type']"></mat-row>
+              <mat-header-row *matHeaderRowDef="['name', 'value', 'unit']"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: ['name', 'value', 'unit']"></mat-row>
             </mat-table>
           </mat-card-content>
+          <mat-card-footer>
+            <article class="sample-details">
+              <div class="sample-details__label">Comment:</div>
+              <div>{{step.comment}}</div>
+            </article>
+          </mat-card-footer>
+          <mat-divider></mat-divider>
         </mat-card>
       </mat-card-content>
     </mat-card>
