@@ -19,10 +19,6 @@ internal sealed class RecipeConfiguration : IEntityTypeConfiguration<Recipe>
             .HasConversion(n => n.Name,
                 n => new RecipeName(n));
 
-        builder.HasMany(r => r.Steps)
-            .WithOne(s => s.Recipe)
-            .IsRequired(false);
-
         // search index
         builder.HasIndex(r => r.RecipeName)
             .HasMethod("GIN")

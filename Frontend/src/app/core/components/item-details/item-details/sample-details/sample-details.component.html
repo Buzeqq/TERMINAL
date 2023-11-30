@@ -10,6 +10,10 @@
           <mat-chip *ngFor="let tag of details.tags">{{tag}}</mat-chip>
         </mat-chip-set>
       </div>
+      <ng-container *ngIf="details.recipe as recipe">
+        <div class="sample-details__label">Recipe: </div>
+        <div>{{recipe.name}}</div>
+      </ng-container>
       <div class="sample-details__label">Comment:</div>
       <div>{{details.comment}}</div>
       <div class="sample-details__label">Number of steps:</div>
@@ -68,7 +72,7 @@
       <mat-icon>arrow_forward</mat-icon>
       Show steps
     </button>
-    <button mat-button color="primary" *ngIf="hasRecipe(details)"> [routerLink]="['/recipes', details.recipeId]"
+    <button mat-button color="primary" *ngIf="hasRecipe(details)" [routerLink]="['/recipes', details.recipe?.id]">
       <mat-icon>arrow_forward</mat-icon>
       Show recipe
     </button>

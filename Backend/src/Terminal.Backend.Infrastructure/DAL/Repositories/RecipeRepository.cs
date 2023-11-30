@@ -16,4 +16,9 @@ internal sealed class RecipeRepository : IRecipeRepository
 
     public Task<Recipe?> GetAsync(RecipeId recipeId, CancellationToken ct)
         => _recipes.SingleOrDefaultAsync(r => r.Id == recipeId, ct);
+
+    public async Task AddAsync(Recipe recipe, CancellationToken ct)
+    {
+        await _recipes.AddAsync(recipe, ct);
+    }
 }

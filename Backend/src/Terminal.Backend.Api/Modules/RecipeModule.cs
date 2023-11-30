@@ -1,5 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Terminal.Backend.Application.Queries.QueryParameters;
+using Terminal.Backend.Application.Queries.Recipes.Get;
 using Terminal.Backend.Application.Queries.Recipes.Search;
 using Terminal.Backend.Core.Enums;
 
@@ -9,9 +11,47 @@ public static class RecipeModule
 {
     public static void UseRecipesEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("api/recipe/search", async ([FromQuery] string searchPhrase, ISender sender, CancellationToken ct) =>
+        app.MapGet("api/recipes/search", async ([FromQuery] string searchPhrase, ISender sender, CancellationToken ct) =>
         {
             var query = new SearchRecipeQuery(searchPhrase);
+            var recipes = await sender.Send(query, ct);
+
+            return Results.Ok(recipes);
+        }).RequireAuthorization(Permission.RecipeRead.ToString());
+
+        app.MapGet("api/recipes/{name}", async (string name, ISender sender, CancellationToken ct) =>
+        {
+            var query = new GetRecipeQuery(name);
+
+            var recipe = await sender.Send(query, ct);
+
+            return recipe is null ? Results.NotFound() : Results.Ok(recipe);
+        }).RequireAuthorization(Permission.RecipeRead.ToString());
+
+        app.MapGet("api/recipes/{id:guid}/details", async (
+            Guid id, 
+            ISender sender,
+            CancellationToken ct) =>
+        {
+            var query = new GetRecipeDetailsQuery(id);
+
+            var recipeDetails = await sender.Send(query, ct);
+
+            return recipeDetails is null ? Results.NotFound() : Results.Ok(recipeDetails);
+        }).RequireAuthorization(Permission.RecipeRead.ToString());
+        
+        app.MapGet("api/recipes", async (
+            [FromQuery] int pageSize, 
+            [FromQuery] int pageNumber, 
+            ISender sender, 
+            CancellationToken ct) =>
+        {
+            var query = new GetRecipesQuery(new PagingParameters
+            {
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            });
+
             var recipes = await sender.Send(query, ct);
 
             return Results.Ok(recipes);

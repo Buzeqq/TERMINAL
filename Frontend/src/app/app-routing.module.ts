@@ -20,6 +20,7 @@ const routes: Routes = [
   {path: 'projects', component: ItemViewsComponent, data: {type: 'Project'}},
   {path: 'projects/:id', component: ItemDetailsComponent, data: {type: 'Project'}},
   {path: 'add-sample', component: AddSampleComponent},
+  {path: 'recipes', component: ItemViewsComponent, data: {type: 'Recipe'}},
   {path: 'settings', component: SettingsComponent},
 
   // must be the last

@@ -6,5 +6,6 @@
   <ng-container [ngSwitch]="item?.type">
     <app-sample-details *ngSwitchCase="'Sample'" [sampleId]="item?.id"></app-sample-details>
     <app-project-details *ngSwitchCase="'Project'" [projectId]="item?.id"></app-project-details>
+    <app-recipe-details *ngSwitchCase="'Recipe'" [recipeId]="item?.id"></app-recipe-details>
   </ng-container>
 </mat-card>

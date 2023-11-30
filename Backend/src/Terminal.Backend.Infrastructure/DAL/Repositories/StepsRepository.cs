@@ -14,9 +14,9 @@ internal sealed class StepsRepository : IStepsRepository
         _recipes = dbContext.Recipes;
     }
 
-    public async Task<IEnumerable<Step>> GetFromRecipeAsync(RecipeId id, CancellationToken ct)
+    public async Task<IEnumerable<RecipeStep>> GetFromRecipeAsync(RecipeId id, CancellationToken ct)
         => (await _recipes
             .Include(r => r.Steps)
-            .SingleOrDefaultAsync(r => r.Id == id, ct))?.Steps ?? new List<Step>();
+            .SingleOrDefaultAsync(r => r.Id == id, ct))?.Steps ?? new List<RecipeStep>();
 
 }

@@ -1,4 +1,9 @@
-using Terminal.Backend.Application.DTO;
+using Terminal.Backend.Application.DTO.Parameters;
+using Terminal.Backend.Application.DTO.ParameterValues;
+using Terminal.Backend.Application.DTO.Projects;
+using Terminal.Backend.Application.DTO.Recipes;
+using Terminal.Backend.Application.DTO.Samples;
+using Terminal.Backend.Application.DTO.Tags;
 using Terminal.Backend.Application.Queries.QueryParameters;
 using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.Entities.Parameters;
@@ -28,14 +33,9 @@ public static class Extensions
         {
             Tags = entities.Select(t => new GetTagsDto.TagDto(t.Id, t.Name))
         };
-    
+
     public static GetTagDto AsGetTagDto(this Tag entity)
-        => new()
-        {
-            Id = entity.Id,
-            Name = entity.Name,
-            IsActive = entity.IsActive
-        };
+        => new(entity.Id, entity.Name, entity.IsActive);
     
     // public static GetSampleDto AsGetSampleDto(this Sample entity)
     //     => new()
@@ -50,7 +50,21 @@ public static class Extensions
     //         Tags = entity.Tags.Select(t => t.Name.Value)
     //     };
 
-    public static IEnumerable<GetSampleStepsDto> AsStepsDto(this IEnumerable<Step> steps)
+    public static IEnumerable<GetSampleStepsDto> AsStepsDto(this IEnumerable<SampleStep> steps)
+        => steps.Select(s => new GetSampleStepsDto(
+            s.Parameters.Select(p =>
+            {
+                GetSampleBaseParameterValueDto b = p switch
+                {
+                    DecimalParameterValue d => new GetSampleDecimalParameterValueDto(d.Parameter.Name, d.Value, (d.Parameter as DecimalParameter)!.Unit),
+                    IntegerParameterValue i => new GetSampleIntegerParameterValueDto(i.Parameter.Name, i.Value, (i.Parameter as IntegerParameter)!.Unit),
+                    TextParameterValue t => new GetSampleTextParameterValueDto(t.Parameter.Name, t.Value),
+                    _ => throw new ArgumentOutOfRangeException(nameof(p))
+                };
+                return b;
+            }), s.Comment));
+    
+    public static IEnumerable<GetSampleStepsDto> AsStepsDto(this IEnumerable<RecipeStep> steps)
         => steps.Select(s => new GetSampleStepsDto(
             s.Parameters.Select(p =>
             {
@@ -85,4 +99,6 @@ public static class Extensions
 
     public static IQueryable<T> Paginate<T>(this IQueryable<T> queryable, PagingParameters parameters)
         => queryable.Skip(parameters.PageNumber * parameters.PageSize).Take(parameters.PageSize);
+
+    public static GetRecipeDto AsDto(this Recipe recipe) => new(recipe.Id, recipe.RecipeName);
 }

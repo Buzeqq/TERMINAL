@@ -23,5 +23,7 @@ internal sealed class StepConfiguration : IEntityTypeConfiguration<Step>
             .HasMany(s => s.Parameters)
             .WithOne()
             .IsRequired();
+
+        builder.UseTpcMappingStrategy();
     }
 }

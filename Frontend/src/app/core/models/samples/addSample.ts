@@ -4,6 +4,8 @@ export interface AddSample {
   steps: Step[];
   tagIds: string[];
   comment: string | null | undefined;
+  saveAsRecipe: boolean;
+  recipeName: string | null;
 }
 
 export interface Step {
