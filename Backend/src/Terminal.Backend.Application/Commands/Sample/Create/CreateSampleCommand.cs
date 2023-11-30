@@ -1,5 +1,5 @@
 using MediatR;
-using Terminal.Backend.Application.DTO;
+using Terminal.Backend.Application.DTO.Samples;
 
 namespace Terminal.Backend.Application.Commands.Sample.Create;
 

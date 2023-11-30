@@ -1,4 +1,4 @@
-using Terminal.Backend.Application.DTO;
+using Terminal.Backend.Application.DTO.ParameterValues;
 using Terminal.Backend.Core.Entities.Parameters;
 using Terminal.Backend.Core.Exceptions;
 

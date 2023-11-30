@@ -1,7 +1,7 @@
 using System.Reflection;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Terminal.Backend.Application.DTO;
+using Terminal.Backend.Application.DTO.Samples;
 
 namespace Terminal.Backend.Application.Queries.Samples.Get;
 

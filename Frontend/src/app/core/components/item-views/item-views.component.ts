@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SelectedItem } from "../../models/items/selected-item";
 
@@ -14,7 +14,7 @@ export class ItemViewsComponent {
     protected readonly route: ActivatedRoute,
   ) {
     this.route.data.subscribe(data => {
-      this._selectedItem = {type: data['type'], id: ''};
+      this._selectedItem = { type: data['type'], id: '' };
     });
   }
 

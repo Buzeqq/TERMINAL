@@ -1,4 +1,4 @@
-using Terminal.Backend.Application.DTO;
+using Terminal.Backend.Application.DTO.Samples;
 using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.ValueObjects;
 

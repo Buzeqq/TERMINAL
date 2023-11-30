@@ -28,6 +28,8 @@ import { TagViewsComponent } from './components/item-views/tag-views/tag-views.c
 import { CdkFixedSizeVirtualScroll, CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { MatRippleModule } from "@angular/material/core";
 import { SvgComponent } from "./components/svg/svg.component";
+import { RecipeViewsComponent } from './components/item-views/recipe-views/recipe-views.component';
+import { RecipeDetailsComponent } from './components/item-details/item-details/recipe-details/recipe-details.component';
 
 
 @NgModule({
@@ -41,18 +43,21 @@ import { SvgComponent } from "./components/svg/svg.component";
     SearchComponent,
     TagViewsComponent,
     SearchComponent,
-    SvgComponent
+    SvgComponent,
+    RecipeViewsComponent,
+    RecipeDetailsComponent
   ],
-  exports: [
-    TimeAgoPipe,
-    SearchComponent,
-    ItemDetailsComponent,
-    SampleDetailsComponent,
-    ProjectDetailsComponent,
-    TagViewsComponent,
-    ItemDetailsComponent,
-    SvgComponent
-  ],
+    exports: [
+        TimeAgoPipe,
+        SearchComponent,
+        ItemDetailsComponent,
+        SampleDetailsComponent,
+        ProjectDetailsComponent,
+        TagViewsComponent,
+        ItemDetailsComponent,
+        SvgComponent,
+        RecipeViewsComponent
+    ],
   imports: [
     CommonModule,
     MatButtonModule,

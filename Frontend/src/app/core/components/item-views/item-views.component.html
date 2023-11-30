@@ -9,6 +9,7 @@
       <mat-card-content [ngSwitch]="selectedItem?.type">
         <app-sample-views *ngSwitchCase="'Sample'" (selectedItemChangeEvent)="selectedItem = $event"></app-sample-views>
         <app-project-views *ngSwitchCase="'Project'" (selectedItemChangeEvent)="selectedItem = $event"></app-project-views>
+        <app-recipe-views *ngSwitchCase="'Recipe'" (selectedItemChangeEvent)="selectedItem = $event"></app-recipe-views>
       </mat-card-content>
     </mat-card>
     <app-item-details class="item-details" [item]="selectedItem"></app-item-details>

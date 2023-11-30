@@ -1,4 +1,9 @@
-using Terminal.Backend.Application.DTO;
+using Terminal.Backend.Application.DTO.Parameters;
+using Terminal.Backend.Application.DTO.ParameterValues;
+using Terminal.Backend.Application.DTO.Projects;
+using Terminal.Backend.Application.DTO.Recipes;
+using Terminal.Backend.Application.DTO.Samples;
+using Terminal.Backend.Application.DTO.Tags;
 using Terminal.Backend.Application.Queries.QueryParameters;
 using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.Entities.Parameters;
@@ -28,14 +33,9 @@ public static class Extensions
         {
             Tags = entities.Select(t => new GetTagsDto.TagDto(t.Id, t.Name))
         };
-    
+
     public static GetTagDto AsGetTagDto(this Tag entity)
-        => new()
-        {
-            Id = entity.Id,
-            Name = entity.Name,
-            IsActive = entity.IsActive
-        };
+        => new(entity.Id, entity.Name, entity.IsActive);
     
     // public static GetSampleDto AsGetSampleDto(this Sample entity)
     //     => new()

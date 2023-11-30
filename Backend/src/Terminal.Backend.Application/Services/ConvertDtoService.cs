@@ -1,5 +1,6 @@
 using Terminal.Backend.Application.Abstractions;
-using Terminal.Backend.Application.DTO;
+using Terminal.Backend.Application.DTO.ParameterValues;
+using Terminal.Backend.Application.DTO.Samples;
 using Terminal.Backend.Application.Exceptions;
 using Terminal.Backend.Core.Abstractions.Repositories;
 using Terminal.Backend.Core.Entities;

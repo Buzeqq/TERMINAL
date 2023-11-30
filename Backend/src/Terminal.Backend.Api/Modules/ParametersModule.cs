@@ -1,7 +1,7 @@
 using MediatR;
 using Terminal.Backend.Application.Commands.Parameter.ChangeStatus;
 using Terminal.Backend.Application.Commands.Parameter.Define;
-using Terminal.Backend.Application.DTO;
+using Terminal.Backend.Application.DTO.Parameters;
 using Terminal.Backend.Application.Queries.Parameters.Get;
 using Terminal.Backend.Core.Enums;
 using Terminal.Backend.Core.ValueObjects;
