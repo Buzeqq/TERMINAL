@@ -23,6 +23,8 @@ internal sealed class TerminalDbSeeder
         var tag3 = new Tag(TagId.Create(), "popular-sample");
         var tag4 = new Tag(TagId.Create(), "hot");
         var tag5 = new Tag(TagId.Create(), "high-pressure");
+        
+        _dbContext.Tags.AddRange(tag1, tag2, tag3, tag4, tag5);
         #endregion
 
         #region projects
@@ -620,8 +622,7 @@ internal sealed class TerminalDbSeeder
         #endregion
 
         #region add
-
-        _dbContext.Tags.AddRange(tag1, tag2, tag3, tag4, tag5);
+        
         _dbContext.Projects.AddRange(projectUpturn, projectBessy2, projectNitro, projectNobelium);
         _dbContext.Parameters.AddRange(bufferParameter,
             substrateParameter,

@@ -1,7 +1,7 @@
 <mat-sidenav-container autosize>
   <mat-sidenav #sidenav
                [mode]="(menuOpened$ | async) ? 'side' : 'over'"
-               [opened]="!(isLoggedOut$ | async) ?? false"
+               [opened]="!(isLoggedOut$ | async)"
   >
     <mat-nav-list>
       <mat-list-item (click)="isExpanded = !isExpanded;">
