@@ -1,0 +1,59 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: 'Frontend'
+
+permissions:
+  contents: read
+  issues: read
+  checks: write
+  pull-requests: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Provide reason behind manual action run'
+        required: true
+        type: 'string'
+  push:
+    paths:
+    - 'Frontend/**'
+    branches: [ "main" ]
+  pull_request:
+    paths:
+    - 'Frontend/**'
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: 'self-hosted'
+    steps:
+    - name: 'Checkout repository'
+      uses: 'actions/checkout@v3'
+
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with: 
+        node-version: 18
+
+    - name: Setup Angular
+      run: npm install @angular/cli
+      
+    - name: 'Use Node.js 18'
+      uses: 'actions/setup-node@v3'
+      with:
+        node-version: '18.x'
+
+    - name: Restore Angular dependencies
+      run: npm ci
+      working-directory: ./Frontend
+
+    - name: Build Angular
+      run: ng b -c production
+      working-directory: ./Frontend
+
+    - name: 'Deploy Application'
+      run: docker compose --env-file=/home/ubuntu/terminal-secrets/.env -f docker-compose-prod.yml up --build -d
+      # Do not run deployment from PR
+      if: github.event_name != 'pull_request'

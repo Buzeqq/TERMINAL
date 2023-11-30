@@ -14,7 +14,7 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'home', component: DashboardComponent},
   {path: 'search', component: ResultsListComponent},
-  {path: 'search/:searchPhrase', component: ResultsListComponent},
+  {path: 'search/:q', component: ResultsListComponent},
   {path: 'samples', component: ItemViewsComponent, data: {type: 'Sample'}},
   {path: 'samples/:id', component: ItemDetailsComponent, data: {type: 'Sample'}},
   {path: 'projects', component: ItemViewsComponent, data: {type: 'Project'}},
