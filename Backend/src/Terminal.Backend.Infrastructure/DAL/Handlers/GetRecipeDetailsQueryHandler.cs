@@ -1,0 +1,32 @@
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Terminal.Backend.Application.DTO;
+using Terminal.Backend.Application.Queries.Recipes;
+using Terminal.Backend.Core.Entities;
+
+namespace Terminal.Backend.Infrastructure.DAL.Handlers;
+
+internal sealed class GetRecipeDetailsQueryHandler : IRequestHandler<GetRecipeDetailsQuery, GetRecipeDetailsDto?>
+{
+    private DbSet<Recipe> _recipes;
+    private DbSet<RecipeStep> _steps;
+
+    public GetRecipeDetailsQueryHandler(TerminalDbContext dbContext)
+    {
+        _recipes = dbContext.Recipes;
+        _steps = dbContext.RecipeSteps;
+    }
+
+    public async Task<GetRecipeDetailsDto?> Handle(GetRecipeDetailsQuery request, CancellationToken cancellationToken)
+    {
+        var recipe = await _recipes.AsNoTracking()
+            .Include(r => r.Steps)
+            .ThenInclude(s => s.Parameters)
+            .ThenInclude(s => s.Parameter)
+            .SingleOrDefaultAsync(r => r.Id.Equals(request.Id), cancellationToken);
+        
+        return recipe is null ? 
+            null : 
+            new GetRecipeDetailsDto(recipe.Id, recipe.RecipeName.Name, recipe.Steps.AsStepsDto());
+    }
+}

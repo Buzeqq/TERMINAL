@@ -19,4 +19,6 @@ public abstract class ParameterValue
     {
         Id = id;
     }
+
+    public abstract ParameterValue DeepCopy(ParameterValueId id);
 }

@@ -4,6 +4,7 @@ using Terminal.Backend.Core.Abstractions.Repositories;
 using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.Exceptions;
 using Terminal.Backend.Core.ValueObjects;
+using ParameterValue = Terminal.Backend.Core.Entities.ParameterValues.ParameterValue;
 
 namespace Terminal.Backend.Application.Commands.Sample.Create;
 
@@ -37,11 +38,13 @@ internal sealed class CreateSampleCommandHandler : IRequestHandler<CreateSampleC
                 throw new InvalidRecipeNameException(recipeName);
             }
             
+            // for new recipe we need to copy every step, and every parameter value in steps
             recipe = new Recipe(RecipeId.Create(), recipeName);
             foreach (var step in steps)
             {
-                // assigns new id
-                recipe.Steps.Add(AsRecipeStep(step, recipe));
+                var parameters = new List<ParameterValue>(step.Parameters
+                    .Select(p => p.DeepCopy(Guid.NewGuid())));
+                recipe.Steps.Add(new RecipeStep(Guid.NewGuid(), step.Comment, parameters, recipe));
             }
             await _recipeRepository.AddAsync(recipe, ct);
         }
@@ -60,12 +63,5 @@ internal sealed class CreateSampleCommandHandler : IRequestHandler<CreateSampleC
             tags.ToList());
         project.Samples.Add(sample);
         await _sampleRepository.AddAsync(sample, ct);
-    }
-    
-    private static RecipeStep AsRecipeStep(Step step, Recipe recipe)
-    {
-        var recipeStep = new RecipeStep(StepId.Create(), step.Comment, step.Parameters, recipe);
-        recipe.AddStep(recipeStep);
-        return recipeStep;
     }
 }

@@ -1,5 +1,5 @@
 import { Step } from "../steps/step";
-import { Recipe } from "../recipes/Recipe";
+import { Recipe } from "../recipes/recipe";
 
 export interface SampleDetails {
   id: string;

@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Terminal.Backend.Application.Queries.Recipes;
 using Terminal.Backend.Application.Queries.Recipes.Get;
 using Terminal.Backend.Application.Queries.Recipes.Search;
 using Terminal.Backend.Core.Enums;
@@ -25,6 +26,18 @@ public static class RecipeModule
             var recipe = await sender.Send(query, ct);
 
             return recipe is null ? Results.NotFound() : Results.Ok(recipe);
-        });
+        }).RequireAuthorization(Permission.RecipeRead.ToString());
+
+        app.MapGet("api/recipe/{id:guid}/details", async (
+            Guid id, 
+            ISender sender,
+            CancellationToken ct) =>
+        {
+            var query = new GetRecipeDetailsQuery(id);
+
+            var recipeDetails = await sender.Send(query, ct);
+
+            return recipeDetails is null ? Results.NotFound() : Results.Ok(recipeDetails);
+        }).RequireAuthorization(Permission.RecipeRead.ToString());
     }
 }

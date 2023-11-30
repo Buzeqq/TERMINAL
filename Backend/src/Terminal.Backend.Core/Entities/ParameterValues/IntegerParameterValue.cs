@@ -22,4 +22,12 @@ public sealed class IntegerParameterValue : ParameterValue
     {
         Value = value;
     }
+    
+    public override ParameterValue DeepCopy(ParameterValueId id)
+    {
+        return new IntegerParameterValue(id, 
+            Parameter as IntegerParameter 
+            ?? throw new ParameterValueCopyException(typeof(IntegerParameter), Parameter.GetType()),
+            Value);
+    }
 }
