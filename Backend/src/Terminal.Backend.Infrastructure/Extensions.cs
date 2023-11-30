@@ -118,6 +118,24 @@ public static class Extensions
         
         using var scope = app.Services.CreateScope();
         using var dbContext = scope.ServiceProvider.GetRequiredService<TerminalDbContext>();
+
+        if (app.Configuration.GetOptions<PostgresOptions>("Postgres").Seed && app.Environment.IsDevelopment())
+        {
+            var seeder = new TerminalDbSeeder(dbContext);
+            try
+            {
+                seeder.Seed();
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        if (app.Environment.IsProduction())
+        {
+            dbContext.Database.Migrate();
+        }
+        
         var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
         var adminOptions = app.Configuration.GetOptions<AdministratorOptions>(AdministratorOptionsSetup.SectionName);
         try
@@ -138,20 +156,6 @@ public static class Extensions
         {
             // log admin already exists, skipping...
         }
-        
-        if (!app.Configuration.GetOptions<PostgresOptions>("Postgres").Seed ||
-            !app.Environment.IsDevelopment()) return app;
-        var seeder = new TerminalDbSeeder(dbContext);
-        try
-        {
-            seeder.Seed();
-        }
-        catch (Exception)
-        {
-        }
-        
-        if (!app.Environment.IsProduction()) return app;
-        dbContext.Database.Migrate();
         
         return app;
     }
