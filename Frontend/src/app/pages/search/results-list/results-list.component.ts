@@ -25,15 +25,16 @@ export class ResultsListComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     if (this.search) {
       setTimeout(() => {
-        this.search!.searchRequest$.pipe(
+        this.search!.searchRequest$!.pipe(
           switchMap(({ searchPhrase, filterState }) => this.searchService.searchIn(filterState, searchPhrase, 0, this.pageSize)),
         ).subscribe(r => {
+          this.selectItem(r[0])
           this.page.next(0);
           this.searchResult.next(r);
         });
 
         this.page.pipe(
-          combineLatestWith(this.search!.searchRequest$),
+          combineLatestWith(this.search!.searchRequest$!),
           filter(([page, _]) => page !== 0),
           switchMap(([page, {searchPhrase, filterState}]) =>
             this.searchService.searchIn(filterState, searchPhrase, page, this.pageSize)
@@ -48,7 +49,7 @@ export class ResultsListComponent implements AfterViewInit {
   }
 
   selectItem(row: SearchItem) {
-    this.selectedItem = {type: row.type, id: row.item.id};
+    this.selectedItem = {type: row?.type, id: row?.item.id};
   }
 
   @ViewChild(SearchComponent)
