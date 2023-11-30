@@ -52,6 +52,5 @@ jobs:
     - name: 'Deploy Application'
       run: |
         docker compose --env-file=/home/ubuntu/terminal-secrets/.env -f docker-compose-prod.yml up --build -d
-      working-directory: 'Backend'
       # Do not run deployment from PR
       if: github.event_name != 'pull_request'
