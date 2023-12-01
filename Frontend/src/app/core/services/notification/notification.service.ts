@@ -20,4 +20,13 @@ export class NotificationService {
       duration: 5000
     });
   }
+
+  notifySessionExpiration(time: number) {
+    /* time provided in milliseconds */
+    let ref = this.snackBar.open(
+      "Session expires in " + time/60_000 + ' minutes', 'Extend', {
+       duration: 30000
+      })
+    return ref.onAction();
+  }
 }
