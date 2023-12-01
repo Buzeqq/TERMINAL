@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {ApiService} from "../api-service";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {BehaviorSubject, catchError, shareReplay, tap, throwError} from "rxjs";
+import {BehaviorSubject, catchError, shareReplay, Subject, tap, throwError, timer} from "rxjs";
 import * as moment from "moment";
 import {jwtDecode} from "jwt-decode";
 
@@ -10,12 +10,17 @@ import {jwtDecode} from "jwt-decode";
 })
 export class AuthService extends ApiService {
   private loggedOut = new BehaviorSubject<boolean>(true);
+  alertBefore = 120 * 1000 // 2 minutes expressed in milliseconds
+  private sessionWarningTimer = new Subject();
+  get sessionWarningTimer$() {
+    return this.sessionWarningTimer.asObservable();
+  }
 
   constructor(
     http: HttpClient,
   ) {
     super(http)
-    // reload issue, if we reload the page a new Auth Service is created so we need to set labels again
+    /* reload issue, if we reload the page a new Auth Service is created so we need to set labels again */
     if (this.isLoggedIn()) {
       this.loggedOut.next(false);
     }
@@ -26,7 +31,7 @@ export class AuthService extends ApiService {
       .pipe(
         catchError(this.handleAuthError),
         tap(r => this.manageResponse(r)),
-        shareReplay() // apparently prevents from double POST request
+        shareReplay() /* prevents from double POST request */
       )
   }
 
@@ -41,10 +46,20 @@ export class AuthService extends ApiService {
   }
 
   private setSession(payload: decodedJWT, token: string) {
-    const expiresAt = moment().add(payload.exp,'second');
     localStorage.setItem('token', token);
-    localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()));
+    localStorage.setItem("expires_at", JSON.stringify(payload.exp * 1000));
     localStorage.setItem('user_role', payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]);
+
+    const expiresIn = moment(payload.exp*1000).subtract(moment().valueOf()); // milliseconds
+    timer(expiresIn.valueOf() - this.alertBefore).subscribe(this.sessionWarningTimer);
+  }
+
+  renewSession() {
+    localStorage.setItem(
+      "expires_at", JSON.stringify(
+        this.getExpiration().add(1, 'hour').valueOf()
+      )
+    );
   }
 
   logout() {
@@ -54,7 +69,7 @@ export class AuthService extends ApiService {
     this.loggedOut.next(true)
   }
 
-  private isLoggedIn() {
+  isLoggedIn() {
     return moment().isBefore(this.getExpiration());
   }
 
@@ -62,7 +77,6 @@ export class AuthService extends ApiService {
     return this.loggedOut.asObservable();
   }
 
-  // TODO handle session expiration
   getExpiration() {
     const expiration = localStorage.getItem("expires_at");
     const expiresAt = expiration ? JSON.parse(expiration) : null;
@@ -77,8 +91,8 @@ export interface successfulLoginResponse {
 export interface decodedJWT {
   sub: string // token
   email: string
-  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": string
-  exp: number // expiration time
+  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": string // role
+  exp: number // expiration time - UTC timestamp in seconds
   iss: string // terminal
   aud: string // terminal-clients
 }

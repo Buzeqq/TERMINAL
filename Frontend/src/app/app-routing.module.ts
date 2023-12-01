@@ -8,20 +8,21 @@ import { AddSampleComponent } from "./pages/add-sample/add-sample.component";
 import { ItemDetailsComponent } from "./core/components/item-details/item-details/item-details.component";
 import {SettingsComponent} from "./pages/settings/settings.component";
 import {LoginComponent} from "./pages/login/login.component";
+import {loginPageGuard, pagesGuard} from "./core/guards/auth.guard";
 
 const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
-  {path: 'login', component: LoginComponent},
-  {path: 'home', component: DashboardComponent},
-  {path: 'search', component: ResultsListComponent},
-  {path: 'search/:q', component: ResultsListComponent},
-  {path: 'samples', component: ItemViewsComponent, data: {type: 'Sample'}},
-  {path: 'samples/:id', component: ItemDetailsComponent, data: {type: 'Sample'}},
-  {path: 'projects', component: ItemViewsComponent, data: {type: 'Project'}},
-  {path: 'projects/:id', component: ItemDetailsComponent, data: {type: 'Project'}},
-  {path: 'add-sample', component: AddSampleComponent},
-  {path: 'recipes', component: ItemViewsComponent, data: {type: 'Recipe'}},
-  {path: 'settings', component: SettingsComponent},
+  {path: 'login', component: LoginComponent, canActivate: [loginPageGuard]},
+  {path: 'home', component: DashboardComponent, canActivate: [pagesGuard]},
+  {path: 'search', component: ResultsListComponent, canActivate: [pagesGuard]},
+  {path: 'search/:q', component: ResultsListComponent, canActivate: [pagesGuard]},
+  {path: 'samples', component: ItemViewsComponent, canActivate: [pagesGuard], data: {type: 'Sample'}},
+  {path: 'samples/:id', component: ItemDetailsComponent, canActivate: [pagesGuard], data: {type: 'Sample'}},
+  {path: 'projects', component: ItemViewsComponent, canActivate: [pagesGuard], data: {type: 'Project'}},
+  {path: 'projects/:id', component: ItemDetailsComponent, canActivate: [pagesGuard], data: {type: 'Project'}},
+  {path: 'add-sample', component: AddSampleComponent, canActivate: [pagesGuard]},
+  {path: 'recipes', component: ItemViewsComponent, canActivate: [pagesGuard], data: {type: 'Recipe'}},
+  {path: 'settings', component: SettingsComponent, canActivate: [pagesGuard]},
 
   // must be the last
   {path: '**', component: NotFoundComponent},
