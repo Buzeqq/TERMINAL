@@ -16,7 +16,7 @@
       <mat-checkbox (change)="updateFilterState(filter.key!, $event)"
                     *ngFor="let filter of (filters$ | async)! | keyvalue"
                     [checked]="filter.value">
-        {{filter.key}}
+        {{filter.key.charAt(0).toUpperCase() + filter.key.slice(1)}}
       </mat-checkbox>
     </div>
   </div>

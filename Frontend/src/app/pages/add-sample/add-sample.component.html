@@ -114,7 +114,7 @@
                       </ng-container>
                     </ng-container>
                   </div>
-                  <mat-card-actions>
+                  <mat-card-actions class="add-sample__actions">
                     <button mat-raised-button color="primary" (click)="addStep(tabIndex)" [disabled]="!parameterControls.controls[tabIndex].valid">Add step</button>
                     <button mat-raised-button color="primary" (click)="deleteStep(tabIndex)" [disabled]="tabIndex === 0">Delete step</button>
                   </mat-card-actions>
@@ -127,14 +127,15 @@
     </form>
   </mat-card-content>
   <mat-card-footer>
-    <mat-card-actions>
+    <mat-card-actions class="add-sample__actions">
       <button mat-raised-button [disabled]="!sampleForm.valid" (click)="addSample()">
         <mat-icon>add</mat-icon>
         Add sample
       </button>
       <mat-checkbox #recipeCheckbox [formControl]="saveAsRecipeFormControl">Save as recipe</mat-checkbox>
       <ng-container *ngIf="recipeCheckbox.checked">
-        <mat-form-field>
+        <div class="break"></div>
+        <mat-form-field class="recipe_name_input">
           <mat-label>Recipe name:</mat-label>
           <input [formControl]="recipeNameFormControl" matInput type="text">
         </mat-form-field>
