@@ -51,6 +51,7 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import { SampleEditComponent } from './pages/settings/sample-edit/sample-edit.component';
 import { TagEditComponent } from './pages/settings/tag-edit/tag-edit.component';
 import {LoginComponent} from "./pages/login/login.component";
+import {PermissionService} from "./core/guards/auth.guard";
 
 @NgModule({
   declarations: [
@@ -118,7 +119,8 @@ import {LoginComponent} from "./pages/login/login.component";
     MatSlideToggleModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    PermissionService
   ],
   bootstrap: [AppComponent]
 })
