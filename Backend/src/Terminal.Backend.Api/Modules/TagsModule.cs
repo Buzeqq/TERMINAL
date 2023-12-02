@@ -15,9 +15,10 @@ public static class TagsModule
         app.MapGet("api/tags", async (
             [FromQuery] int pageNumber,
             [FromQuery] int pageSize,
+            [FromQuery] bool? desc,
             ISender sender,
             CancellationToken ct
-            ) => await sender.Send(new GetTagsQuery(pageNumber, pageSize), ct))
+            ) => await sender.Send(new GetTagsQuery(pageNumber, pageSize, desc ?? true), ct))
             .RequireAuthorization(Permission.TagRead.ToString());
         
         app.MapPost("api/tags", async (
@@ -80,5 +81,14 @@ public static class TagsModule
             var tag = await sender.Send(new GetTagQuery { TagId = id }, ct);
             return tag is null ? Results.NotFound() : Results.Ok(tag);
         });
+        
+        app.MapGet("api/tags/amount", async (
+            ISender sender, 
+            CancellationToken ct) =>
+        {
+            var query = new GetTagsAmountQuery();
+            var amount = await sender.Send(query, ct);
+            return Results.Ok(amount);
+        }).RequireAuthorization(Permission.TagRead.ToString());
     }
 }

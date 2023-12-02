@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { catchError, EMPTY, map, Observable, tap } from "rxjs";
-import { HttpClient } from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import { Project } from "../../models/projects/project";
 import { ApiService } from "../api-service";
 import { NotificationService } from "../notification/notification.service";
@@ -18,8 +18,14 @@ export class ProjectsService extends ApiService {
     super(http);
   }
 
-  getProjects(pageNumber: number, pageSize: number): Observable<Project[]> {
-    return this.get<{ projects: Project[] }>(`projects?pageNumber=${pageNumber}&pageSize=${pageSize}`)
+  getProjects(pageNumber: number, pageSize: number, desc = true): Observable<Project[]> {
+    return this.get<{ projects: Project[] }>('projects', new HttpParams({
+      fromObject: {
+        pageNumber,
+        pageSize,
+        desc
+      }
+    }))
       .pipe(
         map(p => p.projects),
         catchError(this.handleError)
@@ -44,5 +50,9 @@ export class ProjectsService extends ApiService {
           return EMPTY;
         })
       );
+  }
+
+  getProjectsAmount(): Observable<number> {
+    return this.get<number>('projects/amount');
   }
 }

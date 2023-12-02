@@ -17,6 +17,7 @@ internal sealed class GetProjectsQueryHandler : IRequestHandler<GetProjectsQuery
         => (await _projects
             .AsNoTracking()
             .Where(x => x.IsActive)
+            .OrderBy(request.OrderingParameters)
             .Paginate(request.Parameters)
             .ToListAsync(ct)).AsGetProjectsDto();
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from "../api-service";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { map, Observable } from "rxjs";
+import {map, Observable} from "rxjs";
 import { Sample } from "../../models/samples/sample";
 import { AddSample } from "../../models/samples/addSample";
 import { SampleDetails } from "../../models/samples/sampleDetails";
@@ -14,11 +14,13 @@ export class SamplesService extends ApiService {
     super(http);
   }
 
-  getSamples(pageNumber: number, pageSize: number): Observable<Sample[]> {
+  getSamples(pageNumber: number, pageSize: number, orderBy = "CreatedAtUtc", desc = true): Observable<Sample[]> {
     return this.get<{ samples: Sample[] }>('samples', new HttpParams({
       fromObject: {
         pageNumber,
-        pageSize
+        pageSize,
+        orderBy,
+        desc
       }
     }))
       .pipe(
@@ -57,5 +59,9 @@ export class SamplesService extends ApiService {
 
   addSample(form: AddSample) {
     return this.post<never>(`samples`, form);
+  }
+
+  getSamplesAmount(): Observable<number> {
+    return this.get<number>('samples/amount');
   }
 }
