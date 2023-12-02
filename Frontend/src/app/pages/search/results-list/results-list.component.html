@@ -2,9 +2,12 @@
   <app-search></app-search>
   <section class="search__cards">
     <mat-card class="result-list">
-      <mat-card-title class="result-list__header">
-        Results
-      </mat-card-title>
+      <mat-card-header>
+        <div class="result-list__header mat-h1">
+          <mat-icon [inline]="true" fontIcon="manage_search"></mat-icon>
+          <h2>Results</h2>
+        </div>
+      </mat-card-header>
       <mat-list infiniteScroll
                 class="result-list__content"
                 [infiniteScrollUpDistance]="2"
@@ -37,6 +40,6 @@
         </mat-card-actions>
       </mat-card-footer>
     </mat-card>
-    <app-item-details [item]="selectedItem"></app-item-details>
+    <app-item-details [item]="selectedItem" class="item-details"></app-item-details>
   </section>
 </section>

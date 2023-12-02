@@ -100,14 +100,15 @@
     </form>
   </mat-card-content>
   <mat-card-footer>
-    <mat-card-actions>
-      <button mat-raised-button [disabled]="sampleForm.invalid" (click)="addSample()">
+    <mat-card-actions class="add-sample__actions">
+      <button mat-raised-button [disabled]="!sampleForm.valid" (click)="addSample()">
         <mat-icon>add</mat-icon>
         Add sample
       </button>
       <mat-checkbox #recipeCheckbox [formControl]="saveRecipeFormGroup.controls.saveAsRecipe">Save as recipe</mat-checkbox>
       <ng-container *ngIf="recipeCheckbox.checked">
-        <mat-form-field>
+        <div class="break"></div>
+        <mat-form-field class="recipe_name_input">
           <mat-label>Recipe name:</mat-label>
           <input [formControl]="saveRecipeFormGroup.controls.recipeName" matInput type="text">
         </mat-form-field>
