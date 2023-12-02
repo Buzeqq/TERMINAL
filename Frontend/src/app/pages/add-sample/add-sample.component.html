@@ -6,123 +6,111 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <form class="add-sample__main">
+    <form class="add-sample__main" [formGroup]="sampleForm" *ngIf="formData$ | async as formData else loading;">
       <mat-card>
         <mat-form-field>
           <mat-label>Date</mat-label>
           <mtx-datetimepicker #datetimepicker timeInput="true" touchUi="true" type="datetime"></mtx-datetimepicker>
-          <input [formControl]="sampleForm.controls.dateTime" [mtxDatetimepicker]="datetimepicker" matInput required>
+          <input [formControl]="sampleForm.controls.date" [mtxDatetimepicker]="datetimepicker" matInput required>
           <mtx-datetimepicker-toggle [for]="datetimepicker" matSuffix></mtx-datetimepicker-toggle>
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Project</mat-label>
-          <input #projectInput [formControl]="sampleForm.controls.project" [matAutocomplete]="projectAutocomplete"
-                 matInput placeholder="Choose project" type="text" (keyup)="projectInputValue.next(projectInput.value)" required>
-          <mat-autocomplete autoActiveFirstOption #projectAutocomplete requireSelection="true" (optionSelected)="selectProject($event)">
-            <ng-container *ngIf="projectInput.value.length > 0">
-              <mat-option *ngFor="let projectOption of filteredProjects$ | async;" [value]="projectOption">
-                {{projectOption.name}}
-              </mat-option>
-            </ng-container>
-            <ng-container *ngIf="projectInput.value === ''">
-              <mat-option *ngFor="let projectOption of recentProjects$ | async" [value]="projectOption">
-                {{projectOption.name}}
-              </mat-option>
-            </ng-container>
+          <input [formControl]="sampleForm.controls.project" [matAutocomplete]="projectAutocomplete"
+                 matInput placeholder="Choose project" type="text" required>
+          <button matSuffix mat-icon-button *ngIf="sampleForm.controls.project.value" (click)="sampleForm.controls.project.setValue('')">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-autocomplete #projectAutocomplete>
+            <mat-option *ngFor="let project of formData.projects"
+                        [value]="project.name">
+              {{project.name}}
+            </mat-option>
           </mat-autocomplete>
         </mat-form-field>
 
         <mat-form-field>
-          <mat-label>Recipe</mat-label>
-          <input #recipeInput [formControl]="sampleForm.controls.recipe" [matAutocomplete]="recipeAutocomplete"
-                 matInput placeholder="Choose recipe" type="text">
-          <mat-autocomplete autoActiveFirstOption #recipeAutocomplete requireSelection="true">
-            <mat-option value="None">
-              None
-            </mat-option>
-            <mat-option value="Recipe 1">
-              Recipe 1
-            </mat-option>
-            <mat-option value="Recipe 2">
-              Recipe 2
-            </mat-option>
-            <mat-option value="Recipe 3">
-              Recipe 3
+          <mat-label>Recipes</mat-label>
+          <input type="text"
+                 placeholder="Start typing to find recipe"
+                 aria-label="Recipe"
+                 matInput
+                 [formControl]="sampleForm.controls.recipe"
+                 [matAutocomplete]="recipeAutocomplete">
+          <button matSuffix mat-icon-button *ngIf="sampleForm.controls.recipe.value" (click)="sampleForm.controls.recipe.setValue('')">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-autocomplete #recipeAutocomplete (optionSelected)="onRecipeSelect($event)">
+            <mat-option [value]="'None'">None</mat-option>
+            <mat-option *ngFor="let recipe of formData.recipes"
+                        [value]="recipe.name">
+              {{recipe.name}}
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Tags</mat-label>
-          <mat-chip-grid #chipGrid>
-            <mat-chip-row *ngFor="let tag of chosenTags$ | async" [editable]='false' (removed)="removeTag(tag.id)">
+          <mat-chip-grid #chipGrid [formControl]="sampleForm.controls.tags">
+            <mat-chip-row *ngFor="let tag of chosenTags$ | async" [editable]='false' (removed)="removeTag(tag.name)">
               {{tag.name}}
               <button matChipRemove>
                 <mat-icon>cancel</mat-icon>
               </button>
             </mat-chip-row>
-            <input #tagInput [matChipInputFor]="chipGrid" matChipInputAddOnBlur="true" [formControl]="sampleForm.controls.tags" [matAutocomplete]="tagAutocomplete">
-            <mat-autocomplete #tagAutocomplete (optionSelected)="selectedTag($event)">
-              <ng-container *ngIf="tagInput.value.length > 0">
-                <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
-                  {{tag.name}}
-                </mat-option>
-              </ng-container>
-              <ng-container *ngIf="sampleForm.controls.tags.value === ''">
-                <mat-option *ngFor="let tag of recentTags$ | async" [value]="tag">
-                  {{tag.name}}
-                </mat-option>
-              </ng-container>
+
+            <input #tagInput matInput [formControl]="tagFormControl" [matChipInputFor]="chipGrid"
+                   matChipInputAddOnBlur="true" [matAutocomplete]="tagAutocomplete">
+            <mat-autocomplete #tagAutocomplete (optionSelected)="selectedTag($event);">
+              <mat-option *ngFor="let tag of formData.tags" [value]="tag.name">{{tag.name}}</mat-option>
             </mat-autocomplete>
           </mat-chip-grid>
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Comment</mat-label>
-          <textarea [formControl]="sampleForm.controls.comment" matInput></textarea>
+          <textarea matInput [formControl]="sampleForm.controls.comment"></textarea>
         </mat-form-field>
+
       </mat-card>
       <mat-card>
-        <mat-card-content>
-          <ng-container *ngIf="recipeChosen$ | async; else stepCreator">
-            <h2>Recipe chosen!</h2>
-          </ng-container>
-          <ng-template #stepCreator>
-            <h2>Steps</h2>
-            <mat-tab-group>
-              <mat-tab *ngFor="let _ of tabs; let tabIndex = index" [label]="getLabel(tabIndex)">
-                <ng-container *ngIf="getGroupForTab(tabIndex) as stepGroup; else loading">
-                  <div class="add-sample__form">
-                    <ng-container *ngFor="let parameterControl of stepGroup | keyvalue">
-                      <ng-container [ngSwitch]="getInputTypeOfParameter(parameterControl.key)">
-                        <mat-form-field *ngSwitchCase="'text'">
-                          <mat-label>{{parameterControl.key}}</mat-label>
-                          <mat-select [formControl]="parameterControl.value">
-                            <mat-option *ngFor="let option of getAllowedOptions(parameterControl.key)" [value]="option">{{option}}</mat-option>
-                          </mat-select>
-                        </mat-form-field>
-                        <mat-form-field *ngSwitchCase="'number'">
-                          <mat-label>{{parameterControl.key}}</mat-label>
-                          <input matInput [type]="getInputTypeOfParameter(parameterControl.key)" [formControl]="parameterControl.value">
-                          <p matTextSuffix>{{getParameterUnit(parameterControl.key)}}</p>
-                        </mat-form-field>
-                        <mat-form-field *ngSwitchCase="'comment'">
-                          <mat-label>Comment</mat-label>
-                          <textarea matInput [formControl]="parameterControl.value"></textarea>
-                        </mat-form-field>
-                      </ng-container>
-                    </ng-container>
-                  </div>
-                  <mat-card-actions>
-                    <button mat-raised-button color="primary" (click)="addStep(tabIndex)" [disabled]="!parameterControls.controls[tabIndex].valid">Add step</button>
-                    <button mat-raised-button color="primary" (click)="deleteStep(tabIndex)" [disabled]="tabIndex === 0">Delete step</button>
-                  </mat-card-actions>
-                </ng-container>
-              </mat-tab>
-            </mat-tab-group>
-          </ng-template>
-        </mat-card-content>
+        <mat-card-header>
+          <h2>Steps</h2>
+        </mat-card-header>
+        <mat-tab-group [selectedIndex]="selectedTabIndex" (selectedIndexChange)="selectedTabIndex = $event">
+          <mat-tab class="step" *ngFor="let stepControls of sampleForm.controls.steps.controls; index as i" [label]="'Step #' + (i + 1)">
+            <div class="add-sample__form">
+            <ng-container *ngFor="let parameterControl of stepControls.controls.parameters.controls">
+              <ng-container [ngSwitch]="parameterControl.parameter.$type">
+                <mat-form-field *ngSwitchCase="'text'">
+                  <mat-label>{{parameterControl.parameter.name}}</mat-label>
+                  <mat-select [formControl]="parameterControl">
+                    <mat-option *ngFor="let option of getOptions(parameterControl.parameter)" [value]="option">{{option}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field *ngSwitchDefault>
+                  <mat-label>{{parameterControl.parameter.name}}</mat-label>
+                  <input matInput [formControl]="parameterControl"
+                         [type]="'number'"
+                         [step]="getStep(parameterControl.parameter)" min="0">
+                  <p matTextSuffix *ngIf="getUnit(parameterControl.parameter) as unit">{{unit}}</p>
+                </mat-form-field>
+              </ng-container>
+            </ng-container>
+            <mat-form-field>
+              <mat-label>Comment</mat-label>
+              <textarea matInput [formControl]="stepControls.controls.comment"></textarea>
+            </mat-form-field>
+            </div>
+            <mat-card-footer>
+              <mat-card-actions class="step__actions">
+                <button mat-raised-button color="primary" (click)="addTab(i)" [disabled]="!sampleForm.controls.steps.controls[i].valid">Add step</button>
+                <button mat-raised-button color="primary" (click)="removeTab(i)" [disabled]="sampleForm.controls.steps.length === 1">Delete step</button>
+              </mat-card-actions>
+            </mat-card-footer>
+          </mat-tab>
+        </mat-tab-group>
       </mat-card>
     </form>
   </mat-card-content>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from "../api-service";
 import { HttpClient } from "@angular/common/http";
-import { map, Observable } from "rxjs";
+import { map, Observable, tap } from "rxjs";
 import { Parameter } from "../../models/parameters/parameter";
 
 @Injectable({
@@ -15,6 +15,9 @@ export class ParametersService extends ApiService {
 
   getParameters(): Observable<Parameter[]> {
     return this.get<{ parameters: Parameter[] }>('parameters')
-      .pipe(map(p => p.parameters));
+      .pipe(
+        map(p => p.parameters),
+        tap(console.log)
+      );
   }
 }

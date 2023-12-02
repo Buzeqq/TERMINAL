@@ -1,19 +1,19 @@
-export interface TextParameter {
+export interface Parameter {
   id: string;
+  $type: "decimal" | "integer" | "text";
   name: string;
-  allowedValues: string[];
-  $type: 'text';
+  order: number;
+  defaultValue: number | null;
 }
 
-export interface NumericParameter {
-  id: string;
-  name: string;
-  unit: string;
-  $type: 'integer' | 'decimal';
+export interface NumericParameter extends Parameter {
   step: number;
+  unit: string;
 }
 
-export type Parameter = TextParameter | NumericParameter;
+export interface TextParameter extends Parameter {
+  allowedValues: string[];
+}
 
 export function isText(parameter: Parameter): parameter is TextParameter {
   return parameter.$type === 'text';
