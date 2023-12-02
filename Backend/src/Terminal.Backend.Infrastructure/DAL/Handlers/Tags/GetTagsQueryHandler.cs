@@ -29,10 +29,11 @@ internal sealed class GetTagsQueryHandler :
     //         .Select(g => g.Key)
     //         .ToListAsync(ct)).AsGetTagsDto();
 
-    public async Task<GetTagsDto> Handle(GetTagsQuery query, CancellationToken ct)
+    public async Task<GetTagsDto> Handle(GetTagsQuery request, CancellationToken ct)
         => (await _tags
             .AsNoTracking()
             .Where(t => t.IsActive)
-            .Paginate(query.Parameters)
+            .OrderBy(request.OrderingParameters)
+            .Paginate(request.Parameters)
             .ToListAsync(ct)).AsGetTagsDto();
 }
