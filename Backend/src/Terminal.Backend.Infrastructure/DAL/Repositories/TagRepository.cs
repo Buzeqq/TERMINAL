@@ -26,6 +26,8 @@ internal sealed class TagRepository : ITagRepository
         return Task.CompletedTask;
     }
 
-    public async Task<IEnumerable<Tag>> GetManyAsync(IEnumerable<TagId> tagIds, CancellationToken ct)
-        => await _tags.Where(t => tagIds.Equals(t.Id)).ToListAsync(ct);
+    public async Task<IEnumerable<Tag>> GetManyAsync(IEnumerable<TagId> tagIds, CancellationToken ct) =>
+        await _tags
+            .Where(t => tagIds.Contains(t.Id))
+            .ToListAsync(ct);
 }

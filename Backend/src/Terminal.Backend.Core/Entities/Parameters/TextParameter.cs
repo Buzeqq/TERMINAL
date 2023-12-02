@@ -6,7 +6,8 @@ public sealed class TextParameter : Parameter
 {
     public List<string> AllowedValues { get; private set; }
 
-    public TextParameter(ParameterId id, ParameterName name, List<string> allowedValues, bool isActive = true) : base(id, name, isActive)
+    public TextParameter(ParameterId id, ParameterName name, List<string> allowedValues, uint order = 0, bool isActive = true) 
+        : base(id, name, order, isActive)
     {
         AllowedValues = allowedValues;
     }

@@ -30,6 +30,9 @@ import { MatRippleModule } from "@angular/material/core";
 import { SvgComponent } from "./components/svg/svg.component";
 import { RecipeViewsComponent } from './components/item-views/recipe-views/recipe-views.component';
 import { RecipeDetailsComponent } from './components/item-details/item-details/recipe-details/recipe-details.component';
+import { TagSelectorComponent } from './components/form-parts/tag-selector/tag-selector.component';
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { PrettyjsonPipe } from './pipes/prettyjson.pipe';
 
 
 @NgModule({
@@ -45,19 +48,23 @@ import { RecipeDetailsComponent } from './components/item-details/item-details/r
     SearchComponent,
     SvgComponent,
     RecipeViewsComponent,
-    RecipeDetailsComponent
+    RecipeDetailsComponent,
+    TagSelectorComponent,
+    PrettyjsonPipe
   ],
-    exports: [
-        TimeAgoPipe,
-        SearchComponent,
-        ItemDetailsComponent,
-        SampleDetailsComponent,
-        ProjectDetailsComponent,
-        TagViewsComponent,
-        ItemDetailsComponent,
-        SvgComponent,
-        RecipeViewsComponent
-    ],
+  exports: [
+    TimeAgoPipe,
+    SearchComponent,
+    ItemDetailsComponent,
+    SampleDetailsComponent,
+    ProjectDetailsComponent,
+    TagViewsComponent,
+    ItemDetailsComponent,
+    SvgComponent,
+    RecipeViewsComponent,
+    TagSelectorComponent,
+    PrettyjsonPipe
+  ],
   imports: [
     CommonModule,
     MatButtonModule,
@@ -76,7 +83,8 @@ import { RecipeDetailsComponent } from './components/item-details/item-details/r
     MatTableModule,
     CdkFixedSizeVirtualScroll,
     CdkVirtualScrollViewport,
-    MatRippleModule
+    MatRippleModule,
+    MatAutocompleteModule
   ]
 })
 export class CoreModule { }
