@@ -64,7 +64,7 @@ internal sealed class TerminalDbSeeder
                 "tantalum"
             });
         var bufferParameter = new DecimalParameter(ParameterId.Create(), "Buffer", "h", 0.1m);
-        var additionalGasesParameter = new TextParameter(ParameterId.Create(), "Additional gases", new List<string> { "nitrogen", "oxygen" });
+        var additionalGasesParameter = new TextParameter(ParameterId.Create(), "Additional gases", new List<string> { "nitrogen", "oxygen" }, order: 12);
 
         _dbContext.Parameters.AddRange(bufferParameter,
             substrateParameter,

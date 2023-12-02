@@ -1,3 +1,5 @@
+@import '../../../styles/mixin';
+
 .add-sample {
   height: 100%;
 
@@ -14,4 +16,47 @@
     height: 400px;
     padding: 2em 1em;
   }
+
+  &__actions {
+    display: flex;
+
+    .break {
+      display: none;
+    }
+
+    .recipe_name_input {
+      width: auto;
+    }
+  }
+
+  
+  
+  @include md() {
+    &__main {
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    &__actions {
+      justify-content: space-evenly;
+      flex-wrap: wrap;
+  
+      .break {
+        flex-basis: 100%;
+        height: 0;
+      }
+  
+      .recipe_name_input {
+        width: 100%;
+      }
+    }
+  }
 }
+
+.step {
+  &__actions {
+    gap: 1em;
+  }
+}
+
+
