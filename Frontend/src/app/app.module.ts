@@ -52,6 +52,8 @@ import { SampleEditComponent } from './pages/settings/sample-edit/sample-edit.co
 import { TagEditComponent } from './pages/settings/tag-edit/tag-edit.component';
 import {LoginComponent} from "./pages/login/login.component";
 import {PermissionService} from "./core/guards/auth.guard";
+import {MatSortModule} from "@angular/material/sort";
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 @NgModule({
   declarations: [
@@ -116,7 +118,9 @@ import {PermissionService} from "./core/guards/auth.guard";
     CdkFixedSizeVirtualScroll,
     CdkVirtualForOf,
     ScrollingModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatSortModule,
+    MatPaginatorModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

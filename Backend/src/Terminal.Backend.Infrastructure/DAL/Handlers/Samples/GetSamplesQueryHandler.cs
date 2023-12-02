@@ -19,14 +19,14 @@ internal sealed class GetSamplesQueryHandler : IRequestHandler<GetSamplesQuery, 
     {
         var samples = await _samples
             .AsNoTracking()
-            .OrderByDescending(m => m.CreatedAtUtc)
             .Include(m => m.Project)
             .Include(m => m.Tags)
+            .OrderBy(request.OrderingParameters)
             .Paginate(request.Parameters)
             .Select(m => new GetSamplesDto.SampleDto(
                 m.Id, m.Code.Value, m.Project.Name, m.CreatedAtUtc.ToString("o"), m.Comment))
             .ToListAsync(ct);
-
+        
         return new GetSamplesDto { Samples = samples };
     }
 }

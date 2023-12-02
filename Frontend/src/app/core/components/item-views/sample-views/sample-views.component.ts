@@ -1,8 +1,11 @@
-import { Component, Output, EventEmitter, AfterViewInit } from '@angular/core';
-import { BehaviorSubject, tap } from 'rxjs';
-import { Sample } from 'src/app/core/models/samples/sample';
-import { SamplesService } from 'src/app/core/services/samples/samples.service';
-import { SelectedItem } from "../../../models/items/selected-item";
+import {AfterViewInit, Component, EventEmitter, Output} from '@angular/core';
+import {Observable, tap} from 'rxjs';
+import {Sample} from 'src/app/core/models/samples/sample';
+import {SamplesService} from 'src/app/core/services/samples/samples.service';
+import {SelectedItem} from "../../../models/items/selected-item";
+import {MatSort, Sort} from "@angular/material/sort";
+import {MatTableDataSource} from "@angular/material/table";
+import {PageEvent} from "@angular/material/paginator";
 
 @Component({
   selector: 'app-sample-views',
@@ -10,11 +13,15 @@ import { SelectedItem } from "../../../models/items/selected-item";
   styleUrls: ['./sample-views.component.scss']
 })
 export class SampleViewsComponent implements AfterViewInit {
-  displayedColumns: string[] = ['code', 'project', 'created'];
-  private readonly pageSize = 10;
-  private page = 0;
-  private readonly samplesSubject = new BehaviorSubject<Sample[]>([]);
-  samples$ = this.samplesSubject.asObservable();
+  displayedColumns: string[] = ['Code', 'Project.Name', 'CreatedAtUtc'];
+  queryPageSize = 10;
+  private queryPageIndex = 0;
+
+  private orderBy = "CreatedAtUtc";
+  private orderDir = 'desc';
+  dataSource = new MatTableDataSource<Sample>();
+  length$?: Observable<number>;
+
   selectedItem: SelectedItem | undefined;
   @Output() selectedItemChangeEvent = new EventEmitter<SelectedItem>();
 
@@ -23,21 +30,62 @@ export class SampleViewsComponent implements AfterViewInit {
   ) {  }
 
   ngAfterViewInit(): void {
-    this.samplesService.getSamples(this.page, this.pageSize)
-      .pipe(tap(r => this.selectSample(r[0])))
-      .subscribe(r => this.samplesSubject.next(r))
+    this.loadData();
+    this.length$ = this.samplesService.getSamplesAmount();
+    this.dataSource.sortData = this.sortData();
   }
 
-  onScroll(event: any) {
-    // check whether scroll reached bottom
-    if (event.target.offsetHeight + event.target.scrollTop >= event.target.scrollHeight) {
-      this.page += 1;
-      this.samplesService.getSamples(this.page, this.pageSize)
-        .subscribe(r =>
-          this.samplesSubject.next(this.samplesSubject.value.concat(r))
-        )
-      console.log(`loaded another ${this.pageSize} results, page: ${this.page}`);
+  private sortData() {
+    return (items: Sample[], sort: MatSort): Sample[] => {
+      if (!sort.active || sort.direction === '') {
+        return items;
+      }
+      return items.sort((a: Sample, b: Sample) => {
+        let comparatorResult: number;
+        console.log(sort.active)
+        switch (sort.active) {
+          case 'Project.Name':
+            comparatorResult = a.project.localeCompare(b.project);
+            break;
+          case 'Code':
+            // filter letters out
+            const codeA = +a.code.replace(/\D+/g, '');
+            const codeB = +b.code.replace(/\D+/g, '');
+            comparatorResult = (codeA < codeB) ? -1 : 1;
+            break;
+          default:
+            const dateA = new Date(a.createdAtUtc).getTime();
+            const dateB = new Date(b.createdAtUtc).getTime();
+            comparatorResult = (dateA < dateB) ? -1 : 1;
+            break;
+        }
+        return comparatorResult * (sort.direction == 'asc' ? 1 : -1);
+      });
+    };
+  }
+
+  pageSelected(event: PageEvent) {
+    if (this.queryPageIndex != event.pageIndex || this.queryPageSize != event.pageSize) {
+      this.queryPageIndex = event.pageIndex
+      this.queryPageSize = event.pageSize
+      this.loadData();
     }
+  }
+
+  sortColumnChanged($event: Sort) {
+    if ($event.active != this.orderBy || this.orderDir != $event.direction) {
+      this.orderBy = $event.active
+      this.orderDir = $event.direction
+      this.loadData();
+    }
+  }
+
+  private loadData() {
+    this.samplesService.getSamples(this.queryPageIndex, this.queryPageSize, this.orderBy, this.orderDir == 'desc')
+      .pipe(tap(r => {
+        if (!this.selectedItem) this.selectSample(r[0]);
+      }))
+      .subscribe(r => this.dataSource.data = r)
   }
 
   selectSample(m: Sample) {

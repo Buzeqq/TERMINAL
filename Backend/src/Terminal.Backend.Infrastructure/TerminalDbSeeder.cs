@@ -33,7 +33,8 @@ internal sealed class TerminalDbSeeder
         var projectBessy2 = new Project(ProjectId.Create(), "Bessy 2");
         var projectNitro = new Project(ProjectId.Create(), "Nitro");
         var projectNobelium = new Project(ProjectId.Create(), "Nobelium");
-
+        
+        _dbContext.Projects.AddRange(projectUpturn, projectBessy2, projectNitro, projectNobelium);
         #endregion
 
         #region parameters
@@ -65,6 +66,19 @@ internal sealed class TerminalDbSeeder
         var bufferParameter = new DecimalParameter(ParameterId.Create(), "Buffer", "h", 0.1m);
         var additionalGasesParameter = new TextParameter(ParameterId.Create(), "Additional gases", new List<string> { "nitrogen", "oxygen" });
 
+        _dbContext.Parameters.AddRange(bufferParameter,
+            substrateParameter,
+            timeParameter,
+            powerParameter,
+            pressureParameter,
+            temperatureParameter,
+            nucleationParameter,
+            diboranParameter,
+            methaneParameter,
+            bcParameter,
+            hydrogenParameter,
+            additionalGasesParameter);
+        
         #endregion
 
         #region steps
@@ -304,6 +318,7 @@ internal sealed class TerminalDbSeeder
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Samples.Add(sample9);
         _dbContext.SaveChanges();
+        
         var sample10 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -313,6 +328,7 @@ internal sealed class TerminalDbSeeder
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Samples.Add(sample10);
         _dbContext.SaveChanges();
+        
         var sample11 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -320,8 +336,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample11);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample11);
         _dbContext.SaveChanges();
+        
         var sample12 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -329,8 +346,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample12);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample12);
         _dbContext.SaveChanges();
+
         var sample13 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -338,8 +356,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample13);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample13);
         _dbContext.SaveChanges();
+
         var sample14 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -347,8 +366,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample14);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample14);
         _dbContext.SaveChanges();
+
         var sample15 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -356,7 +376,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample15);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample15);
+        _dbContext.SaveChanges();
+
         var sample16 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -364,7 +386,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample16);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample16);
+        _dbContext.SaveChanges();
+
         var sample17 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -372,7 +396,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample17);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample17);
+        _dbContext.SaveChanges();
+
         var sample18 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -380,7 +406,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample18);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample18);
+        _dbContext.SaveChanges();
+
         var sample19 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -388,7 +416,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample19);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample19);
+        _dbContext.SaveChanges();
+
         var sample20 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -396,7 +426,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample20);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample20);
+        _dbContext.SaveChanges();
+
         var sample21 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -404,7 +436,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample21);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample21);
+        _dbContext.SaveChanges();
+
         var sample22 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -412,7 +446,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample22);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample22);
+        _dbContext.SaveChanges();
+
         var sample23 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -420,7 +456,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample23);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample23);
+        _dbContext.SaveChanges();
+
         var sample24 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -428,7 +466,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample24);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample24);
+        _dbContext.SaveChanges();
+
         var sample25 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -436,7 +476,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample25);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample25);
+        _dbContext.SaveChanges();
+
         var sample26 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -444,7 +486,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample26);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample26);
+        _dbContext.SaveChanges();
+
         var sample27 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -452,7 +496,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample27);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample27);
+        _dbContext.SaveChanges();
+
         var sample28 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -460,7 +506,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample28);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample28);
+        _dbContext.SaveChanges();
+
         var sample29 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -468,7 +516,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample29);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample29);
+        _dbContext.SaveChanges();
+
         var sample30 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -476,7 +526,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample30);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample30);
+        _dbContext.SaveChanges();
+
         var sample31 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -484,7 +536,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample31);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample31);
+        _dbContext.SaveChanges();
+
         var sample32 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -492,7 +546,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample32);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample32);
+        _dbContext.SaveChanges();
+
         var sample33 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -500,7 +556,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample33);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample33);
+        _dbContext.SaveChanges();
+
         var sample34 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -508,7 +566,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample34);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample34);
+        _dbContext.SaveChanges();
+
         var sample35 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -516,7 +576,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample35);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample35);
+        _dbContext.SaveChanges();
+
         var sample36 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -524,7 +586,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample36);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample36);
+        _dbContext.SaveChanges();
+
         var sample37 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -532,7 +596,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample37);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample37);
+        _dbContext.SaveChanges();
+
         var sample38 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -540,7 +606,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample38);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample38);
+        _dbContext.SaveChanges();
+
         var sample39 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -548,7 +616,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample39);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample39);
+        _dbContext.SaveChanges();
+
         var sample40 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -556,7 +626,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample40);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample40);
+        _dbContext.SaveChanges();
+
         var sample41 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -564,7 +636,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample41);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample41);
+        _dbContext.SaveChanges();
+
         var sample42 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -572,7 +646,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample42);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample42);
+        _dbContext.SaveChanges();
+
         var sample43 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -580,7 +656,9 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample43);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample43);
+        _dbContext.SaveChanges();
+
         var sample44 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -599,28 +677,8 @@ internal sealed class TerminalDbSeeder
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Samples.Add(sample45);
-        _dbContext.SaveChanges();
-
-        #endregion
-
-        #region add
-        
-        _dbContext.Projects.AddRange(projectUpturn, projectBessy2, projectNitro, projectNobelium);
-        _dbContext.Parameters.AddRange(bufferParameter,
-            substrateParameter,
-            timeParameter,
-            powerParameter,
-            pressureParameter,
-            temperatureParameter,
-            nucleationParameter,
-            diboranParameter,
-            methaneParameter,
-            bcParameter,
-            hydrogenParameter,
-            additionalGasesParameter);
-
-        #endregion
 
         _dbContext.SaveChanges();
+        #endregion
     }
 }

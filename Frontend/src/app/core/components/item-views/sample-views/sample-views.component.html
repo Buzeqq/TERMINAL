@@ -1,27 +1,32 @@
-<cdk-virtual-scroll-viewport itemSize="50" class="items-viewport" (scroll)="onScroll($event)">
-  <div *ngIf="samples$ | async as samples else loading">
-    <mat-table [dataSource]="samples">
-      <ng-container matColumnDef="code">
-        <mat-header-cell *matHeaderCellDef> Code </mat-header-cell>
-        <mat-cell *matCellDef="let sample"> {{sample.code}} </mat-cell>
-      </ng-container>
+<cdk-virtual-scroll-viewport itemSize="50" class="items-viewport" >
+  <mat-table [dataSource]="dataSource" matSort (matSortChange)="sortColumnChanged($event)">
+        <ng-container matColumnDef="Code">
+      <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by code"> Code </mat-header-cell>
+      <mat-cell *matCellDef="let sample"> {{sample.code}} </mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="project">
-        <mat-header-cell *matHeaderCellDef> Project </mat-header-cell>
-        <mat-cell *matCellDef="let sample"> {{sample.project}} </mat-cell>
-      </ng-container>
+    <ng-container matColumnDef="Project.Name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by project"> Project </mat-header-cell>
+      <mat-cell *matCellDef="let sample"> {{sample.project}} </mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="created">
-        <mat-header-cell *matHeaderCellDef> Created </mat-header-cell>
-        <mat-cell *matCellDef="let sample"> {{sample.createdAtUtc | timeAgo}} </mat-cell>
-      </ng-container>
+    <ng-container matColumnDef="CreatedAtUtc">
+      <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date"> Created </mat-header-cell>
+      <mat-cell *matCellDef="let sample"> {{sample.createdAtUtc | timeAgo}} </mat-cell>
+    </ng-container>
 
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row mat-ripple *matRowDef="let row; columns: displayedColumns;" (click)="selectSample(row);"
-               [class.recent-samples__row--is-clicked]="row.id === selectedItem?.id"></mat-row>
-    </mat-table>
-  </div>
+    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+    <mat-row mat-ripple *matRowDef="let row; columns: displayedColumns;" (click)="selectSample(row);"
+             [class.recent-samples__row--is-clicked]="row.id === selectedItem?.id"></mat-row>
+  </mat-table>
 </cdk-virtual-scroll-viewport>
+<mat-paginator
+  [length]="(length$ | async)!"
+  [pageSize]="queryPageSize"
+  [pageSizeOptions]="[10, 25, 50]"
+  (page)="pageSelected($event)"
+  [showFirstLastButtons]="true">
+</mat-paginator>
 
 <ng-template #loading>
   <mat-spinner></mat-spinner>
