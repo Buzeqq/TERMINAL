@@ -1,23 +1,23 @@
 <cdk-virtual-scroll-viewport itemSize="50" class="items-viewport" >
   <mat-table [dataSource]="dataSource" matSort (matSortChange)="sortColumnChanged($event)">
         <ng-container matColumnDef="Code">
-      <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by code"> Code </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Code </mat-header-cell>
       <mat-cell *matCellDef="let sample"> {{sample.code}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="Project.Name">
-      <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by project"> Project </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Project </mat-header-cell>
       <mat-cell *matCellDef="let sample"> {{sample.project}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="CreatedAtUtc">
-      <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date"> Created </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Created </mat-header-cell>
       <mat-cell *matCellDef="let sample"> {{sample.createdAtUtc | timeAgo}} </mat-cell>
     </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="header_row"></mat-header-row>
     <mat-row mat-ripple *matRowDef="let row; columns: displayedColumns;" (click)="selectSample(row);"
-             [class.recent-samples__row--is-clicked]="row.id === selectedItem?.id"></mat-row>
+             [class.row-is-clicked]="row.id === selectedItem?.id"></mat-row>
   </mat-table>
 </cdk-virtual-scroll-viewport>
 <mat-paginator

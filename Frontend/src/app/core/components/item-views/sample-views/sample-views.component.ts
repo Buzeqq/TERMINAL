@@ -10,7 +10,7 @@ import {PageEvent} from "@angular/material/paginator";
 @Component({
   selector: 'app-sample-views',
   templateUrl: './sample-views.component.html',
-  styleUrls: ['./sample-views.component.scss']
+  styleUrls: ['./sample-views.component.scss', '../item-views.component.scss']
 })
 export class SampleViewsComponent implements AfterViewInit {
   displayedColumns: string[] = ['Code', 'Project.Name', 'CreatedAtUtc'];

@@ -1,4 +1,12 @@
+@use '../../../../styles' as st;
+@use '@angular/material' as mat;
+@use 'sass:map';
 @import '../../../../styles/mixin';
+
+$color-config: mat.get-color-config(st.$current-theme);
+$primary-palette: map.get($color-config, 'primary');
+$accent-palette: map.get($color-config, 'accent');
+$is-dark-theme: map.get($color-config, 'is-dark');
 
 .item-view {
   display: flex;
@@ -23,12 +31,6 @@
       font-size: xx-large;
     }
   }
-
-  &__row {
-    &--is-clicked {
-      color: red;
-    }
-  }
 }
 
 @include md() {
@@ -41,4 +43,49 @@
       grid-template-columns: auto;
     }
   }
+}
+
+// for child elements
+
+.items-viewport {
+  height: 540px; // scroll view-port needs setting fixed height
+  width: 99%;
+  @if $is-dark-theme {
+    color: mat.get-color-from-palette($accent-palette, darker);
+  } @else {
+    color: mat.get-color-from-palette($primary-palette, lighter);
+  }
+}
+
+.row-is-clicked {
+  @if $is-dark-theme {
+    background-color: mat.get-color-from-palette($accent-palette, darker);
+  } @else {
+    background-color: mat.get-color-from-palette($primary-palette, lighter);
+  }
+}
+
+.header_row {
+  border-bottom: 0.5px solid;
+}
+
+.cdk-virtual-scroll-viewport {
+  color: mat.get-color-from-palette(mat.$grey-palette, 500);
+  transition: color 0.2s linear;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  @if $is-dark-theme {
+    background: mat.get-color-from-palette(mat.$grey-palette, 120);
+  } @else {
+    background: mat.get-color-from-palette(mat.$grey-palette, 200);
+  }
+}
+
+*::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 0 8px;
 }

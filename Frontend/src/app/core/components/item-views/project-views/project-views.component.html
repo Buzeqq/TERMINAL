@@ -5,9 +5,9 @@
       <mat-cell *matCellDef="let project"> {{project.name}} </mat-cell>
     </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="header_row"></mat-header-row>
     <mat-row mat-ripple *matRowDef="let row; columns: displayedColumns;" (click)="selectProject(row);"
-             [class.recent-samples__row--is-clicked]="row.id === selectedItem?.id"></mat-row>
+             [class.row-is-clicked]="row.id === selectedItem?.id"></mat-row>
   </mat-table>
 </cdk-virtual-scroll-viewport>
 <mat-paginator

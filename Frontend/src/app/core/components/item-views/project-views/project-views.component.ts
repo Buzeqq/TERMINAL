@@ -6,10 +6,11 @@ import { ProjectsService } from "../../../services/projects/projects.service";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatSort, Sort} from "@angular/material/sort";
 import {PageEvent} from "@angular/material/paginator";
+
 @Component({
   selector: 'app-project-views',
   templateUrl: './project-views.component.html',
-  styleUrls: ['./project-views.component.scss']
+  styleUrls: ['./project-views.component.scss', '../item-views.component.scss']
 })
 export class ProjectViewsComponent implements AfterViewInit {
   displayedColumns: string[] = ['Name'];

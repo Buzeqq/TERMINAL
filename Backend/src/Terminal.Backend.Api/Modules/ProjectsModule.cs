@@ -20,7 +20,8 @@ public static class ProjectsModule
             [FromQuery] int pageNumber,
             [FromQuery] bool? desc,
             ISender sender,
-            CancellationToken ct) =>
+            CancellationToken ct
+            ) =>
             Results.Ok(await sender.Send(new GetProjectsQuery(pageNumber, pageSize, desc ?? true), ct)))
             .RequireAuthorization(Permission.ProjectRead.ToString());
 
