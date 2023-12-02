@@ -22,9 +22,9 @@
           <button matSuffix mat-icon-button *ngIf="sampleForm.controls.project.value" (click)="sampleForm.controls.project.setValue('')">
             <mat-icon>close</mat-icon>
           </button>
-          <mat-autocomplete #projectAutocomplete>
+          <mat-autocomplete #projectAutocomplete (optionSelected)="sampleForm.controls.project.setItem($event.option.value, $event.option.value.name)">
             <mat-option *ngFor="let project of formData.projects"
-                        [value]="project.name">
+                        [value]="project">
               {{project.name}}
             </mat-option>
           </mat-autocomplete>
@@ -42,11 +42,13 @@
             <mat-icon>close</mat-icon>
           </button>
           <mat-autocomplete #recipeAutocomplete (optionSelected)="onRecipeSelect($event)">
-            <mat-option [value]="'None'">None</mat-option>
-            <mat-option *ngFor="let recipe of formData.recipes"
-                        [value]="recipe.name">
-              {{recipe.name}}
-            </mat-option>
+            <ng-container *ngIf="formData.recipes as recipes">
+              <mat-option [value]="null">None</mat-option>
+              <mat-option *ngFor="let recipe of recipes"
+                          [value]="recipe">
+                {{recipe.name}}
+              </mat-option>
+            </ng-container>
           </mat-autocomplete>
         </mat-form-field>
 
@@ -65,19 +67,19 @@
           <mat-tab class="step" *ngFor="let stepControls of sampleForm.controls.steps.controls; index as i" [label]="'Step #' + (i + 1)">
             <div class="add-sample__form">
             <ng-container *ngFor="let parameterControl of stepControls.controls.parameters.controls">
-              <ng-container [ngSwitch]="parameterControl.parameter.$type">
+              <ng-container [ngSwitch]="parameterControl.item.$type">
                 <mat-form-field *ngSwitchCase="'text'">
-                  <mat-label>{{parameterControl.parameter.name}}</mat-label>
+                  <mat-label>{{parameterControl.item.name}}</mat-label>
                   <mat-select [formControl]="parameterControl">
-                    <mat-option *ngFor="let option of getOptions(parameterControl.parameter)" [value]="option">{{option}}</mat-option>
+                    <mat-option *ngFor="let option of getOptions(parameterControl.item)" [value]="option">{{option}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field *ngSwitchDefault>
-                  <mat-label>{{parameterControl.parameter.name}}</mat-label>
+                  <mat-label>{{parameterControl.item.name}}</mat-label>
                   <input matInput [formControl]="parameterControl"
                          [type]="'number'"
-                         [step]="getStep(parameterControl.parameter)" min="0">
-                  <p matTextSuffix *ngIf="getUnit(parameterControl.parameter) as unit">{{unit}}</p>
+                         [step]="getStep(parameterControl.item)" min="0">
+                  <p matTextSuffix *ngIf="getUnit(parameterControl.item) as unit">{{unit}}</p>
                 </mat-form-field>
               </ng-container>
             </ng-container>
@@ -99,7 +101,7 @@
   </mat-card-content>
   <mat-card-footer>
     <mat-card-actions>
-      <button mat-raised-button (click)="addSample()">
+      <button mat-raised-button [disabled]="sampleForm.invalid" (click)="addSample()">
         <mat-icon>add</mat-icon>
         Add sample
       </button>
@@ -112,6 +114,7 @@
       </ng-container>
     </mat-card-actions>
   </mat-card-footer>
+  <pre *ngIf="!environment.production" [innerHTML]="sampleForm.value | prettyjson"></pre>
 </mat-card>
 
 <ng-template #loading>

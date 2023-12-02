@@ -32,6 +32,7 @@ import { RecipeViewsComponent } from './components/item-views/recipe-views/recip
 import { RecipeDetailsComponent } from './components/item-details/item-details/recipe-details/recipe-details.component';
 import { TagSelectorComponent } from './components/form-parts/tag-selector/tag-selector.component';
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { PrettyjsonPipe } from './pipes/prettyjson.pipe';
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
     SvgComponent,
     RecipeViewsComponent,
     RecipeDetailsComponent,
-    TagSelectorComponent
+    TagSelectorComponent,
+    PrettyjsonPipe
   ],
   exports: [
     TimeAgoPipe,
@@ -60,7 +62,8 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
     ItemDetailsComponent,
     SvgComponent,
     RecipeViewsComponent,
-    TagSelectorComponent
+    TagSelectorComponent,
+    PrettyjsonPipe
   ],
   imports: [
     CommonModule,
