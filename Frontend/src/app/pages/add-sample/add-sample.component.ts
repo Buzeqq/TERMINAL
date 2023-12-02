@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ParametersService } from "../../core/services/parameters/parameters.service";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import {
-  BehaviorSubject,
-  debounceTime,
+  BehaviorSubject, catchError,
+  debounceTime, EMPTY,
   map,
   Observable,
   startWith, Subscription,
@@ -17,7 +17,7 @@ import { SamplesService } from "../../core/services/samples/samples.service";
 import { NotificationService } from "../../core/services/notification/notification.service";
 import { Router } from "@angular/router";
 import {
-  AddSampleFormData, CommentFormControl,
+  AddSampleFormData, CommentFormControl, ComplexTypeFormControl,
   DateFormControl, ParameterFormControl,
   ProjectFormControl,
   RecipeFormControl, SampleForm, StepFormArray,
@@ -25,11 +25,15 @@ import {
 } from "./types/addSampleTypes";
 import { RecipesService } from "../../core/services/recipes/recipes.service";
 import { AddSample, ParameterValue, Step } from "../../core/models/samples/addSample";
+import { environment } from "../../../environments/environment";
+import { Project } from "../../core/models/projects/project";
+import { Tag } from "../../core/models/tags/tag";
+import { Recipe } from "../../core/models/recipes/recipe";
 
 @Component({
   selector: 'app-add-sample',
   templateUrl: './add-sample.component.html',
-  styleUrls: ['./add-sample.component.scss']
+  styleUrls: ['./add-sample.component.scss'],
 })
 export class AddSampleComponent implements OnInit, OnDestroy {
   parameters: Parameter[] = [];
@@ -42,9 +46,9 @@ export class AddSampleComponent implements OnInit, OnDestroy {
 
   sampleForm = new FormGroup({
     date: new FormControl<Date>(new Date(), [Validators.required, Validators.nullValidator]) as DateFormControl,
-    project: new FormControl<string | null>(null, [Validators.required]) as ProjectFormControl,
-    tags: new FormControl<string[]>([], [Validators.required]) as TagsFormControl,
-    recipe: new FormControl<string | null>(null, [Validators.required]) as RecipeFormControl,
+    project: new ComplexTypeFormControl<Project | null, string | null>(null, null, [Validators.required]) as ProjectFormControl,
+    tags: new ComplexTypeFormControl<Tag[], string[]>([], [], [Validators.required]) as TagsFormControl,
+    recipe: new ComplexTypeFormControl<Recipe | null, string | null>( null,null, [Validators.required]) as RecipeFormControl,
     comment: new FormControl<string | null>(null, [Validators.maxLength(1024)]) as CommentFormControl,
     steps: new FormArray<StepFormArray>([])
   }) as SampleForm;
@@ -111,7 +115,7 @@ export class AddSampleComponent implements OnInit, OnDestroy {
           case "decimal":
           case "integer": {
             const numericParameter = parameter as NumericParameter;
-            firstStep.controls.parameters.push(new ParameterFormControl<string | number | null>(numericParameter, numericParameter.defaultValue,
+            firstStep.controls.parameters.push(new ComplexTypeFormControl<Parameter>(numericParameter, numericParameter.defaultValue,
               [Validators.required]));
             break;
           }
@@ -119,7 +123,7 @@ export class AddSampleComponent implements OnInit, OnDestroy {
             const textParameter = parameter as TextParameter;
             const defaultValue = textParameter.defaultValue ?
               textParameter.allowedValues[textParameter.defaultValue] : null;
-            firstStep.controls.parameters.push(new ParameterFormControl<string | number | null>(textParameter, defaultValue,
+            firstStep.controls.parameters.push(new ComplexTypeFormControl<Parameter>(textParameter, defaultValue,
               [Validators.required]));
             break;
           }
@@ -128,8 +132,6 @@ export class AddSampleComponent implements OnInit, OnDestroy {
 
       steps.push(firstStep);
     });
-
-    this.sampleForm.controls.recipe.setValue('None');
   }
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe());
@@ -166,8 +168,8 @@ export class AddSampleComponent implements OnInit, OnDestroy {
     const t = this.sampleForm.controls.steps.at(selectedTabIndex).controls.parameters as FormArray<ParameterFormControl>;
     const parameterControls = new FormArray<ParameterFormControl>([]);
     for (const p of t.controls) {
-      parameterControls.push(new ParameterFormControl<number | string | null>(
-        p.parameter,
+      parameterControls.push(new ComplexTypeFormControl<Parameter>(
+        p.item,
         p.value,
         p.validator
       ));
@@ -179,23 +181,29 @@ export class AddSampleComponent implements OnInit, OnDestroy {
   }
 
   onRecipeSelect(event: MatAutocompleteSelectedEvent) {
-    // todo: populate form with fetch steps
+    if (event.option.value === null) {
+      this.sampleForm.controls.recipe.setItem(null, 'None');
+      return;
+    }
+    this.sampleForm.controls.recipe.setItem(event.option.value, event.option.value.name);
   }
 
   addSample() {
-    const data = this.sampleFormData.value;
     const addSample = {
-      projectId: data.projects.find(p => p.name === this.sampleForm.controls.project.value)?.id,
-      recipeId: data.recipes.find(r => r.name === this.sampleForm.controls.recipe.value)?.id,
+      projectId: this.sampleForm.controls.project.item?.id,
+      recipeId: this.sampleForm.controls.recipe.item?.id,
       steps: this.getStepsDto(),
-      tagIds: data.recipes.filter(t => this.sampleForm.controls.tags.value.includes(t.name))
-        .map(t => t.id),
-      comment: this.sampleForm.controls.comment.value,
+      tagIds: this.sampleForm.controls.tags.value,
+      comment: this.sampleForm.controls.comment.value ?? '',
       saveAsRecipe: this.saveRecipeFormGroup.controls.saveAsRecipe.value,
       recipeName: this.saveRecipeFormGroup.controls.recipeName.value,
     } as AddSample;
 
     this.samplesService.addSample(addSample)
+      .pipe(catchError((err, _) => {
+        this.notificationService.notifyError(err);
+        return EMPTY;
+      }))
       .subscribe(_ => {
         this.router.navigate(['/samples'])
           .then(_ => this.notificationService.notifySuccess('Sample added!'));
@@ -208,11 +216,11 @@ export class AddSampleComponent implements OnInit, OnDestroy {
     for (const stepControls of stepsControls.controls) {
       steps.push({
         parameters: stepControls.controls.parameters.controls.map(c => ({
-          $type: c.parameter.$type,
-          id: c.parameter.id,
+          $type: c.item.$type,
+          id: c.item.id,
           value: c.value
         } as ParameterValue)),
-        comment: stepControls.controls.comment.value
+        comment: stepControls.controls.comment.value ?? ''
       });
     }
 
@@ -223,4 +231,5 @@ export class AddSampleComponent implements OnInit, OnDestroy {
     saveAsRecipe: new FormControl<boolean>(false),
     recipeName: new FormControl<string | null>('')
   })
+  protected readonly environment = environment;
 }

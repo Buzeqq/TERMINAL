@@ -1,18 +1,25 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, forwardRef, Input, OnInit, ViewChild } from '@angular/core';
 import { TagsFormControl } from "../../../../pages/add-sample/types/addSampleTypes";
 import { TagsService } from "../../../services/tags/tags.service";
 import { SearchService } from "../../../services/search/search.service";
 import { BehaviorSubject, combineLatestWith, debounceTime, filter, map, Observable, startWith, switchMap } from "rxjs";
 import { Tag } from "../../../models/tags/tag";
-import { FormControl } from "@angular/forms";
+import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 
 @Component({
   selector: 'app-tag-selector',
   templateUrl: './tag-selector.component.html',
-  styleUrls: ['./tag-selector.component.scss']
+  styleUrls: ['./tag-selector.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => TagSelectorComponent),
+      multi: true
+    }
+  ]
 })
-export class TagSelectorComponent implements OnInit {
+export class TagSelectorComponent implements OnInit, ControlValueAccessor {
   @Input({ required: true })
   formControl?: TagsFormControl;
 
@@ -51,7 +58,9 @@ export class TagSelectorComponent implements OnInit {
     if (this.chosenTags.value.find(t => t.id === newTag)) {
       return;
     }
+
     this.chosenTags.next([newTag, ...this.chosenTags.value]);
+    this.formControl?.setValue(this.chosenTags.value.map(t => t.id));
     this.tagInput!.nativeElement.value = '';
     this.tagFormControl.setValue('');
   }
@@ -64,5 +73,27 @@ export class TagSelectorComponent implements OnInit {
       this.chosenTags.value.splice(index, 1)
       this.chosenTags.next(this.chosenTags.value);
     }
+  }
+
+  onChange: any = () => {}
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  onTouch: any = () => {}
+  registerOnTouched(fn: any): void {
+    this.onTouch = fn;
+  }
+
+  val = "";
+  set value(val: any) {
+    if(val !== undefined && this.val !== val) {
+      this.val = val;
+      this.onChange(val);
+      this.onTouch(val);
+    }
+  }
+  writeValue(obj: any): void {
+
   }
 }
