@@ -55,6 +55,6 @@ internal sealed class ConvertDtoService : IConvertDtoService
         return steps;
     }
 
-    public Task<IEnumerable<Tag>> ConvertAsync(IEnumerable<TagId> tagIds, CancellationToken ct)
-        => _tagRepository.GetManyAsync(tagIds, ct);
+    public async Task<IEnumerable<Tag>> ConvertAsync(IEnumerable<TagId> tagIds, CancellationToken ct)
+        => await _tagRepository.GetManyAsync(tagIds, ct);
 }

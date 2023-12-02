@@ -7,6 +7,7 @@ import { Project } from "../../models/projects/project";
 import { Tag } from "../../models/tags/tag";
 import {SamplesService} from "../samples/samples.service";
 import {ProjectsService} from "../projects/projects.service";
+import { Recipe } from "../../models/recipes/recipe";
 
 @Injectable({
   providedIn: 'root'
@@ -61,7 +62,6 @@ export class SearchService extends ApiService {
       );
   }
 
-  // TODO recipes
   public searchIn(filterState: Record<'samples' | 'recipes' | 'projects', boolean>, searchPhrase: string, pageNumber: number, pageSize: number): Observable<SearchItem[]> {
     const apiCalls = [];
     if (searchPhrase == '') {
@@ -86,9 +86,22 @@ export class SearchService extends ApiService {
 
     return apiCalls.length > 0 ? zip(apiCalls).pipe(map(r => r.flat())) : of([]);
   }
+
+  searchRecipe(searchPhrase: string, pageNumber: number, pageSize: number): Observable<Recipe[]> {
+    return this.get<{ recipes: Recipe[] }>('samples/search', new HttpParams({
+      fromObject: {
+        searchPhrase,
+        pageNumber,
+        pageSize
+      }
+    }))
+      .pipe(
+        map(s => s.recipes)
+      );
+  }
 }
 
 export interface SearchItem {
   type: 'Sample' | 'Project' | 'Recipe';
-  item: Sample | Project; // | Recipe
+  item: Sample | Project | Recipe;
 }

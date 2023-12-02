@@ -19,6 +19,7 @@ internal sealed class GetParametersQueryHandler : IRequestHandler<GetParametersQ
         => (await _parameters
                 .AsNoTracking()
                 .Where(p => p.IsActive)
+                .OrderBy(p => p.Order)
                 .ToListAsync(ct))
             .AsGetParametersDto();
 }
