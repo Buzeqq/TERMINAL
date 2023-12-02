@@ -10,11 +10,6 @@ internal sealed class TerminalDbSeeder
 {
     private readonly TerminalDbContext _dbContext;
 
-    public TerminalDbSeeder(TerminalDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public void Seed()
     {
         #region tags
@@ -33,7 +28,8 @@ internal sealed class TerminalDbSeeder
         var projectBessy2 = new Project(ProjectId.Create(), "Bessy 2");
         var projectNitro = new Project(ProjectId.Create(), "Nitro");
         var projectNobelium = new Project(ProjectId.Create(), "Nobelium");
-
+        _dbContext.Projects.AddRange(projectUpturn, projectBessy2, projectNitro, projectNobelium);
+        
         #endregion
 
         #region parameters
@@ -63,7 +59,24 @@ internal sealed class TerminalDbSeeder
                 "tantalum"
             });
         var bufferParameter = new DecimalParameter(ParameterId.Create(), "Buffer", "h", 0.1m);
-        var additionalGasesParameter = new TextParameter(ParameterId.Create(), "Additional gases", new List<string> { "nitrogen", "oxygen" }, order: 12);
+        var additionalGasesParameter = new TextParameter(ParameterId.Create(), "Additional gases", 
+            new List<string> { "none", "nitrogen", "oxygen" }, order: 12);
+        var additionalGassesAmountParameter = 
+            new IntegerParameter(ParameterId.Create(), "Additional gases amount", "sccm", 1);
+        additionalGassesAmountParameter.SetParent(additionalGasesParameter);
+        _dbContext.Parameters.AddRange(bufferParameter,
+            substrateParameter,
+            timeParameter,
+            powerParameter,
+            pressureParameter,
+            temperatureParameter,
+            nucleationParameter,
+            diboranParameter,
+            methaneParameter,
+            bcParameter,
+            hydrogenParameter,
+            additionalGasesParameter,
+            additionalGassesAmountParameter);
 
         #endregion
 
@@ -320,7 +333,7 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample11);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample11);
         _dbContext.SaveChanges();
         var sample12 = new Sample(
             SampleId.Create(),
@@ -329,7 +342,7 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample12);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample12);
         _dbContext.SaveChanges();
         var sample13 = new Sample(
             SampleId.Create(),
@@ -338,7 +351,7 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample13);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample13);
         _dbContext.SaveChanges();
         var sample14 = new Sample(
             SampleId.Create(),
@@ -347,7 +360,7 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample14);_dbContext.SaveChanges();
+        _dbContext.Samples.Add(sample14);
         _dbContext.SaveChanges();
         var sample15 = new Sample(
             SampleId.Create(),
@@ -602,25 +615,12 @@ internal sealed class TerminalDbSeeder
         _dbContext.SaveChanges();
 
         #endregion
-
-        #region add
         
-        _dbContext.Projects.AddRange(projectUpturn, projectBessy2, projectNitro, projectNobelium);
-        _dbContext.Parameters.AddRange(bufferParameter,
-            substrateParameter,
-            timeParameter,
-            powerParameter,
-            pressureParameter,
-            temperatureParameter,
-            nucleationParameter,
-            diboranParameter,
-            methaneParameter,
-            bcParameter,
-            hydrogenParameter,
-            additionalGasesParameter);
-
-        #endregion
-
         _dbContext.SaveChanges();
+    }
+
+    public TerminalDbSeeder(TerminalDbContext dbContext)
+    {
+        _dbContext = dbContext;
     }
 }

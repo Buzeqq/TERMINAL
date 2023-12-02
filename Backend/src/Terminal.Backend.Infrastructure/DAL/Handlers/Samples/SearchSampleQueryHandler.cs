@@ -22,9 +22,11 @@ internal sealed class SearchSampleQueryHandler : IRequestHandler<SearchSampleQue
                 .AsNoTracking()
                 .Include(m => m.Project)
                 .Where(m => 
-                    EF.Functions.ToTsVector("english", "AX" + m.Code + " " + m.Comment).Matches(request.SearchPhrase) || 
+                    EF.Functions.ToTsVector("english", "AX" + m.Code + " " + m.Comment)
+                        .Matches(EF.Functions.ToTsQuery($"{request.SearchPhrase}:*")) || 
                     EF.Functions.ILike(m.Project.Name, $"%{request.SearchPhrase}%"))
-                .Select(m => new GetSamplesDto.SampleDto(m.Id, m.Code.Value, m.Project.Name, m.CreatedAtUtc.ToString("o"), m.Comment))
+                .Select(m => new GetSamplesDto.SampleDto(m.Id, m.Code.Value, m.Project.Name, 
+                    m.CreatedAtUtc.ToString("o"), m.Comment))
                 .Paginate(request.Parameters)
                 .ToListAsync(ct)
         };
