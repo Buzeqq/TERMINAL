@@ -50,29 +50,12 @@
           </mat-autocomplete>
         </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>Tags</mat-label>
-          <mat-chip-grid #chipGrid [formControl]="sampleForm.controls.tags">
-            <mat-chip-row *ngFor="let tag of chosenTags$ | async" [editable]='false' (removed)="removeTag(tag.name)">
-              {{tag.name}}
-              <button matChipRemove>
-                <mat-icon>cancel</mat-icon>
-              </button>
-            </mat-chip-row>
-
-            <input #tagInput matInput [formControl]="tagFormControl" [matChipInputFor]="chipGrid"
-                   matChipInputAddOnBlur="true" [matAutocomplete]="tagAutocomplete">
-            <mat-autocomplete #tagAutocomplete (optionSelected)="selectedTag($event);">
-              <mat-option *ngFor="let tag of formData.tags" [value]="tag.name">{{tag.name}}</mat-option>
-            </mat-autocomplete>
-          </mat-chip-grid>
-        </mat-form-field>
+        <app-tag-selector [formControl]="sampleForm.controls.tags"></app-tag-selector>
 
         <mat-form-field>
           <mat-label>Comment</mat-label>
           <textarea matInput [formControl]="sampleForm.controls.comment"></textarea>
         </mat-form-field>
-
       </mat-card>
       <mat-card>
         <mat-card-header>
@@ -116,15 +99,15 @@
   </mat-card-content>
   <mat-card-footer>
     <mat-card-actions>
-      <button mat-raised-button [disabled]="!sampleForm.valid" (click)="addSample()">
+      <button mat-raised-button (click)="addSample()">
         <mat-icon>add</mat-icon>
         Add sample
       </button>
-      <mat-checkbox #recipeCheckbox [formControl]="saveAsRecipeFormControl">Save as recipe</mat-checkbox>
+      <mat-checkbox #recipeCheckbox [formControl]="saveRecipeFormGroup.controls.saveAsRecipe">Save as recipe</mat-checkbox>
       <ng-container *ngIf="recipeCheckbox.checked">
         <mat-form-field>
           <mat-label>Recipe name:</mat-label>
-          <input [formControl]="recipeNameFormControl" matInput type="text">
+          <input [formControl]="saveRecipeFormGroup.controls.recipeName" matInput type="text">
         </mat-form-field>
       </ng-container>
     </mat-card-actions>

@@ -1,0 +1,25 @@
+<mat-form-field class="tag-selector">
+  <mat-label>Tags</mat-label>
+  <mat-chip-grid #chipGrid>
+    <mat-chip-row *ngFor="let tag of chosenTags$ | async" [editable]='false' (removed)="removeTag(tag.id)">
+      {{tag.name}}
+      <button matChipRemove>
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip-row>
+    <input matInput #tagInput [matChipInputFor]="chipGrid" matChipInputAddOnBlur="true" [formControl]="tagFormControl"
+           [matAutocomplete]="tagAutocomplete">
+    <mat-autocomplete #tagAutocomplete (optionSelected)="selectedTag($event)">
+      <ng-container *ngIf="tagInput.value.length > 0">
+        <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
+          {{tag.name}}
+        </mat-option>
+      </ng-container>
+      <ng-container *ngIf="tagFormControl.value === ''">
+        <mat-option *ngFor="let tag of recentTags$ | async" [value]="tag">
+          {{tag.name}}
+        </mat-option>
+      </ng-container>
+    </mat-autocomplete>
+  </mat-chip-grid>
+</mat-form-field>

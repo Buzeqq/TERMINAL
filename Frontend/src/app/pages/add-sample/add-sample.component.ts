@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ParametersService } from "../../core/services/parameters/parameters.service";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import {
@@ -11,13 +11,11 @@ import {
 } from "rxjs";
 import { SearchService } from "../../core/services/search/search.service";
 import { ProjectsService } from "../../core/services/projects/projects.service";
-import { TagsService } from "../../core/services/tags/tags.service";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { NumericParameter, Parameter, TextParameter } from "../../core/models/parameters/parameter";
 import { SamplesService } from "../../core/services/samples/samples.service";
 import { NotificationService } from "../../core/services/notification/notification.service";
 import { Router } from "@angular/router";
-import { Tag } from "../../core/models/tags/tag";
 import {
   AddSampleFormData, CommentFormControl,
   DateFormControl, ParameterFormControl,
@@ -26,6 +24,7 @@ import {
   TagsFormControl
 } from "./types/addSampleTypes";
 import { RecipesService } from "../../core/services/recipes/recipes.service";
+import { AddSample, ParameterValue, Step } from "../../core/models/samples/addSample";
 
 @Component({
   selector: 'app-add-sample',
@@ -53,7 +52,6 @@ export class AddSampleComponent implements OnInit, OnDestroy {
   constructor(protected readonly parameterService: ParametersService,
               private readonly searchService: SearchService,
               private readonly projectService: ProjectsService,
-              private readonly tagsService: TagsService,
               private readonly samplesService: SamplesService,
               private readonly notificationService: NotificationService,
               private readonly recipesService: RecipesService,
@@ -98,29 +96,6 @@ export class AddSampleComponent implements OnInit, OnDestroy {
       })
     ).subscribe());
 
-    this.subscriptions.push(this.tagFormControl.valueChanges.pipe(
-      startWith(''),
-      debounceTime(500),
-      switchMap(phrase => {
-        if (phrase === '') {
-          return this.tagsService.getTags(0, 10);
-        } else {
-          return this.searchService.searchTags(phrase!, 0, 10);
-        }
-      }),
-      tap(r => {
-        console.log(r);
-        return r;
-      }),
-      // combineLatestWith(this.chosenTags$),
-      // map(([filteredTags, chosenTags]) =>
-      //   filteredTags.filter(t1 => chosenTags.find(t2 => t1.id === t2.id))),
-      tap(tags => this.sampleFormData.next({
-        ...this.sampleFormData.value,
-        tags
-      }))
-    ).subscribe());
-
     this.parameterService.getParameters()
       .pipe(
         map(parameters => parameters.sort((p1, p2) => p1.order - p2.order)),
@@ -160,33 +135,6 @@ export class AddSampleComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(s => s.unsubscribe());
   }
 
-  public tagFormControl = new FormControl<string>('');
-  @ViewChild('tagInput') tagInput?: ElementRef<HTMLInputElement>;
-  private chosenTags = new BehaviorSubject<Tag[]>([]);
-  public readonly chosenTags$ = this.chosenTags.asObservable();
-
-  selectedTag(event: MatAutocompleteSelectedEvent) {
-    const newTag = event.option.value;
-    if (this.chosenTags.value.find(t => t.id === newTag)) {
-      return;
-    }
-
-    this.chosenTags.next([newTag ,...this.chosenTags.value]);
-    this.tagInput!.nativeElement.value = '';
-    this.tagFormControl.setValue('');
-  }
-
-  removeTag(tagId: string) {
-    const tag = this.chosenTags.value.find(t => t.id == tagId);
-    if (!tag) return;
-    const index = this.chosenTags.value.indexOf(tag);
-
-    if (index >= 0) {
-      this.chosenTags.value.splice(index, 1)
-      this.chosenTags.next(this.chosenTags.value);
-    }
-  }
-
   getUnit(parameter: Parameter): string | undefined {
     if (parameter.$type !== 'text') {
       return (parameter as NumericParameter).unit;
@@ -210,10 +158,10 @@ export class AddSampleComponent implements OnInit, OnDestroy {
     return [];
   }
 
+  selectedTabIndex: number = 0;
   removeTab(i: number) {
     this.sampleForm.controls.steps.removeAt(i);
   }
-
   addTab(selectedTabIndex: number) {
     const t = this.sampleForm.controls.steps.at(selectedTabIndex).controls.parameters as FormArray<ParameterFormControl>;
     const parameterControls = new FormArray<ParameterFormControl>([]);
@@ -230,14 +178,49 @@ export class AddSampleComponent implements OnInit, OnDestroy {
     }));
   }
 
-  addSample() {
-
-  }
-  saveAsRecipeFormControl = new FormControl(false);
-  recipeNameFormControl = new FormControl('')
-
-  selectedTabIndex: number = 0;
   onRecipeSelect(event: MatAutocompleteSelectedEvent) {
-
+    // todo: populate form with fetch steps
   }
+
+  addSample() {
+    const data = this.sampleFormData.value;
+    const addSample = {
+      projectId: data.projects.find(p => p.name === this.sampleForm.controls.project.value)?.id,
+      recipeId: data.recipes.find(r => r.name === this.sampleForm.controls.recipe.value)?.id,
+      steps: this.getStepsDto(),
+      tagIds: data.recipes.filter(t => this.sampleForm.controls.tags.value.includes(t.name))
+        .map(t => t.id),
+      comment: this.sampleForm.controls.comment.value,
+      saveAsRecipe: this.saveRecipeFormGroup.controls.saveAsRecipe.value,
+      recipeName: this.saveRecipeFormGroup.controls.recipeName.value,
+    } as AddSample;
+
+    this.samplesService.addSample(addSample)
+      .subscribe(_ => {
+        this.router.navigate(['/samples'])
+          .then(_ => this.notificationService.notifySuccess('Sample added!'));
+      });
+  }
+
+  getStepsDto() {
+    const steps: Step[] = [];
+    const stepsControls = this.sampleForm.controls.steps;
+    for (const stepControls of stepsControls.controls) {
+      steps.push({
+        parameters: stepControls.controls.parameters.controls.map(c => ({
+          $type: c.parameter.$type,
+          id: c.parameter.id,
+          value: c.value
+        } as ParameterValue)),
+        comment: stepControls.controls.comment.value
+      });
+    }
+
+    return steps;
+  }
+
+  public saveRecipeFormGroup = new FormGroup({
+    saveAsRecipe: new FormControl<boolean>(false),
+    recipeName: new FormControl<string | null>('')
+  })
 }
