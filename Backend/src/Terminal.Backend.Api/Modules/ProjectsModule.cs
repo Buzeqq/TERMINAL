@@ -4,6 +4,7 @@ using Terminal.Backend.Application.Commands.Project.ChangeStatus;
 using Terminal.Backend.Application.Commands.Project.Create;
 using Terminal.Backend.Application.Queries.Projects.Get;
 using Terminal.Backend.Application.Queries.Projects.Search;
+using Terminal.Backend.Application.Queries.Samples.Get;
 using Terminal.Backend.Core.Enums;
 using Terminal.Backend.Core.ValueObjects;
 
@@ -11,14 +12,19 @@ namespace Terminal.Backend.Api.Modules;
 
 public static class ProjectsModule
 {
+    private const string ApiRouteBase = "api/projects";
     public static void UseProjectsEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("api/projects",async ([FromQuery] int pageSize, [FromQuery] int pageNumber, ISender sender, 
-                    CancellationToken ct)
-                => Results.Ok(await sender.Send(new GetProjectsQuery(pageNumber, pageSize), ct)))
+        app.MapGet(ApiRouteBase,async (
+            [FromQuery] int pageSize,
+            [FromQuery] int pageNumber,
+            [FromQuery] bool? desc,
+            ISender sender,
+            CancellationToken ct) =>
+            Results.Ok(await sender.Send(new GetProjectsQuery(pageNumber, pageSize, desc ?? true), ct)))
             .RequireAuthorization(Permission.ProjectRead.ToString());
 
-        app.MapGet("api/projects/{id:guid}", async (
+        app.MapGet(ApiRouteBase + "/{id:guid}", async (
             Guid id,
             ISender sender, 
             CancellationToken ct) =>
@@ -27,14 +33,14 @@ public static class ProjectsModule
             return project is null ? Results.NotFound() : Results.Ok(project);
         }).RequireAuthorization(Permission.ProjectRead.ToString());
  
-        app.MapPost("api/projects", async (
+        app.MapPost(ApiRouteBase, async (
             CreateProjectCommand command, 
             ISender sender, 
             CancellationToken ct) =>
         {
             command = command with { Id = ProjectId.Create() };
             await sender.Send(command, ct);
-            return Results.Created("api/projects", new { command.Id });
+            return Results.Created(ApiRouteBase, new { command.Id });
         }).RequireAuthorization(Permission.ProjectWrite.ToString());
 
         // app.MapPatch("api/projects/{id:guid}", async (
@@ -48,7 +54,7 @@ public static class ProjectsModule
         //     return Results.Ok();
         // });
         
-        app.MapPost("api/projects/{id:guid}/activate", async (
+        app.MapPost(ApiRouteBase + "/{id:guid}/activate", async (
             Guid id,
             ISender sender,
             CancellationToken ct) =>
@@ -58,7 +64,7 @@ public static class ProjectsModule
             return Results.Ok();
         }).RequireAuthorization(Permission.ProjectUpdate.ToString());
         
-        app.MapPost("api/projects/{id:guid}/deactivate", async (
+        app.MapPost(ApiRouteBase + "/{id:guid}/deactivate", async (
             Guid id,
             ISender sender,
             CancellationToken ct) =>
@@ -68,11 +74,20 @@ public static class ProjectsModule
             return Results.Ok();
         }).RequireAuthorization(Permission.ProjectUpdate.ToString());
 
-        app.MapGet("api/projects/search", async ([FromQuery] string searchPhrase, [FromQuery] int pageNumber, [FromQuery] int pageSize, ISender sender, CancellationToken ct) =>
+        app.MapGet(ApiRouteBase + "/search", async ([FromQuery] string searchPhrase, [FromQuery] int pageNumber, [FromQuery] int pageSize, ISender sender, CancellationToken ct) =>
         {
             var query = new SearchProjectQuery(searchPhrase, pageNumber, pageSize);
             var projects = await sender.Send(query, ct);
             return Results.Ok(projects);
+        }).RequireAuthorization(Permission.ProjectRead.ToString());
+        
+        app.MapGet(ApiRouteBase + "/amount", async (
+            ISender sender, 
+            CancellationToken ct) =>
+        {
+            var query = new GetProjectsAmountQuery();
+            var amount = await sender.Send(query, ct);
+            return Results.Ok(amount);
         }).RequireAuthorization(Permission.ProjectRead.ToString());
     }
 }
