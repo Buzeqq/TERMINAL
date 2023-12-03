@@ -8,7 +8,7 @@ import { AddSampleComponent } from "./pages/add-sample/add-sample.component";
 import { ItemDetailsComponent } from "./core/components/item-details/item-details/item-details.component";
 import {SettingsComponent} from "./pages/settings/settings.component";
 import {LoginComponent} from "./pages/login/login.component";
-import {loginPageGuard, pagesGuard} from "./core/guards/auth.guard";
+import {loginPageGuard, pagesGuard, settingsPageGuard} from "./core/guards/auth.guard";
 
 const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -22,7 +22,7 @@ const routes: Routes = [
   {path: 'projects/:id', component: ItemDetailsComponent, canActivate: [pagesGuard], data: {type: 'Project'}},
   {path: 'add-sample', component: AddSampleComponent, canActivate: [pagesGuard]},
   {path: 'recipes', component: ItemViewsComponent, canActivate: [pagesGuard], data: {type: 'Recipe'}},
-  {path: 'settings', component: SettingsComponent, canActivate: [pagesGuard]},
+  {path: 'settings', component: SettingsComponent, canActivate: [pagesGuard, settingsPageGuard]},
 
   // must be the last
   {path: '**', component: NotFoundComponent},

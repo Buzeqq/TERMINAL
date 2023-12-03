@@ -35,6 +35,7 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { PrettyjsonPipe } from './pipes/prettyjson.pipe';
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatSortModule} from "@angular/material/sort";
+import { UserViewsComponent } from './components/item-views/user-views/user-views.component';
 
 
 @NgModule({
@@ -52,7 +53,8 @@ import {MatSortModule} from "@angular/material/sort";
     RecipeViewsComponent,
     RecipeDetailsComponent,
     TagSelectorComponent,
-    PrettyjsonPipe
+    PrettyjsonPipe,
+    UserViewsComponent
   ],
   exports: [
     TimeAgoPipe,
@@ -65,7 +67,8 @@ import {MatSortModule} from "@angular/material/sort";
     SvgComponent,
     RecipeViewsComponent,
     TagSelectorComponent,
-    PrettyjsonPipe
+    PrettyjsonPipe,
+    UserViewsComponent
   ],
   imports: [
     CommonModule,

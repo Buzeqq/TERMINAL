@@ -21,7 +21,7 @@
           <mat-icon>assignment_add</mat-icon>
           Add recipe
         </button>
-        <button mat-menu-item (click)="closeWhenClicked(); openAddProjectDialog()">
+        <button mat-menu-item (click)="closeWhenClicked(); openAddProjectDialog()" [class.disabled]="!moderatorPermissions">
           <mat-icon>create_new_folder</mat-icon>
           Add project
         </button>
@@ -47,7 +47,7 @@
         <span *ngIf="isExpanded">Projects</span>
       </mat-list-item>
 
-      <mat-list-item routerLink="settings" (click)="closeWhenClicked()">
+      <mat-list-item routerLink="settings" (click)="closeWhenClicked()" [class.disabled]="!moderatorPermissions">
         <mat-icon matListItemIcon>settings</mat-icon>
         <span *ngIf="isExpanded">Settings</span>
       </mat-list-item>
@@ -56,7 +56,7 @@
   </mat-sidenav>
   <div class="grid-container">
     <header>
-      <app-statusbar (toggleMobileMenu)="toggleWhenMobile()"></app-statusbar>  
+      <app-statusbar (toggleMobileMenu)="toggleWhenMobile()"></app-statusbar>
     </header>
     <main>
       <router-outlet></router-outlet>

@@ -24,3 +24,8 @@ mat-sidenav-container {
 main {
   padding: 0 2%;
 }
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
