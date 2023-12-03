@@ -54,6 +54,7 @@ import {LoginComponent} from "./pages/login/login.component";
 import {PermissionService} from "./core/guards/auth.guard";
 import {MatSortModule} from "@angular/material/sort";
 import {MatPaginatorModule} from "@angular/material/paginator";
+import { UserEditComponent } from './pages/settings/user-edit/user-edit.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import {MatPaginatorModule} from "@angular/material/paginator";
     SampleEditComponent,
     TagEditComponent,
     StatusbarComponent,
-    LoginComponent
+    LoginComponent,
+    UserEditComponent
   ],
   imports: [
     BrowserModule,

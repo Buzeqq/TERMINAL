@@ -1,10 +1,11 @@
 <ng-container *ngIf="sampleDetails$ | async; let sampleDetails">
+  <mat-card-header>
+    <mat-card-title class="sample-edit__header">Edit Sample {{sampleDetails.code}}</mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
   <mat-card-content class="sample-edit">
-    <h2 class="sample-edit__header">
-      Sample {{sampleDetails.code}}
-    </h2>
 
-    <mat-form-field class="sample-edit__form-fields" *ngIf="projectDetails$ | async">
+    <mat-form-field class="sample-edit__form-fields first-field" *ngIf="projectDetails$ | async">
       <mat-label>Project</mat-label>
       <mat-select [formControl]="sampleForm.controls.project">
         <mat-option *ngFor="let project of projects$ | async" [value]="project.name">{{project.name}}</mat-option>

@@ -11,6 +11,14 @@ export const loginPageGuard: CanActivateFn = (route, state) => {
   return inject(PermissionService).loginPage();
 };
 
+export const settingsPageGuard: CanActivateFn = (route, state) => {
+  const canActivate = inject(AuthService).isAdminOrMod()
+  if (!canActivate) {
+    inject(NotificationService).notifyNoPermission("Access to Settings denied. Contact administration for assistance.");
+  }
+  return canActivate;
+};
+
 @Injectable()
 export class PermissionService {
   constructor(

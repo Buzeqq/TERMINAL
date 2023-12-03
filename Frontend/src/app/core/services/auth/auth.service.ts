@@ -77,6 +77,18 @@ export class AuthService extends ApiService {
     return this.loggedOut.asObservable();
   }
 
+  isAdmin() {
+    return localStorage.getItem("user_role") == "Administrator";
+  }
+
+  isModerator() {
+    return localStorage.getItem("user_role") == "Moderator";
+  }
+
+  isAdminOrMod() {
+    return this.isAdmin() || this.isModerator();
+  }
+
   getExpiration() {
     const expiration = localStorage.getItem("expires_at");
     const expiresAt = expiration ? JSON.parse(expiration) : null;

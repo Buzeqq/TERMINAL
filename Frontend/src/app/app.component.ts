@@ -16,7 +16,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 export class AppComponent implements OnInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   isUserLoggedOut$ = this.authService.isLoggedOut();
-  
+
   isMobile$: Observable<boolean> = this.breakpointObserver.observe('(max-width: 768px)').pipe(map(result => result.matches));
   isMobile: boolean = false;
 
@@ -24,21 +24,25 @@ export class AppComponent implements OnInit {
   isExpanded$: Observable<boolean> = this.isMobile$.pipe(map(result => result || !this.isMobile));
   isExpanded: boolean = false // toggleable
 
+  moderatorPermissions = this.authService.isAdminOrMod();
+
   constructor(
     private readonly breakpointObserver: BreakpointObserver,
     private readonly dialog: MatDialog,
     protected readonly router: Router,
     private readonly authService: AuthService,
-    private readonly snackbar: NotificationService
+    private readonly notificationService: NotificationService
   ) {  }
 
   openAddProjectDialog() {
-    this.dialog.open(AddProjectDialogComponent);
+    this.moderatorPermissions ?
+    this.dialog.open(AddProjectDialogComponent) :
+    this.notificationService.notifyNoPermission("Access denied. Contact administration for assistance.")
   }
 
   ngOnInit(): void {
     this.authService.sessionWarningTimer$
-      .subscribe(_ => this.snackbar.notifySessionExpiration(this.authService.alertBefore)
+      .subscribe(_ => this.notificationService.notifySessionExpiration(this.authService.alertBefore)
         .subscribe(_ => this.authService.renewSession()));
 
     this.isMobile$.subscribe(result => {

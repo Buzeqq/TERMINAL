@@ -5,6 +5,7 @@ using Terminal.Backend.Application.DTO.Projects;
 using Terminal.Backend.Application.DTO.Recipes;
 using Terminal.Backend.Application.DTO.Samples;
 using Terminal.Backend.Application.DTO.Tags;
+using Terminal.Backend.Application.DTO.Users;
 using Terminal.Backend.Application.Exceptions;
 using Terminal.Backend.Application.Queries.QueryParameters;
 using Terminal.Backend.Core.Entities;
@@ -80,6 +81,14 @@ public static class Extensions
                 return b;
             }), s.Comment));
 
+    public static GetUserDto AsGetUserDto(this User entity)
+        => new()
+        {
+            Id = entity.Id,
+            Email = entity.Email,
+            Role = entity.Role,
+        };
+    
     public static GetParametersDto AsGetParametersDto(this IEnumerable<Parameter> parameters)
     {
         return new GetParametersDto
