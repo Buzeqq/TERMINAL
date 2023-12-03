@@ -26,7 +26,7 @@ export class SampleViewsComponent implements AfterViewInit {
   @Output() selectedItemChangeEvent = new EventEmitter<SelectedItem>();
 
   constructor(
-    private readonly samplesService: SamplesService,
+    private readonly samplesService: SamplesService
   ) {  }
 
   ngAfterViewInit(): void {
@@ -83,13 +83,13 @@ export class SampleViewsComponent implements AfterViewInit {
   private loadData() {
     this.samplesService.getSamples(this.queryPageIndex, this.queryPageSize, this.orderBy, this.orderDir == 'desc')
       .pipe(tap(r => {
-        if (!this.selectedItem) this.selectSample(r[0]);
+        if (!this.selectedItem) this.selectSample(r[0], true);
       }))
       .subscribe(r => this.dataSource.data = r)
   }
 
-  selectSample(m: Sample) {
+  selectSample(m: Sample, init: boolean = false) {
     this.selectedItem = {type: 'Sample', id: m.id};
-    this.selectedItemChangeEvent.emit({type: 'Sample', id: m.id});
+    this.selectedItemChangeEvent.emit({type: 'Sample', id: m.id, config: {init: init} });
   }
 }

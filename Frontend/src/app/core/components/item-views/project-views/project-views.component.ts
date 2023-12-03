@@ -38,7 +38,7 @@ export class ProjectViewsComponent implements AfterViewInit {
   private loadData() {
     this.projectService.getProjects(this.queryPageIndex, this.queryPageSize, this.orderDir == "desc")
       .pipe(tap(r => {
-        if (!this.selectedItem) this.selectProject(r[0]);
+        if (!this.selectedItem) this.selectProject(r[0], true);
       }))
       .subscribe(r => this.dataSource.data = r)
   }
@@ -58,8 +58,8 @@ export class ProjectViewsComponent implements AfterViewInit {
     }
   }
 
-  selectProject(p: Project) {
-    this.selectedItem = {type: 'Project', id: p.id};
+  selectProject(p: Project, init = false) {
+    this.selectedItem = {type: 'Project', id: p.id, config: {init: init}};
     this.selectedItemChangeEvent.emit(this.selectedItem);
   }
 }
