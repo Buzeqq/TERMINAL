@@ -36,6 +36,9 @@ import { PrettyjsonPipe } from './pipes/prettyjson.pipe';
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatSortModule} from "@angular/material/sort";
 import { UserViewsComponent } from './components/item-views/user-views/user-views.component';
+import { StepsCreatorComponent } from './components/form-parts/steps-creator/steps-creator.component';
+import { MatSelectModule } from "@angular/material/select";
+import { MatTabsModule } from "@angular/material/tabs";
 
 
 @NgModule({
@@ -54,7 +57,8 @@ import { UserViewsComponent } from './components/item-views/user-views/user-view
     RecipeDetailsComponent,
     TagSelectorComponent,
     PrettyjsonPipe,
-    UserViewsComponent
+    UserViewsComponent,
+    StepsCreatorComponent
   ],
   exports: [
     TimeAgoPipe,
@@ -68,7 +72,8 @@ import { UserViewsComponent } from './components/item-views/user-views/user-view
     RecipeViewsComponent,
     TagSelectorComponent,
     PrettyjsonPipe,
-    UserViewsComponent
+    UserViewsComponent,
+    StepsCreatorComponent
   ],
   imports: [
     CommonModule,
@@ -91,7 +96,9 @@ import { UserViewsComponent } from './components/item-views/user-views/user-view
     MatRippleModule,
     MatAutocompleteModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatSelectModule,
+    MatTabsModule
   ]
 })
 export class CoreModule { }

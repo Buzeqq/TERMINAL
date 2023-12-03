@@ -1,9 +1,12 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Terminal.Backend.Application.Commands.Recipe;
+using Terminal.Backend.Application.Commands.Sample.Create;
 using Terminal.Backend.Application.Queries.QueryParameters;
 using Terminal.Backend.Application.Queries.Recipes.Get;
 using Terminal.Backend.Application.Queries.Recipes.Search;
 using Terminal.Backend.Core.Enums;
+using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Api.Modules;
 
@@ -56,5 +59,20 @@ public static class RecipeModule
 
             return Results.Ok(recipes);
         }).RequireAuthorization(Permission.RecipeRead.ToString());
+
+        app.MapPost("api/recipes", async(
+            CreateRecipeCommand command,
+            ISender sender,
+            CancellationToken ct) =>
+        {
+            command = command with { Id = RecipeId.Create() };
+
+            await sender.Send(command, ct);
+
+            return Results.Created("api/recipes", new
+            { 
+                command.Id
+            });
+        }).RequireAuthorization(Permission.RecipeWrite.ToString());
     }
 }

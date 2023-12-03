@@ -25,7 +25,7 @@
       <mat-icon>add</mat-icon>
       Add sample
     </button>
-    <button color="primary" mat-raised-button>
+    <button (click)="router.navigate(['/add-recipe'])" color="primary" mat-raised-button [class.disabled]="!moderatorPermissions">
       <mat-icon>assignment_add</mat-icon>
       Add recipe
     </button>

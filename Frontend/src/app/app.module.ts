@@ -47,14 +47,15 @@ import { MatSelectModule } from "@angular/material/select";
 import { ProjectViewsComponent } from "./core/components/item-views/project-views/project-views.component";
 import { SettingsComponent } from './pages/settings/settings.component';
 import { ProjectEditComponent } from './pages/settings/project-edit/project-edit.component';
-import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { SampleEditComponent } from './pages/settings/sample-edit/sample-edit.component';
 import { TagEditComponent } from './pages/settings/tag-edit/tag-edit.component';
-import {LoginComponent} from "./pages/login/login.component";
-import {PermissionService} from "./core/guards/auth.guard";
-import {MatSortModule} from "@angular/material/sort";
-import {MatPaginatorModule} from "@angular/material/paginator";
+import { LoginComponent } from "./pages/login/login.component";
+import { PermissionService } from "./core/guards/auth.guard";
+import { MatSortModule } from "@angular/material/sort";
+import { MatPaginatorModule } from "@angular/material/paginator";
 import { UserEditComponent } from './pages/settings/user-edit/user-edit.component';
+import { AddRecipeComponent } from './pages/add-recipe/add-recipe.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { UserEditComponent } from './pages/settings/user-edit/user-edit.componen
     TagEditComponent,
     StatusbarComponent,
     LoginComponent,
-    UserEditComponent
+    UserEditComponent,
+    AddRecipeComponent
   ],
   imports: [
     BrowserModule,

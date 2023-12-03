@@ -1,0 +1,14 @@
+<h1>Add recipe</h1>
+<form>
+  <strong>Name: </strong>
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput type="text" [formControl]="recipeForm.controls.name">
+  </mat-form-field>
+
+  <app-steps-creator [stepsControls]="recipeForm.controls.steps" [parameters]="parameters"></app-steps-creator>
+
+  <button mat-raised-button type="submit" [disabled]="recipeForm.invalid" (click)="addRecipe()">Add recipe</button>
+</form>
+
+<pre *ngIf="!environment.production" [innerHTML]="recipeForm.value | prettyjson"></pre>
