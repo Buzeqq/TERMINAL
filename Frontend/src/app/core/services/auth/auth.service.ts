@@ -4,13 +4,14 @@ import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {BehaviorSubject, catchError, shareReplay, Subject, tap, throwError, timer} from "rxjs";
 import * as moment from "moment";
 import {jwtDecode} from "jwt-decode";
+import {decodedJWT, successfulLoginResponse} from "../../models/auth/auth";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService extends ApiService {
   private loggedOut = new BehaviorSubject<boolean>(true);
-  alertBefore = 120 * 1000 // 2 minutes expressed in milliseconds
+  alertBefore = 120 * 1000 /* 2 minutes expressed in milliseconds */
   private sessionWarningTimer = new Subject();
   get sessionWarningTimer$() {
     return this.sessionWarningTimer.asObservable();
@@ -30,42 +31,35 @@ export class AuthService extends ApiService {
     return this.post<successfulLoginResponse>('users/login', {email, password})
       .pipe(
         catchError(this.handleAuthError),
-        tap(r => this.manageResponse(r)),
+        tap(r => this.setSession(r)),
         shareReplay() /* prevents from double POST request */
       )
   }
 
-  private handleAuthError(err: HttpErrorResponse) {
-    return throwError(() => Error('Invalid credentials.'))
-  }
-
-  private manageResponse(r: successfulLoginResponse) {
+  private setSession(r: successfulLoginResponse) {
     const decoded = jwtDecode(r.token) as decodedJWT;
-    this.setSession(decoded, r.token);
+
+    localStorage.setItem('token', r.token);
+    localStorage.setItem("expiresAt", JSON.stringify(decoded.exp * 1000));
+
+    const expiresIn = moment(decoded.exp*1000).subtract(moment().valueOf()); // milliseconds
+    timer(expiresIn.valueOf() - this.alertBefore).subscribe(this.sessionWarningTimer);
+
     this.loggedOut.next(false);
   }
 
-  private setSession(payload: decodedJWT, token: string) {
-    localStorage.setItem('token', token);
-    localStorage.setItem("expires_at", JSON.stringify(payload.exp * 1000));
-    localStorage.setItem('user_role', payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]);
-
-    const expiresIn = moment(payload.exp*1000).subtract(moment().valueOf()); // milliseconds
-    timer(expiresIn.valueOf() - this.alertBefore).subscribe(this.sessionWarningTimer);
-  }
-
   renewSession() {
-    localStorage.setItem(
-      "expires_at", JSON.stringify(
-        this.getExpiration().add(1, 'hour').valueOf()
-      )
-    );
+    // FIXME send request to backend for a new token
+    // localStorage.setItem(
+    //   "expiresAt", JSON.stringify(
+    //     this.getExpiration().add(1, 'hour').valueOf()
+    //   )
+    // );
   }
 
   logout() {
     localStorage.removeItem("token");
-    localStorage.removeItem("expires_at");
-    localStorage.removeItem("user_role");
+    localStorage.removeItem("expiresAt");
     this.loggedOut.next(true)
   }
 
@@ -78,34 +72,32 @@ export class AuthService extends ApiService {
   }
 
   isAdmin() {
-    return localStorage.getItem("user_role") == "Administrator";
+    return this.isRole("Administrator");
   }
 
   isModerator() {
-    return localStorage.getItem("user_role") == "Moderator";
+    return this.isRole("Moderator");
   }
 
   isAdminOrMod() {
     return this.isAdmin() || this.isModerator();
   }
 
-  getExpiration() {
-    const expiration = localStorage.getItem("expires_at");
+  private isRole(role: string) {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decoded = jwtDecode(token) as decodedJWT;
+      return decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] == role;
+    } else return false;
+  }
+
+  private getExpiration() {
+    const expiration = localStorage.getItem("expiresAt");
     const expiresAt = expiration ? JSON.parse(expiration) : null;
     return moment(expiresAt);
   }
-}
 
-export interface successfulLoginResponse {
-  token: string
+  private handleAuthError(err: HttpErrorResponse) {
+    return throwError(() => Error('Invalid credentials.'))
+  }
 }
-
-export interface decodedJWT {
-  sub: string // token
-  email: string
-  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": string // role
-  exp: number // expiration time - UTC timestamp in seconds
-  iss: string // terminal
-  aud: string // terminal-clients
-}
-

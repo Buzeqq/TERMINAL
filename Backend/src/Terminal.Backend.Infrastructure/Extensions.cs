@@ -80,7 +80,7 @@ public static class Extensions
             })
             .AddPolicy(Role.Moderator, policy =>
             {
-                policy.AddRequirements(new RoleRequirement(Role.Registered));
+                policy.AddRequirements(new RoleRequirement(Role.Moderator));
             })
             .AddPolicy(Role.Administrator, policy =>
             {
