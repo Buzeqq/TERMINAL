@@ -1,8 +1,10 @@
 <ng-container *ngIf="projectDetails$ | async; let details">
+  <mat-card-header>
+    <mat-card-title class="project-edit__header">Edit Project {{ details.name }}</mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
   <mat-card-content class="project-edit">
-    <h2 class="project-edit__header">Project {{ details.name }}</h2>
-
-    <mat-slide-toggle [formControl]="isActiveToggleButton" class="project-edit__form-fields" color="primary">
+    <mat-slide-toggle [formControl]="isActiveToggleButton" class="project-edit__form-fields first-field" color="primary">
       <mat-label class="toggle-button-label">{{isActiveToggleButton.value ? 'Project active' : 'Project hidden'}}</mat-label>
     </mat-slide-toggle>
 

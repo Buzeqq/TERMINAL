@@ -24,12 +24,12 @@ export class RecipeViewsComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.recipesService.getRecipes(this.page, this.pageSize)
-      .pipe(tap(r => this.selectRecipe(r[0])))
+      .pipe(tap(r => this.selectRecipe(r[0], true)))
       .subscribe(r => this.recipeSubject.next(r))
   }
 
-  selectRecipe(recipe: Recipe) {
-    this.selectedItem = { type: 'Recipe', id: recipe.id };
+  selectRecipe(recipe: Recipe, init = false) {
+    this.selectedItem = { type: 'Recipe', id: recipe.id, config: {init: init} };
     this.selectedItemChangeEvent.emit(this.selectedItem);
   }
 

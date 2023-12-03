@@ -118,12 +118,12 @@ public static class Extensions
         
         using var scope = app.Services.CreateScope();
         using var dbContext = scope.ServiceProvider.GetRequiredService<TerminalDbContext>();
-        
+
         if (app.Environment.IsProduction())
         {
             dbContext.Database.Migrate();
         }
-        
+
         var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
         var adminOptions = app.Configuration.GetOptions<AdministratorOptions>(AdministratorOptionsSetup.SectionName);
         try
@@ -136,7 +136,7 @@ public static class Extensions
                     passwordHasher.Hash(adminOptions.Password));
                 admin.SetRole(adminRole);
                 dbContext.Users.Add(admin);
-                
+        
                 dbContext.SaveChanges();
             }
         }

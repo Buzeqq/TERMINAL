@@ -1,9 +1,12 @@
+using System.Linq.Expressions;
 using Terminal.Backend.Application.DTO.Parameters;
 using Terminal.Backend.Application.DTO.ParameterValues;
 using Terminal.Backend.Application.DTO.Projects;
 using Terminal.Backend.Application.DTO.Recipes;
 using Terminal.Backend.Application.DTO.Samples;
 using Terminal.Backend.Application.DTO.Tags;
+using Terminal.Backend.Application.DTO.Users;
+using Terminal.Backend.Application.Exceptions;
 using Terminal.Backend.Application.Queries.QueryParameters;
 using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.Entities.Parameters;
@@ -78,6 +81,14 @@ public static class Extensions
                 return b;
             }), s.Comment));
 
+    public static GetUserDto AsGetUserDto(this User entity)
+        => new()
+        {
+            Id = entity.Id,
+            Email = entity.Email,
+            Role = entity.Role,
+        };
+    
     public static GetParametersDto AsGetParametersDto(this IEnumerable<Parameter> parameters)
     {
         return new GetParametersDto
@@ -99,6 +110,36 @@ public static class Extensions
 
     public static IQueryable<T> Paginate<T>(this IQueryable<T> queryable, PagingParameters parameters)
         => queryable.Skip(parameters.PageNumber * parameters.PageSize).Take(parameters.PageSize);
+    
+    public static IOrderedQueryable<TEntity> OrderBy<TEntity>(this IQueryable<TEntity> source, OrderingParameters parameters)
+    {
+        string command = parameters.Desc ? "OrderByDescending" : "OrderBy";
+        var type = typeof(TEntity);
+        var parameter = Expression.Parameter(type, "p");
+
+        // Split the column name into individual property names
+        var properties = parameters.OrderBy.Split('.');
+
+        // Build expression for each property in the chain
+        Expression propertyAccess = parameter;
+        foreach (var property in properties)
+        {
+            var propertyInfo = type.GetProperty(property);
+            if (propertyInfo is null)
+            {
+                throw new ColumnNotFoundException(property);
+            }
+
+            propertyAccess = Expression.MakeMemberAccess(propertyAccess, propertyInfo);
+            type = propertyInfo.PropertyType; // Update type for the next iteration
+        }
+
+        var orderByExpression = Expression.Lambda(propertyAccess, parameter);
+        var resultExpression = Expression.Call(typeof(Queryable), command, new Type[] { typeof(TEntity), type },
+            source.Expression, Expression.Quote(orderByExpression));
+
+        return (IOrderedQueryable<TEntity>)source.Provider.CreateQuery<TEntity>(resultExpression);
+    }
 
     public static GetRecipeDto AsDto(this Recipe recipe) => new(recipe.Id, recipe.RecipeName);
 }

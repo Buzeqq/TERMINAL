@@ -1,19 +1,27 @@
-import { AfterViewInit, Component, EventEmitter, Output } from '@angular/core';
-import { BehaviorSubject, tap } from 'rxjs';
+import {AfterViewInit, Component, EventEmitter, Output, ViewChild} from '@angular/core';
+import {Observable, tap} from 'rxjs';
 import { Project } from "../../../models/projects/project";
 import { SelectedItem } from "../../../models/items/selected-item";
 import { ProjectsService } from "../../../services/projects/projects.service";
+import {MatTableDataSource} from "@angular/material/table";
+import {MatSort, Sort} from "@angular/material/sort";
+import {PageEvent} from "@angular/material/paginator";
+
 @Component({
   selector: 'app-project-views',
   templateUrl: './project-views.component.html',
-  styleUrls: ['./project-views.component.scss']
+  styleUrls: ['./project-views.component.scss', '../item-views.component.scss']
 })
 export class ProjectViewsComponent implements AfterViewInit {
-  displayedColumns: string[] = ['name'];
-  private readonly pageSize = 10;
-  private page = 0;
-  private readonly projectsSubject = new BehaviorSubject<Project[]>([]);
-  projects$= this.projectsSubject.asObservable();
+  displayedColumns: string[] = ['Name'];
+  queryPageSize = 10;
+  private queryPageIndex = 0;
+
+  private orderDir = "desc";
+  dataSource = new MatTableDataSource<Project>();
+  length$?: Observable<number>;
+  @ViewChild(MatSort) sort?: MatSort;
+
   selectedItem?: SelectedItem;
   @Output() selectedItemChangeEvent = new EventEmitter<SelectedItem>();
 
@@ -22,25 +30,36 @@ export class ProjectViewsComponent implements AfterViewInit {
   ) { }
 
   ngAfterViewInit(): void {
-    this.projectService.getProjects(this.page, this.pageSize)
-      .pipe(tap(r => this.selectProject(r[0])))
-      .subscribe(r => this.projectsSubject.next(r))
+    this.loadData()
+    this.length$ = this.projectService.getProjectsAmount();
+    this.dataSource.sort = this.sort!;
   }
 
-  selectProject(p: Project) {
-    this.selectedItem = {type: 'Project', id: p.id};
-    this.selectedItemChangeEvent.emit(this.selectedItem);
+  private loadData() {
+    this.projectService.getProjects(this.queryPageIndex, this.queryPageSize, this.orderDir == "desc")
+      .pipe(tap(r => {
+        if (!this.selectedItem) this.selectProject(r[0], true);
+      }))
+      .subscribe(r => this.dataSource.data = r)
   }
 
-  onScroll(event: any) {
-    // check whether scroll reached bottom
-    if (event.target.offsetHeight + event.target.scrollTop >= event.target.scrollHeight) {
-      this.page += 1;
-      this.projectService.getProjects(this.page, this.pageSize)
-        .subscribe(r =>
-          this.projectsSubject.next(this.projectsSubject.value.concat(r))
-        )
-      console.log(`loaded another ${this.pageSize} results, page: ${this.page}`);
+  pageSelected(event: PageEvent) {
+    if (this.queryPageIndex != event.pageIndex || this.queryPageSize != event.pageSize) {
+      this.queryPageIndex = event.pageIndex
+      this.queryPageSize = event.pageSize
+      this.loadData();
     }
+  }
+
+  sortColumnChanged($event: Sort) {
+    if (this.orderDir != $event.direction) {
+      this.orderDir = $event.direction
+      this.loadData();
+    }
+  }
+
+  selectProject(p: Project, init = false) {
+    this.selectedItem = {type: 'Project', id: p.id, config: {init: init}};
+    this.selectedItemChangeEvent.emit(this.selectedItem);
   }
 }

@@ -12,7 +12,7 @@ namespace Terminal.Backend.Api.Modules;
 
 public static class SamplesModule
 {
-    public const string ApiRouteBase = "api/samples";
+    private const string ApiRouteBase = "api/samples";
     public static void UseSamplesEndpoints(this IEndpointRouteBuilder app)
     {
         app.MapPost(ApiRouteBase, async (
@@ -73,14 +73,25 @@ public static class SamplesModule
         app.MapGet(ApiRouteBase, async (
             [FromQuery] int pageNumber, 
             [FromQuery] int pageSize, 
+            [FromQuery] string? orderBy,
+            [FromQuery] bool? desc,
             ISender sender, 
             CancellationToken ct) =>
         {
-            var query = new GetSamplesQuery(pageNumber, pageSize);
+            var query = new GetSamplesQuery(pageNumber, pageSize, orderBy ?? "CreatedAtUtc", desc ?? true);
 
             var samples = await sender.Send(query, ct);
             
             return Results.Ok(samples);
+        }).RequireAuthorization(Permission.SampleRead.ToString());
+        
+        app.MapGet(ApiRouteBase + "/amount", async (
+            ISender sender, 
+            CancellationToken ct) =>
+        {
+            var query = new GetSamplesAmountQuery();
+            var amount = await sender.Send(query, ct);
+            return Results.Ok(amount);
         }).RequireAuthorization(Permission.SampleRead.ToString());
 
         app.MapGet(ApiRouteBase + "/search", async (

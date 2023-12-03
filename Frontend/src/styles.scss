@@ -25,17 +25,21 @@ $light-theme: mat.define-light-theme((
 ));
 
 // Apply the dark theme by default
-@include mat.all-component-themes($dark-theme);
-@include dashboard.theme($dark-theme);
-@include mtx.all-component-themes($dark-theme);
+$current-theme: $dark-theme;
+//$current-theme: $light-theme;
+
+@include mat.all-component-themes($current-theme);
+@include dashboard.theme($current-theme);
+@include mtx.all-component-themes($current-theme);
 
 // Apply the light theme only when the user prefers light styles.
 @media (prefers-color-scheme: light) {
   // Use the `-color` mixins to only apply color styles without reapplying the same
   // typography and density styles.
-  @include mat.all-component-colors($light-theme);
-  @include dashboard.theme($light-theme);
-  @include mtx.all-component-themes($light-theme);
+  $current-theme: $light-theme;
+  //@include mat.all-component-themes($current-theme);
+  //@include dashboard.theme($current-theme);
+  //@include mtx.all-component-themes($current-theme);
 }
 
 html, body {

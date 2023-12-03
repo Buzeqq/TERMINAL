@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {Observable} from "rxjs";
 import {PingService} from "../../services/ping/ping.service";
 import {AuthService} from "../../services/auth/auth.service";
@@ -25,5 +25,11 @@ export class StatusbarComponent {
     this.authService.logout();
     this.router.navigate([''])
       .then(_ => this.notificationService.notifySuccess('Logged out successfully.'))
+  }
+
+  @Output() toggleMobileMenu = new EventEmitter<void>();
+
+  toggleMobileMenuClicked() {
+    this.toggleMobileMenu.emit();
   }
 }

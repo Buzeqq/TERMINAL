@@ -1,10 +1,10 @@
 <mat-sidenav-container autosize>
-  <mat-sidenav #sidenav
-               [mode]="(menuOpened$ | async) ? 'side' : 'over'"
-               [opened]="!(isLoggedOut$ | async)"
+  <mat-sidenav #sidenav *ngIf="!(isUserLoggedOut$ | async)"
+               [mode]="isMobile ? 'over' : 'side'"
+               [opened]="!(isMobile$ | async)"
   >
-    <mat-nav-list>
-      <mat-list-item (click)="isExpanded = !isExpanded;">
+    <mat-nav-list *ngIf="(isExpanded$ | async)">
+      <mat-list-item (click)="expandWhenDesktop(); closeWhenClicked();">
         <mat-icon matListItemIcon>menu</mat-icon>
       </mat-list-item>
 
@@ -13,41 +13,41 @@
         <span *ngIf="isExpanded">Add</span>
       </mat-list-item>
       <mat-menu #addMenu>
-        <button (click)="router.navigate(['/add-sample'])" mat-menu-item>
+        <button routerLink="add-sample" (click)="closeWhenClicked()" mat-menu-item>
           <mat-icon>add</mat-icon>
           Add sample
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item (click)="closeWhenClicked()">
           <mat-icon>assignment_add</mat-icon>
           Add recipe
         </button>
-        <button mat-menu-item (click)="openAddProjectDialog()">
+        <button mat-menu-item (click)="closeWhenClicked(); openAddProjectDialog()" [class.disabled]="!moderatorPermissions">
           <mat-icon>create_new_folder</mat-icon>
           Add project
         </button>
       </mat-menu>
 
-      <mat-list-item routerLink="home">
+      <mat-list-item routerLink="home" (click)="closeWhenClicked()">
         <mat-icon matListItemIcon>home</mat-icon>
         <span *ngIf="isExpanded">Home</span>
       </mat-list-item>
 
-      <mat-list-item routerLink="samples">
+      <mat-list-item routerLink="samples" (click)="closeWhenClicked()">
         <mat-icon matListItemIcon>science</mat-icon>
         <span *ngIf="isExpanded">Samples</span>
       </mat-list-item>
 
-      <mat-list-item routerLink="recipes">
+      <mat-list-item routerLink="recipes" (click)="closeWhenClicked()">
         <mat-icon matListItemIcon>assignment</mat-icon>
         <span *ngIf="isExpanded">Recipes</span>
       </mat-list-item>
 
-      <mat-list-item routerLink="projects">
+      <mat-list-item routerLink="projects" (click)="closeWhenClicked()">
         <mat-icon matListItemIcon>folder</mat-icon>
         <span *ngIf="isExpanded">Projects</span>
       </mat-list-item>
 
-      <mat-list-item routerLink="settings">
+      <mat-list-item routerLink="settings" (click)="closeWhenClicked()" [class.disabled]="!moderatorPermissions">
         <mat-icon matListItemIcon>settings</mat-icon>
         <span *ngIf="isExpanded">Settings</span>
       </mat-list-item>
@@ -56,7 +56,7 @@
   </mat-sidenav>
   <div class="grid-container">
     <header>
-      <app-statusbar></app-statusbar>
+      <app-statusbar (toggleMobileMenu)="toggleWhenMobile()"></app-statusbar>
     </header>
     <main>
       <router-outlet></router-outlet>

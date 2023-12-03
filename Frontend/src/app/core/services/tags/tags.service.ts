@@ -14,11 +14,12 @@ export class TagsService extends ApiService {
     super(http);
   }
 
-  getTags(pageNumber: number, pageSize: number): Observable<Tag[]> {
+  getTags(pageNumber: number, pageSize: number, desc = true): Observable<Tag[]> {
     return this.get<{ tags: Tag[] }>('tags', new HttpParams({
       fromObject: {
         pageNumber,
-        pageSize
+        pageSize,
+        desc
       }
     })).pipe(
       map(t => t.tags)
@@ -30,5 +31,9 @@ export class TagsService extends ApiService {
       .pipe(
         catchError(this.handleError)
       );
+  }
+
+  getTagsAmount(): Observable<number> {
+    return this.get<number>('tags/amount');
   }
 }

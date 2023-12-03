@@ -17,10 +17,15 @@ mat-sidenav-container {
 .grid-container {
   display: grid;
   grid-template-rows: auto 1fr 15%;
-  grid-row-gap: 25px;
+  grid-row-gap: 2%;
   height: 100vh;
 }
 
 main {
   padding: 0 2%;
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

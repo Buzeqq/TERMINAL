@@ -9,11 +9,22 @@
     margin-left: 1rem;
     width: 6pc;
   }
+
+  &__menu_mobile{
+    display: none;
+    @include md() {
+      display: block;
+      margin-right: 1rem;
+    }
+  }
 }
 
 .header {
   display: flex;
   align-items: center;
+  :hover {
+    cursor: pointer;
+  }
 
   &__title {
     margin-left: 10px;

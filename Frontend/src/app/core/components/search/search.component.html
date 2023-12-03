@@ -29,7 +29,7 @@
       <mat-icon>assignment_add</mat-icon>
       Add recipe
     </button>
-    <button (click)="openAddProjectDialog()" color="primary" mat-raised-button>
+    <button (click)="openAddProjectDialog()" color="primary" mat-raised-button [class.disabled]="!moderatorPermissions">
       <mat-icon>create_new_folder</mat-icon>
       Add project
     </button>

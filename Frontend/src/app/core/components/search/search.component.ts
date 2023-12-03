@@ -11,6 +11,8 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatDialog } from "@angular/material/dialog";
 import {ActivatedRoute, Router} from "@angular/router";
 import { AddProjectDialogComponent } from "../dialogs/add-project/add-project-dialog.component";
+import {AuthService} from "../../services/auth/auth.service";
+import {NotificationService} from "../../services/notification/notification.service";
 
 @Component({
   selector: 'app-search',
@@ -24,11 +26,14 @@ export class SearchComponent implements OnInit {
   private readonly filtersState$ = new ReplaySubject<Record<string, boolean>>();
   @Output('searchRequest')
   public searchRequest$?: Observable<{ filterState: any; searchPhrase: any }>;
+  moderatorPermissions = this.authService.isAdminOrMod();
 
   constructor(
     private readonly dialog: MatDialog,
     protected readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly authService: AuthService,
+    private readonly notificationService: NotificationService
   )
   {
     this.route.queryParamMap.subscribe(
@@ -81,6 +86,8 @@ export class SearchComponent implements OnInit {
   }
 
   openAddProjectDialog() {
-    this.dialog.open(AddProjectDialogComponent);
+    this.moderatorPermissions ?
+    this.dialog.open(AddProjectDialogComponent) :
+    this.notificationService.notifyNoPermission("Access denied. Contact administration for assistance.")
   }
 }

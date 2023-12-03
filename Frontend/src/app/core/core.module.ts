@@ -33,6 +33,9 @@ import { RecipeDetailsComponent } from './components/item-details/item-details/r
 import { TagSelectorComponent } from './components/form-parts/tag-selector/tag-selector.component';
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { PrettyjsonPipe } from './pipes/prettyjson.pipe';
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatSortModule} from "@angular/material/sort";
+import { UserViewsComponent } from './components/item-views/user-views/user-views.component';
 
 
 @NgModule({
@@ -50,7 +53,8 @@ import { PrettyjsonPipe } from './pipes/prettyjson.pipe';
     RecipeViewsComponent,
     RecipeDetailsComponent,
     TagSelectorComponent,
-    PrettyjsonPipe
+    PrettyjsonPipe,
+    UserViewsComponent
   ],
   exports: [
     TimeAgoPipe,
@@ -63,7 +67,8 @@ import { PrettyjsonPipe } from './pipes/prettyjson.pipe';
     SvgComponent,
     RecipeViewsComponent,
     TagSelectorComponent,
-    PrettyjsonPipe
+    PrettyjsonPipe,
+    UserViewsComponent
   ],
   imports: [
     CommonModule,
@@ -84,7 +89,9 @@ import { PrettyjsonPipe } from './pipes/prettyjson.pipe';
     CdkFixedSizeVirtualScroll,
     CdkVirtualScrollViewport,
     MatRippleModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatPaginatorModule,
+    MatSortModule
   ]
 })
 export class CoreModule { }
