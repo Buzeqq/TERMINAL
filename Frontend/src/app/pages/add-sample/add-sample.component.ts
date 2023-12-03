@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ParametersService } from "../../core/services/parameters/parameters.service";
-import { AbstractControl, FormArray, FormControl, FormGroup, Validators, ɵTypedOrUntyped } from "@angular/forms";
+import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import {
   BehaviorSubject, catchError,
   debounceTime, EMPTY,
@@ -29,6 +29,7 @@ import { environment } from "../../../environments/environment";
 import { Project } from "../../core/models/projects/project";
 import { Tag } from "../../core/models/tags/tag";
 import { Recipe } from "../../core/models/recipes/recipe";
+import { SetupFormService } from "../../core/services/setup-form/setup-form.service";
 
 @Component({
   selector: 'app-add-sample',
@@ -59,7 +60,8 @@ export class AddSampleComponent implements OnInit, OnDestroy {
               private readonly samplesService: SamplesService,
               private readonly notificationService: NotificationService,
               private readonly recipesService: RecipesService,
-              private readonly router: Router) {
+              private readonly router: Router,
+              private readonly setupFormService: SetupFormService) {
   }
 
   private readonly subscriptions: Subscription[] = [];
@@ -134,85 +136,16 @@ export class AddSampleComponent implements OnInit, OnDestroy {
           }
         }
 
-        this.setParents(firstStep.controls.parameters);
+        this.subscriptions.push(...this.setupFormService.setParents(firstStep.controls.parameters, this.parameters));
 
         steps.push(firstStep);
     });
   }
 
-  private setParents(parameters: FormArray<ParameterFormControl>) {
-    for (const parameterControl of parameters.controls) {
-      if (!parameterControl.item.parentId) continue;
 
-      const parent = this.parameters
-        .find(p => p.id === parameterControl.item.parentId);
-      if (!parent) continue;
-
-      const parentControl = parameters.controls
-        .find(c => c.item === parent);
-      if (!parentControl) continue;
-
-      parameterControl.parentControl = parentControl;
-      this.subscriptions.push(parentControl.valueChanges.subscribe(value => {
-        if (value === this.getDefaultValue(parentControl.item)) {
-          parameterControl.setValue(null);
-          parameterControl.disable();
-        } else {
-          parameterControl.enable();
-        }
-      }));
-    }
-  }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe());
-  }
-
-  getUnit(parameter: Parameter): string | undefined {
-    if (parameter.$type !== 'text') {
-      return (parameter as NumericParameter).unit;
-    }
-    return undefined;
-  }
-
-  getStep(parameter: Parameter) {
-    if (parameter.$type !== 'text') {
-      return (parameter as NumericParameter).step;
-    }
-
-    return undefined;
-  }
-
-  getOptions(parameter: Parameter) {
-    if (parameter.$type === 'text') {
-      return (parameter as TextParameter).allowedValues;
-    }
-
-    return [];
-  }
-
-  selectedTabIndex: number = 0;
-  removeTab(i: number) {
-    this.sampleForm.controls.steps.removeAt(i);
-  }
-  addTab(selectedTabIndex: number) {
-    const t = this.sampleForm.controls.steps.at(selectedTabIndex).controls.parameters as FormArray<ParameterFormControl>;
-    const parameterControls = new FormArray<ParameterFormControl>([]);
-    for (const p of t.controls) {
-      let newControl = new ComplexTypeFormControl<Parameter>(
-        p.item,
-        p.value,
-        p.validator
-      );
-      parameterControls.push(newControl);
-    }
-
-    this.setParents(parameterControls);
-
-    this.sampleForm.controls.steps.insert(selectedTabIndex, new FormGroup<{comment: CommentFormControl; parameters: FormArray<ParameterFormControl>}>({
-      comment: new FormControl<string | null>(''),
-      parameters: parameterControls
-    }));
   }
 
   onRecipeSelect(event: MatAutocompleteSelectedEvent) {
@@ -269,21 +202,4 @@ export class AddSampleComponent implements OnInit, OnDestroy {
     recipeName: new FormControl<string | null>('')
   })
   protected readonly environment = environment;
-
-  getRootControls(parameters: FormArray<ParameterFormControl>): ParameterFormControl[] {
-    return parameters.controls.filter(c => c.parentControl === null);
-  }
-
-  getControlChild(parameterControl: ComplexTypeFormControl<Parameter>, step: number): ParameterFormControl | undefined {
-    return this.sampleForm.controls.steps.at(step).controls.parameters.controls
-      .find(c => c.parentControl === parameterControl);
-  }
-
-  getDefaultValue(item: Parameter): string {
-    if (item.$type === 'text') {
-      return (item as TextParameter).allowedValues[item.defaultValue];
-    }
-
-    return item.defaultValue.toString();
-  }
 }

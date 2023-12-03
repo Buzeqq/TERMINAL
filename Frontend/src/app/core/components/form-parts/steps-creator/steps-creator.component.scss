@@ -1,0 +1,14 @@
+.step {
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    height: 400px;
+    padding: 2em 1em;
+  }
+
+  &__actions {
+    gap: 1em;
+  }
+}
