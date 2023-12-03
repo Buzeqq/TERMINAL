@@ -17,7 +17,8 @@ export class AppComponent implements OnInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   isUserLoggedOut$ = this.authService.isLoggedOut();
 
-  isMobile$: Observable<boolean> = this.breakpointObserver.observe('(max-width: 768px)').pipe(map(result => result.matches));
+  isMobile$: Observable<boolean> = this.breakpointObserver.observe('(max-width: 768px)')
+    .pipe(map(result => result.matches));
   isMobile: boolean = false;
 
   // honestly, I don't know why this works, but it does and I'm not going to question it
