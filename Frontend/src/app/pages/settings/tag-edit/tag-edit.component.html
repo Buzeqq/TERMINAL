@@ -1,8 +1,11 @@
 <ng-container *ngIf="tagDetails$ | async; let details">
+  <mat-card-header>
+    <mat-card-title class="tag-edit__header">Edit Tag {{ details.name }}</mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
   <mat-card-content class="tag-edit">
-    <h2 class="tag-edit__header">Tag {{ details.name }}</h2>
 
-    <mat-slide-toggle [formControl]="isActiveToggleButton" class="tag-edit__form-fields" color="primary">
+    <mat-slide-toggle [formControl]="isActiveToggleButton" class="tag-edit__form-fields first-field" color="primary">
       <mat-label class="toggle-button-label">{{isActiveToggleButton.value ? 'Tag active' : 'Tag hidden'}}</mat-label>
     </mat-slide-toggle>
 
