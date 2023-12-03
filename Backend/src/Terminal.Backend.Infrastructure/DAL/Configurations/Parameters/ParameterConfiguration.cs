@@ -27,6 +27,10 @@ internal sealed class ParameterConfiguration : IEntityTypeConfiguration<Paramete
             .HasForeignKey("ParameterName")
             .IsRequired();
 
+        builder.HasOne(p => p.Parent)
+            .WithMany()
+            .OnDelete(DeleteBehavior.SetNull);
+
         builder
             .HasDiscriminator<string>("Type")
             .HasValue<NumericParameter>(nameof(NumericParameter))

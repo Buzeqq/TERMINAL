@@ -10,11 +10,6 @@ internal sealed class TerminalDbSeeder
 {
     private readonly TerminalDbContext _dbContext;
 
-    public TerminalDbSeeder(TerminalDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public void Seed()
     {
         #region tags
@@ -64,7 +59,24 @@ internal sealed class TerminalDbSeeder
                 "tantalum"
             });
         var bufferParameter = new DecimalParameter(ParameterId.Create(), "Buffer", "h", 0.1m);
-        var additionalGasesParameter = new TextParameter(ParameterId.Create(), "Additional gases", new List<string> { "nitrogen", "oxygen" }, order: 12);
+        var additionalGasesParameter = new TextParameter(ParameterId.Create(), "Additional gases", 
+            new List<string> { "none", "nitrogen", "oxygen" }, order: 12);
+        var additionalGassesAmountParameter = 
+            new IntegerParameter(ParameterId.Create(), "Additional gases amount", "sccm", 1);
+        additionalGassesAmountParameter.SetParent(additionalGasesParameter);
+        _dbContext.Parameters.AddRange(bufferParameter,
+            substrateParameter,
+            timeParameter,
+            powerParameter,
+            pressureParameter,
+            temperatureParameter,
+            nucleationParameter,
+            diboranParameter,
+            methaneParameter,
+            bcParameter,
+            hydrogenParameter,
+            additionalGasesParameter,
+            additionalGassesAmountParameter);
 
         _dbContext.Parameters.AddRange(bufferParameter,
             substrateParameter,
@@ -680,5 +692,10 @@ internal sealed class TerminalDbSeeder
 
         _dbContext.SaveChanges();
         #endregion
+    }
+
+    public TerminalDbSeeder(TerminalDbContext dbContext)
+    {
+        _dbContext = dbContext;
     }
 }

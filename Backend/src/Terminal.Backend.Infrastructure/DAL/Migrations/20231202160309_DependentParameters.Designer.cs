@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Terminal.Backend.Infrastructure.DAL;
@@ -12,9 +13,11 @@ using Terminal.Backend.Infrastructure.DAL;
 namespace Terminal.Backend.Infrastructure.DAL.Migrations
 {
     [DbContext(typeof(TerminalDbContext))]
-    partial class TerminalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231202160309_DependentParameters")]
+    partial class DependentParameters
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -849,15 +852,6 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                         .HasColumnType("text[]")
                         .HasColumnName("TextParameter_AllowedValues");
 
-                    b.Property<long>("DefaultValue")
-                        .HasColumnType("bigint");
-
-                    b.ToTable("Parameters", t =>
-                        {
-                            t.Property("DefaultValue")
-                                .HasColumnName("TextParameter_DefaultValue");
-                        });
-
                     b.HasDiscriminator().HasValue("TextParameter");
                 });
 
@@ -889,18 +883,9 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                 {
                     b.HasBaseType("Terminal.Backend.Core.Entities.Parameters.NumericParameter");
 
-                    b.Property<decimal>("DefaultValue")
-                        .HasColumnType("numeric");
-
                     b.Property<decimal>("Step")
                         .HasColumnType("numeric")
                         .HasColumnName("DecimalParameter_Step");
-
-                    b.ToTable("Parameters", t =>
-                        {
-                            t.Property("DefaultValue")
-                                .HasColumnName("DecimalParameter_DefaultValue");
-                        });
 
                     b.HasDiscriminator().HasValue("DecimalParameter");
                 });
@@ -908,9 +893,6 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Parameters.IntegerParameter", b =>
                 {
                     b.HasBaseType("Terminal.Backend.Core.Entities.Parameters.NumericParameter");
-
-                    b.Property<int>("DefaultValue")
-                        .HasColumnType("integer");
 
                     b.Property<int>("Step")
                         .HasColumnType("integer")

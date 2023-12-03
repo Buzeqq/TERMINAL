@@ -147,7 +147,7 @@ public static class Extensions
 
         if (!app.Configuration.GetOptions<PostgresOptions>("Postgres").Seed ||
             !app.Environment.IsDevelopment()) return app;
-
+        
         using var seedTransaction = dbContext.Database.BeginTransaction();
         var seeder = new TerminalDbSeeder(dbContext);
         try
@@ -159,7 +159,7 @@ public static class Extensions
         {
             seedTransaction.Rollback();
         }
-        
+
         return app;
     }
 
