@@ -36,10 +36,6 @@ export class ComplexTypeFormControl<TComplexType, TFormState = number | string |
     this.item = item;
     this.setValue(formState);
   }
-}
 
-export const COMPLEX_TYPE_FORM_CONTROL_VALUE_ACCESSOR = {
-  provide: NG_VALUE_ACCESSOR,
-  useExisting: forwardRef(() => ComplexTypeFormControl),
-  multi: true
+  public parentControl: ComplexTypeFormControl<any> | null = null;
 }

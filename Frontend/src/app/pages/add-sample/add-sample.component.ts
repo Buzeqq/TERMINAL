@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ParametersService } from "../../core/services/parameters/parameters.service";
-import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
+import { AbstractControl, FormArray, FormControl, FormGroup, Validators, ɵTypedOrUntyped } from "@angular/forms";
 import {
   BehaviorSubject, catchError,
   debounceTime, EMPTY,
@@ -104,35 +104,66 @@ export class AddSampleComponent implements OnInit, OnDestroy {
       .pipe(
         map(parameters => parameters.sort((p1, p2) => p1.order - p2.order)),
       ).subscribe(parameters => {
-      const steps = this.sampleForm.controls.steps;
-      const firstStep: StepFormArray = new FormGroup<{comment: CommentFormControl; parameters: FormArray<ParameterFormControl>}>({
-        comment: new FormControl<string | null>(''),
-        parameters: new FormArray<ParameterFormControl>([])
-      });
+        this.parameters = parameters;
 
-      for (const parameter of parameters) {
-        switch (parameter.$type) {
-          case "decimal":
-          case "integer": {
-            const numericParameter = parameter as NumericParameter;
-            firstStep.controls.parameters.push(new ComplexTypeFormControl<Parameter>(numericParameter, numericParameter.defaultValue,
-              [Validators.required]));
-            break;
-          }
-          case "text": {
-            const textParameter = parameter as TextParameter;
-            const defaultValue = textParameter.defaultValue ?
-              textParameter.allowedValues[textParameter.defaultValue] : null;
-            firstStep.controls.parameters.push(new ComplexTypeFormControl<Parameter>(textParameter, defaultValue,
-              [Validators.required]));
-            break;
+        const steps = this.sampleForm.controls.steps;
+        const firstStep: StepFormArray = new FormGroup<{comment: CommentFormControl; parameters: FormArray<ParameterFormControl>}>({
+          comment: new FormControl<string | null>(''),
+          parameters: new FormArray<ParameterFormControl>([])
+        });
+
+        for (const parameter of parameters) {
+          switch (parameter.$type) {
+            case "decimal":
+            case "integer": {
+              const numericParameter = parameter as NumericParameter;
+              firstStep.controls.parameters.push(new ComplexTypeFormControl<Parameter>(
+                numericParameter,
+                numericParameter.defaultValue,
+                [Validators.required]));
+              break;
+            }
+            case "text": {
+              const textParameter = parameter as TextParameter;
+              const defaultValue = textParameter.defaultValue ?
+                textParameter.allowedValues[textParameter.defaultValue] : null;
+              firstStep.controls.parameters.push(new ComplexTypeFormControl<Parameter>(textParameter, defaultValue,
+                [Validators.required]));
+              break;
+            }
           }
         }
-      }
 
-      steps.push(firstStep);
+        this.setParents(firstStep.controls.parameters);
+
+        steps.push(firstStep);
     });
   }
+
+  private setParents(parameters: FormArray<ParameterFormControl>) {
+    for (const parameterControl of parameters.controls) {
+      if (!parameterControl.item.parentId) continue;
+
+      const parent = this.parameters
+        .find(p => p.id === parameterControl.item.parentId);
+      if (!parent) continue;
+
+      const parentControl = parameters.controls
+        .find(c => c.item === parent);
+      if (!parentControl) continue;
+
+      parameterControl.parentControl = parentControl;
+      this.subscriptions.push(parentControl.valueChanges.subscribe(value => {
+        if (value === this.getDefaultValue(parentControl.item)) {
+          parameterControl.setValue(null);
+          parameterControl.disable();
+        } else {
+          parameterControl.enable();
+        }
+      }));
+    }
+  }
+
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe());
   }
@@ -168,12 +199,16 @@ export class AddSampleComponent implements OnInit, OnDestroy {
     const t = this.sampleForm.controls.steps.at(selectedTabIndex).controls.parameters as FormArray<ParameterFormControl>;
     const parameterControls = new FormArray<ParameterFormControl>([]);
     for (const p of t.controls) {
-      parameterControls.push(new ComplexTypeFormControl<Parameter>(
+      let newControl = new ComplexTypeFormControl<Parameter>(
         p.item,
         p.value,
         p.validator
-      ));
+      );
+      parameterControls.push(newControl);
     }
+
+    this.setParents(parameterControls);
+
     this.sampleForm.controls.steps.insert(selectedTabIndex, new FormGroup<{comment: CommentFormControl; parameters: FormArray<ParameterFormControl>}>({
       comment: new FormControl<string | null>(''),
       parameters: parameterControls
@@ -215,7 +250,9 @@ export class AddSampleComponent implements OnInit, OnDestroy {
     const stepsControls = this.sampleForm.controls.steps;
     for (const stepControls of stepsControls.controls) {
       steps.push({
-        parameters: stepControls.controls.parameters.controls.map(c => ({
+        parameters: stepControls.controls.parameters.controls
+          .filter(c => c.value !== null)
+          .map(c => ({
           $type: c.item.$type,
           id: c.item.id,
           value: c.value
@@ -232,4 +269,21 @@ export class AddSampleComponent implements OnInit, OnDestroy {
     recipeName: new FormControl<string | null>('')
   })
   protected readonly environment = environment;
+
+  getRootControls(parameters: FormArray<ParameterFormControl>): ParameterFormControl[] {
+    return parameters.controls.filter(c => c.parentControl === null);
+  }
+
+  getControlChild(parameterControl: ComplexTypeFormControl<Parameter>, step: number): ParameterFormControl | undefined {
+    return this.sampleForm.controls.steps.at(step).controls.parameters.controls
+      .find(c => c.parentControl === parameterControl);
+  }
+
+  getDefaultValue(item: Parameter): string {
+    if (item.$type === 'text') {
+      return (item as TextParameter).allowedValues[item.defaultValue];
+    }
+
+    return item.defaultValue.toString();
+  }
 }

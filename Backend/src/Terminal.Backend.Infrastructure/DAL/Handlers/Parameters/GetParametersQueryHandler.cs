@@ -18,6 +18,7 @@ internal sealed class GetParametersQueryHandler : IRequestHandler<GetParametersQ
     public async Task<GetParametersDto> Handle(GetParametersQuery request, CancellationToken ct) 
         => (await _parameters
                 .AsNoTracking()
+                .Include(p => p.Parent)
                 .Where(p => p.IsActive)
                 .OrderBy(p => p.Order)
                 .ToListAsync(ct))

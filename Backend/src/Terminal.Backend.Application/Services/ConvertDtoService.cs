@@ -32,6 +32,7 @@ internal sealed class ConvertDtoService : IConvertDtoService
             foreach (var parameterDto in stepDto.Parameters)
             {
                 var id = ParameterValueId.Create();
+                
                 ParameterValue parameter = parameterDto switch
                 {
                     CreateSampleDecimalParameterValueDto @decimal 
