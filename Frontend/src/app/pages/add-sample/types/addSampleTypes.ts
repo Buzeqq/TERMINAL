@@ -1,9 +1,8 @@
-import { FormArray, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import { Parameter } from "../../../core/models/parameters/parameter";
 import { Project } from "../../../core/models/projects/project";
 import { Recipe } from "../../../core/models/recipes/recipe";
 import { Tag } from "../../../core/models/tags/tag";
-import { forwardRef } from "@angular/core";
 
 export type StepFormArray = FormGroup<{comment: CommentFormControl, parameters: FormArray<ParameterFormControl>}>;
 export type DateFormControl = FormControl<Date>;

@@ -12,19 +12,18 @@ import {
 import { SearchService } from "../../core/services/search/search.service";
 import { ProjectsService } from "../../core/services/projects/projects.service";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
-import { NumericParameter, Parameter, TextParameter } from "../../core/models/parameters/parameter";
+import { Parameter } from "../../core/models/parameters/parameter";
 import { SamplesService } from "../../core/services/samples/samples.service";
 import { NotificationService } from "../../core/services/notification/notification.service";
 import { Router } from "@angular/router";
 import {
   AddSampleFormData, CommentFormControl, ComplexTypeFormControl,
-  DateFormControl, ParameterFormControl,
-  ProjectFormControl,
+  DateFormControl, ProjectFormControl,
   RecipeFormControl, SampleForm, StepFormArray,
   TagsFormControl
 } from "./types/addSampleTypes";
 import { RecipesService } from "../../core/services/recipes/recipes.service";
-import { AddSample, ParameterValue, Step } from "../../core/models/samples/addSample";
+import { AddSample } from "../../core/models/samples/addSample";
 import { environment } from "../../../environments/environment";
 import { Project } from "../../core/models/projects/project";
 import { Tag } from "../../core/models/tags/tag";
@@ -109,32 +108,7 @@ export class AddSampleComponent implements OnInit, OnDestroy {
         this.parameters = parameters;
 
         const steps = this.sampleForm.controls.steps;
-        const firstStep: StepFormArray = new FormGroup<{comment: CommentFormControl; parameters: FormArray<ParameterFormControl>}>({
-          comment: new FormControl<string | null>(''),
-          parameters: new FormArray<ParameterFormControl>([])
-        });
-
-        for (const parameter of parameters) {
-          switch (parameter.$type) {
-            case "decimal":
-            case "integer": {
-              const numericParameter = parameter as NumericParameter;
-              firstStep.controls.parameters.push(new ComplexTypeFormControl<Parameter>(
-                numericParameter,
-                numericParameter.defaultValue,
-                [Validators.required]));
-              break;
-            }
-            case "text": {
-              const textParameter = parameter as TextParameter;
-              const defaultValue = textParameter.defaultValue ?
-                textParameter.allowedValues[textParameter.defaultValue] : null;
-              firstStep.controls.parameters.push(new ComplexTypeFormControl<Parameter>(textParameter, defaultValue,
-                [Validators.required]));
-              break;
-            }
-          }
-        }
+        const firstStep = this.setupFormService.getFirstStep(parameters);
 
         this.subscriptions.push(...this.setupFormService.setParents(firstStep.controls.parameters, this.parameters));
 
@@ -160,7 +134,7 @@ export class AddSampleComponent implements OnInit, OnDestroy {
     const addSample = {
       projectId: this.sampleForm.controls.project.item?.id,
       recipeId: this.sampleForm.controls.recipe.item?.id,
-      steps: this.getStepsDto(),
+      steps: this.setupFormService.getStepsDto(this.sampleForm.controls.steps),
       tagIds: this.sampleForm.controls.tags.value,
       comment: this.sampleForm.controls.comment.value ?? '',
       saveAsRecipe: this.saveRecipeFormGroup.controls.saveAsRecipe.value,
@@ -176,25 +150,6 @@ export class AddSampleComponent implements OnInit, OnDestroy {
         this.router.navigate(['/samples'])
           .then(_ => this.notificationService.notifySuccess('Sample added!'));
       });
-  }
-
-  getStepsDto() {
-    const steps: Step[] = [];
-    const stepsControls = this.sampleForm.controls.steps;
-    for (const stepControls of stepsControls.controls) {
-      steps.push({
-        parameters: stepControls.controls.parameters.controls
-          .filter(c => c.value !== null)
-          .map(c => ({
-          $type: c.item.$type,
-          id: c.item.id,
-          value: c.value
-        } as ParameterValue)),
-        comment: stepControls.controls.comment.value ?? ''
-      });
-    }
-
-    return steps;
   }
 
   public saveRecipeFormGroup = new FormGroup({
