@@ -10,8 +10,11 @@ import { SettingsComponent } from "./pages/settings/settings.component";
 import { LoginComponent } from "./pages/login/login.component";
 import { loginPageGuard, pagesGuard, settingsPageGuard } from "./core/guards/auth.guard";
 import { AddRecipeComponent } from "./pages/add-recipe/add-recipe.component";
+import {DexieTesterComponent} from "./pages/dexie-tester/dexie-tester.component";
 
 const routes: Routes = [
+  {path: 'dbtest', component: DexieTesterComponent},
+
   {path: '', redirectTo: 'login', pathMatch: 'full'},
   {path: 'login', component: LoginComponent, canActivate: [loginPageGuard]},
   {path: 'home', component: DashboardComponent, canActivate: [pagesGuard]},

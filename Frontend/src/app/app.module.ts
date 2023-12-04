@@ -56,6 +56,7 @@ import { MatSortModule } from "@angular/material/sort";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { UserEditComponent } from './pages/settings/user-edit/user-edit.component';
 import { AddRecipeComponent } from './pages/add-recipe/add-recipe.component';
+import { DexieTesterComponent } from './pages/dexie-tester/dexie-tester.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import { AddRecipeComponent } from './pages/add-recipe/add-recipe.component';
     StatusbarComponent,
     LoginComponent,
     UserEditComponent,
-    AddRecipeComponent
+    AddRecipeComponent,
+    DexieTesterComponent
   ],
   imports: [
     BrowserModule,
