@@ -13,10 +13,10 @@ internal sealed class CreateProjectCommandHandler : IRequestHandler<CreateProjec
         _projectRepository = projectRepository;
     }
 
-    public async Task Handle(CreateProjectCommand request, CancellationToken ct)
+    public Task Handle(CreateProjectCommand request, CancellationToken ct)
     {
         var newProjectId = ProjectId.Create();
         var newProject = new Core.Entities.Project(newProjectId, request.Name);
-        await _projectRepository.AddAsync(newProject, ct);
+        return _projectRepository.AddAsync(newProject, ct);
     }
 }

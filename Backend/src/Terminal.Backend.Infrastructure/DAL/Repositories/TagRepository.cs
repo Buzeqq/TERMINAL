@@ -17,8 +17,8 @@ internal sealed class TagRepository : ITagRepository
     public async Task AddAsync(Tag tag, CancellationToken ct)
         => await _tags.AddAsync(tag, ct);
 
-    public async Task<Tag?> GetAsync(TagId id, CancellationToken ct)
-        => await _tags.SingleOrDefaultAsync(t => t.Id == id, ct);
+    public Task<Tag?> GetAsync(TagId id, CancellationToken ct)
+        => _tags.SingleOrDefaultAsync(t => t.Id == id, ct);
 
     public Task UpdateAsync(Tag tag)
     {

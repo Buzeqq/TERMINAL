@@ -13,14 +13,14 @@ where TRequest : notnull
         _unitOfWork = unitOfWork;
     }
     
-    public async Task<TResponse> Handle(TRequest command, RequestHandlerDelegate<TResponse> next, CancellationToken ct)
+    public Task<TResponse> Handle(TRequest command, RequestHandlerDelegate<TResponse> next, CancellationToken ct)
     {
         if (!IsCommand())
         {
-            return await next();
+            return next();
         }
         
-        return await _unitOfWork.ExecuteAsync(next);
+        return _unitOfWork.ExecuteAsync(next);
     }
 
     private static bool IsCommand() => typeof(TRequest).Name.EndsWith("Command");

@@ -14,12 +14,17 @@ internal sealed class UserRepository : IUserRepository
         _users = context.Users;
     }
 
-    public async Task<User?> GetUserByEmailAsync(Email email, CancellationToken ct)
-        => await _users
+    public Task<User?> GetUserByEmailAsync(Email email, CancellationToken ct)
+        => _users
             .Include(u => u.Role)
             .SingleOrDefaultAsync(u => u.Email == email, ct);
 
     public async Task AddUserAsync(User user, CancellationToken ct)
-        => await _users
-            .AddAsync(user, ct);
+        => await _users.AddAsync(user, ct);
+
+    public Task UpdateAsync(User user, CancellationToken ct)
+    {
+        _users.Update(user);
+        return Task.CompletedTask;
+    }
 }

@@ -26,7 +26,7 @@ internal sealed class ExceptionMiddleware : IMiddleware
         }
     }
 
-    private static async Task HandleErrorAsync(HttpContext context, Exception exception)
+    private static Task HandleErrorAsync(HttpContext context, Exception exception)
     {
         var (statusCode, error) = exception switch
         {
@@ -36,7 +36,7 @@ internal sealed class ExceptionMiddleware : IMiddleware
         };
 
         context.Response.StatusCode = statusCode;
-        await context.Response.WriteAsJsonAsync(error);
+        return context.Response.WriteAsJsonAsync(error);
     }
 
     private record Error(string Code, string Reason);

@@ -12,10 +12,10 @@ internal sealed class DefineParameterCommandHandler : IRequestHandler<DefinePara
         _parameterRepository = parameterRepository;
     }
 
-    public async Task Handle(DefineParameterCommand command, CancellationToken ct)
+    public Task Handle(DefineParameterCommand command, CancellationToken ct)
     {
         var parameter = command.Parameter;
 
-        await _parameterRepository.AddAsync(parameter, ct);
+        return _parameterRepository.AddAsync(parameter, ct);
     }
 }
