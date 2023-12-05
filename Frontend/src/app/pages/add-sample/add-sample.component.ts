@@ -85,6 +85,9 @@ export class AddSampleComponent implements OnInit, OnDestroy {
       return undefined;
     }),
     filter(q => q !== undefined),
+    tap(_ => {
+      this.sampleForm.controls.recipe.disable();
+    }),
     switchMap(q => this.replicationService.getReplicationData(q!)),
     tap(d => {
       this.fillForm(d);
@@ -142,6 +145,23 @@ export class AddSampleComponent implements OnInit, OnDestroy {
 
         steps.push(firstStep);
     });
+
+    this.subscriptions.push(this.sampleForm.controls.recipe.valueChanges
+      .pipe(
+        filter(_ => !!this.sampleForm.controls.recipe.item),
+        map(_ => this.sampleForm.controls.recipe.item),
+        switchMap(r => this.replicationService.getReplicationData({
+          id: r!.id,
+          type: 'Recipe'
+        }).pipe(
+          catchError((_) => {
+            this.notificationService.notifyError('Failed to load recipe!');
+            return EMPTY;
+          })
+        )),
+        tap(d => this.fillForm(d))
+      )
+      .subscribe());
   }
 
 
@@ -189,7 +209,7 @@ export class AddSampleComponent implements OnInit, OnDestroy {
   private fillForm(d: ReplicationData) {
     this.sampleForm.controls.steps.clear();
     for (const s of d.steps) {
-      this.sampleForm.controls.steps.push(new FormGroup<{comment: CommentFormControl, parameters: FormArray<ParameterFormControl>}>({
+      const step = new FormGroup<{comment: CommentFormControl, parameters: FormArray<ParameterFormControl>}>({
         comment: new FormControl(d.comment),
         parameters: new FormArray<ParameterFormControl>(s.parameters.sort((pv1, pv2) => {
           const p1 = this.parameters.find(p => p.name === pv1.name)!;
@@ -198,9 +218,12 @@ export class AddSampleComponent implements OnInit, OnDestroy {
           return p1?.order - p2?.order;
         })
           .map(p1 => new ComplexTypeFormControl<Parameter>(
-          this.parameters.find(p2 => p1.name === p2.name)!, p1.value
-        )))
-      }))
+            this.parameters.find(p2 => p1.name === p2.name)!, p1.value
+          )))
+      });
+      this.sampleForm.controls.steps.push(step);
+
+      this.subscriptions.push(...this.setupFormService.setParents(step.controls.parameters, this.parameters));
     }
   }
 }
