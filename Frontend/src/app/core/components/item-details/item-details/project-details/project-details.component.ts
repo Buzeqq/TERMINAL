@@ -1,10 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { ItemDetailsComponent } from "../item-details.component";
-import { catchError, EMPTY, map, Observable, tap } from "rxjs";
+import { catchError, EMPTY, Observable, tap } from "rxjs";
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Project } from "../../../../models/projects/project";
-import { SamplesService } from "../../../../services/samples/samples.service";
 import { ProjectsService } from "../../../../services/projects/projects.service";
 
 @Component({
@@ -32,7 +31,6 @@ export class ProjectDetailsComponent extends ItemDetailsComponent {
     this._projectId = id || this.route.snapshot.paramMap.get('id') || undefined;
     if (!id) return;
 
-    console.log(this._projectId);
     this.projectDetails$ = this.projectService.getProject(this._projectId!)
       .pipe(
         catchError((err, _) => {

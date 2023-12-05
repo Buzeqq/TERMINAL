@@ -24,6 +24,16 @@ public static class ProjectsModule
             ) =>
             Results.Ok(await sender.Send(new GetProjectsQuery(pageNumber, pageSize, desc ?? true), ct)))
             .RequireAuthorization(Permission.ProjectRead.ToString());
+        
+        app.MapGet(ApiRouteBase + "/all",async (
+                    [FromQuery] int pageSize,
+                    [FromQuery] int pageNumber,
+                    [FromQuery] bool? desc,
+                    ISender sender,
+                    CancellationToken ct
+                ) =>
+                Results.Ok(await sender.Send(new GetProjectsQuery(pageNumber, pageSize, desc ?? true, false), ct)))
+            .RequireAuthorization(Permission.ProjectRead.ToString());
 
         app.MapGet(ApiRouteBase + "/{id:guid}", async (
             Guid id,
@@ -87,6 +97,15 @@ public static class ProjectsModule
             CancellationToken ct) =>
         {
             var query = new GetProjectsAmountQuery();
+            var amount = await sender.Send(query, ct);
+            return Results.Ok(amount);
+        }).RequireAuthorization(Permission.ProjectRead.ToString());
+        
+        app.MapGet(ApiRouteBase + "/amount/all", async (
+            ISender sender, 
+            CancellationToken ct) =>
+        {
+            var query = new GetProjectsAmountQuery(false);
             var amount = await sender.Send(query, ct);
             return Results.Ok(amount);
         }).RequireAuthorization(Permission.ProjectRead.ToString());

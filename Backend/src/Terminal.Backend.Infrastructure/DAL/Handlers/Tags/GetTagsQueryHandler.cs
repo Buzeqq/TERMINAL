@@ -32,7 +32,7 @@ internal sealed class GetTagsQueryHandler :
     public async Task<GetTagsDto> Handle(GetTagsQuery request, CancellationToken ct)
         => (await _tags
             .AsNoTracking()
-            .Where(t => t.IsActive)
+            .Where(t => t.IsActive || t.IsActive == request.OnlyActive)
             .OrderBy(request.OrderingParameters)
             .Paginate(request.Parameters)
             .ToListAsync(ct)).AsGetTagsDto();

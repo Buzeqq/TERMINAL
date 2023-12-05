@@ -16,7 +16,7 @@ internal sealed class GetProjectsQueryHandler : IRequestHandler<GetProjectsQuery
         CancellationToken ct)
         => (await _projects
             .AsNoTracking()
-            .Where(x => x.IsActive)
+            .Where(p => p.IsActive || p.IsActive == request.OnlyActive)
             .OrderBy(request.OrderingParameters)
             .Paginate(request.Parameters)
             .ToListAsync(ct)).AsGetProjectsDto();

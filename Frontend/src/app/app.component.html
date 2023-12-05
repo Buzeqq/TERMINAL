@@ -1,5 +1,6 @@
 <mat-sidenav-container autosize>
-  <mat-sidenav #sidenav *ngIf="!(isUserLoggedOut$ | async)"
+<!--  FIXME: below complex if statement is necessary bcs of routing issue when network is restored (it does not redirect to login page)-->
+  <mat-sidenav #sidenav *ngIf="!(isUserLoggedOut$ | async) || !(isOnline$ | async)"
                [mode]="isMobile ? 'over' : 'side'"
                [opened]="!(isMobile$ | async)"
   >
@@ -50,6 +51,12 @@
       <mat-list-item routerLink="settings" (click)="closeWhenClicked()" [class.disabled]="!moderatorPermissions">
         <mat-icon matListItemIcon>settings</mat-icon>
         <span *ngIf="isExpanded">Settings</span>
+      </mat-list-item>
+
+      <mat-list-item (click)="synchronise()">
+        <mat-icon matListItemIcon>sync</mat-icon>
+        <span *ngIf="isExpanded">Synchronise</span>
+<!--        <mat-hint>Fetch data from server</mat-hint>-->
       </mat-list-item>
 
     </mat-nav-list>

@@ -12,7 +12,7 @@
               Projects
             </ng-template>
             <ng-template matTabContent>
-              <app-project-views (selectedItemChangeEvent)="selectedItem = $event"></app-project-views>
+              <app-project-views (selectedItemChangeEvent)="selectedItem = $event" [all]="true"></app-project-views>
             </ng-template>
           </mat-tab>
           <mat-tab>
@@ -39,7 +39,7 @@
               Tags
             </ng-template>
             <ng-template matTabContent>
-              <app-tag-views (selectedItemChangeEvent)="selectedItem = $event"></app-tag-views>
+              <app-tag-views (selectedItemChangeEvent)="selectedItem = $event" [all]="true"></app-tag-views>
             </ng-template>
           </mat-tab>
           <mat-tab>

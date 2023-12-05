@@ -1,8 +1,5 @@
-export interface SampleEntity {
-  id: string
-  code: string
-  createdAtUtc: Date
-  comment?: string
-  projectId: string
-  recipeId?: string
+import {SampleDetails} from "../../models/samples/sampleDetails";
+
+export interface SampleEntity extends SampleDetails {
+  projectName: string;
 }

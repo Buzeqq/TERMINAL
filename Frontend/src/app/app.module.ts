@@ -51,12 +51,11 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { SampleEditComponent } from './pages/settings/sample-edit/sample-edit.component';
 import { TagEditComponent } from './pages/settings/tag-edit/tag-edit.component';
 import { LoginComponent } from "./pages/login/login.component";
-import { PermissionService } from "./core/guards/auth.guard";
 import { MatSortModule } from "@angular/material/sort";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { UserEditComponent } from './pages/settings/user-edit/user-edit.component';
 import { AddRecipeComponent } from './pages/add-recipe/add-recipe.component';
-import { DexieTesterComponent } from './pages/dexie-tester/dexie-tester.component';
+import {SampleInterceptor} from "./core/interceptors/samples/sample.interceptor";
 
 @NgModule({
   declarations: [
@@ -76,8 +75,7 @@ import { DexieTesterComponent } from './pages/dexie-tester/dexie-tester.componen
     StatusbarComponent,
     LoginComponent,
     UserEditComponent,
-    AddRecipeComponent,
-    DexieTesterComponent
+    AddRecipeComponent
   ],
   imports: [
     BrowserModule,
@@ -130,7 +128,7 @@ import { DexieTesterComponent } from './pages/dexie-tester/dexie-tester.componen
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    PermissionService
+    { provide: HTTP_INTERCEPTORS, useClass: SampleInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

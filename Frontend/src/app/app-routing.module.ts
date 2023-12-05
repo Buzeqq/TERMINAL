@@ -8,26 +8,25 @@ import { AddSampleComponent } from "./pages/add-sample/add-sample.component";
 import { ItemDetailsComponent } from "./core/components/item-details/item-details/item-details.component";
 import { SettingsComponent } from "./pages/settings/settings.component";
 import { LoginComponent } from "./pages/login/login.component";
-import { loginPageGuard, pagesGuard, settingsPageGuard } from "./core/guards/auth.guard";
 import { AddRecipeComponent } from "./pages/add-recipe/add-recipe.component";
-import {DexieTesterComponent} from "./pages/dexie-tester/dexie-tester.component";
+import {LoginPageGuard} from "./core/guards/login/login-page.guard";
+import {PagesGuard} from "./core/guards/pages/pages.guard";
+import {settingsGuard} from "./core/guards/settings/settings.guard";
 
 const routes: Routes = [
-  {path: 'dbtest', component: DexieTesterComponent},
-
   {path: '', redirectTo: 'login', pathMatch: 'full'},
-  {path: 'login', component: LoginComponent, canActivate: [loginPageGuard]},
-  {path: 'home', component: DashboardComponent, canActivate: [pagesGuard]},
-  {path: 'search', component: ResultsListComponent, canActivate: [pagesGuard]},
-  {path: 'search/:q', component: ResultsListComponent, canActivate: [pagesGuard]},
-  {path: 'samples', component: ItemViewsComponent, canActivate: [pagesGuard], data: {type: 'Sample'}},
-  {path: 'samples/:id', component: ItemDetailsComponent, canActivate: [pagesGuard], data: {type: 'Sample'}},
-  {path: 'projects', component: ItemViewsComponent, canActivate: [pagesGuard], data: {type: 'Project'}},
-  {path: 'projects/:id', component: ItemDetailsComponent, canActivate: [pagesGuard], data: {type: 'Project'}},
-  {path: 'add-sample', component: AddSampleComponent, canActivate: [pagesGuard]},
-  {path: 'add-recipe', component: AddRecipeComponent, canActivate: [pagesGuard]},
-  {path: 'recipes', component: ItemViewsComponent, canActivate: [pagesGuard], data: {type: 'Recipe'}},
-  {path: 'settings', component: SettingsComponent, canActivate: [pagesGuard, settingsPageGuard]},
+  {path: 'login', component: LoginComponent, canActivate: [LoginPageGuard]},
+  {path: 'home', component: DashboardComponent, canActivate: [PagesGuard]},
+  {path: 'search', component: ResultsListComponent, canActivate: [PagesGuard]},
+  {path: 'search/:q', component: ResultsListComponent, canActivate: [PagesGuard]},
+  {path: 'samples', component: ItemViewsComponent, canActivate: [PagesGuard], data: {type: 'Sample'}},
+  {path: 'samples/:id', component: ItemDetailsComponent, canActivate: [PagesGuard], data: {type: 'Sample'}},
+  {path: 'projects', component: ItemViewsComponent, canActivate: [PagesGuard], data: {type: 'Project'}},
+  {path: 'projects/:id', component: ItemDetailsComponent, canActivate: [PagesGuard], data: {type: 'Project'}},
+  {path: 'add-sample', component: AddSampleComponent, canActivate: [PagesGuard]},
+  {path: 'add-recipe', component: AddRecipeComponent, canActivate: [PagesGuard]},
+  {path: 'recipes', component: ItemViewsComponent, canActivate: [PagesGuard], data: {type: 'Recipe'}},
+  {path: 'settings', component: SettingsComponent, canActivate: [PagesGuard, settingsGuard]},
 
   // must be the last
   {path: '**', component: NotFoundComponent},
