@@ -3,7 +3,7 @@ import { ParametersService } from "../../core/services/parameters/parameters.ser
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import {
   BehaviorSubject, catchError,
-  debounceTime, EMPTY,
+  debounceTime, EMPTY, filter,
   map,
   Observable,
   startWith, Subscription,
@@ -15,10 +15,10 @@ import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { Parameter } from "../../core/models/parameters/parameter";
 import { SamplesService } from "../../core/services/samples/samples.service";
 import { NotificationService } from "../../core/services/notification/notification.service";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Params, Router } from "@angular/router";
 import {
   AddSampleFormData, CommentFormControl, ComplexTypeFormControl,
-  DateFormControl, ProjectFormControl,
+  DateFormControl, ParameterFormControl, ProjectFormControl,
   RecipeFormControl, SampleForm, StepFormArray,
   TagsFormControl
 } from "./types/addSampleTypes";
@@ -29,6 +29,7 @@ import { Project } from "../../core/models/projects/project";
 import { Tag } from "../../core/models/tags/tag";
 import { Recipe } from "../../core/models/recipes/recipe";
 import { SetupFormService } from "../../core/services/setup-form/setup-form.service";
+import { ReplicateQuery, ReplicationData, ReplicationService } from "../../core/services/steps/replication.service";
 
 @Component({
   selector: 'app-add-sample',
@@ -60,10 +61,40 @@ export class AddSampleComponent implements OnInit, OnDestroy {
               private readonly notificationService: NotificationService,
               private readonly recipesService: RecipesService,
               private readonly router: Router,
-              private readonly setupFormService: SetupFormService) {
+              private readonly activatedRoute: ActivatedRoute,
+              private readonly setupFormService: SetupFormService,
+              private readonly replicationService: ReplicationService) {
   }
 
   private readonly subscriptions: Subscription[] = [];
+
+  replicationData$ = this.activatedRoute.queryParams.pipe(
+    map((p: Params): ReplicateQuery | undefined => {
+      const recipeId = p['recipeId'];
+      if (recipeId) return {
+        type: 'Recipe',
+        id: recipeId,
+      };
+
+      const sampleId = p['sampleId'];
+      if (sampleId) return {
+        type: 'Sample',
+        id: sampleId
+      };
+
+      return undefined;
+    }),
+    filter(q => q !== undefined),
+    tap(_ => {
+      this.sampleForm.controls.recipe.disable();
+    }),
+    switchMap(q => this.replicationService.getReplicationData(q!)),
+    tap(d => {
+      this.fillForm(d);
+    })
+  );
+
+
   ngOnInit(): void {
     this.subscriptions.push(this.sampleForm.controls.project.valueChanges.pipe(
       startWith(''),
@@ -114,6 +145,23 @@ export class AddSampleComponent implements OnInit, OnDestroy {
 
         steps.push(firstStep);
     });
+
+    this.subscriptions.push(this.sampleForm.controls.recipe.valueChanges
+      .pipe(
+        filter(_ => !!this.sampleForm.controls.recipe.item),
+        map(_ => this.sampleForm.controls.recipe.item),
+        switchMap(r => this.replicationService.getReplicationData({
+          id: r!.id,
+          type: 'Recipe'
+        }).pipe(
+          catchError((_) => {
+            this.notificationService.notifyError('Failed to load recipe!');
+            return EMPTY;
+          })
+        )),
+        tap(d => this.fillForm(d))
+      )
+      .subscribe());
   }
 
 
@@ -157,4 +205,25 @@ export class AddSampleComponent implements OnInit, OnDestroy {
     recipeName: new FormControl<string | null>('')
   })
   protected readonly environment = environment;
+
+  private fillForm(d: ReplicationData) {
+    this.sampleForm.controls.steps.clear();
+    for (const s of d.steps) {
+      const step = new FormGroup<{comment: CommentFormControl, parameters: FormArray<ParameterFormControl>}>({
+        comment: new FormControl(d.comment),
+        parameters: new FormArray<ParameterFormControl>(s.parameters.sort((pv1, pv2) => {
+          const p1 = this.parameters.find(p => p.name === pv1.name)!;
+          const p2 = this.parameters.find(p => p.name === pv2.name)!;
+
+          return p1?.order - p2?.order;
+        })
+          .map(p1 => new ComplexTypeFormControl<Parameter>(
+            this.parameters.find(p2 => p1.name === p2.name)!, p1.value
+          )))
+      });
+      this.sampleForm.controls.steps.push(step);
+
+      this.subscriptions.push(...this.setupFormService.setParents(step.controls.parameters, this.parameters));
+    }
+  }
 }
