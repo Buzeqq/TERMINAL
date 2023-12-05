@@ -29,4 +29,14 @@ public sealed class User
         Role = role;
         role.Users.Add(this);
     }
+
+    public void UpdatePassword(Password password)
+    {
+        Password = password;
+    }
+
+    public void Activate()
+    {
+        Activated = true;
+    }
 }

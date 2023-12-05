@@ -13,7 +13,7 @@ internal sealed class RoleRepository : IRoleRepository
         _roles = dbContext.Roles;
     }
 
-    public async Task<Role?> GetByNameAsync(string roleName, CancellationToken ct)
-        => await _roles
+    public Task<Role?> GetByNameAsync(string roleName, CancellationToken ct)
+        => _roles
             .SingleOrDefaultAsync(r => string.Equals(r.Name.ToLower(), roleName.ToLower()), ct);
 }

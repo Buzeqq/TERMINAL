@@ -13,10 +13,10 @@ internal sealed class CreateTagCommandHandler : IRequestHandler<CreateTagCommand
         _tagRepository = tagRepository;
     }
 
-    public async Task Handle(CreateTagCommand command, CancellationToken ct)
+    public Task Handle(CreateTagCommand command, CancellationToken ct)
     {
         var newTagId = TagId.Create();
         var newTag = new Core.Entities.Tag(newTagId, command.Name);
-        await _tagRepository.AddAsync(newTag, ct);
+        return _tagRepository.AddAsync(newTag, ct);
     }
 }
