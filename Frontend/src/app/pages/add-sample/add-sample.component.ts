@@ -68,6 +68,7 @@ export class AddSampleComponent implements OnInit, OnDestroy {
 
   private readonly subscriptions: Subscription[] = [];
 
+  isRecipeInputReadonly: boolean = false;
   replicationData$ = this.activatedRoute.queryParams.pipe(
     map((p: Params): ReplicateQuery | undefined => {
       const recipeId = p['recipeId'];
@@ -85,11 +86,11 @@ export class AddSampleComponent implements OnInit, OnDestroy {
       return undefined;
     }),
     filter(q => q !== undefined),
-    tap(_ => {
-      this.sampleForm.controls.recipe.disable();
-    }),
     switchMap(q => this.replicationService.getReplicationData(q!)),
     tap(d => {
+      if (d.type == 'Recipe') {
+        this.sampleForm.controls.recipe.setItem({ name: d.basedOn.name, id: d.basedOn.id } as Recipe, d.basedOn.name);
+      }
       this.fillForm(d);
     })
   );
@@ -123,14 +124,13 @@ export class AddSampleComponent implements OnInit, OnDestroy {
           } else {
             return this.searchService.searchRecipe(phrase!, 0, 10);
           }
-        }),
-      tap(recipes => {
-        this.sampleFormData.next({
-          ...this.sampleFormData.value,
-          recipes
-        });
-      })
-    ).subscribe());
+        })
+    ).subscribe(recipes => {
+      this.sampleFormData.next({
+        ...this.sampleFormData.value,
+        recipes
+      });
+    }));
 
     this.parameterService.getParameters()
       .pipe(
@@ -155,6 +155,7 @@ export class AddSampleComponent implements OnInit, OnDestroy {
           type: 'Recipe'
         }).pipe(
           catchError((_) => {
+
             this.notificationService.notifyError('Failed to load recipe!');
             return EMPTY;
           })
@@ -162,6 +163,8 @@ export class AddSampleComponent implements OnInit, OnDestroy {
         tap(d => this.fillForm(d))
       )
       .subscribe());
+
+    this.sampleForm.controls.recipe.setItem(null, 'None');
   }
 
 
@@ -222,7 +225,6 @@ export class AddSampleComponent implements OnInit, OnDestroy {
           )))
       });
       this.sampleForm.controls.steps.push(step);
-
       this.subscriptions.push(...this.setupFormService.setParents(step.controls.parameters, this.parameters));
     }
   }

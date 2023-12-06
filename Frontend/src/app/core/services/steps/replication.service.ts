@@ -18,9 +18,13 @@ export class ReplicationService {
       return this.samplesService.getSampleDetails(query.id)
         .pipe(
           map(d => ({
-          basedOn: d.code,
+          basedOn: {
+            name: d.comment,
+            id: d.id
+          },
           comment: d.comment,
-          steps: d.steps
+          steps: d.steps,
+          type: query.type
           } as ReplicationData))
         );
     }
@@ -29,9 +33,13 @@ export class ReplicationService {
       return this.recipesService.getRecipe(query.id)
         .pipe(
           map(d => ({
-            basedOn: d.name,
+            basedOn: {
+              name: d.name,
+              id: d.id,
+            },
             comment: '',
-            steps: d.steps
+            steps: d.steps,
+            type: query.type
           }))
         );
     }
@@ -46,7 +54,11 @@ export interface ReplicateQuery {
 }
 
 export interface ReplicationData {
-  basedOn: string;
+  basedOn: {
+    name: string;
+    id: string;
+  };
+  type: 'Sample' | 'Recipe';
   comment: string;
   steps: Step[];
 }
