@@ -45,18 +45,13 @@ public static class RecipeModule
         
         app.MapGet("api/recipes", async (
             [FromQuery] int pageSize, 
-            [FromQuery] int pageNumber, 
+            [FromQuery] int pageNumber,
+            [FromQuery] bool? desc,
             ISender sender, 
             CancellationToken ct) =>
         {
-            var query = new GetRecipesQuery(new PagingParameters
-            {
-                PageNumber = pageNumber,
-                PageSize = pageSize
-            });
-
+            var query = new GetRecipesQuery(pageNumber, pageSize, desc ?? true);
             var recipes = await sender.Send(query, ct);
-
             return Results.Ok(recipes);
         }).RequireAuthorization(Permission.RecipeRead.ToString());
 
@@ -74,5 +69,14 @@ public static class RecipeModule
                 command.Id
             });
         }).RequireAuthorization(Permission.RecipeWrite.ToString());
+        
+        app.MapGet("api/recipes/amount", async (
+            ISender sender, 
+            CancellationToken ct) =>
+        {
+            var query = new GetRecipesAmountQuery();
+            var amount = await sender.Send(query, ct);
+            return Results.Ok(amount);
+        }).RequireAuthorization(Permission.RecipeRead.ToString());
     }
 }

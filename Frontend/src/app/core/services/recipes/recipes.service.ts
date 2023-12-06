@@ -14,10 +14,12 @@ export class RecipesService extends ApiService {
     super(http);
   }
 
-  public getRecipes(pageNumber: number, pageSize: number): Observable<Recipe[]> {
-    return this.get<{ recipes: Recipe[] }>('recipes', new HttpParams({ fromObject: {
-      pageNumber,
-      pageSize
+  public getRecipes(pageNumber: number, pageSize: number, desc = true): Observable<Recipe[]> {
+    return this.get<{ recipes: Recipe[] }>('recipes', new HttpParams({
+      fromObject: {
+        pageNumber,
+        pageSize,
+        desc
     }})).pipe(
       map(r => r.recipes)
     );
@@ -29,5 +31,9 @@ export class RecipesService extends ApiService {
 
   addRecipe(addRecipe: AddRecipe) {
     return this.post<never>(`recipes`, addRecipe).pipe(tap(console.log));
+  }
+
+  getRecipesAmount(): Observable<number> {
+    return this.get<number>('recipes/amount');
   }
 }

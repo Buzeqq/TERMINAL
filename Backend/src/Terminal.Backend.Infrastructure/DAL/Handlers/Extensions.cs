@@ -22,6 +22,12 @@ public static class Extensions
         {
             Projects = entities.Select(p => new GetProjectsDto.ProjectDto(p.Id, p.Name))
         };
+    
+    public static GetRecipesDto AsGetRecipesDto(this IEnumerable<Recipe> entities)
+        => new()
+        {
+            Recipes = entities.Select(r => new GetRecipesDto.RecipeDto(r.Id, r.RecipeName))
+        };
 
     public static GetProjectDto AsGetProjectDto(this Project entity)
         => new()
