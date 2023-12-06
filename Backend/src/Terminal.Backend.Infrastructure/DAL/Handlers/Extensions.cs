@@ -6,6 +6,7 @@ using Terminal.Backend.Application.DTO.Recipes;
 using Terminal.Backend.Application.DTO.Samples;
 using Terminal.Backend.Application.DTO.Tags;
 using Terminal.Backend.Application.DTO.Users;
+using Terminal.Backend.Application.DTO.Users.Invitations;
 using Terminal.Backend.Application.Exceptions;
 using Terminal.Backend.Application.Queries.QueryParameters;
 using Terminal.Backend.Core.Entities;
@@ -20,6 +21,12 @@ public static class Extensions
         => new()
         {
             Projects = entities.Select(p => new GetProjectsDto.ProjectDto(p.Id, p.Name))
+        };
+    
+    public static GetRecipesDto AsGetRecipesDto(this IEnumerable<Recipe> entities)
+        => new()
+        {
+            Recipes = entities.Select(r => new GetRecipesDto.RecipeDto(r.Id, r.RecipeName))
         };
 
     public static GetProjectDto AsGetProjectDto(this Project entity)
@@ -142,4 +149,7 @@ public static class Extensions
     }
 
     public static GetRecipeDto AsDto(this Recipe recipe) => new(recipe.Id, recipe.RecipeName);
+
+    public static GetInvitationDto? AsGetInvitationDto(this Invitation invitation) =>
+        new(invitation.ExpiresIn > DateTime.UtcNow, invitation.User.Email);
 }

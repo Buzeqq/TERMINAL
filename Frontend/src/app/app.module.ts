@@ -55,6 +55,7 @@ import { MatSortModule } from "@angular/material/sort";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { UserEditComponent } from './pages/settings/user-edit/user-edit.component';
 import { AddRecipeComponent } from './pages/add-recipe/add-recipe.component';
+import { RecipeEditComponent } from './pages/settings/recipe-edit/recipe-edit.component';
 import {SampleInterceptor} from "./core/interceptors/samples/sample.interceptor";
 
 @NgModule({
@@ -75,7 +76,8 @@ import {SampleInterceptor} from "./core/interceptors/samples/sample.interceptor"
     StatusbarComponent,
     LoginComponent,
     UserEditComponent,
-    AddRecipeComponent
+    AddRecipeComponent,
+    RecipeEditComponent
   ],
   imports: [
     BrowserModule,

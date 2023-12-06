@@ -12,13 +12,13 @@ public static class TagsModule
 {
     public static void UseTagEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("api/tags", async (
+        app.MapGet("api/tags", (
             [FromQuery] int pageNumber,
             [FromQuery] int pageSize,
             [FromQuery] bool? desc,
             ISender sender,
             CancellationToken ct
-            ) => await sender.Send(new GetTagsQuery(pageNumber, pageSize, desc ?? true), ct))
+            ) => sender.Send(new GetTagsQuery(pageNumber, pageSize, desc ?? true), ct))
             .RequireAuthorization(Permission.TagRead.ToString());
         
         app.MapGet("api/tags/all", async (

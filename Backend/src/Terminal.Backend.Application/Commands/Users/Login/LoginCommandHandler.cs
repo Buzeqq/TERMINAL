@@ -27,6 +27,11 @@ internal sealed class LoginCommandHandler : IRequestHandler<LoginCommand, JwtTok
         {
             throw new UserNotFoundException(email);
         }
+
+        if (!user.Activated)
+        {
+            throw new AccountNotActivatedException();
+        }
         
         if (!_passwordHasher.Verify(password, user.Password))
         {

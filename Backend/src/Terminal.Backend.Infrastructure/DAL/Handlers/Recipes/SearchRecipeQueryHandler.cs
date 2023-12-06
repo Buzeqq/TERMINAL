@@ -22,7 +22,7 @@ internal sealed class SearchRecipeQueryHandler : IRequestHandler<SearchRecipeQue
                 .AsNoTracking()
                 .Where(m => EF.Functions.ToTsVector("english", m.RecipeName)
                     .Matches(request.SearchPhrase))
-                .Select(r => new GetRecipeDto(r.Id, r.RecipeName))
+                .Select(r => new GetRecipesDto.RecipeDto(r.Id, r.RecipeName))
                 .ToListAsync(ct)
         };
 }
