@@ -1,4 +1,4 @@
-import {Recipe} from "../../models/recipes/recipe";
+import {RecipeDetails} from "../../models/recipes/recipeDetails";
 
-export interface RecipeEntity extends Recipe {
+export interface RecipeEntity extends RecipeDetails {
 }

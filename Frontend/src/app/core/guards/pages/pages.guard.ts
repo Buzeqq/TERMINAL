@@ -30,7 +30,6 @@ export class PagesGuard implements CanActivate {
       }
     } catch (error) {
       console.log('Error checking online status:', error);
-      // Handle error, e.g., redirect to an error page
       return false;
     }
   }

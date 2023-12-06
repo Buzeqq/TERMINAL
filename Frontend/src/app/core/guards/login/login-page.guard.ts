@@ -8,7 +8,6 @@ import {firstValueFrom} from "rxjs";
   providedIn: 'root',
 })
 export class LoginPageGuard implements CanActivate {
-  // return inject(PermissionService).loginPage();
 
   constructor(
     private authService: AuthService,
@@ -32,7 +31,6 @@ export class LoginPageGuard implements CanActivate {
       }
     } catch (error) {
       console.log('Error checking online status:', error);
-      // Handle error, e.g., redirect to an error page
       return false;
     }
   }

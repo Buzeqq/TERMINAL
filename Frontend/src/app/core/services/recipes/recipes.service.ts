@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from "../api-service";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { map, Observable, tap } from "rxjs";
+import { map, Observable } from "rxjs";
 import { RecipeDetails } from "../../models/recipes/recipeDetails";
 import { Recipe } from "../../models/recipes/recipe";
 import { AddRecipe } from "../../models/recipes/addRecipe";
@@ -25,7 +25,7 @@ export class RecipesService extends ApiService {
   }
 
   public getRecipes(pageNumber: number, pageSize: number, desc = true): Observable<Recipe[]> {
-    return this.get<{ recipes: Recipe[] }>('recipes', new HttpParams({
+    if (this.online) return this.get<{ recipes: Recipe[] }>('recipes', new HttpParams({
       fromObject: {
         pageNumber,
         pageSize,
@@ -33,18 +33,20 @@ export class RecipesService extends ApiService {
     }})).pipe(
       map(r => r.recipes)
     );
-    // else return this.idbService.getRecipes(pageNumber, pageSize);
+    else return this.idbService.getRecipes(pageNumber, pageSize, desc);
   }
 
   public getRecipe(id: string): Observable<RecipeDetails> {
-    return this.get<RecipeDetails>(`recipes/${id}/details`);
+    if (this.online) return this.get<RecipeDetails>(`recipes/${id}/details`);
+    else return this.idbService.getRecipe(id);
   }
 
   addRecipe(addRecipe: AddRecipe) {
-    return this.post<never>(`recipes`, addRecipe).pipe(tap(console.log));
+    return this.post<never>(`recipes`, addRecipe);
   }
 
   getRecipesAmount(): Observable<number> {
-    return this.get<number>('recipes/amount');
+    if (this.online) return this.get<number>('recipes/amount');
+    else return this.idbService.getRecipesAmount();
   }
 }

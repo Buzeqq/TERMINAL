@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {map, Observable, tap} from "rxjs";
+import {map, Observable} from "rxjs";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { AddProjectDialogComponent } from "./core/components/dialogs/add-project/add-project-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
   isExpanded$: Observable<boolean> = this.isMobile$.pipe(map(result => result || !this.isMobile));
   isExpanded: boolean = false // toggleable
 
-  isOnline$ = this.pingService.isOnline$.pipe(tap(o => console.log(`app-component isOnline$ = ${o}`)));
+  isOnline$ = this.pingService.isOnline$;
 
   moderatorPermissions = this.authService.isAdminOrMod();
 

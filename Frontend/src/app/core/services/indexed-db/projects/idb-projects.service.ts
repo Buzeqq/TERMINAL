@@ -13,11 +13,11 @@ export class IdbProjectsService {
 
   constructor( ) { }
 
-  async getProjects(pageIndex: number, pageSize: number, desc = true, all = false) {
+  async getProjects(pageIndex: number, pageSize: number, desc = true) {
     let query = db.projects.orderBy('name');
     if (desc) query = query.reverse();
     const entities = await query
-      .filter(e => e.isActive == 1 || e.isActive == (all ? 0 : 1))
+      .filter(e => e.isActive == 1)
       .offset(pageIndex)
       .limit(pageSize)
       .toArray();

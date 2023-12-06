@@ -16,20 +16,14 @@
       </ng-container>
       <div class="sample-details__label">Comment:</div>
       <div>{{details.comment}}</div>
-      <div class="sample-details__label">Number of steps:</div>
-      <div>{{details.steps.length}}</div>
+      <div *ngIf="!isDetailView()" class="sample-details__label">Number of steps: {{details.steps.length}}</div>
     </article>
 
     <mat-card *ngIf="isDetailView()">
-      <mat-card-header>
-        <mat-card-title>Steps</mat-card-title>
-      </mat-card-header>
-
-      <mat-divider></mat-divider>
-
-      <mat-card-content>
-        <mat-card *ngFor="let step of details.steps">
-          <mat-card-content>
+      <mat-card-content class="recipe-details">
+        <mat-divider></mat-divider>
+        <mat-tab-group>
+          <mat-tab *ngFor="let step of details.steps index as i" [label]="'Step #' + (i + 1)">
             <mat-table [dataSource]="step.parameters">
               <ng-container matColumnDef="name">
                 <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
@@ -49,15 +43,12 @@
               <mat-header-row *matHeaderRowDef="['name', 'value', 'unit']"></mat-header-row>
               <mat-row *matRowDef="let row; columns: ['name', 'value', 'unit']"></mat-row>
             </mat-table>
-          </mat-card-content>
-          <mat-card-footer>
-            <article class="sample-details">
-              <div class="sample-details__label">Comment:</div>
+            <section class="recipe-details__comment">
+              <div class="recipe-details__label">Comment:</div>
               <div>{{step.comment}}</div>
-            </article>
-          </mat-card-footer>
-          <mat-divider></mat-divider>
-        </mat-card>
+            </section>
+          </mat-tab>
+        </mat-tab-group>
       </mat-card-content>
     </mat-card>
   </mat-card-content>
@@ -72,7 +63,7 @@
       <mat-icon>arrow_forward</mat-icon>
       Show steps
     </button>
-    <button mat-button color="primary" *ngIf="hasRecipe(details)" [routerLink]="['/recipes', details.recipe?.id]">
+    <button mat-button color="primary" *ngIf="hasRecipe(details)" [routerLink]="['/recipes']" [queryParams]="{recipeId: details.recipe?.id}">
       <mat-icon>arrow_forward</mat-icon>
       Show recipe
     </button>

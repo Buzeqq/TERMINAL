@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { ItemDetailsComponent } from "../item-details.component";
-import { catchError, EMPTY, map, Observable, tap } from "rxjs";
+import { catchError, EMPTY, Observable, tap } from "rxjs";
 import { ActivatedRoute } from '@angular/router';
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { RecipeDetails } from "../../../../models/recipes/recipeDetails";
 import { RecipesService } from "../../../../services/recipes/recipes.service";
+import {NotificationService} from "../../../../services/notification/notification.service";
 
 @Component({
   selector: 'app-recipe-details',
@@ -19,7 +19,7 @@ export class RecipeDetailsComponent extends ItemDetailsComponent {
   constructor(
     private readonly recipesService: RecipesService,
     protected override readonly route: ActivatedRoute,
-    private readonly snackBar: MatSnackBar,
+    private readonly notificationService: NotificationService
   ) { super(route); }
 
   @Input()
@@ -35,9 +35,7 @@ export class RecipeDetailsComponent extends ItemDetailsComponent {
       .pipe(
         catchError((err, _) => {
           console.log(err);
-          this.snackBar.open('Failed to load project', 'Close', {
-            duration: 3000
-          });
+          this.notificationService.notifyError('Failed to load recipe');
           return EMPTY;
         }),
         tap(r => {

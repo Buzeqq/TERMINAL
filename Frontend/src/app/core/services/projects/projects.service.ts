@@ -35,25 +35,15 @@ export class ProjectsService extends ApiService {
       }
     }))
       .pipe(
-        map(p => p.projects),
-        tap(_ => console.log('online /projects'))
+        map(p => p.projects)
       );
-    else {
-      console.log('offline /projects');
-      return this.idbService.getProjects(pageNumber, pageSize, desc, all);
-    }
+    else
+      return this.idbService.getProjects(pageNumber, pageSize, desc);
   }
 
   getProject(id: string): Observable<ProjectDetails> {
-    if (this.online) return this.get<ProjectDetails>(`projects/${id}`)
-      .pipe(
-        tap(_ => console.log('online /projects/{id}')),
-        catchError(this.handleError)
-      );
-    else {
-      console.log('offline /projects/{id}')
-      return this.idbService.getProject(id);
-    }
+    if (this.online) return this.get<ProjectDetails>(`projects/${id}`);
+    else return this.idbService.getProject(id);
   }
 
   addProject(name: string) {

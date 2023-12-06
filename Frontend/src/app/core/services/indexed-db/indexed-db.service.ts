@@ -2,13 +2,12 @@ import {Injectable} from '@angular/core';
 import {Project} from "../../models/projects/project";
 import {IdbProjectsService} from "./projects/idb-projects.service";
 import {from} from "rxjs";
-import {IdbTagsService} from "./tags/idb-tags.service";
-import {Tag} from "../../models/tags/tag";
 import {Sample} from "../../models/samples/sample";
 import {IdbSamplesService} from "./samples/idb-samples.service";
 import {Recipe} from "../../models/recipes/recipe";
 import {IdbRecipesService} from "./recipes/idb-recipes.service";
 import {SampleDetails} from "../../models/samples/sampleDetails";
+import {RecipeDetails} from "../../models/recipes/recipeDetails";
 
 @Injectable({
   providedIn: 'root'
@@ -17,17 +16,12 @@ export class IndexedDbService {
 
   constructor(
     private readonly idbProjectService: IdbProjectsService,
-    private readonly idbTagService: IdbTagsService,
     private readonly idbSampleService: IdbSamplesService,
     private readonly idbRecipeService: IdbRecipesService
   ) { }
 
-  addProjects(projects: Project[]) {
-    this.idbProjectService.addProjects(projects);
-  }
-
-  getProjects(pageIndex: number, pageSize: number, desc: boolean, all: boolean) {
-    return from(this.idbProjectService.getProjects(pageIndex, pageSize, desc, all));
+  getProjects(pageIndex: number, pageSize: number, desc: boolean) {
+    return from(this.idbProjectService.getProjects(pageIndex, pageSize, desc));
   }
 
   getProject(id: string) {
@@ -38,20 +32,8 @@ export class IndexedDbService {
     return from(this.idbProjectService.getProjectsAmount())
   }
 
-  addTags(tags: Tag[]) {
-    this.idbTagService.addTags(tags);
-  }
-
-  getTags(pageIndex: number, pageSize: number, desc: boolean, all: boolean) {
-    return from(this.idbTagService.getTags(pageIndex, pageSize, desc, all));
-  }
-
-  getTagsAmount() {
-    return from(this.idbTagService.getTagsAmount())
-  }
-
-  getTagById(id: string) {
-    return from(this.idbTagService.getTagById(id))
+  addProjects(projects: Project[]) {
+    this.idbProjectService.addProjects(projects);
   }
 
   addSamples(samples: Sample[]) {
@@ -78,7 +60,23 @@ export class IndexedDbService {
     return from(this.idbSampleService.getSamplesAmount());
   }
 
+  getRecipes(pageIndex: number, pageSize: number, desc: boolean) {
+    return from(this.idbRecipeService.getRecipes(pageIndex, pageSize, desc));
+  }
+
+  getRecipe(id: string) {
+    return from(this.idbRecipeService.getRecipe(id));
+  }
+
   addRecipes(recipes: Recipe[]) {
     this.idbRecipeService.addRecipes(recipes);
+  }
+
+  addRecipe(recipe: RecipeDetails) {
+    this.idbRecipeService.addRecipe(recipe);
+  }
+
+  getRecipesAmount() {
+    return from(this.idbRecipeService.getRecipesAmount())
   }
 }

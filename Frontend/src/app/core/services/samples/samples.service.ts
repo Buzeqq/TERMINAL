@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from "../api-service";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import {map, Observable, tap} from "rxjs";
+import {map, Observable} from "rxjs";
 import { Sample } from "../../models/samples/sample";
 import { AddSample } from "../../models/samples/addSample";
 import { SampleDetails } from "../../models/samples/sampleDetails";
@@ -54,15 +54,11 @@ export class SamplesService extends ApiService {
         map(r => r.map(sample => ({
           ...sample,
           createdAtUtc: new Date(sample.createdAtUtc)
-        }))),
-        tap(_ => console.log('online /samples'))
+        })))
       );
-    else {
-      console.log("offline /samples")
-      return this.idbService.getRecentSamples(length).pipe(map(s => s.map(sample => ({
+    else return this.idbService.getRecentSamples(length).pipe(map(s => s.map(sample => ({
         ...sample, createdAtUtc: new Date(sample.createdAtUtc)
       }))));
-    }
   }
 
   getSampleDetails(id: string): Observable<SampleDetails> {
@@ -71,17 +67,13 @@ export class SamplesService extends ApiService {
         map(sample => ({
           ...sample,
             createdAtUtc: new Date(sample.createdAtUtc)
-        })),
-        tap(_ => console.log('online /samples/{id}'))
+        }))
       );
-    else {
-      console.log('offline /samples/{id}')
-      return this.idbService.getSample(id).pipe(map(
+    else return this.idbService.getSample(id).pipe(map(
         sample => ({
           ...sample, createdAtUtc: new Date(sample.createdAtUtc)
         })
       ));
-    }
   }
 
   addSample(form: AddSample) {
@@ -89,11 +81,7 @@ export class SamplesService extends ApiService {
   }
 
   getSamplesAmount(): Observable<number> {
-    if (this.online) return this.get<number>('samples/amount')
-      .pipe(tap(_ => console.log('online /samples/amount')));
-    else {
-      console.log('offline /samples/amount')
-      return this.idbService.getSamplesAmount();
-    }
+    if (this.online) return this.get<number>('samples/amount');
+    else return this.idbService.getSamplesAmount();
   }
 }

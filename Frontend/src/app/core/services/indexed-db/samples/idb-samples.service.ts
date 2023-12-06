@@ -45,7 +45,21 @@ export class IdbSamplesService {
 
   async addSamples(samples: Sample[]) {
     const projects = await Promise.all(samples.map(s => this.getProjectByName(s.project)));
-    await db.samples.bulkPut(this.samplesToEntities(samples, projects));
+    for (const newSamp of samples) {
+      const index = samples.indexOf(newSamp);
+      const sample = await db.samples.get(newSamp.id);
+      if (sample) db.samples.put(this.smartMerge(sample, newSamp, projects[index]));
+      else db.samples.put(this.sampleToEntity(newSamp, projects[index]))
+    }
+  }
+
+  private smartMerge(se: SampleEntity, sa: Sample, p: ProjectEntity): SampleEntity {
+    /* overwrite first and second row with potential new values, 3rd remains the same */
+    return {
+      id: sa.id, code: sa.code, createdAtUtc: sa.createdAtUtc,
+      projectId: p.id, projectName: p.name,
+      comment: se.comment, recipe: se.recipe, steps: se.steps, tags: se.tags
+    }
   }
 
   async addSample(sample: SampleDetails) {
@@ -72,21 +86,16 @@ export class IdbSamplesService {
 
   private entityToSample(e: SampleEntity): SampleDetails {
     return {
-      id: e.id,
-      code: e.code,
-      comment: e.comment,
-      createdAtUtc: e.createdAtUtc,
+      id: e.id, code: e.code, createdAtUtc: e.createdAtUtc,
       projectId: e.projectId,
-      recipe: e.recipe,
-      steps: e.steps,
-      tags: e.tags
+      comment: e.comment, recipe: e.recipe, steps: e.steps, tags: e.tags
     }
   }
 
   private async entitiesToSamples(entities: SampleEntity[], orderBy = '', desc = true): Promise<Sample[]> {
     const projects = await Promise.all(entities.map(e => this.getProjectById(e.projectId)))
     let samples = entities.map((e, index) => ({id: e.id, code: e.code, project: projects[index].name, createdAtUtc: e.createdAtUtc}))
-    // almost proper sorting by code
+    /* dexie provides weird results when sorting by code which is usually sth like AX10, so we use simple sorting */
     if (orderBy == 'code') {
       samples = samples.sort((a, b) => {
         const codeA = +a.code.replace(/\D+/g, '');
@@ -98,20 +107,12 @@ export class IdbSamplesService {
     return samples;
   }
 
-  private samplesToEntities(samples: Sample[], projects: ProjectEntity[]): SampleEntity[] {
-    return samples.map((s, index) => {
-      return {
-        id: s.id,
-        code: s.code,
-        createdAtUtc: s.createdAtUtc,
-        projectId: projects[index].id,
-        projectName: s.project,
-        comment: null,
-        recipe: null,
-        steps: [], // TODO
-        tags: []
-      }
-    })
+  private sampleToEntity(s: Sample, p: ProjectEntity): SampleEntity {
+    return {
+      id: s.id, code: s.code, createdAtUtc: s.createdAtUtc,
+      projectId: p.id, projectName: s.project,
+      comment: null, recipe: null, steps: [], tags: []
+    }
   }
 
   private fieldMapper(field: 'Code' | 'Project.Name' | 'CreatedAtUtc') {
@@ -122,29 +123,3 @@ export class IdbSamplesService {
     }[field]
   }
 }
-
-/*
-  sample details
-*   id: string;
-  code: string;
-  recipe: Recipe | null;
-  createdAtUtc: Date;
-  comment: string | null;
-  projectId: string;
-  steps: Step[];
-  tags: string[];
-  *
-  * sample
-  id: string;
-  code: string;
-  project: string;
-  createdAtUtc: Date;
-  *
-  * entity
-  id: string
-  code: string
-  createdAtUtc: Date
-  comment?: string
-  projectId: string
-  recipeId?: string
-* */

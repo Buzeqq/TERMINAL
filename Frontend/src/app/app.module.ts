@@ -57,6 +57,7 @@ import { UserEditComponent } from './pages/settings/user-edit/user-edit.componen
 import { AddRecipeComponent } from './pages/add-recipe/add-recipe.component';
 import { RecipeEditComponent } from './pages/settings/recipe-edit/recipe-edit.component';
 import {SampleInterceptor} from "./core/interceptors/samples/sample.interceptor";
+import {RecipeInterceptor} from "./core/interceptors/recipes/recipe.interceptor";
 
 @NgModule({
   declarations: [
@@ -130,7 +131,8 @@ import {SampleInterceptor} from "./core/interceptors/samples/sample.interceptor"
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: SampleInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: SampleInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: RecipeInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

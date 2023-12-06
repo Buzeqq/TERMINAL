@@ -26,6 +26,7 @@ const routes: Routes = [
   {path: 'add-sample', component: AddSampleComponent, canActivate: [PagesGuard]},
   {path: 'add-recipe', component: AddRecipeComponent, canActivate: [PagesGuard]},
   {path: 'recipes', component: ItemViewsComponent, canActivate: [PagesGuard], data: {type: 'Recipe'}},
+  // {path: 'recipes/:id', component: ItemDetailsComponent, canActivate: [PagesGuard], data: {type: 'Recipe'}},
   {path: 'settings', component: SettingsComponent, canActivate: [PagesGuard, settingsGuard]},
 
   // must be the last
