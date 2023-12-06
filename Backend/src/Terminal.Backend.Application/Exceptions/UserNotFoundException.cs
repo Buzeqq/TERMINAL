@@ -5,7 +5,7 @@ namespace Terminal.Backend.Application.Exceptions;
 
 internal sealed class UserNotFoundException : TerminalException
 {
-    public UserNotFoundException(Email email) : base($"User with email: {email.Value} not found!")
+    public UserNotFoundException() : base("User not found!")
     {
     }
 }

@@ -39,4 +39,9 @@ public sealed class User
     {
         Activated = true;
     }
+
+    public void UpdateEmail(Email email)
+    {
+        Email = email;
+    }
 }

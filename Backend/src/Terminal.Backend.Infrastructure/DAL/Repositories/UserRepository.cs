@@ -27,4 +27,13 @@ internal sealed class UserRepository : IUserRepository
         _users.Update(user);
         return Task.CompletedTask;
     }
+
+    public Task<User?> GetAsync(UserId id, CancellationToken cancellationToken)
+        => _users.SingleOrDefaultAsync(u => u.Id == id, cancellationToken);
+
+    public Task DeleteAsync(User user, CancellationToken cancellationToken)
+    {
+        _users.Remove(user);
+        return Task.CompletedTask;
+    }
 }
