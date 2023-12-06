@@ -14,10 +14,14 @@ public static class RecipeModule
     private const string ApiBaseRoute = "api/recipes";
     public static void UseRecipesEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet(ApiBaseRoute + "/search",
-                async ([FromQuery] string searchPhrase, ISender sender, CancellationToken ct) =>
+        app.MapGet(ApiBaseRoute + "/search", async (
+               [FromQuery] string searchPhrase,
+               [FromQuery] int pageSize,
+               [FromQuery] int pageNumber,
+               ISender sender,
+               CancellationToken ct) =>
                 {
-                    var query = new SearchRecipeQuery(searchPhrase);
+                    var query = new SearchRecipeQuery(searchPhrase, pageNumber, pageSize);
                     var recipes = await sender.Send(query, ct);
                     return Results.Ok(recipes);
                 }).RequireAuthorization(Permission.RecipeRead.ToString())

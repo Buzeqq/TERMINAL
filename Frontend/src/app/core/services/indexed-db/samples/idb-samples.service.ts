@@ -39,6 +39,21 @@ export class IdbSamplesService {
     return this.entityToSample(entity);
   }
 
+  async searchSamples(searchPhrase: string, pageIndex: number, pageSize: number) {
+    const offset = pageIndex * pageSize;
+    const entities = await db.samples
+      .filter((sample) => {
+        return (
+          sample.code.toLowerCase().includes(searchPhrase.toLowerCase()) ||
+          sample.projectName.toLowerCase().includes(searchPhrase.toLowerCase())
+        );
+      })
+      .offset(offset)
+      .limit(pageSize)
+      .toArray();
+    return this.entitiesToSamples(entities);
+  }
+
   async getSamplesAmount() {
     return db.samples.count();
   }
@@ -53,6 +68,11 @@ export class IdbSamplesService {
     }
   }
 
+  async addSample(sample: SampleDetails) {
+    const entity = await this.sampleDetailsToEntity(sample);
+    db.samples.put(entity);
+  }
+
   private smartMerge(se: SampleEntity, sa: Sample, p: ProjectEntity): SampleEntity {
     /* overwrite first and second row with potential new values, 3rd remains the same */
     return {
@@ -60,11 +80,6 @@ export class IdbSamplesService {
       projectId: p.id, projectName: p.name,
       comment: se.comment, recipe: se.recipe, steps: se.steps, tags: se.tags
     }
-  }
-
-  async addSample(sample: SampleDetails) {
-    const entity = await this.sampleDetailsToEntity(sample);
-    db.samples.put(entity);
   }
 
   private async getProjectByName(name: string) {

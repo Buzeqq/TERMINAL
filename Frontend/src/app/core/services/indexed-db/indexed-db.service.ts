@@ -79,4 +79,16 @@ export class IndexedDbService {
   getRecipesAmount() {
     return from(this.idbRecipeService.getRecipesAmount())
   }
+
+  searchSamples(searchPhrase: string, pageIndex: number, pageSize: number) {
+    return from(this.idbSampleService.searchSamples(searchPhrase, pageIndex, pageSize))
+  }
+
+  searchProjects(searchPhrase: string, pageIndex: number, pageSize: number) {
+    return from(this.idbProjectService.searchProjects(searchPhrase, pageIndex, pageSize));
+  }
+
+  searchRecipes(searchPhrase: string, pageIndex: number, pageSize: number) {
+    return from(this.idbRecipeService.searchRecipes(searchPhrase, pageIndex, pageSize));
+  }
 }

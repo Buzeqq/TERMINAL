@@ -27,6 +27,17 @@ export class IdbRecipesService {
     return recipe;
   }
 
+  async searchRecipes(searchPhrase: string, pageIndex: number, pageSize: number) {
+    const offset = pageIndex * pageSize;
+    return db.recipes
+      .filter((recipe) => (
+        recipe.name.toLowerCase().includes(searchPhrase.toLowerCase()))
+      )
+      .offset(offset)
+      .limit(pageSize)
+      .toArray();
+  }
+
   async addRecipes(recipes: Recipe[]) {
     /* Table.bulkPut() would overwrite steps with an empty list */
     for (const newRecipe of recipes) {
