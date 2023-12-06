@@ -29,7 +29,7 @@ export class ProjectDetailsComponent extends ItemDetailsComponent {
 
   set projectId(id: string | undefined) {
     this._projectId = id || this.route.snapshot.paramMap.get('id') || undefined;
-    if (!id) return;
+    if (!this._projectId) return;
 
     this.projectDetails$ = this.projectService.getProject(this._projectId!)
       .pipe(

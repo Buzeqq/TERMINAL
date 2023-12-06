@@ -46,7 +46,6 @@ export class SampleDetailsComponent extends ItemDetailsComponent {
         tap(m => {
           this.loading = 'determinate';
           this.projectDetails$ = this.projectService.getProject(m.projectId)
-          console.log(m)
         })
       );
   }

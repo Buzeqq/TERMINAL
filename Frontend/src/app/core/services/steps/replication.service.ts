@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { SamplesService } from "../samples/samples.service";
 import { RecipesService } from "../recipes/recipes.service";
 import { EMPTY, map, Observable } from "rxjs";
-import { Step } from "../../models/steps/step";
+import {RecipeDetails} from "../../models/recipes/recipeDetails";
 
 @Injectable({
   providedIn: 'root'
@@ -18,13 +18,9 @@ export class ReplicationService {
       return this.samplesService.getSampleDetails(query.id)
         .pipe(
           map(d => ({
-          basedOn: {
-            name: d.comment,
-            id: d.id
-          },
+          basedOn: d.code,
           comment: d.comment,
-          steps: d.steps,
-          type: query.type
+          recipe: d.recipe
           } as ReplicationData))
         );
     }
@@ -33,13 +29,9 @@ export class ReplicationService {
       return this.recipesService.getRecipe(query.id)
         .pipe(
           map(d => ({
-            basedOn: {
-              name: d.name,
-              id: d.id,
-            },
+            basedOn: d.name,
             comment: '',
-            steps: d.steps,
-            type: query.type
+            recipe: d
           }))
         );
     }
@@ -54,11 +46,7 @@ export interface ReplicateQuery {
 }
 
 export interface ReplicationData {
-  basedOn: {
-    name: string;
-    id: string;
-  };
-  type: 'Sample' | 'Recipe';
+  basedOn: string; // display name
   comment: string;
-  steps: Step[];
+  recipe: RecipeDetails;
 }
