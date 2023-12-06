@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { map, Observable } from "rxjs";
+import {firstValueFrom, map, Observable} from "rxjs";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { AddProjectDialogComponent } from "./core/components/dialogs/add-project/add-project-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
@@ -28,7 +28,6 @@ export class AppComponent implements OnInit {
   isExpanded: boolean = false // toggleable
 
   isOnline$ = this.pingService.isOnline$;
-
   moderatorPermissions = this.authService.isAdminOrMod();
 
   constructor(
@@ -41,10 +40,14 @@ export class AppComponent implements OnInit {
     private readonly pingService: PingService
   ) {  }
 
-  openAddProjectDialog() {
-    this.moderatorPermissions ?
-    this.dialog.open(AddProjectDialogComponent) :
-    this.notificationService.notifyNoPermission("Access denied. Contact administration for assistance.")
+  async openAddProjectDialog() {
+    const online = await firstValueFrom(this.isOnline$);
+    if (!online)
+      this.notificationService.notifyConnectionError();
+    else if (!this.moderatorPermissions)
+      this.notificationService.notifyNoPermission();
+    else
+      this.dialog.open(AddProjectDialogComponent);
   }
 
   ngOnInit(): void {

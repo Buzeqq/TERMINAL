@@ -1,15 +1,14 @@
-import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot} from "@angular/router";
-import {Injectable} from "@angular/core";
+import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot} from '@angular/router';
 import {AuthService} from "../../services/auth/auth.service";
 import {NotificationService} from "../../services/notification/notification.service";
-import {firstValueFrom} from "rxjs";
 import {PingService} from "../../services/ping/ping.service";
+import {firstValueFrom} from "rxjs";
+import {Injectable} from "@angular/core";
 
 @Injectable({
   providedIn: 'root',
 })
-export class SettingsGuard implements CanActivate {
-
+export class AdminOnlineFeaturesGuard implements CanActivate {
   constructor(
     private pingService: PingService,
     private authService: AuthService,
@@ -29,4 +28,5 @@ export class SettingsGuard implements CanActivate {
 
     return online && permission;
   }
+
 }
