@@ -15,12 +15,10 @@ internal sealed class GetRecipesQueryHandler : IRequestHandler<GetRecipesQuery, 
         _recipes = dbContext.Recipes;
     }
 
-    public async Task<GetRecipesDto> Handle(GetRecipesQuery request, CancellationToken cancellationToken) =>
-        new()
-        {
-            Recipes = await _recipes
-                .Paginate(request.Parameters)
-                .Select(r => r.AsDto())
-                .ToListAsync(cancellationToken)
-        };
+    public async Task<GetRecipesDto> Handle(GetRecipesQuery request,
+        CancellationToken ct) => (await _recipes
+        .AsNoTracking()
+        .OrderBy(request.OrderingParameters)
+        .Paginate(request.Parameters)
+        .ToListAsync(ct)).AsGetRecipesDto();
 }
