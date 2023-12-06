@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {Observable, tap} from "rxjs";
 import {SelectedItem} from "../../../models/items/selected-item";
 import {Tag} from "../../../models/tags/tag";
@@ -25,6 +25,8 @@ export class TagViewsComponent implements AfterViewInit {
   selectedItem?: SelectedItem;
   @Output() selectedItemChangeEvent = new EventEmitter<SelectedItem>();
 
+  @Input() all?: boolean;
+
   constructor(
     private readonly tagService: TagsService,
   ) { }
@@ -36,7 +38,7 @@ export class TagViewsComponent implements AfterViewInit {
   }
 
   private loadData() {
-    this.tagService.getTags(this.queryPageIndex, this.queryPageSize, this.orderDir == "desc")
+    this.tagService.getTags(this.queryPageIndex, this.queryPageSize, this.orderDir == "desc", this.all)
       .pipe(tap(r => {
         if (!this.selectedItem) this.selectTag(r[0]);
       }))

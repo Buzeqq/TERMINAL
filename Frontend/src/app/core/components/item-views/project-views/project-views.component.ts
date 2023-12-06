@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {Observable, tap} from 'rxjs';
 import { Project } from "../../../models/projects/project";
 import { SelectedItem } from "../../../models/items/selected-item";
@@ -25,6 +25,8 @@ export class ProjectViewsComponent implements AfterViewInit {
   selectedItem?: SelectedItem;
   @Output() selectedItemChangeEvent = new EventEmitter<SelectedItem>();
 
+  @Input() all?: boolean;
+
   constructor(
     private readonly projectService: ProjectsService,
   ) { }
@@ -36,7 +38,7 @@ export class ProjectViewsComponent implements AfterViewInit {
   }
 
   private loadData() {
-    this.projectService.getProjects(this.queryPageIndex, this.queryPageSize, this.orderDir == "desc")
+    this.projectService.getProjects(this.queryPageIndex, this.queryPageSize, this.orderDir == "desc", this.all)
       .pipe(tap(r => {
         if (!this.selectedItem) this.selectProject(r[0], true);
       }))

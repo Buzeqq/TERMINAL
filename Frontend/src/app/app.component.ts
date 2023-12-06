@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import { map, Observable } from "rxjs";
+import {map, Observable} from "rxjs";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { AddProjectDialogComponent } from "./core/components/dialogs/add-project/add-project-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
@@ -7,6 +7,8 @@ import { Router } from "@angular/router";
 import {AuthService} from "./core/services/auth/auth.service";
 import {NotificationService} from "./core/services/notification/notification.service";
 import { MatSidenav } from '@angular/material/sidenav';
+import {SyncService} from "./core/services/sync/sync.service";
+import {PingService} from "./core/services/ping/ping.service";
 
 @Component({
   selector: 'app-root',
@@ -25,6 +27,8 @@ export class AppComponent implements OnInit {
   isExpanded$: Observable<boolean> = this.isMobile$.pipe(map(result => result || !this.isMobile));
   isExpanded: boolean = false // toggleable
 
+  isOnline$ = this.pingService.isOnline$;
+
   moderatorPermissions = this.authService.isAdminOrMod();
 
   constructor(
@@ -32,7 +36,9 @@ export class AppComponent implements OnInit {
     private readonly dialog: MatDialog,
     protected readonly router: Router,
     private readonly authService: AuthService,
-    private readonly notificationService: NotificationService
+    private readonly notificationService: NotificationService,
+    private readonly syncService: SyncService,
+    private readonly pingService: PingService
   ) {  }
 
   openAddProjectDialog() {
@@ -79,5 +85,10 @@ export class AppComponent implements OnInit {
     if (this.isUserLoggedIn() && this.isMobile) {
       this.sidenav.close();
     }
+  }
+
+  async synchronise() {
+    /* fetch data from server and save in indexedDB */
+    await this.syncService.synchronise();
   }
 }

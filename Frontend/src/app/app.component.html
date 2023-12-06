@@ -1,5 +1,5 @@
 <mat-sidenav-container autosize>
-  <mat-sidenav #sidenav *ngIf="!(isUserLoggedOut$ | async)"
+  <mat-sidenav #sidenav *ngIf="!(isUserLoggedOut$ | async) || !(isOnline$ | async)"
                [mode]="isMobile ? 'over' : 'side'"
                [opened]="!(isMobile$ | async)"
   >
@@ -50,6 +50,13 @@
       <mat-list-item routerLink="settings" (click)="closeWhenClicked()" [class.disabled]="!moderatorPermissions">
         <mat-icon matListItemIcon>settings</mat-icon>
         <span *ngIf="isExpanded">Settings</span>
+      </mat-list-item>
+
+      <mat-list-item (click)="synchronise()"
+          matTooltip="Fetch data from server, so you can browse offline."
+          matTooltipPosition="below">
+        <mat-icon matListItemIcon>cloud_download</mat-icon>
+        <span *ngIf="isExpanded">Fetch</span>
       </mat-list-item>
 
     </mat-nav-list>

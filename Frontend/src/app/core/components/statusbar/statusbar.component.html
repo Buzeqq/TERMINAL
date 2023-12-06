@@ -8,19 +8,20 @@
     <span class="header__title">Terminal</span>
   </div>
   <span class="toolbar__spacer"></span>
-  <ng-container *ngIf="isOnline$ | async as status; else loading;">
-    <ng-container *ngIf="status; else offline;">
+  <ng-container *ngIf="isOnline$ | async as status;">
+<!--    else loading;-->
+    <ng-container *ngIf="status">
       <mat-icon>wifi</mat-icon>
     </ng-container>
-    <ng-template #offline>
+    <ng-container *ngIf="!status">
       <mat-icon>wifi_off</mat-icon>
-    </ng-template>
+    </ng-container>
   </ng-container>
   <button class="toolbar__logout" mat-flat-button (click)="logOutButtonClicked()" [hidden]="isLoggedOut$ | async">
     {{ 'Sign Out' }}
   </button>
 </mat-toolbar>
 
-<ng-template #loading>
-  <mat-spinner></mat-spinner>
-</ng-template>
+<!--<ng-template #loading>-->
+<!--  <mat-spinner></mat-spinner>-->
+<!--</ng-template>-->

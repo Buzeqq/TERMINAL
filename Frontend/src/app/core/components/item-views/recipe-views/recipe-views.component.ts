@@ -6,6 +6,7 @@ import { RecipesService } from "../../../services/recipes/recipes.service";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatSort, Sort} from "@angular/material/sort";
 import {PageEvent} from "@angular/material/paginator";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-recipe-views',
@@ -27,10 +28,16 @@ export class RecipeViewsComponent implements AfterViewInit {
 
   constructor(
     private readonly recipesService: RecipesService,
+    private readonly route: ActivatedRoute
   ) { }
 
   ngAfterViewInit(): void {
     this.loadData()
+    this.route.queryParamMap.subscribe(params => {
+      const id = params.get('recipeId');
+      if (id) this.recipesService.getRecipe(id)
+        .subscribe(r => this.selectRecipe(r));
+    })
     this.length$ = this.recipesService.getRecipesAmount();
     this.dataSource.sort = this.sort!;
   }

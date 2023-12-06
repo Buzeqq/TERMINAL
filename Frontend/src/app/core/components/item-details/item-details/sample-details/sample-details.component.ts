@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { EMPTY, Observable, catchError, tap } from 'rxjs';
 import { SampleDetails } from 'src/app/core/models/samples/sampleDetails';
 import { SamplesService } from 'src/app/core/services/samples/samples.service';
@@ -8,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Project } from "../../../../models/projects/project";
 import { ProjectsService } from "../../../../services/projects/projects.service";
 import { ExportService } from 'src/app/core/services/export/export.service';
+import {NotificationService} from "../../../../services/notification/notification.service";
 
 @Component({
   selector: 'app-sample-details',
@@ -21,7 +21,7 @@ export class SampleDetailsComponent extends ItemDetailsComponent {
 
   constructor(
     private readonly samplesService: SamplesService,
-    private readonly snackBar: MatSnackBar,
+    private readonly notificationService: NotificationService,
     private readonly projectService: ProjectsService,
     private readonly exportService: ExportService,
     protected override readonly route: ActivatedRoute
@@ -40,14 +40,13 @@ export class SampleDetailsComponent extends ItemDetailsComponent {
       .pipe(
         catchError((err, _) => {
           console.log(err);
-          this.snackBar.open('Failed to load sample', 'Close', {
-            duration: 3000
-          });
+          this.notificationService.notifyError('Failed to load sample');
           return EMPTY;
         }),
         tap(m => {
           this.loading = 'determinate';
           this.projectDetails$ = this.projectService.getProject(m.projectId)
+          console.log(m)
         })
       );
   }

@@ -51,12 +51,13 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { SampleEditComponent } from './pages/settings/sample-edit/sample-edit.component';
 import { TagEditComponent } from './pages/settings/tag-edit/tag-edit.component';
 import { LoginComponent } from "./pages/login/login.component";
-import { PermissionService } from "./core/guards/auth.guard";
 import { MatSortModule } from "@angular/material/sort";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { UserEditComponent } from './pages/settings/user-edit/user-edit.component';
 import { AddRecipeComponent } from './pages/add-recipe/add-recipe.component';
 import { RecipeEditComponent } from './pages/settings/recipe-edit/recipe-edit.component';
+import {SampleInterceptor} from "./core/interceptors/samples/sample.interceptor";
+import {RecipeInterceptor} from "./core/interceptors/recipes/recipe.interceptor";
 
 @NgModule({
   declarations: [
@@ -130,7 +131,8 @@ import { RecipeEditComponent } from './pages/settings/recipe-edit/recipe-edit.co
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    PermissionService
+    { provide: HTTP_INTERCEPTORS, useClass: SampleInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: RecipeInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

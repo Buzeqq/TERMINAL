@@ -21,6 +21,15 @@ public static class TagsModule
             ) => sender.Send(new GetTagsQuery(pageNumber, pageSize, desc ?? true), ct))
             .RequireAuthorization(Permission.TagRead.ToString());
         
+        app.MapGet("api/tags/all", async (
+                [FromQuery] int pageNumber,
+                [FromQuery] int pageSize,
+                [FromQuery] bool? desc,
+                ISender sender,
+                CancellationToken ct
+            ) => await sender.Send(new GetTagsQuery(pageNumber, pageSize, desc ?? true, false), ct))
+            .RequireAuthorization(Permission.TagRead.ToString());
+        
         app.MapPost("api/tags", async (
                 CreateTagCommand command, 
                 ISender sender, 

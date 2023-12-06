@@ -25,8 +25,8 @@ $light-theme: mat.define-light-theme((
 ));
 
 // Apply the dark theme by default
-$current-theme: $dark-theme;
-//$current-theme: $light-theme;
+//$current-theme: $dark-theme;
+$current-theme: $light-theme;
 
 @include mat.all-component-themes($current-theme);
 @include dashboard.theme($current-theme);
