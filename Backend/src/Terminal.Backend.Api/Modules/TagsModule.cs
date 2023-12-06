@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Api.Swagger;
 using Terminal.Backend.Application.Commands.Tag.ChangeStatus;
 using Terminal.Backend.Application.Commands.Tag.Create;
+using Terminal.Backend.Application.Commands.Tag.Delete;
+using Terminal.Backend.Application.Commands.Tag.Update;
 using Terminal.Backend.Application.Queries.Tags.Get;
 using Terminal.Backend.Application.Queries.Tags.Search;
 using Terminal.Backend.Core.Enums;
@@ -42,7 +44,7 @@ public static class TagsModule
             { 
                 command = command with { Id = TagId.Create() };
                 await sender.Send(command, ct);
-                return Results.Created(ApiBaseRoute, new { command.Id });
+                return Results.Created(ApiBaseRoute, new { Id = command.Id.Value });
             }).RequireAuthorization(Permission.TagWrite.ToString())
         .WithTags(SwaggerSetup.TagTag);
         
@@ -98,6 +100,29 @@ public static class TagsModule
             var amount = await sender.Send(query, ct);
             return Results.Ok(amount);
         }).RequireAuthorization(Permission.TagRead.ToString())
+            .WithTags(SwaggerSetup.TagTag);
+
+        app.MapDelete(ApiBaseRoute + "/{id:guid}", async (
+            Guid id,
+            ISender sender,
+            CancellationToken ct) =>
+            {
+                var command = new DeleteTagCommand(id);
+                await sender.Send(command, ct);
+                return Results.Ok();
+            }).RequireAuthorization(Permission.TagDelete.ToString())
+            .WithTags(SwaggerSetup.TagTag);
+
+        app.MapPatch(ApiBaseRoute + "/{id:guid}", async (
+            Guid id,
+            [FromBody] UpdateTagCommand command,
+            ISender sender,
+            CancellationToken ct) =>
+        {
+            command = command with { Id = id };
+            await sender.Send(command, ct);
+            return Results.Ok();
+        }).RequireAuthorization(Permission.TagDelete.ToString())
             .WithTags(SwaggerSetup.TagTag);
     }
 }

@@ -20,7 +20,7 @@ internal sealed class TagRepository : ITagRepository
     public Task<Tag?> GetAsync(TagId id, CancellationToken ct)
         => _tags.SingleOrDefaultAsync(t => t.Id == id, ct);
 
-    public Task UpdateAsync(Tag tag)
+    public Task UpdateAsync(Tag tag, CancellationToken ct)
     {
         _tags.Update(tag);
         return Task.CompletedTask;
@@ -30,4 +30,10 @@ internal sealed class TagRepository : ITagRepository
         await _tags
             .Where(t => tagIds.Contains(t.Id))
             .ToListAsync(ct);
+
+    public Task DeleteAsync(Tag tag, CancellationToken cancellationToken)
+    {
+        _tags.Remove(tag);
+        return Task.CompletedTask;
+    }
 }
