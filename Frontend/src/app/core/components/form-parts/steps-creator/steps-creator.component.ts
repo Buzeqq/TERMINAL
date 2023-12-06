@@ -72,12 +72,15 @@ export class StepsCreatorComponent implements OnDestroy {
         p.value,
         p.validator
       );
+      if (newControl.value == null) {
+        newControl.disable();
+      }
       parameterControls.push(newControl);
     }
 
     this.subscriptions.push(...this.setupFormService.setParents(parameterControls, this.parameters));
 
-    this.stepsControls.insert(selectedTabIndex, new FormGroup<{comment: CommentFormControl; parameters: FormArray<ParameterFormControl>}>({
+    this.stepsControls.insert(selectedTabIndex + 1, new FormGroup<{comment: CommentFormControl; parameters: FormArray<ParameterFormControl>}>({
       comment: new FormControl<string | null>(''),
       parameters: parameterControls
     }));

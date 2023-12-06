@@ -120,7 +120,7 @@ public static class Extensions
     
     public static IOrderedQueryable<TEntity> OrderBy<TEntity>(this IQueryable<TEntity> source, OrderingParameters parameters)
     {
-        string command = parameters.Desc ? "OrderByDescending" : "OrderBy";
+        var command = parameters.Desc ? "OrderByDescending" : "OrderBy";
         var type = typeof(TEntity);
         var parameter = Expression.Parameter(type, "p");
 
@@ -150,6 +150,6 @@ public static class Extensions
 
     public static GetRecipeDto AsDto(this Recipe recipe) => new(recipe.Id, recipe.RecipeName);
 
-    public static GetInvitationDto? AsGetInvitationDto(this Invitation invitation) =>
+    public static GetInvitationDto AsGetInvitationDto(this Invitation invitation) =>
         new(invitation.ExpiresIn > DateTime.UtcNow, invitation.User.Email);
 }
