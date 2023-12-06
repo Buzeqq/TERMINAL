@@ -18,12 +18,13 @@ internal sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
         builder.HasMany(p => p.Samples)
             .WithOne(m => m.Project)
             .HasForeignKey("ProjectId")
+            .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
 
         // search index
-        // builder
-        //     .HasIndex(p => p.Name)
-        //     .HasMethod("GIN")
-        //     .IsTsVectorExpressionIndex("english");
+        builder
+            .HasIndex(p => p.Name)
+            .HasMethod("GIN")
+            .IsTsVectorExpressionIndex("english");
     }
 }

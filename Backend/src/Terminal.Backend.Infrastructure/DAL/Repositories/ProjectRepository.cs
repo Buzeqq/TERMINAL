@@ -25,4 +25,10 @@ internal sealed class ProjectRepository : IProjectRepository
         _projects.Update(project);
         return Task.CompletedTask;
     }
+
+    public Task DeleteAsync(Project project, CancellationToken cancellationToken)
+    {
+        _projects.Remove(project);
+        return Task.CompletedTask;
+    }
 }

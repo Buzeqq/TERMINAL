@@ -21,4 +21,9 @@ public sealed class Project
     {
         IsActive = isActive;
     }
+
+    public void Update(ProjectName name)
+    {
+        Name = name;
+    }
 }

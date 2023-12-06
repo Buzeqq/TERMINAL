@@ -1,5 +1,6 @@
 using MediatR;
+using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Commands.Parameter.ChangeStatus;
 
-public sealed record ChangeParameterStatusCommand(Guid Name, bool Status) : IRequest;
+public sealed record ChangeParameterStatusCommand(ParameterId Name, bool Status) : IRequest;
