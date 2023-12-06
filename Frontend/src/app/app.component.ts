@@ -1,11 +1,11 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {map, Observable} from "rxjs";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { map, Observable } from "rxjs";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { AddProjectDialogComponent } from "./core/components/dialogs/add-project/add-project-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
-import {AuthService} from "./core/services/auth/auth.service";
-import {NotificationService} from "./core/services/notification/notification.service";
+import { AuthService } from "./core/services/auth/auth.service";
+import { NotificationService } from "./core/services/notification/notification.service";
 import { MatSidenav } from '@angular/material/sidenav';
 import {SyncService} from "./core/services/sync/sync.service";
 import {PingService} from "./core/services/ping/ping.service";

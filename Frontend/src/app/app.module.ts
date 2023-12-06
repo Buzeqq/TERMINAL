@@ -58,6 +58,8 @@ import { AddRecipeComponent } from './pages/add-recipe/add-recipe.component';
 import { RecipeEditComponent } from './pages/settings/recipe-edit/recipe-edit.component';
 import {SampleInterceptor} from "./core/interceptors/samples/sample.interceptor";
 import {RecipeInterceptor} from "./core/interceptors/recipes/recipe.interceptor";
+import { RegisterComponent } from './pages/register/register.component';
+import { AddUserComponent } from './core/components/dialogs/add-user/add-user.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +80,9 @@ import {RecipeInterceptor} from "./core/interceptors/recipes/recipe.interceptor"
     LoginComponent,
     UserEditComponent,
     AddRecipeComponent,
-    RecipeEditComponent
+    RecipeEditComponent,
+    RegisterComponent,
+    AddUserComponent
   ],
   imports: [
     BrowserModule,

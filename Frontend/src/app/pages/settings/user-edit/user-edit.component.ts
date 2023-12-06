@@ -7,6 +7,8 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {UserService} from "../../../core/services/users/user.service";
 import {UserDetails} from "../../../core/models/users/user-details";
 import {AuthService} from "../../../core/services/auth/auth.service";
+import { MatDialog } from '@angular/material/dialog';
+import { AddUserComponent } from 'src/app/core/components/dialogs/add-user/add-user.component';
 
 @Component({
   selector: 'app-user-edit',
@@ -29,7 +31,8 @@ export class UserEditComponent {
   constructor(
     private readonly userService: UserService,
     private readonly snackBar: MatSnackBar,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly dialog: MatDialog
   ) {  }
 
   @Input()
@@ -77,4 +80,9 @@ export class UserEditComponent {
       let role = 'Registered';
     }
   }
+
+  addUser(){
+    this.dialog.open(AddUserComponent);
+  }
 }
+

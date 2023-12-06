@@ -1,4 +1,10 @@
 <section *ngIf="adminPermissions">
+  <mat-card-actions>
+    <button mat-raised-button (click)="addUser()" color="primary"> 
+      <mat-icon>add</mat-icon>
+      Add user
+    </button>
+  </mat-card-actions>
   <ng-container *ngIf="userDetails$ | async; let details">
     <mat-card-header>
       <mat-card-title class="user-edit__header">Edit User</mat-card-title>

@@ -12,6 +12,7 @@ import { AddRecipeComponent } from "./pages/add-recipe/add-recipe.component";
 import {LoginPageGuard} from "./core/guards/login/login-page.guard";
 import {PagesGuard} from "./core/guards/pages/pages.guard";
 import {settingsGuard} from "./core/guards/settings/settings.guard";
+import { RegisterComponent } from './pages/register/register.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -28,6 +29,7 @@ const routes: Routes = [
   {path: 'recipes', component: ItemViewsComponent, canActivate: [PagesGuard], data: {type: 'Recipe'}},
   // {path: 'recipes/:id', component: ItemDetailsComponent, canActivate: [PagesGuard], data: {type: 'Recipe'}},
   {path: 'settings', component: SettingsComponent, canActivate: [PagesGuard, settingsGuard]},
+  {path: 'register/:token', component: RegisterComponent },
 
   // must be the last
   {path: '**', component: NotFoundComponent},

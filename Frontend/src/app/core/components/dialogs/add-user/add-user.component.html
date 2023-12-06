@@ -1,0 +1,43 @@
+<div class="add-user-dialog">
+    <h1 class="add-user-dialog__title" mat-dialog-title>Add new project</h1>
+    <mat-form-field class="add-user-dialog__form">
+      <mat-label>New user email</mat-label>
+        <input matInput type="email" [formControl]="userEmail">
+        <mat-error *ngIf="userEmail.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="userEmail.hasError('email')">
+          Email is <strong>invalid</strong>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="add-user-dialog__form">
+      <mat-label>Role</mat-label>
+      <mat-select [formControl]="userRole">
+        <mat-option *ngFor="let role of userRoles;" [value]="role">{{role}}</mat-option>
+      </mat-select>
+    </mat-form-field>  
+
+    <mat-card-actions class="add-user-dialog__buttons" *ngIf="!link">
+      <button mat-raised-button color="primary" (click)="inviteUser()" [disabled]="form.invalid">
+        Add user
+      </button>
+    </mat-card-actions>
+
+    <mat-card-footer *ngIf="link">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title class="mat-h1">Invitation link</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <textarea matInput [value]="link" readonly="true" rows="3" cols="50"></textarea>
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-raised-button color="primary" (click)="copyLink()">
+                    Copy link
+                </button>
+            </mat-card-actions>
+        </mat-card>        
+    </mat-card-footer>
+  </div>
+  
