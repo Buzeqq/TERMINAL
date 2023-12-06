@@ -52,9 +52,9 @@ internal sealed class CreateSampleCommandHandler : IRequestHandler<CreateSampleC
         {
             recipe = await _recipeRepository.GetAsync(recipeId, ct);
         }
-
+        
         var tags = await _convertService.ConvertAsync(tagsDto.Select(t => new TagId(t)), ct);
-        var project = await _projectRepository.GetAsync(projectId, ct) ?? throw new ProjectNotFoundException(projectId);
+        var project = await _projectRepository.GetAsync(projectId, ct) ?? throw new ProjectNotFoundException();
         var sample = new Core.Entities.Sample(sampleId,
             project,
             recipe,

@@ -19,7 +19,7 @@ internal sealed class ChangeProjectStatusCommandHandler : IRequestHandler<Change
         var project = await _projectRepository.GetAsync(projectId, ct);
         if (project is null)
         {
-            throw new ProjectNotFoundException(projectId);
+            throw new ProjectNotFoundException();
         }
 
         project.ChangeStatus(isActive);

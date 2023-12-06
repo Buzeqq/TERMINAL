@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerUI;
 using Terminal.Backend.Application.Abstractions;
 using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.ValueObjects;
@@ -105,7 +106,12 @@ public static class Extensions
         if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
         {
             app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwaggerUI(c =>
+            {
+                c.DocExpansion(DocExpansion.None);
+                c.EnableFilter();
+                c.EnableDeepLinking();
+            });
             app.UseCors(x => x
                 .AllowAnyHeader()
                 .AllowAnyMethod()

@@ -8,4 +8,5 @@ public interface IProjectRepository
     Task<Project?> GetAsync(ProjectId id, CancellationToken ct);
     Task AddAsync(Project project, CancellationToken ct);
     Task UpdateAsync(Project project, CancellationToken ct);
+    Task DeleteAsync(Project project, CancellationToken cancellationToken);
 }

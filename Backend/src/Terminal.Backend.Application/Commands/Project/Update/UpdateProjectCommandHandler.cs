@@ -1,0 +1,29 @@
+using MediatR;
+using Terminal.Backend.Core.Abstractions.Repositories;
+using Terminal.Backend.Core.Exceptions;
+
+namespace Terminal.Backend.Application.Commands.Project.Update;
+
+internal sealed class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand>
+{
+    private readonly IProjectRepository _projectRepository;
+
+    public UpdateProjectCommandHandler(IProjectRepository projectRepository)
+    {
+        _projectRepository = projectRepository;
+    }
+
+    public async Task Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
+    {
+        var id = request.Id;
+        var project = await _projectRepository.GetAsync(id, cancellationToken);
+        if (project is null)
+        {
+            throw new ProjectNotFoundException();
+        }
+        
+        project.Update(request.Name);
+        
+        await _projectRepository.UpdateAsync(project, cancellationToken);
+    }
+}

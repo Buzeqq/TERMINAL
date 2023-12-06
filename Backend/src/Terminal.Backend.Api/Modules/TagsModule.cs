@@ -1,56 +1,52 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Terminal.Backend.Api.Swagger;
 using Terminal.Backend.Application.Commands.Tag.ChangeStatus;
 using Terminal.Backend.Application.Commands.Tag.Create;
 using Terminal.Backend.Application.Queries.Tags.Get;
 using Terminal.Backend.Application.Queries.Tags.Search;
 using Terminal.Backend.Core.Enums;
+using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Api.Modules;
 
 public static class TagsModule
 {
+    private const string ApiBaseRoute = "api/tags";
     public static void UseTagEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("api/tags", (
-            [FromQuery] int pageNumber,
-            [FromQuery] int pageSize,
-            [FromQuery] bool? desc,
-            ISender sender,
-            CancellationToken ct
-            ) => sender.Send(new GetTagsQuery(pageNumber, pageSize, desc ?? true), ct))
-            .RequireAuthorization(Permission.TagRead.ToString());
-        
-        app.MapGet("api/tags/all", async (
+        app.MapGet(ApiBaseRoute, (
                 [FromQuery] int pageNumber,
                 [FromQuery] int pageSize,
                 [FromQuery] bool? desc,
                 ISender sender,
-                CancellationToken ct
-            ) => await sender.Send(new GetTagsQuery(pageNumber, pageSize, desc ?? true, false), ct))
-            .RequireAuthorization(Permission.TagRead.ToString());
+                CancellationToken ct) => 
+                sender.Send(new GetTagsQuery(pageNumber, pageSize, desc ?? true), ct))
+            .RequireAuthorization(Permission.TagRead.ToString())
+            .WithTags(SwaggerSetup.TagTag);
         
-        app.MapPost("api/tags", async (
-                CreateTagCommand command, 
-                ISender sender, 
-                CancellationToken ct) =>
-            {
+        app.MapGet(ApiBaseRoute + "/all", (
+                [FromQuery] int pageNumber,
+                [FromQuery] int pageSize,
+                [FromQuery] bool? desc,
+                ISender sender,
+                CancellationToken ct) => 
+                sender.Send(new GetTagsQuery(pageNumber, pageSize, desc ?? true, false), ct))
+            .RequireAuthorization(Permission.TagRead.ToString())
+            .WithTags(SwaggerSetup.TagTag);
+        
+        app.MapPost(ApiBaseRoute, async (
+            CreateTagCommand command, 
+            ISender sender, 
+            CancellationToken ct) =>
+            { 
+                command = command with { Id = TagId.Create() };
                 await sender.Send(command, ct);
-                return Results.Created("api/tags", null);
-            }).RequireAuthorization(Permission.TagWrite.ToString());
-
-        // app.MapPatch("api/tags/{name}", async (
-        //     string name, 
-        //     ChangeTagStatusCommand command,
-        //     ICommandHandler<ChangeTagStatusCommand> handler,
-        //     CancellationToken ct) =>
-        // {
-        //     command = command with { Name = name };
-        //     await handler.HandleAsync(command, ct);
-        //     return Results.Ok();
-        // });
+                return Results.Created(ApiBaseRoute, new { command.Id });
+            }).RequireAuthorization(Permission.TagWrite.ToString())
+        .WithTags(SwaggerSetup.TagTag);
         
-        app.MapPost("api/tags/{id:guid}/activate", async (
+        app.MapPost(ApiBaseRoute + "/{id:guid}/activate", async (
             Guid id,
             ISender sender,
             CancellationToken ct) =>
@@ -58,9 +54,10 @@ public static class TagsModule
             var command = new ChangeTagStatusCommand(id, true);
             await sender.Send(command, ct);
             return Results.Ok();
-        }).RequireAuthorization(Permission.TagUpdate.ToString());
+        }).RequireAuthorization(Permission.TagUpdate.ToString())
+            .WithTags(SwaggerSetup.TagTag);
         
-        app.MapPost("api/tags/{id:guid}/deactivate", async (
+        app.MapPost(ApiBaseRoute + "/{id:guid}/deactivate", async (
             Guid id,
             ISender sender,
             CancellationToken ct) =>
@@ -68,9 +65,10 @@ public static class TagsModule
             var command = new ChangeTagStatusCommand(id, false);
             await sender.Send(command, ct);
             return Results.Ok();
-        }).RequireAuthorization(Permission.TagUpdate.ToString());
+        }).RequireAuthorization(Permission.TagUpdate.ToString())
+            .WithTags(SwaggerSetup.TagTag);
 
-        app.MapGet("api/tags/search", async (
+        app.MapGet(ApiBaseRoute + "/search", async (
             [FromQuery] string searchPhrase,
             ISender sender,
             CancellationToken ct
@@ -78,26 +76,28 @@ public static class TagsModule
         {
             var query = new SearchTagQuery(searchPhrase);
             var tags = await sender.Send(query, ct);
-
             return Results.Ok(tags);
-        }).RequireAuthorization(Permission.TagRead.ToString());
+        }).RequireAuthorization(Permission.TagRead.ToString())
+            .WithTags(SwaggerSetup.TagTag);
 
-        app.MapGet("api/tags/{id:guid}", async (
+        app.MapGet(ApiBaseRoute + "/{id:guid}", async (
             Guid id,
             ISender sender,
             CancellationToken ct) =>
         {
             var tag = await sender.Send(new GetTagQuery { TagId = id }, ct);
             return tag is null ? Results.NotFound() : Results.Ok(tag);
-        });
+        }).RequireAuthorization(Permission.TagRead.ToString())
+            .WithTags(SwaggerSetup.TagTag);
         
-        app.MapGet("api/tags/amount", async (
+        app.MapGet(ApiBaseRoute + "/amount", async (
             ISender sender, 
             CancellationToken ct) =>
         {
             var query = new GetTagsAmountQuery();
             var amount = await sender.Send(query, ct);
             return Results.Ok(amount);
-        }).RequireAuthorization(Permission.TagRead.ToString());
+        }).RequireAuthorization(Permission.TagRead.ToString())
+            .WithTags(SwaggerSetup.TagTag);
     }
 }

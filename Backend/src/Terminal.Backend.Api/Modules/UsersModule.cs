@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Terminal.Backend.Api.Swagger;
 using Terminal.Backend.Application.Commands.Users.Create;
 using Terminal.Backend.Application.Commands.Users.Invitations;
 using Terminal.Backend.Application.Commands.Users.Login;
@@ -11,32 +12,31 @@ namespace Terminal.Backend.Api.Modules;
 
 public static class UsersModule
 {
-    private const string ApiRouteBase = "api/users";
+    private const string ApiBaseRoute = "api/users";
     public static void UseUsersEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapPost(ApiRouteBase + "/login", async (
+        app.MapPost(ApiBaseRoute + "/login", async (
             [FromBody] LoginCommand command,
             ISender sender,
             CancellationToken ct) =>
         {
             var token = await sender.Send(command, ct);
-
             return token;
-        }).AllowAnonymous();
+        }).AllowAnonymous()
+            .WithTags(SwaggerSetup.UserTag);
 
-        app.MapGet(ApiRouteBase + "/{id:guid}", async (
+        app.MapGet(ApiBaseRoute + "/{id:guid}", async (
             Guid id,
             ISender sender,
             CancellationToken ct) =>
         {
             var query = new GetUserQuery(id);
-
             var user = await sender.Send(query, ct);
-
             return user is not null ? Results.Ok(user) : Results.NotFound();
-        }).RequireAuthorization(Role.Registered);
+        }).RequireAuthorization(Role.Registered)
+            .WithTags(SwaggerSetup.UserTag);
         
-        app.MapGet(ApiRouteBase, async (
+        app.MapGet(ApiBaseRoute, async (
             [FromQuery] int pageNumber, 
             [FromQuery] int pageSize, 
             [FromQuery] string? orderBy,
@@ -47,50 +47,50 @@ public static class UsersModule
             var query = new GetUsersQuery(pageNumber, pageSize, orderBy ?? "Role", desc ?? true);
             var users = await sender.Send(query, ct);
             return Results.Ok(users);
-        }).RequireAuthorization(Role.Moderator);
+        }).RequireAuthorization(Role.Moderator)
+            .WithTags(SwaggerSetup.UserTag);
 
-        app.MapPost(ApiRouteBase, async (
+        app.MapPost(ApiBaseRoute, async (
             [FromBody] CreateUserCommand command,
             ISender sender,
             CancellationToken ct) =>
         {
             var invitation = await sender.Send(command, ct);
+            return Results.Created($"{ApiBaseRoute}/invitations", invitation);
+        }).RequireAuthorization(Role.Administrator)
+            .WithTags(SwaggerSetup.UserTag);
 
-            return invitation;
-        }).RequireAuthorization(Role.Administrator);
-
-        app.MapGet(ApiRouteBase + "/invitations/{id:guid}", async (
+        app.MapGet(ApiBaseRoute + "/invitations/{id:guid}", async (
             Guid id,
             ISender sender,
             CancellationToken ct) =>
         {
             var query = new CheckInvitationQuery(id);
-
             var invitation = await sender.Send(query, ct);
-
             return invitation is null ? Results.BadRequest() : Results.Ok(invitation);
-        }).AllowAnonymous();
+        }).AllowAnonymous()
+            .WithTags(SwaggerSetup.UserTag);
 
-        app.MapPost(ApiRouteBase + "/invitations/accept/{id:guid}", async (
+        app.MapPost(ApiBaseRoute + "/invitations/accept/{id:guid}", async (
             Guid id,
             [FromBody] AcceptInvitationCommand command,
             ISender sender,
             CancellationToken ct) =>
         {
             command = command with { Id = id };
-
             await sender.Send(command, ct);
-
-            return Results.Created(ApiRouteBase, null);
-        }).AllowAnonymous();
+            return Results.Created(ApiBaseRoute, null);
+        }).AllowAnonymous()
+            .WithTags(SwaggerSetup.UserTag);
         
-        app.MapGet(ApiRouteBase + "/amount", async (
+        app.MapGet(ApiBaseRoute + "/amount", async (
             ISender sender, 
             CancellationToken ct) =>
         {
             var query = new GetUsersAmountQuery();
             var amount = await sender.Send(query, ct);
             return Results.Ok(amount);
-        }).RequireAuthorization(Role.Moderator);
+        }).RequireAuthorization(Role.Moderator)
+            .WithTags(SwaggerSetup.UserTag);
     }
 }

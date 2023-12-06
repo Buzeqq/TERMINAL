@@ -15,8 +15,7 @@ internal sealed class CreateProjectCommandHandler : IRequestHandler<CreateProjec
 
     public Task Handle(CreateProjectCommand request, CancellationToken ct)
     {
-        var newProjectId = ProjectId.Create();
-        var newProject = new Core.Entities.Project(newProjectId, request.Name);
+        var newProject = new Core.Entities.Project(request.Id, request.Name);
         return _projectRepository.AddAsync(newProject, ct);
     }
 }
