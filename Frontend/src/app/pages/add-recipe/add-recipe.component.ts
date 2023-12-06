@@ -7,7 +7,7 @@ import { map, Subscription } from "rxjs";
 import { Parameter } from "../../core/models/parameters/parameter";
 import { ParametersService } from "../../core/services/parameters/parameters.service";
 import { SetupFormService } from "../../core/services/setup-form/setup-form.service";
-import { environment } from "../../../environments/environment.development";
+import { environment } from "../../../environments/environment";
 import { RecipesService } from "../../core/services/recipes/recipes.service";
 import { AddRecipe } from "../../core/models/recipes/addRecipe";
 import { Router } from "@angular/router";

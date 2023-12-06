@@ -48,7 +48,7 @@ export class AddSampleComponent implements OnInit, OnDestroy {
   sampleForm = new FormGroup({
     date: new FormControl<Date>(new Date(), [Validators.required, Validators.nullValidator]) as DateFormControl,
     project: new ComplexTypeFormControl<Project | null, string | null>(null, null, [Validators.required]) as ProjectFormControl,
-    tags: new ComplexTypeFormControl<Tag[], string[]>([], [], [Validators.required]) as TagsFormControl,
+    tags: new ComplexTypeFormControl<Tag[], string[]>([], []) as TagsFormControl,
     recipe: new ComplexTypeFormControl<Recipe | null, string | null>( null,null, [Validators.required]) as RecipeFormControl,
     comment: new FormControl<string | null>(null, [Validators.maxLength(1024)]) as CommentFormControl,
     steps: new FormArray<StepFormArray>([])

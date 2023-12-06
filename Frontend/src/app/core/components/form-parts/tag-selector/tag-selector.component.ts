@@ -72,6 +72,7 @@ export class TagSelectorComponent implements OnInit, ControlValueAccessor {
     if (index >= 0) {
       this.chosenTags.value.splice(index, 1)
       this.chosenTags.next(this.chosenTags.value);
+      this.formControl!.setValue(this.chosenTags.value);
     }
   }
 
