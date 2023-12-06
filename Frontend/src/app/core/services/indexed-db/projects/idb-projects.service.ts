@@ -31,6 +31,18 @@ export class IdbProjectsService {
     return this.entityToProjectDetails(project, samples);
   }
 
+  async searchProjects(searchPhrase: string, pageIndex: number, pageSize: number) {
+    const offset = pageIndex * pageSize;
+    const entities = await db.projects
+      .filter((project) => (
+         project.name.toLowerCase().includes(searchPhrase.toLowerCase()))
+      )
+      .offset(offset)
+      .limit(pageSize)
+      .toArray();
+    return this.entitiesToProjects(entities);
+  }
+
   async getProjectsAmount() {
     return db.projects.count();
   }

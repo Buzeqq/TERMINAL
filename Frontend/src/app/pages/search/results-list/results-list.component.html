@@ -31,14 +31,17 @@
                 <div matListItemLine>Project</div>
               </mat-list-item>
             </ng-container>
+
+            <ng-container *ngIf="item.type === 'Recipe'">
+              <mat-list-item (click)="selectItem(item)" class="row">
+                <mat-icon matListItemIcon>assignment</mat-icon>
+                <div matListItemTitle>{{$any(item.item).name}}</div>
+                <div matListItemLine>Recipe</div>
+              </mat-list-item>
+            </ng-container>
             <mat-divider></mat-divider>
           </ng-container>
       </mat-list>
-      <mat-card-footer class="result-list__footer">
-        <mat-card-actions>
-          <button mat-raised-button color="primary">Load more</button>
-        </mat-card-actions>
-      </mat-card-footer>
     </mat-card>
     <app-item-details [item]="selectedItem" class="item-details"></app-item-details>
   </section>

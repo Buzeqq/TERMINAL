@@ -21,10 +21,12 @@ internal sealed class SearchSampleQueryHandler : IRequestHandler<SearchSampleQue
             Samples = await _samples
                 .AsNoTracking()
                 .Include(m => m.Project)
+                .Include(m => m.Recipe)
                 .Where(m => 
                     EF.Functions.ToTsVector("english", "AX" + m.Code + " " + m.Comment)
                         .Matches(EF.Functions.ToTsQuery($"{request.SearchPhrase}:*")) || 
-                    EF.Functions.ILike(m.Project.Name, $"%{request.SearchPhrase}%"))
+                    EF.Functions.ILike(m.Project.Name, $"%{request.SearchPhrase}%") ||
+                    EF.Functions.ILike(m.Recipe.RecipeName, $"%{request.SearchPhrase}%"))
                 .Select(m => new GetSamplesDto.SampleDto(m.Id, m.Code.Value, m.Project.Name, 
                     m.CreatedAtUtc.ToString("o"), m.Comment))
                 .Paginate(request.Parameters)

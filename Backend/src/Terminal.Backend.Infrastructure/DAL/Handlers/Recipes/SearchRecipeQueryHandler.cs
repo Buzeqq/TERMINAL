@@ -20,9 +20,9 @@ internal sealed class SearchRecipeQueryHandler : IRequestHandler<SearchRecipeQue
         {
             Recipes = await _recipes
                 .AsNoTracking()
-                .Where(m => EF.Functions.ToTsVector("english", m.RecipeName)
-                    .Matches(request.SearchPhrase))
+                .Where(r => EF.Functions.ILike(r.RecipeName, $"%{request.SearchPhrase}%"))
                 .Select(r => new GetRecipesDto.RecipeDto(r.Id, r.RecipeName))
+                .Paginate(request.Parameters)
                 .ToListAsync(ct)
         };
 }

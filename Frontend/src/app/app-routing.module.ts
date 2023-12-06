@@ -11,8 +11,9 @@ import { LoginComponent } from "./pages/login/login.component";
 import { AddRecipeComponent } from "./pages/add-recipe/add-recipe.component";
 import {LoginPageGuard} from "./core/guards/login/login-page.guard";
 import {PagesGuard} from "./core/guards/pages/pages.guard";
-import {settingsGuard} from "./core/guards/settings/settings.guard";
 import { RegisterComponent } from './pages/register/register.component';
+import {AdminOnlineFeaturesGuard} from "./core/guards/admin-online-features/admin-online-features.guard";
+import {OnlineFeaturesGuard} from "./core/guards/online-features/online-features.guard";
 
 const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -24,11 +25,11 @@ const routes: Routes = [
   {path: 'samples/:id', component: ItemDetailsComponent, canActivate: [PagesGuard], data: {type: 'Sample'}},
   {path: 'projects', component: ItemViewsComponent, canActivate: [PagesGuard], data: {type: 'Project'}},
   {path: 'projects/:id', component: ItemDetailsComponent, canActivate: [PagesGuard], data: {type: 'Project'}},
-  {path: 'add-sample', component: AddSampleComponent, canActivate: [PagesGuard]},
-  {path: 'add-recipe', component: AddRecipeComponent, canActivate: [PagesGuard]},
+  {path: 'add-sample', component: AddSampleComponent, canActivate: [OnlineFeaturesGuard, PagesGuard]},
+  {path: 'add-recipe', component: AddRecipeComponent, canActivate: [OnlineFeaturesGuard, PagesGuard]},
   {path: 'recipes', component: ItemViewsComponent, canActivate: [PagesGuard], data: {type: 'Recipe'}},
   {path: 'recipes/:id', component: ItemDetailsComponent, canActivate: [PagesGuard], data: {type: 'Recipe'}},
-  {path: 'settings', component: SettingsComponent, canActivate: [PagesGuard, settingsGuard]},
+  {path: 'settings', component: SettingsComponent, canActivate: [AdminOnlineFeaturesGuard, PagesGuard]},
   {path: 'register/:token', component: RegisterComponent },
 
   // must be the last

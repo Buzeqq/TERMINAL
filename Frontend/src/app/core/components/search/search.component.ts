@@ -3,7 +3,7 @@ import {
   BehaviorSubject,
   combineLatestWith,
   debounceTime,
-  distinctUntilChanged,
+  distinctUntilChanged, firstValueFrom,
   map, Observable,
   ReplaySubject
 } from "rxjs";
@@ -13,6 +13,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import { AddProjectDialogComponent } from "../dialogs/add-project/add-project-dialog.component";
 import {AuthService} from "../../services/auth/auth.service";
 import {NotificationService} from "../../services/notification/notification.service";
+import {PingService} from "../../services/ping/ping.service";
 
 @Component({
   selector: 'app-search',
@@ -26,6 +27,8 @@ export class SearchComponent implements OnInit {
   private readonly filtersState$ = new ReplaySubject<Record<string, boolean>>();
   @Output('searchRequest')
   public searchRequest$?: Observable<{ filterState: any; searchPhrase: any }>;
+
+  isOnline$ = this.pingService.isOnline$;
   moderatorPermissions = this.authService.isAdminOrMod();
 
   constructor(
@@ -33,7 +36,8 @@ export class SearchComponent implements OnInit {
     protected readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly authService: AuthService,
-    private readonly notificationService: NotificationService
+    private readonly notificationService: NotificationService,
+    private readonly pingService: PingService
   )
   {
     this.route.queryParamMap.subscribe(
@@ -85,9 +89,13 @@ export class SearchComponent implements OnInit {
     this.filtersState$.next(this.filtersState);
   }
 
-  openAddProjectDialog() {
-    this.moderatorPermissions ?
-    this.dialog.open(AddProjectDialogComponent) :
-    this.notificationService.notifyNoPermission("Access denied. Contact administration for assistance.")
+  async openAddProjectDialog() {
+    const online = await firstValueFrom(this.isOnline$);
+    if (!online)
+      this.notificationService.notifyConnectionError();
+    else if (!this.moderatorPermissions)
+      this.notificationService.notifyNoPermission();
+    else
+      this.dialog.open(AddProjectDialogComponent);
   }
 }

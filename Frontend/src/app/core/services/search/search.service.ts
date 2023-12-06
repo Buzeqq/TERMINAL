@@ -8,19 +8,28 @@ import { Tag } from "../../models/tags/tag";
 import {SamplesService} from "../samples/samples.service";
 import {ProjectsService} from "../projects/projects.service";
 import { Recipe } from "../../models/recipes/recipe";
+import {PingService} from "../ping/ping.service";
+import {IndexedDbService} from "../indexed-db/indexed-db.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class SearchService extends ApiService {
+
+  online = false;
   constructor(
     http: HttpClient,
     private readonly sampleService: SamplesService,
-    private readonly projectService: ProjectsService
-  ) { super(http); }
+    private readonly projectService: ProjectsService,
+    private readonly pingService: PingService,
+    private readonly idbService: IndexedDbService,
+  ) {
+    super(http);
+    this.pingService.isOnline$.subscribe(r => this.online = r);
+  }
 
   public searchSamples(searchPhrase: string, pageNumber: number, pageSize: number): Observable<Sample[]> {
-    return this.get<{ samples: Sample[] }>('samples/search', new HttpParams({
+    if (this.online) return this.get<{ samples: Sample[] }>('samples/search', new HttpParams({
       fromObject: {
         searchPhrase,
         pageNumber,
@@ -34,10 +43,17 @@ export class SearchService extends ApiService {
           createdAtUtc: new Date(s.createdAtUtc)
         })))
       );
+    else return this.idbService.searchSamples(searchPhrase, pageNumber, pageSize)
+      .pipe(
+        map(samples => samples.map(s => ({
+          ...s,
+          createdAtUtc: new Date(s.createdAtUtc)
+        })))
+      );
   }
 
   public searchProjects(searchPhrase: string, pageNumber: number, pageSize: number): Observable<Project[]> {
-    return this.get<{ projects: Project[] }>('projects/search', new HttpParams({
+    if (this.online) return this.get<{ projects: Project[] }>('projects/search', new HttpParams({
       fromObject: {
         searchPhrase,
         pageNumber,
@@ -47,6 +63,21 @@ export class SearchService extends ApiService {
       .pipe(
         map(p => p.projects)
       );
+    else return this.idbService.searchProjects(searchPhrase, pageNumber, pageSize);
+  }
+
+  searchRecipe(searchPhrase: string, pageNumber: number, pageSize: number): Observable<Recipe[]> {
+    if (this.online) return this.get<{ recipes: Recipe[] }>('recipes/search', new HttpParams({
+      fromObject: {
+        searchPhrase,
+        pageNumber,
+        pageSize
+      }
+    }))
+      .pipe(
+        map(s => s.recipes)
+      );
+    else return this.idbService.searchRecipes(searchPhrase, pageNumber, pageSize);
   }
 
   public searchTags(searchPhrase: string, pageNumber: number, pageSize: number): Observable<Tag[]> {
@@ -78,26 +109,13 @@ export class SearchService extends ApiService {
         type: 'Sample',
         item: s
       } as SearchItem)))));
-      if (filterState['projects']) apiCalls.push(this.searchProjects(searchPhrase, pageNumber, pageSize).pipe(map(p => p.map(p => ({
-        type: 'Project',
-        item: p
+      if (filterState['recipes']) apiCalls.push(this.searchRecipe(searchPhrase, pageNumber, pageSize).pipe(map(r => r.map(r => ({
+        type: 'Recipe',
+        item: r
       } as SearchItem)))));
     }
 
     return apiCalls.length > 0 ? zip(apiCalls).pipe(map(r => r.flat())) : of([]);
-  }
-
-  searchRecipe(searchPhrase: string, pageNumber: number, pageSize: number): Observable<Recipe[]> {
-    return this.get<{ recipes: Recipe[] }>('samples/search', new HttpParams({
-      fromObject: {
-        searchPhrase,
-        pageNumber,
-        pageSize
-      }
-    }))
-      .pipe(
-        map(s => s.recipes)
-      );
   }
 }
 

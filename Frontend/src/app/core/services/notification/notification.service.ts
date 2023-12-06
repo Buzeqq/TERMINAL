@@ -30,8 +30,14 @@ export class NotificationService {
     return ref.onAction();
   }
 
-  notifyNoPermission(message: string) {
-    this.snackBar.open(message, 'Close', {
+  notifyConnectionError() {
+    this.snackBar.open("Feature accessible only online. Please check your network connection.", 'Close', {
+      duration: 5000
+    });
+  }
+
+  notifyNoPermission() {
+    this.snackBar.open("Access denied. Contact administration for assistance.", 'Close', {
       duration: 5000
     });
   }
