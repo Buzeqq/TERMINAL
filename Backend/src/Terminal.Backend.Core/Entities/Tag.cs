@@ -19,4 +19,9 @@ public sealed class Tag
     {
         IsActive = isActive;
     }
+
+    public void Update(string name)
+    {
+        Name = name;
+    }
 }

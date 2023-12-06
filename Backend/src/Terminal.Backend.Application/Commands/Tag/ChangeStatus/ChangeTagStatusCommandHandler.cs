@@ -20,10 +20,10 @@ internal sealed class ChangeTagStatusCommandHandler : IRequestHandler<ChangeTagS
         var tag = await _tagRepository.GetAsync(id, ct);
         if (tag is null)
         {
-            throw new TagNotFoundException(id);
+            throw new TagNotFoundException();
         }
 
         tag.ChangeStatus(status);
-        await _tagRepository.UpdateAsync(tag);
+        await _tagRepository.UpdateAsync(tag, ct);
     }
 }
