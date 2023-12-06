@@ -1,3 +1,5 @@
+@import '../../../styles/mixin';
+
 .grid-container {
   display: flex;
   flex-direction: column;
@@ -15,6 +17,12 @@
 
   .login-form {
     margin-top: 10px;
+  }
+
+  .login-content {
+    @include md() {
+      width: 80%;
+    }
   }
 
   .grid-element {
