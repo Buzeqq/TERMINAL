@@ -1,12 +1,21 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Api.Swagger;
 using Terminal.Backend.Application.Commands.Users.Create;
+using Terminal.Backend.Application.Commands.Users.Delete;
 using Terminal.Backend.Application.Commands.Users.Invitations;
 using Terminal.Backend.Application.Commands.Users.Login;
+using Terminal.Backend.Application.Commands.Users.Update.Email;
+using Terminal.Backend.Application.Commands.Users.Update.Password;
+using Terminal.Backend.Application.Commands.Users.Update.Password.WithAdminPrivileges;
+using Terminal.Backend.Application.Commands.Users.Update.Role;
 using Terminal.Backend.Application.Queries.Users;
 using Terminal.Backend.Application.Queries.Users.Invitations;
 using Terminal.Backend.Core.Entities;
+using Permission = Terminal.Backend.Core.Enums.Permission;
 
 namespace Terminal.Backend.Api.Modules;
 
@@ -91,6 +100,70 @@ public static class UsersModule
             var amount = await sender.Send(query, ct);
             return Results.Ok(amount);
         }).RequireAuthorization(Role.Moderator)
+            .WithTags(SwaggerSetup.UserTag);
+
+        app.MapDelete(ApiBaseRoute + "/{id:guid}", async (
+            Guid id,
+            ISender sender,
+            CancellationToken ct) =>
+        {
+            await sender.Send(new DeleteUserCommand(id), ct);
+            return Results.Ok();
+        }).RequireAuthorization(Permission.UserDelete.ToString())
+            .WithTags(SwaggerSetup.UserTag);
+
+        app.MapPatch(ApiBaseRoute + "/{id:guid}/email", async (
+            Guid id,
+            ISender sender,
+            [FromBody] UpdateUserEmailCommand command,
+            CancellationToken ct) =>
+            {
+                command = command with { Id = id };
+                await sender.Send(command, ct);
+                return Results.Ok();
+            }).RequireAuthorization(Role.Administrator)
+            .WithTags(SwaggerSetup.UserTag);
+        
+        app.MapPatch(ApiBaseRoute + "/{id:guid}/password", async (
+            Guid id,
+            ISender sender,
+            [FromBody] UpdateUserPasswordAdministratorCommand command,
+            CancellationToken ct) =>
+        {
+            command = command with { Id = id };
+            await sender.Send(command, ct);
+            return Results.Ok();
+        }).RequireAuthorization(Role.Administrator)
+            .WithTags(SwaggerSetup.UserTag);
+        
+        app.MapPatch(ApiBaseRoute + "/password", async (
+                ClaimsPrincipal claims,
+                ISender sender,
+                [FromBody] UpdateUserPasswordUserCommand command,
+                CancellationToken ct) =>
+            {
+                if (!Guid.TryParse(claims.Claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value,
+                        out var id))
+                {
+                    return Results.BadRequest();
+                }
+                
+                command = command with { Id = id };
+                await sender.Send(command, ct);
+                return Results.Ok();
+            }).RequireAuthorization(Role.Registered)
+            .WithTags(SwaggerSetup.UserTag);
+        
+        app.MapPatch(ApiBaseRoute + "/{id:guid}/role", async (
+            Guid id,
+            ISender sender,
+            [FromBody] UpdateUserRoleCommand command,
+            CancellationToken ct) =>
+        {
+            command = command with { Id = id };
+            await sender.Send(command, ct);
+            return Results.Ok();
+        }).RequireAuthorization(Role.Administrator)
             .WithTags(SwaggerSetup.UserTag);
     }
 }

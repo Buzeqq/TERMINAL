@@ -25,7 +25,7 @@ internal sealed class LoginCommandHandler : IRequestHandler<LoginCommand, JwtTok
         var user = await _userRepository.GetUserByEmailAsync(email, cancellationToken);
         if (user is null)
         {
-            throw new UserNotFoundException(email);
+            throw new UserNotFoundException();
         }
 
         if (!user.Activated)
