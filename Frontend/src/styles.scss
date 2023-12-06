@@ -25,8 +25,8 @@ $light-theme: mat.define-light-theme((
 ));
 
 // Apply the dark theme by default
-//$current-theme: $dark-theme;
-$current-theme: $light-theme;
+$current-theme: $dark-theme;
+//$current-theme: $light-theme;
 
 @include mat.all-component-themes($current-theme);
 @include dashboard.theme($current-theme);
@@ -37,9 +37,9 @@ $current-theme: $light-theme;
   // Use the `-color` mixins to only apply color styles without reapplying the same
   // typography and density styles.
   $current-theme: $light-theme;
-  //@include mat.all-component-themes($current-theme);
-  //@include dashboard.theme($current-theme);
-  //@include mtx.all-component-themes($current-theme);
+  @include mat.all-component-themes($current-theme);
+  @include dashboard.theme($current-theme);
+  @include mtx.all-component-themes($current-theme);
 }
 
 html, body {

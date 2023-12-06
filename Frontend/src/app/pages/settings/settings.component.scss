@@ -1,3 +1,5 @@
+@import '../../../styles/mixin';
+
 .settings {
   display: flex;
   flex-direction: column;
@@ -6,6 +8,18 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     column-gap: 30px;
+
+    @include md() {
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    &__views {
+      width: 50vw;
+      @include md() {
+        width: 95vw;
+      }
+    }
   }
 }
 
@@ -21,3 +35,5 @@ mat-card-header {
 .tab-icon {
   margin-right: 8px;
 }
+
+

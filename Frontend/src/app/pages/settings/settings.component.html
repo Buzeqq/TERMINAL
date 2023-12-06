@@ -4,7 +4,7 @@
 <section class="settings">
   <section class="settings__cards">
     <section>
-      <mat-card>
+      <mat-card class="settings__cards__views">
         <mat-tab-group>
           <mat-tab>
             <ng-template mat-tab-label>
@@ -56,15 +56,15 @@
     </section>
 
     <section>
-    <mat-card>
-      <ng-container [ngSwitch]="selectedItem?.type">
-        <app-project-edit *ngSwitchCase="'Project'" [projectId]="selectedItem?.id"></app-project-edit>
-        <app-sample-edit *ngSwitchCase="'Sample'" [sampleId]="selectedItem?.id"></app-sample-edit>
-        <app-recipe-edit *ngSwitchCase="'Recipe'" [recipeId]="selectedItem?.id"></app-recipe-edit>
-        <app-tag-edit *ngSwitchCase="'Tag'" [tagId]="selectedItem?.id"></app-tag-edit>
-        <app-user-edit *ngSwitchCase="'User'" [userId]="selectedItem?.id"></app-user-edit>
-      </ng-container>
-    </mat-card>
+      <mat-card>
+        <ng-container [ngSwitch]="selectedItem?.type">
+          <app-project-edit *ngSwitchCase="'Project'" [projectId]="selectedItem?.id"></app-project-edit>
+          <app-sample-edit *ngSwitchCase="'Sample'" [sampleId]="selectedItem?.id"></app-sample-edit>
+          <app-recipe-edit *ngSwitchCase="'Recipe'" [recipeId]="selectedItem?.id"></app-recipe-edit>
+          <app-tag-edit *ngSwitchCase="'Tag'" [tagId]="selectedItem?.id"></app-tag-edit>
+          <app-user-edit *ngSwitchCase="'User'" [userId]="selectedItem?.id"></app-user-edit>
+        </ng-container>
+      </mat-card>
     </section>
 
   </section>
