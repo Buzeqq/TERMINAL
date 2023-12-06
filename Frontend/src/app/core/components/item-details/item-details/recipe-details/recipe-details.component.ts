@@ -29,7 +29,7 @@ export class RecipeDetailsComponent extends ItemDetailsComponent {
 
   set recipeId(id: string | undefined) {
     this._recipeId = id || this.route.snapshot.paramMap.get('id') || undefined;
-    if (!id) return;
+    if (!this._recipeId) return;
 
     this.recipeDetails$ = this.recipesService.getRecipe(this._recipeId!)
       .pipe(
