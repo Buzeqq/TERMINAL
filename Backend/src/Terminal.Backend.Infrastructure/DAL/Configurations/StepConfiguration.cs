@@ -22,7 +22,8 @@ internal sealed class StepConfiguration : IEntityTypeConfiguration<Step>
         builder
             .HasMany(s => s.Parameters)
             .WithOne()
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.UseTpcMappingStrategy();
     }

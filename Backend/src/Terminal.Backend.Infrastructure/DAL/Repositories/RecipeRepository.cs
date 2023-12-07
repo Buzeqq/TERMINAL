@@ -21,4 +21,10 @@ internal sealed class RecipeRepository : IRecipeRepository
     {
         await _recipes.AddAsync(recipe, ct);
     }
+
+    public Task DeleteAsync(Recipe recipe, CancellationToken cancellationToken)
+    {
+        _recipes.Remove(recipe);
+        return Task.CompletedTask;
+    }
 }

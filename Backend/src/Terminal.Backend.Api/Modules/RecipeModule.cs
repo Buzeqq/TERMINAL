@@ -2,6 +2,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Api.Swagger;
 using Terminal.Backend.Application.Commands.Recipe;
+using Terminal.Backend.Application.Commands.Recipe.Create;
+using Terminal.Backend.Application.Commands.Recipe.Delete;
 using Terminal.Backend.Application.Queries.Recipes.Get;
 using Terminal.Backend.Application.Queries.Recipes.Search;
 using Terminal.Backend.Core.Enums;
@@ -78,6 +80,16 @@ public static class RecipeModule
             var amount = await sender.Send(query, ct);
             return Results.Ok(amount);
         }).RequireAuthorization(Permission.RecipeRead.ToString())
+            .WithTags(SwaggerSetup.RecipeTag);
+
+        app.MapDelete(ApiBaseRoute + "/{id:guid}", async (
+            Guid id,
+            ISender sender,
+            CancellationToken ct) =>
+            {
+                await sender.Send(new DeleteRecipeCommand(id), ct);
+                return Results.Ok();
+            }).RequireAuthorization(Permission.RecipeDelete.ToString())
             .WithTags(SwaggerSetup.RecipeTag);
     }
 }

@@ -4,7 +4,7 @@ using Terminal.Backend.Core.Abstractions.Repositories;
 using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.ValueObjects;
 
-namespace Terminal.Backend.Application.Commands.Recipe;
+namespace Terminal.Backend.Application.Commands.Recipe.Create;
 
 internal sealed class CreateRecipeCommandHandler : IRequestHandler<CreateRecipeCommand>
 {

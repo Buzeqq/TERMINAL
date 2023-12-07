@@ -20,11 +20,5 @@ internal sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
             .HasForeignKey("ProjectId")
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
-
-        // search index
-        builder
-            .HasIndex(p => p.Name)
-            .HasMethod("GIN")
-            .IsTsVectorExpressionIndex("english");
     }
 }

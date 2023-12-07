@@ -29,10 +29,12 @@ internal sealed class SampleConfiguration : IEntityTypeConfiguration<Sample>
         
         builder.HasMany(m => m.Steps)
             .WithOne()
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(m => m.Recipe)
-            .WithMany();
+            .WithMany()
+            .OnDelete(DeleteBehavior.SetNull);
         
         // search index
         builder

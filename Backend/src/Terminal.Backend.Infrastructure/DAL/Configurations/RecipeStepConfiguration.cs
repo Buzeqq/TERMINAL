@@ -11,6 +11,7 @@ internal sealed class RecipeStepConfiguration : IEntityTypeConfiguration<RecipeS
         builder
             .HasOne(s => s.Recipe)
             .WithMany(r => r.Steps)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
