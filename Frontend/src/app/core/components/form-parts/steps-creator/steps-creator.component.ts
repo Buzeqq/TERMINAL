@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import {
   CommentFormControl,
@@ -15,7 +15,7 @@ import { Subscription } from "rxjs";
   templateUrl: './steps-creator.component.html',
   styleUrls: ['./steps-creator.component.scss']
 })
-export class StepsCreatorComponent implements OnInit, OnDestroy {
+export class StepsCreatorComponent implements AfterViewInit, OnDestroy {
   @Input({ required: true })
   stepsControls: FormArray<StepFormArray> = new FormArray<StepFormArray>([]);
   selectedTabIndex: number = 0;
@@ -90,7 +90,8 @@ export class StepsCreatorComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(s => s.unsubscribe());
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
+    if (!this.stepsControls.controls.at(0)) return;
     this.subscriptions.push(...this.setupFormService.setParents(this.stepsControls.controls.at(0)!.controls.parameters, this.parameters));
   }
 }

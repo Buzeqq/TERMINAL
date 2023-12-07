@@ -47,18 +47,18 @@ public static class Extensions
     public static GetTagDto AsGetTagDto(this Tag entity)
         => new(entity.Id, entity.Name, entity.IsActive);
     
-    // public static GetSampleDto AsGetSampleDto(this Sample entity)
-    //     => new()
-    //     {
-    //         Id = entity.Id,
-    //         ProjectId = entity.Project.Id,
-    //         RecipeId = entity.Recipe?.Id.Value,
-    //         Code = entity.Code.Value,
-    //         Comment = entity.Comment.Value,
-    //         CreatedAtUtc = entity.CreatedAtUtc.ToString("o"),
-    //         Steps = entity.Steps.Select(s => s.Id),
-    //         Tags = entity.Tags.Select(t => t.Name.Value)
-    //     };
+    public static GetSampleDto AsGetSampleDto(this Sample entity)
+        => new()
+        { 
+            Id = entity.Id.Value,
+            ProjectId = entity.Project.Id.Value,
+            Recipe = entity.Recipe?.AsDto(),
+            Code = entity.Code.Value,
+            Comment = entity.Comment.Value,
+            CreatedAtUtc = entity.CreatedAtUtc.ToString("o"),
+            Steps = entity.Steps.AsStepsDto(),
+            Tags = entity.Tags.Select(t => new GetTagsDto.TagDto(t.Id, t.Name))
+        };
 
     public static IEnumerable<GetSampleStepsDto> AsStepsDto(this IEnumerable<SampleStep> steps)
         => steps.Select(s => new GetSampleStepsDto(

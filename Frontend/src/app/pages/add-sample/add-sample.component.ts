@@ -69,40 +69,7 @@ export class AddSampleComponent implements OnInit, OnDestroy {
 
   private readonly subscriptions: Subscription[] = [];
 
-  replicationData$ = this.activatedRoute.queryParams.pipe(
-    map((p: Params): ReplicateQuery | undefined => {
-      const recipeId = p['recipeId'];
-      if (recipeId) return {
-        type: 'Recipe',
-        id: recipeId,
-      };
-
-      const sampleId = p['sampleId'];
-      if (sampleId) return {
-        type: 'Sample',
-        id: sampleId
-      };
-
-      const projectId = p['projectId'];
-      if (projectId)
-        this.projectService.getProject(projectId)
-          .subscribe(p => {
-            this.sampleForm.controls.project.setItem({id: p.id, name: p.name}, null);
-            this.sampleForm.controls.project.setValue(p.name);
-          })
-
-      return undefined;
-    }),
-    filter(q => q !== undefined),
-    switchMap(q => this.replicationService.getReplicationData(q!)),
-    tap(d => {
-      // form will automatically fill
-      if (d.type === 'Recipe') {
-        this.sampleForm.controls.recipe.setItem({ name: d.basedOn.name, id: d.basedOn.id } as Recipe, d.basedOn.name);
-      }
-      this.fillForm(d);
-    })
-  );
+  replicationData$ = new Observable<ReplicationData>();
 
 
   ngOnInit(): void {
@@ -174,6 +141,41 @@ export class AddSampleComponent implements OnInit, OnDestroy {
       .subscribe());
 
     this.sampleForm.controls.recipe.setItem(null, 'None');
+
+    this.replicationData$ = this.activatedRoute.queryParams.pipe(
+      map((p: Params): ReplicateQuery | undefined => {
+        const recipeId = p['recipeId'];
+        if (recipeId) return {
+          type: 'Recipe',
+          id: recipeId,
+        };
+
+        const sampleId = p['sampleId'];
+        if (sampleId) return {
+          type: 'Sample',
+          id: sampleId
+        };
+
+        const projectId = p['projectId'];
+        if (projectId)
+          this.projectService.getProject(projectId)
+            .subscribe(p => {
+              this.sampleForm.controls.project.setItem({id: p.id, name: p.name}, null);
+              this.sampleForm.controls.project.setValue(p.name);
+            })
+
+        return undefined;
+      }),
+      filter(q => q !== undefined),
+      switchMap(q => this.replicationService.getReplicationData(q!)),
+      tap(d => {
+        // form will automatically fill
+        if (d.type === 'Recipe') {
+          this.sampleForm.controls.recipe.setItem({ name: d.basedOn.name, id: d.basedOn.id } as Recipe, d.basedOn.name);
+        }
+        this.fillForm(d);
+      })
+    );
   }
 
   ngOnDestroy(): void {
