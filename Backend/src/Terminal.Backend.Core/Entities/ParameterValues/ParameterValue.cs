@@ -21,4 +21,6 @@ public abstract class ParameterValue
     }
 
     public abstract ParameterValue DeepCopy(ParameterValueId id);
+
+    public abstract void Update(ParameterValue newParameterValue);
 }

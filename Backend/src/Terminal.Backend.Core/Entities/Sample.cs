@@ -1,3 +1,4 @@
+using System.Runtime.Intrinsics.Arm;
 using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Core.Entities;
@@ -37,7 +38,13 @@ public sealed class Sample
     {
         Project = project;
         Recipe = recipe;
-        Steps = steps.ToList();
+        var mergedSteps = Steps
+            .Join(steps, s1 => s1.Id, s2 => s2.Id, 
+                (s1, s2) => new Tuple<SampleStep, SampleStep>(s1, s2));
+        foreach (var (oldStep, newStep) in mergedSteps)
+        {
+            oldStep.Update(newStep.Parameters, newStep.Comment);
+        }
         Tags = tags.ToList();
         Comment = comment;
     }

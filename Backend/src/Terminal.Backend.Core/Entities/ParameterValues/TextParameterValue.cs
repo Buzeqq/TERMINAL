@@ -30,4 +30,17 @@ public sealed class TextParameterValue : ParameterValue
             ?? throw new ParameterValueCopyException(typeof(TextParameterValue), Parameter.GetType()),
             Value);
     }
+
+    public override void Update(ParameterValue newParameterValue)
+    {
+        if (newParameterValue is not TextParameterValue newTextParameterValue) return;
+        var textParameter = (TextParameter)Parameter;
+        var value = newTextParameterValue.Value;
+        if (!textParameter.AllowedValues.Contains(value))
+        {
+            throw new TextParameterValueNotValidException(textParameter, value);
+        }
+
+        Value = value;
+    }
 }

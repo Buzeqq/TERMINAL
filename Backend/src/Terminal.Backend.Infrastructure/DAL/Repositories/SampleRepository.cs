@@ -18,7 +18,14 @@ internal sealed class SampleRepository : ISampleRepository
         => await _samples.AddAsync(sample, ct);
 
     public Task<Sample?> GetAsync(SampleId id, CancellationToken cancellationToken) 
-        => _samples.SingleOrDefaultAsync(s => s.Id == id, cancellationToken);
+        => _samples
+            .Include(s => s.Project)
+            .Include(s => s.Recipe)
+            .Include(s => s.Steps)
+            .ThenInclude(s => s.Parameters)
+            .ThenInclude(p => p.Parameter)
+            .Include(s => s.Tags)
+            .SingleOrDefaultAsync(s => s.Id == id, cancellationToken);
 
     public Task DeleteAsync(Sample sample, CancellationToken cancellationToken)
     {

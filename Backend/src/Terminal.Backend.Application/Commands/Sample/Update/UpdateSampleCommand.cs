@@ -9,6 +9,6 @@ public sealed record UpdateSampleCommand(
     [property: JsonIgnore] SampleId Id,
     Guid ProjectId,
     Guid? RecipeId, 
-    IEnumerable<CreateSampleStepDto> Steps, 
+    IEnumerable<UpdateSampleStepDto> Steps, 
     IEnumerable<Guid> TagIds, 
     string Comment) : IRequest;

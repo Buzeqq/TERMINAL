@@ -62,10 +62,3 @@ internal sealed class UpdateSampleCommandHandler : IRequestHandler<UpdateSampleC
         await _sampleRepository.UpdateAsync(sample, cancellationToken);
     }
 }
-
-internal class RecipeNotFoundException : TerminalException
-{
-    public RecipeNotFoundException() : base("Recipe not found!")
-    {
-    }
-}
