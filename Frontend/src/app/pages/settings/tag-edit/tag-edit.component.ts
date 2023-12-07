@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {catchError, EMPTY, Observable, tap} from "rxjs";
+import {catchError, EMPTY, firstValueFrom, Observable, tap} from "rxjs";
 import {Tag} from "../../../core/models/tags/tag";
 import {TagDetails} from "../../../core/models/tags/tag-details";
 import {FormControl, Validators} from "@angular/forms";
@@ -72,8 +72,15 @@ export class TagEditComponent {
       || this.tagDetails!.isActive !== this.isActiveToggleButton.value
   }
 
-  editTag() {
-    // TODO send a request with new form values
+  async editTag() {
+    if (this.tagDetails!.name != this.tagNameFormControl.value)
+      await firstValueFrom(this.tagsService
+        .updateTag(this._tagId, {name: this.tagNameFormControl.value}));
+
+    if (this.tagDetails!.isActive != this.isActiveToggleButton.value)
+      await firstValueFrom(this.isActiveToggleButton.value ?
+        this.tagsService.activateTag(this._tagId) :
+        this.tagsService.deactivateTag(this._tagId));
   }
 
   deleteTag() {
