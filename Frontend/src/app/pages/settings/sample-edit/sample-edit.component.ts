@@ -114,7 +114,7 @@ export class SampleEditComponent implements OnInit {
     this.sampleForm.controls.recipe.setValue(sample.recipe!.name)
     this.sampleForm.controls.recipe.disable();
 
-    this.chosenTags.next(sample.tags);
+    // this.chosenTags.next(sample.tags); TODO: adjust to new SampleDetails model
     this.sampleForm.controls.comment.setValue(sample.comment);
   }
 
