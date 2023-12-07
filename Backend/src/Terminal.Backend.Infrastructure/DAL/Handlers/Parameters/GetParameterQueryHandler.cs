@@ -13,7 +13,7 @@ internal sealed class GetParameterQueryHandler : IRequestHandler<GetParameterQue
     {
         _parameters = dbContext.Parameters;
     }
-    
+
     public Task<Parameter?> Handle(GetParameterQuery query, CancellationToken ct)
     {
         var id = query.Id;

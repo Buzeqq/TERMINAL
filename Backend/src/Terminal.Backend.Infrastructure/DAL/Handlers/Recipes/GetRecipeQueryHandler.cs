@@ -21,7 +21,7 @@ internal sealed class GetRecipeQueryHandler : IRequestHandler<GetRecipeQuery, Ge
         var recipe = await _recipes.Include(r => r.Steps)
             .SingleOrDefaultAsync(r => r.RecipeName.Equals(name),
                 cancellationToken);
-        
+
         return recipe?.AsDto();
     }
 }

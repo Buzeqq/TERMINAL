@@ -13,7 +13,7 @@ internal sealed class GetUsersAmountQueryHandler : IRequestHandler<GetUsersAmoun
     {
         _users = dbContext.Users;
     }
-    
+
     public async Task<int> Handle(GetUsersAmountQuery request, CancellationToken cancellationToken)
     {
         var amount = _users

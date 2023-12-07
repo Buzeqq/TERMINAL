@@ -17,7 +17,7 @@ internal sealed class SampleRepository : ISampleRepository
     public async Task AddAsync(Sample sample, CancellationToken ct)
         => await _samples.AddAsync(sample, ct);
 
-    public Task<Sample?> GetAsync(SampleId id, CancellationToken cancellationToken) 
+    public Task<Sample?> GetAsync(SampleId id, CancellationToken cancellationToken)
         => _samples
             .Include(s => s.Project)
             .Include(s => s.Recipe)

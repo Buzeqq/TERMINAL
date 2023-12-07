@@ -11,16 +11,13 @@ public static class Extensions
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddMediatR(cfg =>
-        {
-            cfg.RegisterServicesFromAssembly(AssemblyReference.Assembly);
-        });
+        services.AddMediatR(cfg => { cfg.RegisterServicesFromAssembly(AssemblyReference.Assembly); });
 
         services.ConfigureOptions<InvitationOptionsSetup>();
         services.AddScoped<IConvertDtoService, ConvertDtoService>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IInvitationFactory, InvitationFactory>();
-        
+
         return services;
     }
 }

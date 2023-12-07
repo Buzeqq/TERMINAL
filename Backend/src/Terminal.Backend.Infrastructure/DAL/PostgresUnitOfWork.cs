@@ -7,7 +7,7 @@ internal sealed class PostgresUnitOfWork<TResponse> : IUnitOfWork<TResponse>
     private readonly TerminalDbContext _dbContext;
 
     public PostgresUnitOfWork(TerminalDbContext dbContext)
-     => _dbContext = dbContext;
+        => _dbContext = dbContext;
 
     public async Task<TResponse> ExecuteAsync(RequestHandlerDelegate<TResponse> next)
     {

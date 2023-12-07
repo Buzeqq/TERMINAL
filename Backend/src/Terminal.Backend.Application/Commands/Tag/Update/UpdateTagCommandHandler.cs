@@ -22,6 +22,11 @@ internal sealed class UpdateTagCommandHandler : IRequestHandler<UpdateTagCommand
             throw new TagNotFoundException();
         }
 
+        if (tag.Name != request.Name && !await _tagRepository.IsNameUniqueAsync(name, cancellationToken))
+        {
+            throw new InvalidTagException(name);
+        }
+
         tag.Update(name);
         await _tagRepository.UpdateAsync(tag, cancellationToken);
     }

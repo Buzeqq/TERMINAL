@@ -15,7 +15,7 @@ internal sealed class GetParametersQueryHandler : IRequestHandler<GetParametersQ
         _parameters = dbContext.Parameters;
     }
 
-    public async Task<GetParametersDto> Handle(GetParametersQuery request, CancellationToken ct) 
+    public async Task<GetParametersDto> Handle(GetParametersQuery request, CancellationToken ct)
         => (await _parameters
                 .AsNoTracking()
                 .Include(p => p.Parent)

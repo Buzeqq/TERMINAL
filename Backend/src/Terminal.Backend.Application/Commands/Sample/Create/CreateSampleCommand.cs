@@ -8,7 +8,9 @@ namespace Terminal.Backend.Application.Commands.Sample.Create;
 public sealed record CreateSampleCommand(
     [property: JsonIgnore] SampleId SampleId,
     Guid ProjectId,
-    Guid? RecipeId, 
-    IEnumerable<CreateSampleStepDto> Steps, 
-    IEnumerable<Guid> TagIds, 
-    string Comment, bool SaveAsRecipe, string? RecipeName = null) : IRequest;
+    Guid? RecipeId,
+    IEnumerable<CreateSampleStepDto> Steps,
+    IEnumerable<Guid> TagIds,
+    string Comment,
+    bool SaveAsRecipe,
+    string? RecipeName = null) : IRequest;

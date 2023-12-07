@@ -10,7 +10,7 @@ namespace Terminal.Backend.Infrastructure.DAL;
 internal static class Extensions
 {
     private const string OptionsSectionName = "Postgres";
-    
+
     public static IServiceCollection AddPostgres(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<PostgresOptions>(configuration.GetRequiredSection(OptionsSectionName));
@@ -32,7 +32,7 @@ internal static class Extensions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IInvitationRepository, InvitationRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
-        
+
         return services;
     }
 }

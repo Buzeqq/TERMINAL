@@ -8,6 +8,7 @@ public class SearchProjectQuery : IRequest<GetProjectsDto>
 {
     public string SearchPhrase { get; set; }
     public PagingParameters Parameters { get; set; }
+
     public SearchProjectQuery(string searchPhrase, int pageNumber, int pageSize)
     {
         SearchPhrase = searchPhrase;

@@ -33,7 +33,7 @@ public abstract class Enumeration<TEnum, TId> : IEquatable<Enumeration<TEnum, TI
     {
         return Name;
     }
-    
+
     public static IEnumerable<TEnum> GetValues()
     {
         return Enumerations!.Values;
@@ -42,7 +42,7 @@ public abstract class Enumeration<TEnum, TId> : IEquatable<Enumeration<TEnum, TI
     public static bool IsDefined(TId id) => Enumerations?.ContainsKey(id) ?? true;
 
     public static implicit operator string(Enumeration<TEnum, TId> x) => x.Name;
-    
+
     private static Dictionary<TId, TEnum> CreateEnumerations()
     {
         var enumerationType = typeof(TEnum);
@@ -53,7 +53,7 @@ public abstract class Enumeration<TEnum, TId> : IEquatable<Enumeration<TEnum, TI
                 BindingFlags.FlattenHierarchy)
             .Where(fieldInfo =>
                 enumerationType.IsAssignableFrom(fieldInfo.FieldType))
-            .Select(fieldInfo => 
+            .Select(fieldInfo =>
                 (TEnum)fieldInfo.GetValue(default)!);
 
         return fieldsForType.ToDictionary(x => x.Value);

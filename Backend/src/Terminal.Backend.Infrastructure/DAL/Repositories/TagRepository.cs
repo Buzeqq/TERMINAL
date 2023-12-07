@@ -26,8 +26,8 @@ internal sealed class TagRepository : ITagRepository
         return Task.CompletedTask;
     }
 
-    public async Task<IEnumerable<Tag>> GetManyAsync(IEnumerable<TagId> tagIds, CancellationToken ct) =>
-        await _tags
+    public async Task<IEnumerable<Tag>> GetManyAsync(IEnumerable<TagId> tagIds, CancellationToken ct) 
+        => await _tags
             .Where(t => tagIds.Contains(t.Id))
             .ToListAsync(ct);
 
@@ -36,4 +36,7 @@ internal sealed class TagRepository : ITagRepository
         _tags.Remove(tag);
         return Task.CompletedTask;
     }
+
+    public Task<bool> IsNameUniqueAsync(TagName name, CancellationToken cancellationToken) 
+        => _tags.AllAsync(t => t.Name != name, cancellationToken);
 }

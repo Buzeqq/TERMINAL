@@ -18,7 +18,7 @@ builder.Host.UseSerilog((context, loggerConfiguration) =>
 {
     loggerConfiguration
         .WriteTo.Console();
-    
+
     if (context.HostingEnvironment.IsProduction())
     {
         loggerConfiguration
@@ -39,5 +39,7 @@ app.Run();
 
 namespace Terminal.Backend.Api
 {
-    public class Program { }
+    public class Program
+    {
+    }
 }

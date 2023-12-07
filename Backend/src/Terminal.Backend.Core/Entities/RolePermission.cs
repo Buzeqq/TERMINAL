@@ -11,5 +11,5 @@ public sealed class RolePermission
     }
 
     public PermissionId PermissionId { get; private set; }
-    public RoleId RoleId { get; private set; } 
+    public RoleId RoleId { get; private set; }
 }

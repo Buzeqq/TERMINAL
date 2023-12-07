@@ -15,11 +15,11 @@ internal sealed class ParameterRepository : IParameterRepository
     }
 
     public async Task<T?> GetAsync<T>(ParameterId id, CancellationToken ct)
-    where T : Parameter
+        where T : Parameter
         => await _parameters
             .Include(p => p.Parent)
             .SingleOrDefaultAsync(p => p.Id == id, ct) as T;
-    
+
     public async Task AddAsync(Parameter parameter, CancellationToken ct)
         => await _parameters.AddAsync(parameter, ct);
 

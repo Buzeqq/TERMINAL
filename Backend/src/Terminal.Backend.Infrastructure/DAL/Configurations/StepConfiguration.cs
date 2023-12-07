@@ -10,7 +10,7 @@ internal sealed class StepConfiguration : IEntityTypeConfiguration<Step>
     public void Configure(EntityTypeBuilder<Step> builder)
     {
         builder.HasKey(s => s.Id);
-        
+
         builder.Property(s => s.Id)
             .HasConversion(i => i.Value,
                 i => new StepId(i));

@@ -13,6 +13,7 @@ internal sealed class JwtBearerOptionsSetup : IConfigureNamedOptions<JwtBearerOp
     {
         _options = options.Value;
     }
+
     public void Configure(string? name, JwtBearerOptions options)
     {
         Configure(options);

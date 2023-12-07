@@ -19,7 +19,7 @@ public sealed record SampleCode
         var isValid = !string.IsNullOrWhiteSpace(code) &&
                       code.StartsWith(Prefix) &&
                       isParsable;
-        
+
         if (!isValid)
         {
             throw new InvalidSampleCodeException(code);
@@ -27,8 +27,7 @@ public sealed record SampleCode
 
         Number = number;
     }
-    
+
     public static implicit operator string(SampleCode code) => code.Value;
     public static implicit operator SampleCode(string code) => new(code);
-    
 }

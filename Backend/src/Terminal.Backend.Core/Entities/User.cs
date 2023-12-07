@@ -9,7 +9,7 @@ public sealed class User
     public Password Password { get; private set; }
     public Role Role { get; private set; }
     public bool Activated { get; private set; }
-    
+
     private User(UserId id, Email email, Password password, bool activated)
     {
         Id = id;
@@ -23,7 +23,7 @@ public sealed class User
 
     public static User CreateActiveUser(UserId id, Email email, Password password)
         => new(id, email, password, true);
-    
+
     public void SetRole(Role role)
     {
         Role = role;

@@ -14,7 +14,7 @@ public sealed class TextParameterValue : ParameterValue
         {
             throw new TextParameterValueNotValidException(parameter, value);
         }
-        
+
         Value = value;
     }
 
@@ -22,10 +22,10 @@ public sealed class TextParameterValue : ParameterValue
     {
         Value = value;
     }
-    
+
     public override ParameterValue DeepCopy(ParameterValueId id)
     {
-        return new TextParameterValue(id, 
+        return new TextParameterValue(id,
             Parameter as TextParameter
             ?? throw new ParameterValueCopyException(typeof(TextParameterValue), Parameter.GetType()),
             Value);

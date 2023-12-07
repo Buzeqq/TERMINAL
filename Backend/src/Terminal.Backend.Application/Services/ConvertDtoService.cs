@@ -35,13 +35,13 @@ internal sealed class ConvertDtoService : IConvertDtoService
                 var parameter = await GetParameterValueAsync(id, parameterDto, ct);
                 parameters.Add(parameter);
             }
-            
+
             steps.Add(new SampleStep(StepId.Create(), new Comment(stepDto.Comment), parameters));
         }
-        
+
         return steps;
     }
-    
+
     public async Task<IEnumerable<SampleStep>> ConvertAsync(IEnumerable<UpdateSampleStepDto> stepsDto,
         CancellationToken ct)
     {
@@ -55,10 +55,10 @@ internal sealed class ConvertDtoService : IConvertDtoService
                 var parameter = await GetParameterValueAsync(id, parameterDto, ct);
                 parameters.Add(parameter);
             }
-            
+
             steps.Add(new SampleStep(stepDto.Id, new Comment(stepDto.Comment), parameters));
         }
-        
+
         return steps;
     }
 
@@ -67,14 +67,14 @@ internal sealed class ConvertDtoService : IConvertDtoService
     {
         ParameterValue parameter = parameterDto switch
         {
-            CreateSampleDecimalParameterValueDto @decimal 
-                => new DecimalParameterValue(id, await _parameterRepository.GetAsync<DecimalParameter>(@decimal.Id, ct) 
+            CreateSampleDecimalParameterValueDto @decimal
+                => new DecimalParameterValue(id, await _parameterRepository.GetAsync<DecimalParameter>(@decimal.Id, ct)
                                                  ?? throw new ParameterNotFoundException(), @decimal.Value),
-            CreateSampleIntegerParameterValueDto integer 
-                => new IntegerParameterValue(id, await _parameterRepository.GetAsync<IntegerParameter>(integer.Id, ct) 
+            CreateSampleIntegerParameterValueDto integer
+                => new IntegerParameterValue(id, await _parameterRepository.GetAsync<IntegerParameter>(integer.Id, ct)
                                                  ?? throw new ParameterNotFoundException(), integer.Value),
-            CreateSampleTextParameterValueDto text 
-                => new TextParameterValue(id, await _parameterRepository.GetAsync<TextParameter>(text.Id, ct) 
+            CreateSampleTextParameterValueDto text
+                => new TextParameterValue(id, await _parameterRepository.GetAsync<TextParameter>(text.Id, ct)
                                               ?? throw new ParameterNotFoundException(), text.Value),
             _ => throw new UnknownParameterTypeException(parameterDto)
         };

@@ -6,7 +6,7 @@ using Terminal.Backend.Infrastructure.Authentication.Requirements;
 
 namespace Terminal.Backend.Infrastructure.Authentication;
 
-internal sealed class PermissionAuthorizationHandler 
+internal sealed class PermissionAuthorizationHandler
     : AuthorizationHandler<PermissionRequirement>
 {
     private readonly IServiceScopeFactory _serviceScopeFactory;

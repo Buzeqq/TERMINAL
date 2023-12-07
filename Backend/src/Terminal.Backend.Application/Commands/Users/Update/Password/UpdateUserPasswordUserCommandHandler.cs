@@ -29,7 +29,7 @@ internal sealed class UpdateUserPasswordUserCommandHandler : IRequestHandler<Upd
         {
             throw new InvalidCredentialsException();
         }
-        
+
         user.UpdatePassword(_passwordHasher.Hash(newPassword));
         await _userRepository.UpdateAsync(user, cancellationToken);
     }

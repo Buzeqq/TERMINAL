@@ -31,7 +31,7 @@ internal sealed class JwtProvider : IJwtProvider
             new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_options.SecretKey)),
             SecurityAlgorithms.HmacSha256);
-        
+
         var token = new JwtSecurityToken(
             _options.Issuer,
             _options.Audience,

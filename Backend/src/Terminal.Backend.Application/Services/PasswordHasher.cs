@@ -11,7 +11,7 @@ internal sealed class PasswordHasher : IPasswordHasher
     private const int Iterations = 50_000;
     private static readonly HashAlgorithmName Algorithm = HashAlgorithmName.SHA256;
     private const char SegmentDelimiter = ':';
-    
+
     public Password Hash(string password)
     {
         var salt = RandomNumberGenerator.GetBytes(SaltSize);
@@ -22,7 +22,7 @@ internal sealed class PasswordHasher : IPasswordHasher
             Algorithm,
             KeySize
         );
-        
+
         return new Password(string.Join(
             SegmentDelimiter,
             Convert.ToHexString(hash),
@@ -46,7 +46,7 @@ internal sealed class PasswordHasher : IPasswordHasher
             algorithm,
             hash.Length
         );
-        
+
         return CryptographicOperations.FixedTimeEquals(inputHash, hash);
     }
 }

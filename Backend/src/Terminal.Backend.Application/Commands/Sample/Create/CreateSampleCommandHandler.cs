@@ -29,7 +29,7 @@ internal sealed class CreateSampleCommandHandler : IRequestHandler<CreateSampleC
     {
         var (sampleId, projectId, recipeId, stepsDto, tagsDto,
             comment, saveAsRecipe, recipeName) = command;
-        
+
         var steps = (await _convertService.ConvertAsync(stepsDto, ct)).ToList();
         Core.Entities.Recipe? recipe = null;
         if (saveAsRecipe)
@@ -38,7 +38,7 @@ internal sealed class CreateSampleCommandHandler : IRequestHandler<CreateSampleC
             {
                 throw new InvalidRecipeNameException(recipeName);
             }
-            
+
             // for new recipe we need to copy every step, and every parameter value in steps
             recipe = new Core.Entities.Recipe(RecipeId.Create(), recipeName);
             foreach (var step in steps)
@@ -47,20 +47,21 @@ internal sealed class CreateSampleCommandHandler : IRequestHandler<CreateSampleC
                     .Select(p => p.DeepCopy(Guid.NewGuid())));
                 recipe.Steps.Add(new RecipeStep(Guid.NewGuid(), step.Comment, parameters, recipe));
             }
+
             await _recipeRepository.AddAsync(recipe, ct);
         }
         else if (recipeId is not null)
         {
             recipe = await _recipeRepository.GetAsync(recipeId, ct);
         }
-        
+
         var tags = await _convertService.ConvertAsync(tagsDto.Select(t => new TagId(t)), ct);
         var project = await _projectRepository.GetAsync(projectId, ct) ?? throw new ProjectNotFoundException();
         if (!project.IsActive)
         {
             throw new ProjectNotActiveException(project.Name);
         }
-        
+
         var sample = new Core.Entities.Sample(sampleId,
             project,
             recipe,

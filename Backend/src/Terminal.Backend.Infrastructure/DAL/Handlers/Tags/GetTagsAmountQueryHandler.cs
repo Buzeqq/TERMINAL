@@ -13,7 +13,7 @@ internal sealed class GetTagsAmountQueryHandler : IRequestHandler<GetTagsAmountQ
     {
         _tags = dbContext.Tags;
     }
-    
+
     public async Task<int> Handle(GetTagsAmountQuery request, CancellationToken cancellationToken)
     {
         var amount = _tags

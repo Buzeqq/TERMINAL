@@ -13,7 +13,7 @@ public sealed class DecimalParameter : NumericParameter
         decimal step,
         decimal defaultValue = 0,
         uint order = 0,
-        bool isActive = true) : 
+        bool isActive = true) :
         base(id, name, unit, order, isActive)
     {
         Step = step;

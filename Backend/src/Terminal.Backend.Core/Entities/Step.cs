@@ -15,13 +15,13 @@ public abstract class Step
         Comment = comment;
         Parameters = parameters;
     }
-    
+
     protected Step(StepId id, Comment comment)
     {
         Id = id;
         Comment = comment;
     }
-    
+
     public void Update(IEnumerable<ParameterValue> parameters, Comment comment)
     {
         Comment = comment;

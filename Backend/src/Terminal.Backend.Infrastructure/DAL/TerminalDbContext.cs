@@ -26,9 +26,11 @@ internal sealed class TerminalDbContext : DbContext
     public DbSet<Invitation> Invitations { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<Permission> Permissions { get; set; }
-    
-    public TerminalDbContext(DbContextOptions<TerminalDbContext> options) : base(options) { }
-    
+
+    public TerminalDbContext(DbContextOptions<TerminalDbContext> options) : base(options)
+    {
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);

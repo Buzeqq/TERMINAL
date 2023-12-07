@@ -5,4 +5,7 @@ using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Commands.Recipe.Create;
 
-public sealed record CreateRecipeCommand([property: JsonIgnore] RecipeId Id, string Name, IEnumerable<CreateSampleStepDto> Steps) : IRequest;
+public sealed record CreateRecipeCommand(
+    [property: JsonIgnore] RecipeId Id,
+    string Name,
+    IEnumerable<CreateSampleStepDto> Steps) : IRequest;

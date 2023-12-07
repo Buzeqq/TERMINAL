@@ -17,8 +17,8 @@ internal sealed class SearchTagQueryHandler : IRequestHandler<SearchTagQuery, Ge
 
     public async Task<GetTagsDto> Handle(SearchTagQuery request, CancellationToken ct)
         => (await _tags
-                .AsNoTracking()
-                .Where(t => EF.Functions.ILike(t.Name, $"%{request.SearchPhrase}%"))
-                .Select(t => t)
-                .ToListAsync(ct)).AsGetTagsDto();
+            .AsNoTracking()
+            .Where(t => EF.Functions.ILike(t.Name, $"%{request.SearchPhrase}%"))
+            .Select(t => t)
+            .ToListAsync(ct)).AsGetTagsDto();
 }

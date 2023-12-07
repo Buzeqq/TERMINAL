@@ -14,7 +14,7 @@ internal sealed class GetUserQueryHandler : IRequestHandler<GetUserQuery, GetUse
     {
         _users = dbContext.Users;
     }
-    
+
     public async Task<GetUserDto> Handle(GetUserQuery request, CancellationToken ct)
     {
         var user = (await _users

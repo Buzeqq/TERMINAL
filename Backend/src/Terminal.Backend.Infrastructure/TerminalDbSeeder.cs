@@ -13,13 +13,15 @@ internal sealed class TerminalDbSeeder
     public void Seed()
     {
         #region tags
+
         var tag1 = new Tag(TagId.Create(), "new-sample");
         var tag2 = new Tag(TagId.Create(), "methane-rich");
         var tag3 = new Tag(TagId.Create(), "popular-sample");
         var tag4 = new Tag(TagId.Create(), "hot");
         var tag5 = new Tag(TagId.Create(), "high-pressure");
-        
+
         _dbContext.Tags.AddRange(tag1, tag2, tag3, tag4, tag5);
+
         #endregion
 
         #region projects
@@ -28,8 +30,9 @@ internal sealed class TerminalDbSeeder
         var projectBessy2 = new Project(ProjectId.Create(), "Bessy 2");
         var projectNitro = new Project(ProjectId.Create(), "Nitro");
         var projectNobelium = new Project(ProjectId.Create(), "Nobelium");
-        
+
         _dbContext.Projects.AddRange(projectUpturn, projectBessy2, projectNitro, projectNobelium);
+
         #endregion
 
         #region parameters
@@ -59,9 +62,9 @@ internal sealed class TerminalDbSeeder
                 "tantalum"
             });
         var bufferParameter = new DecimalParameter(ParameterId.Create(), "Buffer", "h", 0.1m);
-        var additionalGasesParameter = new TextParameter(ParameterId.Create(), "Additional gases", 
+        var additionalGasesParameter = new TextParameter(ParameterId.Create(), "Additional gases",
             new List<string> { "none", "nitrogen", "oxygen" }, order: 12);
-        var additionalGassesAmountParameter = 
+        var additionalGassesAmountParameter =
             new IntegerParameter(ParameterId.Create(), "Additional gases amount", "sccm", 1);
         additionalGassesAmountParameter.SetParent(additionalGasesParameter);
         _dbContext.Parameters.AddRange(bufferParameter,
@@ -90,7 +93,7 @@ internal sealed class TerminalDbSeeder
             bcParameter,
             hydrogenParameter,
             additionalGasesParameter);
-        
+
         #endregion
 
         #region steps
@@ -100,14 +103,17 @@ internal sealed class TerminalDbSeeder
         step1.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), hydrogenParameter, 300));
         step1.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), methaneParameter, 100));
         step1.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), diboranParameter, 240));
-        step1.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), nucleationParameter, nucleationParameter.AllowedValues.First()));
+        step1.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), nucleationParameter,
+            nucleationParameter.AllowedValues.First()));
         step1.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), temperatureParameter, 800));
         step1.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), pressureParameter, 20));
         step1.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), powerParameter, 1300));
         step1.Parameters.Add(new DecimalParameterValue(ParameterValueId.Create(), timeParameter, 2.3m));
-        step1.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), substrateParameter, substrateParameter.AllowedValues.First()));
+        step1.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), substrateParameter,
+            substrateParameter.AllowedValues.First()));
         step1.Parameters.Add(new DecimalParameterValue(ParameterValueId.Create(), bufferParameter, 0.0m));
-        step1.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter, additionalGasesParameter.AllowedValues.First()));
+        step1.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter,
+            additionalGasesParameter.AllowedValues.First()));
         step1.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), bcParameter, 2000));
 
         var step2 = new SampleStep(StepId.Create(), new Comment("First step!"));
@@ -115,42 +121,51 @@ internal sealed class TerminalDbSeeder
         step2.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), hydrogenParameter, 300));
         step2.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), methaneParameter, 100));
         step2.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), diboranParameter, 240));
-        step2.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), nucleationParameter, nucleationParameter.AllowedValues.First()));
+        step2.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), nucleationParameter,
+            nucleationParameter.AllowedValues.First()));
         step2.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), temperatureParameter, 800));
         step2.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), pressureParameter, 20));
         step2.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), powerParameter, 1300));
         step2.Parameters.Add(new DecimalParameterValue(ParameterValueId.Create(), timeParameter, 2.3m));
-        step2.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), substrateParameter, substrateParameter.AllowedValues.First()));
+        step2.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), substrateParameter,
+            substrateParameter.AllowedValues.First()));
         step2.Parameters.Add(new DecimalParameterValue(ParameterValueId.Create(), bufferParameter, 0.0m));
-        step2.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter, additionalGasesParameter.AllowedValues.First()));
+        step2.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter,
+            additionalGasesParameter.AllowedValues.First()));
 
         var step3 = new SampleStep(StepId.Create(), new Comment("First step!"));
         step3.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), bcParameter, 2000));
         step3.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), hydrogenParameter, 300));
         step3.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), methaneParameter, 100));
         step3.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), diboranParameter, 240));
-        step3.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), nucleationParameter, nucleationParameter.AllowedValues.First()));
+        step3.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), nucleationParameter,
+            nucleationParameter.AllowedValues.First()));
         step3.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), temperatureParameter, 800));
         step3.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), pressureParameter, 20));
         step3.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), powerParameter, 1300));
         step3.Parameters.Add(new DecimalParameterValue(ParameterValueId.Create(), timeParameter, 2.3m));
-        step3.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), substrateParameter, substrateParameter.AllowedValues.First()));
+        step3.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), substrateParameter,
+            substrateParameter.AllowedValues.First()));
         step3.Parameters.Add(new DecimalParameterValue(ParameterValueId.Create(), bufferParameter, 0.0m));
-        step3.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter, additionalGasesParameter.AllowedValues.First()));
+        step3.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter,
+            additionalGasesParameter.AllowedValues.First()));
 
         var step4 = new SampleStep(StepId.Create(), new Comment("First step!"));
         step4.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), bcParameter, 2000));
         step4.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), hydrogenParameter, 300));
         step4.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), methaneParameter, 100));
         step4.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), diboranParameter, 240));
-        step4.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), nucleationParameter, nucleationParameter.AllowedValues.First()));
+        step4.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), nucleationParameter,
+            nucleationParameter.AllowedValues.First()));
         step4.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), temperatureParameter, 800));
         step4.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), pressureParameter, 20));
         step4.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), powerParameter, 1300));
         step4.Parameters.Add(new DecimalParameterValue(ParameterValueId.Create(), timeParameter, 2.3m));
-        step4.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), substrateParameter, substrateParameter.AllowedValues.First()));
+        step4.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), substrateParameter,
+            substrateParameter.AllowedValues.First()));
         step4.Parameters.Add(new DecimalParameterValue(ParameterValueId.Create(), bufferParameter, 0.0m));
-        step4.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter, additionalGasesParameter.AllowedValues.First()));
+        step4.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter,
+            additionalGasesParameter.AllowedValues.First()));
 
 
         var step5 = new SampleStep(StepId.Create(), new Comment("First step!"));
@@ -158,84 +173,102 @@ internal sealed class TerminalDbSeeder
         step5.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), hydrogenParameter, 300));
         step5.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), methaneParameter, 100));
         step5.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), diboranParameter, 240));
-        step5.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), nucleationParameter, nucleationParameter.AllowedValues.First()));
+        step5.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), nucleationParameter,
+            nucleationParameter.AllowedValues.First()));
         step5.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), temperatureParameter, 800));
         step5.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), pressureParameter, 20));
         step5.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), powerParameter, 1300));
         step5.Parameters.Add(new DecimalParameterValue(ParameterValueId.Create(), timeParameter, 2.3m));
-        step5.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), substrateParameter, substrateParameter.AllowedValues.First()));
+        step5.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), substrateParameter,
+            substrateParameter.AllowedValues.First()));
         step5.Parameters.Add(new DecimalParameterValue(ParameterValueId.Create(), bufferParameter, 0.0m));
-        step5.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter, additionalGasesParameter.AllowedValues.First()));
+        step5.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter,
+            additionalGasesParameter.AllowedValues.First()));
 
         var step6 = new SampleStep(StepId.Create(), new Comment("First step!"));
         step6.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), bcParameter, 2000));
         step6.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), hydrogenParameter, 300));
         step6.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), methaneParameter, 100));
         step6.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), diboranParameter, 240));
-        step6.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), nucleationParameter, nucleationParameter.AllowedValues.First()));
+        step6.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), nucleationParameter,
+            nucleationParameter.AllowedValues.First()));
         step6.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), temperatureParameter, 800));
         step6.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), pressureParameter, 20));
         step6.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), powerParameter, 1300));
         step6.Parameters.Add(new DecimalParameterValue(ParameterValueId.Create(), timeParameter, 2.3m));
-        step6.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), substrateParameter, substrateParameter.AllowedValues.First()));
+        step6.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), substrateParameter,
+            substrateParameter.AllowedValues.First()));
         step6.Parameters.Add(new DecimalParameterValue(ParameterValueId.Create(), bufferParameter, 0.0m));
-        step6.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter, additionalGasesParameter.AllowedValues.First()));
+        step6.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter,
+            additionalGasesParameter.AllowedValues.First()));
 
         var step7 = new SampleStep(StepId.Create(), new Comment("First step!"));
         step7.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), bcParameter, 2000));
         step7.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), hydrogenParameter, 300));
         step7.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), methaneParameter, 100));
         step7.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), diboranParameter, 240));
-        step7.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), nucleationParameter, nucleationParameter.AllowedValues.First()));
+        step7.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), nucleationParameter,
+            nucleationParameter.AllowedValues.First()));
         step7.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), temperatureParameter, 800));
         step7.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), pressureParameter, 20));
         step7.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), powerParameter, 1300));
         step7.Parameters.Add(new DecimalParameterValue(ParameterValueId.Create(), timeParameter, 2.3m));
-        step7.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), substrateParameter, substrateParameter.AllowedValues.First()));
+        step7.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), substrateParameter,
+            substrateParameter.AllowedValues.First()));
         step7.Parameters.Add(new DecimalParameterValue(ParameterValueId.Create(), bufferParameter, 0.0m));
-        step7.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter, additionalGasesParameter.AllowedValues.First()));
+        step7.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter,
+            additionalGasesParameter.AllowedValues.First()));
 
         var step8 = new SampleStep(StepId.Create(), new Comment("First step!"));
         step8.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), bcParameter, 2000));
         step8.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), hydrogenParameter, 300));
         step8.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), methaneParameter, 100));
         step8.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), diboranParameter, 240));
-        step8.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), nucleationParameter, nucleationParameter.AllowedValues.First()));
+        step8.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), nucleationParameter,
+            nucleationParameter.AllowedValues.First()));
         step8.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), temperatureParameter, 800));
         step8.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), pressureParameter, 20));
         step8.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), powerParameter, 1300));
         step8.Parameters.Add(new DecimalParameterValue(ParameterValueId.Create(), timeParameter, 2.3m));
-        step8.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), substrateParameter, substrateParameter.AllowedValues.First()));
+        step8.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), substrateParameter,
+            substrateParameter.AllowedValues.First()));
         step8.Parameters.Add(new DecimalParameterValue(ParameterValueId.Create(), bufferParameter, 0.0m));
-        step8.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter, additionalGasesParameter.AllowedValues.First()));
+        step8.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter,
+            additionalGasesParameter.AllowedValues.First()));
 
         var step9 = new SampleStep(StepId.Create(), new Comment("First step!"));
         step9.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), bcParameter, 2000));
         step9.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), hydrogenParameter, 300));
         step9.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), methaneParameter, 100));
         step9.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), diboranParameter, 240));
-        step9.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), nucleationParameter, nucleationParameter.AllowedValues.First()));
+        step9.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), nucleationParameter,
+            nucleationParameter.AllowedValues.First()));
         step9.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), temperatureParameter, 800));
         step9.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), pressureParameter, 20));
         step9.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), powerParameter, 1300));
         step9.Parameters.Add(new DecimalParameterValue(ParameterValueId.Create(), timeParameter, 2.3m));
-        step9.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), substrateParameter, substrateParameter.AllowedValues.First()));
+        step9.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), substrateParameter,
+            substrateParameter.AllowedValues.First()));
         step9.Parameters.Add(new DecimalParameterValue(ParameterValueId.Create(), bufferParameter, 0.0m));
-        step9.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter, additionalGasesParameter.AllowedValues.First()));
+        step9.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter,
+            additionalGasesParameter.AllowedValues.First()));
 
         var step10 = new SampleStep(StepId.Create(), new Comment("First step!"));
         step10.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), bcParameter, 2000));
         step10.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), hydrogenParameter, 300));
         step10.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), methaneParameter, 100));
         step10.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), diboranParameter, 240));
-        step10.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), nucleationParameter, nucleationParameter.AllowedValues.First()));
+        step10.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), nucleationParameter,
+            nucleationParameter.AllowedValues.First()));
         step10.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), temperatureParameter, 800));
         step10.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), pressureParameter, 20));
         step10.Parameters.Add(new IntegerParameterValue(ParameterValueId.Create(), powerParameter, 1300));
         step10.Parameters.Add(new DecimalParameterValue(ParameterValueId.Create(), timeParameter, 2.3m));
-        step10.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), substrateParameter, substrateParameter.AllowedValues.First()));
+        step10.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), substrateParameter,
+            substrateParameter.AllowedValues.First()));
         step10.Parameters.Add(new DecimalParameterValue(ParameterValueId.Create(), bufferParameter, 0.0m));
-        step10.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter, additionalGasesParameter.AllowedValues.First()));
+        step10.Parameters.Add(new TextParameterValue(ParameterValueId.Create(), additionalGasesParameter,
+            additionalGasesParameter.AllowedValues.First()));
 
         #endregion
 
@@ -330,7 +363,7 @@ internal sealed class TerminalDbSeeder
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Samples.Add(sample9);
         _dbContext.SaveChanges();
-        
+
         var sample10 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -340,7 +373,7 @@ internal sealed class TerminalDbSeeder
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Samples.Add(sample10);
         _dbContext.SaveChanges();
-        
+
         var sample11 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -350,7 +383,7 @@ internal sealed class TerminalDbSeeder
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Samples.Add(sample11);
         _dbContext.SaveChanges();
-        
+
         var sample12 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -680,7 +713,7 @@ internal sealed class TerminalDbSeeder
             new List<Tag> { tag1, tag3, tag5 });
         _dbContext.Samples.Add(sample44);
         _dbContext.SaveChanges();
-        
+
         var sample45 = new Sample(
             SampleId.Create(),
             projectNitro,
@@ -691,6 +724,7 @@ internal sealed class TerminalDbSeeder
         _dbContext.Samples.Add(sample45);
 
         _dbContext.SaveChanges();
+
         #endregion
     }
 

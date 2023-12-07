@@ -12,10 +12,9 @@ public sealed record GetRecentSamplesQuery(int Length) : IRequest<GetRecentSampl
         const string numberKey = "len";
         var parsed = int.TryParse(context.Request.Query[numberKey], out var length);
         length = parsed ? length : 5;
-        
+
         var result = new GetRecentSamplesQuery(length);
 
         return ValueTask.FromResult<GetRecentSamplesQuery?>(result);
     }
 }
-

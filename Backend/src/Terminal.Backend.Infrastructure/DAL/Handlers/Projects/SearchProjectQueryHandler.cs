@@ -25,6 +25,4 @@ internal sealed class SearchProjectQueryHandler : IRequestHandler<SearchProjectQ
                 .Paginate(request.Parameters)
                 .ToListAsync(cancellationToken)
         };
-
-
 }

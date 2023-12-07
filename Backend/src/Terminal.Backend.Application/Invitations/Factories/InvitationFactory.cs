@@ -21,7 +21,7 @@ internal sealed class InvitationFactory : IInvitationFactory
     {
         await _invitationRepository.DeleteAllForUserAsync(user, ct);
         var id = InvitationId.Create();
-        
+
         var invitation = Invitation.CreateFor(user, id, CreateLink(id), DateTime.UtcNow.AddHours(1));
         await _invitationRepository.AddAsync(invitation, ct);
 

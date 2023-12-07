@@ -31,4 +31,7 @@ internal sealed class ProjectRepository : IProjectRepository
         _projects.Remove(project);
         return Task.CompletedTask;
     }
+
+    public Task<bool> IsNameUniqueAsync(ProjectName requestName, CancellationToken cancellationToken) 
+        => _projects.AllAsync(p => p.Name != requestName, cancellationToken);
 }
