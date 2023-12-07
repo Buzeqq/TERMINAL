@@ -37,13 +37,13 @@ internal sealed class ConvertDtoService : IConvertDtoService
                 {
                     CreateSampleDecimalParameterValueDto @decimal 
                         => new DecimalParameterValue(id, await _parameterRepository.GetAsync<DecimalParameter>(@decimal.Id, ct) 
-                                                     ?? throw new ParameterNotFoundException(@decimal.Id), @decimal.Value),
+                                                     ?? throw new ParameterNotFoundException(), @decimal.Value),
                     CreateSampleIntegerParameterValueDto integer 
                         => new IntegerParameterValue(id, await _parameterRepository.GetAsync<IntegerParameter>(integer.Id, ct) 
-                                                         ?? throw new ParameterNotFoundException(integer.Id), integer.Value),
+                                                         ?? throw new ParameterNotFoundException(), integer.Value),
                     CreateSampleTextParameterValueDto text 
                         => new TextParameterValue(id, await _parameterRepository.GetAsync<TextParameter>(text.Id, ct) 
-                                                      ?? throw new ParameterNotFoundException(text.Id), text.Value),
+                                                      ?? throw new ParameterNotFoundException(), text.Value),
                     _ => throw new UnknownParameterTypeException(parameterDto)
                 };
                 

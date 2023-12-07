@@ -18,7 +18,7 @@ export class ExportService {
   }
 
   private groupParametersInColumns(details: SampleDetails): Record<string, ParameterValue[]> {
-    const dict : Record<string,ParameterValue[]> = {};
+    const dict : Record<string, ParameterValue[]> = {};
 
     details.steps.forEach(s => {
       s.parameters.forEach(p => {

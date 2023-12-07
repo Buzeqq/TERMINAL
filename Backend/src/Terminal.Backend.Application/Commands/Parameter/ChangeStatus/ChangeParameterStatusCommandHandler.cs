@@ -20,7 +20,7 @@ internal class ChangeParameterStatusCommandHandler : IRequestHandler<ChangeParam
 
         if (parameter is null)
         {
-            throw new ParameterNotFoundException(id);
+            throw new ParameterNotFoundException();
         }
 
         parameter.ChangeStatus(status);
