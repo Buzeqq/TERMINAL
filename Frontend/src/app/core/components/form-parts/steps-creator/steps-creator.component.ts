@@ -15,7 +15,7 @@ import { Subscription } from "rxjs";
   templateUrl: './steps-creator.component.html',
   styleUrls: ['./steps-creator.component.scss']
 })
-export class StepsCreatorComponent implements AfterViewInit, OnDestroy {
+export class StepsCreatorComponent implements OnInit, OnDestroy {
   @Input({ required: true })
   stepsControls: FormArray<StepFormArray> = new FormArray<StepFormArray>([]);
   selectedTabIndex: number = 0;
@@ -64,6 +64,8 @@ export class StepsCreatorComponent implements AfterViewInit, OnDestroy {
     this.stepsControls.removeAt(i);
   }
   addTab(selectedTabIndex: number) {
+    if (this.parameters.length === 0) return;
+
     const t = this.stepsControls.at(selectedTabIndex).controls.parameters as FormArray<ParameterFormControl>;
     const parameterControls = new FormArray<ParameterFormControl>([]);
     for (const p of t.controls) {
@@ -90,7 +92,7 @@ export class StepsCreatorComponent implements AfterViewInit, OnDestroy {
     this.subscriptions.forEach(s => s.unsubscribe());
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     if (!this.stepsControls.controls.at(0)) return;
     this.subscriptions.push(...this.setupFormService.setParents(this.stepsControls.controls.at(0)!.controls.parameters, this.parameters));
   }

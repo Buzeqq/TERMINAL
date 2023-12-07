@@ -156,13 +156,14 @@ export class AddSampleComponent implements OnInit, OnDestroy {
           id: sampleId
         };
 
-        const projectId = p['projectId'];
-        if (projectId)
-          this.projectService.getProject(projectId)
-            .subscribe(p => {
-              this.sampleForm.controls.project.setItem({id: p.id, name: p.name}, null);
-              this.sampleForm.controls.project.setValue(p.name);
-            })
+        // const projectId = p['projectId'];
+        // if (projectId) {
+        //   this.projectService.getProject(projectId)
+        //     .subscribe(p => {
+        //       this.sampleForm.controls.project.setItem({id: p.id, name: p.name}, null);
+        //       this.sampleForm.controls.project.setValue(p.name);
+        //     });
+        // }
 
         return undefined;
       }),
@@ -225,13 +226,13 @@ export class AddSampleComponent implements OnInit, OnDestroy {
       const step = new FormGroup<{comment: CommentFormControl, parameters: FormArray<ParameterFormControl>}>({
         comment: new FormControl(d.comment),
         parameters: new FormArray<ParameterFormControl>(s.parameters.sort((pv1, pv2) => {
-          const p1 = this.parameters.find(p => p.name === pv1.name)!;
-          const p2 = this.parameters.find(p => p.name === pv2.name)!;
+          const p1 = this.parameters.find(p => p.id === pv1.id)!;
+          const p2 = this.parameters.find(p => p.id === pv2.id)!;
 
           return p1?.order - p2?.order;
         })
           .map(p1 => new ComplexTypeFormControl<Parameter>(
-            this.parameters.find(p2 => p1.name === p2.name)!, p1.value
+            this.parameters.find(p2 => p1.id   === p2.id)!, p1.value
           )))
       });
       this.sampleForm.controls.steps.push(step);
@@ -242,14 +243,15 @@ export class AddSampleComponent implements OnInit, OnDestroy {
   private addMissingParameterValues(d: ReplicationData) {
     for (const s of d.steps) {
       const missingParameter = this.parameters.filter(p =>
-        !s.parameters.find(pv => pv.name === p.name));
+        !s.parameters.find(pv => pv.id === p.id));
 
       s.parameters.push(...missingParameter.map(p => ({
+        id: p.id,
         $type: p.$type,
         value: p.defaultValue,
         name: p.name,
         unit: p.$type !== 'text' ? '' : (p as NumericParameter).unit,
-      } as ParameterValue)));
+      })));
     }
   }
 }

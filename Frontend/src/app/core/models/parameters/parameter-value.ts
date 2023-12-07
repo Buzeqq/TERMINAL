@@ -1,6 +1,7 @@
 export interface ParameterValue {
-  $type: string
-  value: number | string | null
-  unit: string
-  name: string
+  $type: string;
+  id: string;
+  value: number | string | null;
+  unit: string;
+  name: string;
 }

@@ -66,9 +66,9 @@ public static class Extensions
             {
                 GetSampleBaseParameterValueDto b = p switch
                 {
-                    DecimalParameterValue d => new GetSampleDecimalParameterValueDto(d.Parameter.Name, d.Value, (d.Parameter as DecimalParameter)!.Unit),
-                    IntegerParameterValue i => new GetSampleIntegerParameterValueDto(i.Parameter.Name, i.Value, (i.Parameter as IntegerParameter)!.Unit),
-                    TextParameterValue t => new GetSampleTextParameterValueDto(t.Parameter.Name, t.Value),
+                    DecimalParameterValue d => new GetSampleDecimalParameterValueDto(d.Parameter.Id, d.Parameter.Name, d.Value, (d.Parameter as DecimalParameter)!.Unit),
+                    IntegerParameterValue i => new GetSampleIntegerParameterValueDto(i.Parameter.Id, i.Parameter.Name, i.Value, (i.Parameter as IntegerParameter)!.Unit),
+                    TextParameterValue t => new GetSampleTextParameterValueDto(t.Parameter.Id, t.Parameter.Name, t.Value),
                     _ => throw new ArgumentOutOfRangeException(nameof(p))
                 };
                 return b;
@@ -80,9 +80,9 @@ public static class Extensions
             {
                 GetSampleBaseParameterValueDto b = p switch
                 {
-                    DecimalParameterValue d => new GetSampleDecimalParameterValueDto(d.Parameter.Name, d.Value, (d.Parameter as DecimalParameter)!.Unit),
-                    IntegerParameterValue i => new GetSampleIntegerParameterValueDto(i.Parameter.Name, i.Value, (i.Parameter as IntegerParameter)!.Unit),
-                    TextParameterValue t => new GetSampleTextParameterValueDto(t.Parameter.Name, t.Value),
+                    DecimalParameterValue d => new GetSampleDecimalParameterValueDto(d.Parameter.Id, d.Parameter.Name, d.Value, (d.Parameter as DecimalParameter)!.Unit),
+                    IntegerParameterValue i => new GetSampleIntegerParameterValueDto(i.Parameter.Id, i.Parameter.Name, i.Value, (i.Parameter as IntegerParameter)!.Unit),
+                    TextParameterValue t => new GetSampleTextParameterValueDto(t.Parameter.Id, t.Parameter.Name, t.Value),
                     _ => throw new ArgumentOutOfRangeException(nameof(p))
                 };
                 return b;
