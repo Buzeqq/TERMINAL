@@ -29,7 +29,9 @@ internal sealed class UserRepository : IUserRepository
     }
 
     public Task<User?> GetAsync(UserId id, CancellationToken cancellationToken)
-        => _users.SingleOrDefaultAsync(u => u.Id == id, cancellationToken);
+        => _users
+            .Include(u => u.Role)
+            .SingleOrDefaultAsync(u => u.Id == id, cancellationToken);
 
     public Task DeleteAsync(User user, CancellationToken cancellationToken)
     {

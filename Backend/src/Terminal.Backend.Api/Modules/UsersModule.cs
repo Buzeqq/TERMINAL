@@ -1,13 +1,12 @@
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Api.Swagger;
 using Terminal.Backend.Application.Commands.Users.Create;
 using Terminal.Backend.Application.Commands.Users.Delete;
 using Terminal.Backend.Application.Commands.Users.Invitations;
 using Terminal.Backend.Application.Commands.Users.Login;
+using Terminal.Backend.Application.Commands.Users.Refresh;
 using Terminal.Backend.Application.Commands.Users.Update.Email;
 using Terminal.Backend.Application.Commands.Users.Update.Password;
 using Terminal.Backend.Application.Commands.Users.Update.Password.WithAdminPrivileges;
@@ -137,21 +136,21 @@ public static class UsersModule
             .WithTags(SwaggerSetup.UserTag);
         
         app.MapPatch(ApiBaseRoute + "/password", async (
-                ClaimsPrincipal claims,
-                ISender sender,
-                [FromBody] UpdateUserPasswordUserCommand command,
-                CancellationToken ct) =>
+            ClaimsPrincipal claims,
+            ISender sender,
+            [FromBody] UpdateUserPasswordUserCommand command,
+            CancellationToken ct) =>
+        {
+            var id = claims.GetUserId();
+            if (id is null)
             {
-                if (!Guid.TryParse(claims.Claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value,
-                        out var id))
-                {
-                    return Results.BadRequest();
-                }
-                
-                command = command with { Id = id };
-                await sender.Send(command, ct);
-                return Results.Ok();
-            }).RequireAuthorization(Role.Registered)
+                return Results.BadRequest();
+            }
+            
+            command = command with { Id = id };
+            await sender.Send(command, ct);
+            return Results.Ok();
+        }).RequireAuthorization(Role.Registered)
             .WithTags(SwaggerSetup.UserTag);
         
         app.MapPatch(ApiBaseRoute + "/{id:guid}/role", async (
@@ -164,6 +163,23 @@ public static class UsersModule
             await sender.Send(command, ct);
             return Results.Ok();
         }).RequireAuthorization(Role.Administrator)
+            .WithTags(SwaggerSetup.UserTag);
+
+        app.MapPost(ApiBaseRoute + "/refresh", async (
+            ClaimsPrincipal claimsPrincipal,
+            ISender sender,
+            CancellationToken ct) =>
+        {
+            var id = claimsPrincipal.GetUserId();
+            if (id is null)
+            {
+                return Results.BadRequest();
+            }
+
+            var command = new RefreshTokenCommand(id.Value);
+            var token = await sender.Send(command, ct);
+            return Results.Ok(token);
+        }).RequireAuthorization(Role.Registered)
             .WithTags(SwaggerSetup.UserTag);
     }
 }

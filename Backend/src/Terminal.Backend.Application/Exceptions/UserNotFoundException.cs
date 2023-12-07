@@ -1,5 +1,4 @@
 using Terminal.Backend.Core.Exceptions;
-using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Exceptions;
 
