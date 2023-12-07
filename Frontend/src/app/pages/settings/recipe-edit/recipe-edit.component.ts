@@ -6,6 +6,9 @@ import {whitespaceValidator} from "../../../core/components/validators/whitespac
 import {RecipesService} from "../../../core/services/recipes/recipes.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {RecipeDetails} from "../../../core/models/recipes/recipeDetails";
+import {NotificationService} from "../../../core/services/notification/notification.service";
+import {MatDialog} from "@angular/material/dialog";
+import {DeleteDialogComponent} from "../../../core/components/dialogs/delete-dialog/delete-dialog.component";
 
 @Component({
   selector: 'app-recipe-edit',
@@ -22,7 +25,8 @@ export class RecipeEditComponent {
 
   constructor(
     private readonly recipeService: RecipesService,
-    private readonly snackBar: MatSnackBar,
+    private readonly notificationService: NotificationService,
+    private readonly dialog: MatDialog,
   ) {  }
 
   @Input()
@@ -36,9 +40,7 @@ export class RecipeEditComponent {
       .pipe(
         catchError((err, _) => {
           console.log(err);
-          this.snackBar.open('Failed to load recipe', 'Close', {
-            duration: 3000
-          });
+          this.notificationService.notifyError('Failed to load recipe');
           return EMPTY;
         }),
         tap(r => {
@@ -63,5 +65,17 @@ export class RecipeEditComponent {
 
   editRecipe() {
     // TODO send a request with new form values
+  }
+
+  deleteRecipe() {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: {
+        title: `Delete Recipe ${this.recipeDetails?.name}`,
+        message: 'Attention! This action is irreversible.'
+      }});
+    dialogRef.afterClosed().subscribe(deleteConfirmed => {
+      if (deleteConfirmed)
+        this.recipeService.deleteRecipe(this._recipeId!, this.recipeDetails!.name).subscribe();
+    })
   }
 }

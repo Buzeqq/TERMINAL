@@ -1,6 +1,6 @@
 <ng-container *ngIf="recipeDetails$ | async; let details">
   <mat-card-header>
-    <mat-card-title class="recipe-edit__header">Edit Recipe {{ details.name }}</mat-card-title>
+    <mat-card-title class="recipe-edit__header">Recipe {{ details.name }}</mat-card-title>
   </mat-card-header>
   <mat-divider></mat-divider>
   <mat-card-content class="recipe-edit">
@@ -30,6 +30,12 @@
                 (click)="editRecipe()"
                 [disabled]="!readyToSubmit()">
           Submit changes
+        </button>
+      </section>
+      <section>
+        <button mat-raised-button color="warn"
+                (click)="deleteRecipe()">
+          Delete
         </button>
       </section>
     </mat-card-actions>
