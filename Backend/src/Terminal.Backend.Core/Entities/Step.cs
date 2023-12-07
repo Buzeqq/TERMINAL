@@ -21,6 +21,17 @@ public abstract class Step
         Id = id;
         Comment = comment;
     }
+    
+    public void Update(IEnumerable<ParameterValue> parameters, Comment comment)
+    {
+        Comment = comment;
+        var mergedParameters = Parameters.Join(parameters, p => p.Parameter.Id,
+            p => p.Parameter.Id, (p1, p2) => new Tuple<ParameterValue, ParameterValue>(p1, p2));
+        foreach (var (oldParameterValue, newParameterValue) in mergedParameters)
+        {
+            oldParameterValue.Update(newParameterValue);
+        }
+    }
 }
 
 public sealed class SampleStep : Step

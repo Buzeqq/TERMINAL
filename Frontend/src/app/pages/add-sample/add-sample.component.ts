@@ -69,40 +69,7 @@ export class AddSampleComponent implements OnInit, OnDestroy {
 
   private readonly subscriptions: Subscription[] = [];
 
-  replicationData$ = this.activatedRoute.queryParams.pipe(
-    map((p: Params): ReplicateQuery | undefined => {
-      const recipeId = p['recipeId'];
-      if (recipeId) return {
-        type: 'Recipe',
-        id: recipeId,
-      };
-
-      const sampleId = p['sampleId'];
-      if (sampleId) return {
-        type: 'Sample',
-        id: sampleId
-      };
-
-      const projectId = p['projectId'];
-      if (projectId)
-        this.projectService.getProject(projectId)
-          .subscribe(p => {
-            this.sampleForm.controls.project.setItem({id: p.id, name: p.name}, null);
-            this.sampleForm.controls.project.setValue(p.name);
-          })
-
-      return undefined;
-    }),
-    filter(q => q !== undefined),
-    switchMap(q => this.replicationService.getReplicationData(q!)),
-    tap(d => {
-      // form will automatically fill
-      if (d.type === 'Recipe') {
-        this.sampleForm.controls.recipe.setItem({ name: d.basedOn.name, id: d.basedOn.id } as Recipe, d.basedOn.name);
-      }
-      this.fillForm(d);
-    })
-  );
+  replicationData$ = new Observable<ReplicationData>();
 
 
   ngOnInit(): void {
@@ -174,6 +141,42 @@ export class AddSampleComponent implements OnInit, OnDestroy {
       .subscribe());
 
     this.sampleForm.controls.recipe.setItem(null, 'None');
+
+    this.replicationData$ = this.activatedRoute.queryParams.pipe(
+      map((p: Params): ReplicateQuery | undefined => {
+        const recipeId = p['recipeId'];
+        if (recipeId) return {
+          type: 'Recipe',
+          id: recipeId,
+        };
+
+        const sampleId = p['sampleId'];
+        if (sampleId) return {
+          type: 'Sample',
+          id: sampleId
+        };
+
+        // const projectId = p['projectId'];
+        // if (projectId) {
+        //   this.projectService.getProject(projectId)
+        //     .subscribe(p => {
+        //       this.sampleForm.controls.project.setItem({id: p.id, name: p.name}, null);
+        //       this.sampleForm.controls.project.setValue(p.name);
+        //     });
+        // }
+
+        return undefined;
+      }),
+      filter(q => q !== undefined),
+      switchMap(q => this.replicationService.getReplicationData(q!)),
+      tap(d => {
+        // form will automatically fill
+        if (d.type === 'Recipe') {
+          this.sampleForm.controls.recipe.setItem({ name: d.basedOn.name, id: d.basedOn.id } as Recipe, d.basedOn.name);
+        }
+        this.fillForm(d);
+      })
+    );
   }
 
   ngOnDestroy(): void {
@@ -223,13 +226,13 @@ export class AddSampleComponent implements OnInit, OnDestroy {
       const step = new FormGroup<{comment: CommentFormControl, parameters: FormArray<ParameterFormControl>}>({
         comment: new FormControl(d.comment),
         parameters: new FormArray<ParameterFormControl>(s.parameters.sort((pv1, pv2) => {
-          const p1 = this.parameters.find(p => p.name === pv1.name)!;
-          const p2 = this.parameters.find(p => p.name === pv2.name)!;
+          const p1 = this.parameters.find(p => p.id === pv1.id)!;
+          const p2 = this.parameters.find(p => p.id === pv2.id)!;
 
           return p1?.order - p2?.order;
         })
           .map(p1 => new ComplexTypeFormControl<Parameter>(
-            this.parameters.find(p2 => p1.name === p2.name)!, p1.value
+            this.parameters.find(p2 => p1.id   === p2.id)!, p1.value
           )))
       });
       this.sampleForm.controls.steps.push(step);
@@ -240,14 +243,15 @@ export class AddSampleComponent implements OnInit, OnDestroy {
   private addMissingParameterValues(d: ReplicationData) {
     for (const s of d.steps) {
       const missingParameter = this.parameters.filter(p =>
-        !s.parameters.find(pv => pv.name === p.name));
+        !s.parameters.find(pv => pv.id === p.id));
 
       s.parameters.push(...missingParameter.map(p => ({
+        id: p.id,
         $type: p.$type,
         value: p.defaultValue,
         name: p.name,
         unit: p.$type !== 'text' ? '' : (p as NumericParameter).unit,
-      } as ParameterValue)));
+      })));
     }
   }
 }

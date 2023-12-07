@@ -47,46 +47,48 @@ public static class Extensions
     public static GetTagDto AsGetTagDto(this Tag entity)
         => new(entity.Id, entity.Name, entity.IsActive);
     
-    // public static GetSampleDto AsGetSampleDto(this Sample entity)
-    //     => new()
-    //     {
-    //         Id = entity.Id,
-    //         ProjectId = entity.Project.Id,
-    //         RecipeId = entity.Recipe?.Id.Value,
-    //         Code = entity.Code.Value,
-    //         Comment = entity.Comment.Value,
-    //         CreatedAtUtc = entity.CreatedAtUtc.ToString("o"),
-    //         Steps = entity.Steps.Select(s => s.Id),
-    //         Tags = entity.Tags.Select(t => t.Name.Value)
-    //     };
+    public static GetSampleDto AsGetSampleDto(this Sample entity)
+        => new()
+        { 
+            Id = entity.Id.Value,
+            ProjectId = entity.Project.Id.Value,
+            Recipe = entity.Recipe?.AsDto(),
+            Code = entity.Code.Value,
+            Comment = entity.Comment.Value,
+            CreatedAtUtc = entity.CreatedAtUtc.ToString("o"),
+            Steps = entity.Steps.AsStepsDto(),
+            Tags = entity.Tags.Select(t => new GetTagsDto.TagDto(t.Id, t.Name))
+        };
 
-    public static IEnumerable<GetSampleStepsDto> AsStepsDto(this IEnumerable<SampleStep> steps)
+    public static IEnumerable<GetSampleStepsDto> AsStepsDto<TStep>(this IEnumerable<TStep> steps)
+    where TStep: Step
         => steps.Select(s => new GetSampleStepsDto(
+            s.Id,
             s.Parameters.Select(p =>
             {
                 GetSampleBaseParameterValueDto b = p switch
                 {
-                    DecimalParameterValue d => new GetSampleDecimalParameterValueDto(d.Parameter.Name, d.Value, (d.Parameter as DecimalParameter)!.Unit),
-                    IntegerParameterValue i => new GetSampleIntegerParameterValueDto(i.Parameter.Name, i.Value, (i.Parameter as IntegerParameter)!.Unit),
-                    TextParameterValue t => new GetSampleTextParameterValueDto(t.Parameter.Name, t.Value),
+                    DecimalParameterValue d => new GetSampleDecimalParameterValueDto(d.Parameter.Id, d.Parameter.Name, d.Value, (d.Parameter as DecimalParameter)!.Unit),
+                    IntegerParameterValue i => new GetSampleIntegerParameterValueDto(i.Parameter.Id, i.Parameter.Name, i.Value, (i.Parameter as IntegerParameter)!.Unit),
+                    TextParameterValue t => new GetSampleTextParameterValueDto(t.Parameter.Id, t.Parameter.Name, t.Value),
                     _ => throw new ArgumentOutOfRangeException(nameof(p))
                 };
                 return b;
             }), s.Comment));
     
-    public static IEnumerable<GetSampleStepsDto> AsStepsDto(this IEnumerable<RecipeStep> steps)
-        => steps.Select(s => new GetSampleStepsDto(
-            s.Parameters.Select(p =>
-            {
-                GetSampleBaseParameterValueDto b = p switch
-                {
-                    DecimalParameterValue d => new GetSampleDecimalParameterValueDto(d.Parameter.Name, d.Value, (d.Parameter as DecimalParameter)!.Unit),
-                    IntegerParameterValue i => new GetSampleIntegerParameterValueDto(i.Parameter.Name, i.Value, (i.Parameter as IntegerParameter)!.Unit),
-                    TextParameterValue t => new GetSampleTextParameterValueDto(t.Parameter.Name, t.Value),
-                    _ => throw new ArgumentOutOfRangeException(nameof(p))
-                };
-                return b;
-            }), s.Comment));
+    // public static IEnumerable<GetSampleStepsDto> AsStepsDto(this IEnumerable<RecipeStep> steps)
+    //     => steps.Select(s => new GetSampleStepsDto(
+    //         s.Parameters.Select(p =>
+    //         {
+    //             GetSampleBaseParameterValueDto b = p switch
+    //             {
+    //                 DecimalParameterValue d => new GetSampleDecimalParameterValueDto(d.Parameter.Id, d.Parameter.Name, d.Value, (d.Parameter as DecimalParameter)!.Unit),
+    //                 IntegerParameterValue i => new GetSampleIntegerParameterValueDto(i.Parameter.Id, i.Parameter.Name, i.Value, (i.Parameter as IntegerParameter)!.Unit),
+    //                 TextParameterValue t => new GetSampleTextParameterValueDto(t.Parameter.Id, t.Parameter.Name, t.Value),
+    //                 _ => throw new ArgumentOutOfRangeException(nameof(p))
+    //             };
+    //             return b;
+    //         }), s.Comment));
 
     public static GetUserDto AsGetUserDto(this User entity)
         => new()

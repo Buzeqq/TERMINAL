@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import {
   CommentFormControl,
@@ -64,6 +64,8 @@ export class StepsCreatorComponent implements OnInit, OnDestroy {
     this.stepsControls.removeAt(i);
   }
   addTab(selectedTabIndex: number) {
+    if (this.parameters.length === 0) return;
+
     const t = this.stepsControls.at(selectedTabIndex).controls.parameters as FormArray<ParameterFormControl>;
     const parameterControls = new FormArray<ParameterFormControl>([]);
     for (const p of t.controls) {
@@ -91,6 +93,7 @@ export class StepsCreatorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    if (!this.stepsControls.controls.at(0)) return;
     this.subscriptions.push(...this.setupFormService.setParents(this.stepsControls.controls.at(0)!.controls.parameters, this.parameters));
   }
 }

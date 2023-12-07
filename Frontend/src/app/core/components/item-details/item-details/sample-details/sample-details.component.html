@@ -7,7 +7,7 @@
       <div class="sample-details__label">Tags: </div>
       <div>
         <mat-chip-set>
-          <mat-chip *ngFor="let tag of details.tags">{{tag}}</mat-chip>
+          <mat-chip *ngFor="let tag of details.tags">{{tag.name}}</mat-chip>
         </mat-chip-set>
       </div>
       <ng-container *ngIf="details.recipe as recipe">

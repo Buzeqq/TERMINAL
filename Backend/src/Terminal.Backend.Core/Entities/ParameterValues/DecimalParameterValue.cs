@@ -1,4 +1,3 @@
-using System.Reflection;
 using Terminal.Backend.Core.Entities.Parameters;
 using Terminal.Backend.Core.Exceptions;
 using Terminal.Backend.Core.ValueObjects;
@@ -31,12 +30,18 @@ public sealed class DecimalParameterValue : ParameterValue
             ?? throw new ParameterValueCopyException(typeof(DecimalParameter), Parameter.GetType()),
             Value);
     }
-}
 
-public class ParameterValueCopyException : TerminalException 
-{
-    public ParameterValueCopyException(MemberInfo parameterValueParameter, MemberInfo castedParameter) 
-        : base($"Cannot cast {castedParameter.Name} to {parameterValueParameter.Name}")
+    public override void Update(ParameterValue newParameterValue)
     {
+        if (newParameterValue is not DecimalParameterValue newDecimalParameterValue) return;
+
+        var decimalParameter = (DecimalParameter)Parameter;
+        var value = newDecimalParameterValue.Value;
+        if (value % decimalParameter.Step != 0)
+        {
+            throw new DecimalParameterValueNotValidException(decimalParameter, value);
+        }
+        
+        Value = value;
     }
 }

@@ -2,7 +2,7 @@ using Terminal.Backend.Application.DTO.ParameterValues;
 
 namespace Terminal.Backend.Application.DTO.Samples;
 
-public sealed record GetSampleStepsDto(
+public sealed record UpdateSampleStepDto(
     Guid Id,
-    IEnumerable<GetSampleBaseParameterValueDto> Parameters,
+    IEnumerable<CreateSampleBaseParameterValueDto> Parameters,
     string Comment);

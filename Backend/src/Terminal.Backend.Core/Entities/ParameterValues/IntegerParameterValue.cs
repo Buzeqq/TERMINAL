@@ -30,4 +30,18 @@ public sealed class IntegerParameterValue : ParameterValue
             ?? throw new ParameterValueCopyException(typeof(IntegerParameter), Parameter.GetType()),
             Value);
     }
+
+    public override void Update(ParameterValue newParameterValue)
+    {
+        if (newParameterValue is not IntegerParameterValue newIntegerParameterValue) return;
+
+        var integerParameter = (IntegerParameter)Parameter;
+        var value = newIntegerParameterValue.Value;
+        if (value % integerParameter.Step != 0)
+        {
+            throw new IntegerParameterValueNotValidException(integerParameter, value);
+        }
+        
+        Value = value;
+    }
 }
