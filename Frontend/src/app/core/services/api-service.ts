@@ -28,8 +28,8 @@ export abstract class ApiService {
     return this.http.post<T>(this.apiUrl + endpoint, body);
   }
 
-  protected put<T>(endpoint: string, body: any): Observable<T> {
-    return this.http.put<T>(this.apiUrl + endpoint, body);
+  protected patch<T>(endpoint: string, body: any): Observable<T> {
+    return this.http.patch<T>(this.apiUrl + endpoint, body);
   }
 
   protected delete<T>(endpoint: string): Observable<T> {

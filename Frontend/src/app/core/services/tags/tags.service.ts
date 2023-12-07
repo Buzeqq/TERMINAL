@@ -49,4 +49,37 @@ export class TagsService extends ApiService {
         })
       )
   }
+
+  updateTag(id: string | undefined, data: {name: string | null}) {
+    return this.patch(`tags/${id}`, data)
+      .pipe(
+        tap(_ => this.notificationService.notifySuccess(`Tag updated`)),
+        catchError(_ => {
+          this.notificationService.notifyError(`Failed updating tag`);
+          return EMPTY;
+        })
+      );
+  }
+
+  activateTag(id: string | undefined) {
+    return this.post(`tags/${id}/activate`, {})
+      .pipe(
+        tap(_ => this.notificationService.notifySuccess(`Tag updated`)),
+        catchError(_ => {
+          this.notificationService.notifyError(`Failed updating tag`);
+          return EMPTY;
+        })
+      );
+  }
+
+  deactivateTag(id: string | undefined) {
+    return this.post(`tags/${id}/deactivate`, {})
+      .pipe(
+        tap(_ => this.notificationService.notifySuccess(`Tag updated`)),
+        catchError(_ => {
+          this.notificationService.notifyError(`Failed updating tag`);
+          return EMPTY;
+        })
+      );
+  }
 }

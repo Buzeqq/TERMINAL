@@ -74,4 +74,37 @@ export class ProjectsService extends ApiService {
         })
       );
   }
+
+  activateProject(id: string | undefined) {
+    return this.post(`projects/${id}/activate`, {})
+      .pipe(
+        tap(_ => this.notificationService.notifySuccess(`Project updated`)),
+        catchError(_ => {
+          this.notificationService.notifyError(`Failed updating project`);
+          return EMPTY;
+        })
+      );
+  }
+
+  deactivateProject(id: string | undefined) {
+    return this.post(`projects/${id}/deactivate`, {})
+      .pipe(
+        tap(_ => this.notificationService.notifySuccess(`Project updated`)),
+        catchError(_ => {
+          this.notificationService.notifyError(`Failed updating project`);
+          return EMPTY;
+        })
+      );
+  }
+
+  updateProject(id: string | undefined, data: {name: string | null}) {
+    return this.patch(`projects/${id}`, data)
+      .pipe(
+        tap(_ => this.notificationService.notifySuccess(`Project updated`)),
+        catchError(_ => {
+          this.notificationService.notifyError(`Failed updating project`);
+          return EMPTY;
+        })
+      );
+  }
 }

@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {catchError, EMPTY, Observable, tap} from "rxjs";
+import {catchError, EMPTY, firstValueFrom, Observable, tap} from "rxjs";
 import {FormControl, Validators} from "@angular/forms";
 import {whitespaceValidator} from "../../../core/components/validators/whitespaceValidator";
 import {Project} from "../../../core/models/projects/project";
@@ -72,8 +72,15 @@ export class ProjectEditComponent {
       || this.projectDetails!.isActive !== this.isActiveToggleButton.value
   }
 
-  editProject() {
-    // TODO send a request with new form values
+  async editProject() {
+    if (this.projectDetails!.name != this.projectNameFormControl.value)
+      await firstValueFrom(this.projectService
+        .updateProject(this._projectId, {name: this.projectNameFormControl.value}));
+
+    if (this.projectDetails!.isActive != this.isActiveToggleButton.value)
+      await firstValueFrom(this.isActiveToggleButton.value ?
+        this.projectService.activateProject(this._projectId) :
+        this.projectService.deactivateProject(this._projectId));
   }
 
   deleteProject() {
