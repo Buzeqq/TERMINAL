@@ -6,7 +6,7 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <p *ngIf="replicationData$ | async as d">Adding sample based on: {{d.basedOn}}</p>
+    <p *ngIf="replicationData$ | async as d">Adding sample based on: {{d.basedOn.name}}</p>
     <form class="add-sample__main" [formGroup]="sampleForm" *ngIf="formData$ | async as formData else loading;">
       <mat-card>
         <mat-form-field>

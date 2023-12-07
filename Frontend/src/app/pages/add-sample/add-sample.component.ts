@@ -97,8 +97,10 @@ export class AddSampleComponent implements OnInit, OnDestroy {
     switchMap(q => this.replicationService.getReplicationData(q!)),
     tap(d => {
       // form will automatically fill
-      this.sampleForm.controls.recipe.setItem(d.recipe, null);
-      this.sampleForm.controls.recipe.setValue(d.recipe.name);
+      if (d.type === 'Recipe') {
+        this.sampleForm.controls.recipe.setItem({ name: d.basedOn.name, id: d.basedOn.id } as Recipe, d.basedOn.name);
+      }
+      this.fillForm(d);
     })
   );
 
@@ -217,7 +219,7 @@ export class AddSampleComponent implements OnInit, OnDestroy {
   private fillForm(d: ReplicationData) {
     this.sampleForm.controls.steps.clear();
     this.addMissingParameterValues(d); // when choosing recipe, that doesn't contain value for child controls it's should be added to form
-    for (const s of d.recipe.steps) {
+    for (const s of d.steps) {
       const step = new FormGroup<{comment: CommentFormControl, parameters: FormArray<ParameterFormControl>}>({
         comment: new FormControl(d.comment),
         parameters: new FormArray<ParameterFormControl>(s.parameters.sort((pv1, pv2) => {
@@ -236,7 +238,7 @@ export class AddSampleComponent implements OnInit, OnDestroy {
   }
 
   private addMissingParameterValues(d: ReplicationData) {
-    for (const s of d.recipe.steps) {
+    for (const s of d.steps) {
       const missingParameter = this.parameters.filter(p =>
         !s.parameters.find(pv => pv.name === p.name));
 
