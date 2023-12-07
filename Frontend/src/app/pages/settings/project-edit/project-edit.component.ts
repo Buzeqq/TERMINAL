@@ -79,7 +79,7 @@ export class ProjectEditComponent {
   deleteProject() {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       data: {
-        title: `Delete project ${this.projectDetails?.name}`,
+        title: `Delete Project ${this.projectDetails?.name}`,
         message: 'Attention! This action is irreversible. Deleting a project also deletes all included samples.'
       }});
     dialogRef.afterClosed().subscribe(deleteConfirmed => {

@@ -1,6 +1,6 @@
 <ng-container *ngIf="tagDetails$ | async; let details">
   <mat-card-header>
-    <mat-card-title class="tag-edit__header">Edit Tag {{ details.name }}</mat-card-title>
+    <mat-card-title class="tag-edit__header">Tag {{ details.name }}</mat-card-title>
   </mat-card-header>
   <mat-divider></mat-divider>
   <mat-card-content class="tag-edit">
@@ -42,6 +42,12 @@
                 (click)="editTag()"
                 [disabled]="!readyToSubmit()">
           Submit changes
+        </button>
+      </section>
+      <section>
+        <button mat-raised-button color="warn"
+                (click)="deleteTag()">
+          Delete
         </button>
       </section>
     </mat-card-actions>

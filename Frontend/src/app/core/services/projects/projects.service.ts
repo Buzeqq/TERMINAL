@@ -68,8 +68,8 @@ export class ProjectsService extends ApiService {
     return this.delete(`projects/${id}`)
       .pipe(
         tap(_ => this.notificationService.notifySuccess(`Deleted project ${name}`)),
-        catchError((err, _) => {
-          this.notificationService.notifyError(err)
+        catchError(_ => {
+          this.notificationService.notifyError(`Failed deletion of project ${name}`);
           return EMPTY;
         })
       );

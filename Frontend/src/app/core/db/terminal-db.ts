@@ -14,7 +14,7 @@ export class TerminalDB extends Dexie {
     fields provided in schema are indexed,
     other fields included in tables are not indexed, just stored
     */
-    this.version(1).stores(
+    this.version(7).stores(
       {
         samples: 'id, &code, createdAtUtc, projectId, projectName',
         projects: 'id, &name, isActive',
