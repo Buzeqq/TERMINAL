@@ -1,6 +1,6 @@
 <ng-container *ngIf="sampleDetails$ | async; let sampleDetails">
   <mat-card-header>
-    <mat-card-title class="sample-edit__header">Edit Sample {{sampleDetails.code}}</mat-card-title>
+    <mat-card-title class="sample-edit__header">Sample {{sampleDetails.code}}</mat-card-title>
   </mat-card-header>
   <mat-divider></mat-divider>
   <mat-card-content class="sample-edit">
@@ -14,23 +14,8 @@
 
     <mat-form-field class="sample-edit__form-fields sample-edit__hint_below">
       <mat-label>Recipe</mat-label>
-      <input #recipeInput [formControl]="sampleForm.controls.recipe" [matAutocomplete]="recipeAutocomplete"
-             matInput placeholder="Choose recipe" type="text">
-      <mat-autocomplete autoActiveFirstOption #recipeAutocomplete requireSelection="true">
-        <mat-option value="None">
-          None
-        </mat-option>
-        <mat-option value="Recipe 1">
-          Recipe 1
-        </mat-option>
-        <mat-option value="Recipe 2">
-          Recipe 2
-        </mat-option>
-        <mat-option value="Recipe 3">
-          Recipe 3
-        </mat-option>
-      </mat-autocomplete>
-      <mat-hint class="sample-edit__hint">Changing the recipe results in a new sample!</mat-hint>
+      <input #recipeInput [formControl]="sampleForm.controls.recipe"
+             matInput type="text">
     </mat-form-field>
 
     <mat-form-field class="sample-edit__form-fields">
@@ -64,15 +49,26 @@
     </mat-form-field>
 
     <mat-card-actions class="sample-edit__form-buttons">
-      <button mat-raised-button color="primary">
-<!--              (click)="resetForm()"-->
-        Reset
-      </button>
-      <button mat-raised-button color="primary"
-              [disabled]="sampleForm.invalid">
-<!--        (click)="editSample()"-->
-        Submit changes
-      </button>
+      <section matTooltip="No changes apllied" [matTooltipDisabled]="dirtyForm()">
+        <button mat-raised-button color="primary"
+                (click)="resetForm()"
+                [disabled]="!dirtyForm()">
+          Reset
+        </button>
+      </section>
+      <section matTooltip="No changes apllied or invalid values are set" [matTooltipDisabled]="readyToSubmit()">
+        <button mat-raised-button color="primary"
+                (click)="editSample()"
+                [disabled]="!readyToSubmit()">
+          Submit changes
+        </button>
+      </section>
+      <section>
+        <button mat-raised-button color="warn"
+                (click)="deleteSample()">
+          Delete
+        </button>
+      </section>
     </mat-card-actions>
 
   </mat-card-content>

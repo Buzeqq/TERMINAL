@@ -1,11 +1,13 @@
 import {Component, Input} from '@angular/core';
 import {catchError, EMPTY, Observable, tap} from "rxjs";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {FormControl, Validators} from "@angular/forms";
 import {whitespaceValidator} from "../../../core/components/validators/whitespaceValidator";
 import {Project} from "../../../core/models/projects/project";
 import {ProjectDetails} from "../../../core/models/projects/project-details";
 import {ProjectsService} from "../../../core/services/projects/projects.service";
+import {MatDialog} from "@angular/material/dialog";
+import {NotificationService} from "../../../core/services/notification/notification.service";
+import {DeleteDialogComponent} from "../../../core/components/dialogs/delete-dialog/delete-dialog.component";
 
 @Component({
   selector: 'app-project-edit',
@@ -30,7 +32,8 @@ export class ProjectEditComponent {
 
   constructor(
     private readonly projectService: ProjectsService,
-    private readonly snackBar: MatSnackBar,
+    private readonly notificationService: NotificationService,
+    private readonly dialog: MatDialog,
   ) {  }
 
   @Input()
@@ -44,9 +47,7 @@ export class ProjectEditComponent {
       .pipe(
         catchError((err, _) => {
           console.log(err);
-          this.snackBar.open('Failed to load project', 'Close', {
-            duration: 3000
-          });
+          this.notificationService.notifyError('Failed to load project');
           return EMPTY;
         }),
         tap(r => {
@@ -73,5 +74,17 @@ export class ProjectEditComponent {
 
   editProject() {
     // TODO send a request with new form values
+  }
+
+  deleteProject() {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: {
+        title: `Delete Project ${this.projectDetails?.name}`,
+        message: 'Attention! This action is irreversible. Deleting a project also deletes all included samples.'
+      }});
+    dialogRef.afterClosed().subscribe(deleteConfirmed => {
+      if (deleteConfirmed)
+        this.projectService.deleteProject(this._projectId!, this.projectDetails!.name).subscribe();
+    })
   }
 }

@@ -4,8 +4,10 @@ import {Tag} from "../../../core/models/tags/tag";
 import {TagDetails} from "../../../core/models/tags/tag-details";
 import {FormControl, Validators} from "@angular/forms";
 import {whitespaceValidator} from "../../../core/components/validators/whitespaceValidator";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {TagsService} from "../../../core/services/tags/tags.service";
+import {DeleteDialogComponent} from "../../../core/components/dialogs/delete-dialog/delete-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
+import {NotificationService} from "../../../core/services/notification/notification.service";
 
 @Component({
   selector: 'app-tag-edit',
@@ -30,7 +32,8 @@ export class TagEditComponent {
 
   constructor(
     private readonly tagsService: TagsService,
-    private readonly snackBar: MatSnackBar,
+    private readonly notificationService: NotificationService,
+    private readonly dialog: MatDialog,
   ) {  }
 
   @Input()
@@ -44,9 +47,7 @@ export class TagEditComponent {
       .pipe(
         catchError((err, _) => {
           console.log(err);
-          this.snackBar.open('Failed to load tag', 'Close', {
-            duration: 3000
-          });
+          this.notificationService.notifyError('Failed to load tag');
           return EMPTY;
         }),
         tap(r => {
@@ -73,5 +74,17 @@ export class TagEditComponent {
 
   editTag() {
     // TODO send a request with new form values
+  }
+
+  deleteTag() {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: {
+        title: `Delete Tag ${this.tagDetails?.name}`,
+        message: 'Attention! This action is irreversible. Deleting a tag removes it from every possible sample.'
+      }});
+    dialogRef.afterClosed().subscribe(deleteConfirmed => {
+      if (deleteConfirmed)
+        this.tagsService.deleteTag(this._tagId!, this.tagDetails!.name).subscribe();
+    })
   }
 }

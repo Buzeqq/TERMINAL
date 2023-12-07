@@ -1,6 +1,6 @@
 <ng-container *ngIf="projectDetails$ | async; let details">
   <mat-card-header>
-    <mat-card-title class="project-edit__header">Edit Project {{ details.name }}</mat-card-title>
+    <mat-card-title class="project-edit__header">Project {{ details.name }}</mat-card-title>
   </mat-card-header>
   <mat-divider></mat-divider>
   <mat-card-content class="project-edit">
@@ -41,6 +41,12 @@
                 (click)="editProject()"
                 [disabled]="!readyToSubmit()">
           Submit changes
+        </button>
+      </section>
+      <section>
+        <button mat-raised-button color="warn"
+                (click)="deleteProject()">
+          Delete
         </button>
       </section>
     </mat-card-actions>

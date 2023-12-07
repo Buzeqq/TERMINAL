@@ -1,5 +1,5 @@
 <div class="add-user-dialog">
-    <h1 class="add-user-dialog__title" mat-dialog-title>Add new project</h1>
+    <h1 class="add-user-dialog__title" mat-dialog-title>Invite new user</h1>
     <mat-form-field class="add-user-dialog__form">
       <mat-label>New user email</mat-label>
         <input matInput type="email" [formControl]="userEmail">
@@ -16,11 +16,11 @@
       <mat-select [formControl]="userRole">
         <mat-option *ngFor="let role of userRoles;" [value]="role">{{role}}</mat-option>
       </mat-select>
-    </mat-form-field>  
+    </mat-form-field>
 
     <mat-card-actions class="add-user-dialog__buttons" *ngIf="!link">
       <button mat-raised-button color="primary" (click)="inviteUser()" [disabled]="form.invalid">
-        Add user
+        Create invitation link
       </button>
     </mat-card-actions>
 
@@ -37,7 +37,6 @@
                     Copy link
                 </button>
             </mat-card-actions>
-        </mat-card>        
+        </mat-card>
     </mat-card-footer>
   </div>
-  

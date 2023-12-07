@@ -39,6 +39,7 @@ import { UserViewsComponent } from './components/item-views/user-views/user-view
 import { StepsCreatorComponent } from './components/form-parts/steps-creator/steps-creator.component';
 import { MatSelectModule } from "@angular/material/select";
 import { MatTabsModule } from "@angular/material/tabs";
+import { DeleteDialogComponent } from './components/dialogs/delete-dialog/delete-dialog.component';
 
 
 @NgModule({
@@ -58,7 +59,8 @@ import { MatTabsModule } from "@angular/material/tabs";
     TagSelectorComponent,
     PrettyjsonPipe,
     UserViewsComponent,
-    StepsCreatorComponent
+    StepsCreatorComponent,
+    DeleteDialogComponent
   ],
   exports: [
     TimeAgoPipe,

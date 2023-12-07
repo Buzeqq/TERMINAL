@@ -63,4 +63,15 @@ export class ProjectsService extends ApiService {
     if (this.online) return this.get<number>('projects/amount');
     else return this.idbService.getProjectsAmount();
   }
+
+  deleteProject(id: string, name:string) {
+    return this.delete(`projects/${id}`)
+      .pipe(
+        tap(_ => this.notificationService.notifySuccess(`Deleted project ${name}`)),
+        catchError(_ => {
+          this.notificationService.notifyError(`Failed deletion of project ${name}`);
+          return EMPTY;
+        })
+      );
+  }
 }

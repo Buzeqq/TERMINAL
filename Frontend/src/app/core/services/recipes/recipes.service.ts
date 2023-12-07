@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from "../api-service";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { map, Observable } from "rxjs";
+import {catchError, EMPTY, map, Observable, tap} from "rxjs";
 import { RecipeDetails } from "../../models/recipes/recipeDetails";
 import { Recipe } from "../../models/recipes/recipe";
 import { AddRecipe } from "../../models/recipes/addRecipe";
 import {IndexedDbService} from "../indexed-db/indexed-db.service";
 import {PingService} from "../ping/ping.service";
+import {NotificationService} from "../notification/notification.service";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,8 @@ export class RecipesService extends ApiService {
   constructor(
     http: HttpClient,
     private readonly idbService: IndexedDbService,
-    private readonly pingService: PingService
+    private readonly pingService: PingService,
+    private readonly notificationService: NotificationService,
   ) {
     super(http);
     this.pingService.isOnline$.subscribe(r => this.online = r);
@@ -48,5 +50,16 @@ export class RecipesService extends ApiService {
   getRecipesAmount(): Observable<number> {
     if (this.online) return this.get<number>('recipes/amount');
     else return this.idbService.getRecipesAmount();
+  }
+
+  deleteRecipe(id: string, name: string) {
+    return this.delete(`recipes/${id}`)
+      .pipe(
+        tap(_ => this.notificationService.notifySuccess(`Deleted recipe ${name}`)),
+        catchError(_ => {
+          this.notificationService.notifyError(`Failed deletion of recipe ${name}`)
+          return EMPTY;
+        })
+      );
   }
 }
