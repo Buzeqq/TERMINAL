@@ -21,9 +21,10 @@ import {NotificationService} from "../../../core/services/notification/notificat
 import {Router} from "@angular/router";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {SampleDetails} from "../../../core/models/samples/sampleDetails";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {ProjectDetails} from "../../../core/models/projects/project-details";
 import { Tag } from "../../../core/models/tags/tag";
+import {DeleteDialogComponent} from "../../../core/components/dialogs/delete-dialog/delete-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-sample-edit',
@@ -43,7 +44,7 @@ export class SampleEditComponent implements OnInit {
 
   private _sampleId?: string;
   sampleDetails$: Observable<SampleDetails> = new Observable<SampleDetails>();
-
+  sampleDetails?: SampleDetails;
   projectDetails$: Observable<ProjectDetails> = new Observable<ProjectDetails>();
   projects$: Observable<Project[]> = new Observable<Project[]>();
 
@@ -65,8 +66,7 @@ export class SampleEditComponent implements OnInit {
               private readonly formBuilder: FormBuilder,
               private readonly samplesService: SamplesService,
               private readonly notificationService: NotificationService,
-              private readonly router: Router,
-              private readonly snackBar: MatSnackBar
+              private readonly dialog: MatDialog,
   ) {  }
 
   ngOnInit(): void {
@@ -86,31 +86,36 @@ export class SampleEditComponent implements OnInit {
   }
 
   set sampleId(id: string | undefined) {
+    this._sampleId = id;
     this.sampleDetails$ = this.samplesService.getSampleDetails(id!)
       .pipe(
         catchError((err, _) => {
           console.log(err);
-          this.snackBar.open('Failed to load sample', 'Close', {duration: 3000});
+          this.notificationService.notifyError('Failed to load sample');
           return EMPTY;
         }),
         tap(sample => {
-          this.initForm(sample);
+          this.sampleDetails = sample;
+          this.resetForm();
           this.loading = 'determinate';
         })
       );
   }
 
-  private initForm(m: SampleDetails) {
+  resetForm() {
     // set initial values in form controls
+    const sample = this.sampleDetails;
+    if (!sample) return;
 
-    this.projectDetails$ = this.projectService.getProject(m.projectId)
+    this.projectDetails$ = this.projectService.getProject(sample.projectId)
       .pipe(tap(p => this.sampleForm.controls.project.setValue(p.name)));
     this.projects$ = this.projectService.getProjects(0, 30); // TODO get all projects for a dropdown list?
 
-    this.sampleForm.controls.recipe.setValue('None') // TODO
+    this.sampleForm.controls.recipe.setValue(sample.recipe!.name)
+    this.sampleForm.controls.recipe.disable();
 
-    this.chosenTags.next(m.tags);
-    this.sampleForm.controls.comment.setValue(m.comment);
+    this.chosenTags.next(sample.tags);
+    this.sampleForm.controls.comment.setValue(sample.comment);
   }
 
   selectedTag(event: MatAutocompleteSelectedEvent) {
@@ -133,4 +138,29 @@ export class SampleEditComponent implements OnInit {
     }
   }
 
+  // TODO
+
+  readyToSubmit() {
+    return true
+  }
+
+  dirtyForm() {
+    return true
+  }
+
+  editSample() {
+
+  }
+
+  deleteSample() {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: {
+        title: `Delete Sample ${this.sampleDetails?.code}`,
+        message: 'Attention! This action is irreversible.'
+      }});
+    dialogRef.afterClosed().subscribe(deleteConfirmed => {
+      if (deleteConfirmed)
+        this.samplesService.deleteSample(this._sampleId!, this.sampleDetails!.code).subscribe();
+    })
+  }
 }

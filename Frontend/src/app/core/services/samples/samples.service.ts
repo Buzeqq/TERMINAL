@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from "../api-service";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import {map, Observable} from "rxjs";
+import {catchError, EMPTY, map, Observable, tap} from "rxjs";
 import { Sample } from "../../models/samples/sample";
 import { AddSample } from "../../models/samples/addSample";
 import { SampleDetails } from "../../models/samples/sampleDetails";
 import {PingService} from "../ping/ping.service";
 import {IndexedDbService} from "../indexed-db/indexed-db.service";
+import {NotificationService} from "../notification/notification.service";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,8 @@ export class SamplesService extends ApiService {
   constructor(
     http: HttpClient,
     private readonly pingService: PingService,
-    private readonly idbService: IndexedDbService
+    private readonly idbService: IndexedDbService,
+    private readonly notificationService: NotificationService,
   ) { super(http); this.pingService.isOnline$.subscribe(r => this.online = r); }
 
   getSamples(pageNumber: number, pageSize: number, orderBy = "CreatedAtUtc", desc = true): Observable<Sample[]> {
@@ -83,5 +85,16 @@ export class SamplesService extends ApiService {
   getSamplesAmount(): Observable<number> {
     if (this.online) return this.get<number>('samples/amount');
     else return this.idbService.getSamplesAmount();
+  }
+
+  deleteSample(id: string, code: string) {
+    return this.delete(`samples/${id}`)
+      .pipe(
+        tap(_ => this.notificationService.notifySuccess(`Deleted sample ${code}`)),
+        catchError(_ => {
+          this.notificationService.notifyError(`Failed deletion of sample ${code}`)
+          return EMPTY;
+        })
+      );
   }
 }
