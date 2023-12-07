@@ -12,7 +12,7 @@ import {
 import { SearchService } from "../../core/services/search/search.service";
 import { ProjectsService } from "../../core/services/projects/projects.service";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
-import { Parameter } from "../../core/models/parameters/parameter";
+import { NumericParameter, Parameter } from "../../core/models/parameters/parameter";
 import { SamplesService } from "../../core/services/samples/samples.service";
 import { NotificationService } from "../../core/services/notification/notification.service";
 import { ActivatedRoute, Params, Router } from "@angular/router";
@@ -30,6 +30,7 @@ import { Tag } from "../../core/models/tags/tag";
 import { Recipe } from "../../core/models/recipes/recipe";
 import { SetupFormService } from "../../core/services/setup-form/setup-form.service";
 import { ReplicateQuery, ReplicationData, ReplicationService } from "../../core/services/steps/replication.service";
+import { ParameterValue } from "../../core/models/parameters/parameter-value";
 
 @Component({
   selector: 'app-add-sample',
@@ -215,6 +216,7 @@ export class AddSampleComponent implements OnInit, OnDestroy {
 
   private fillForm(d: ReplicationData) {
     this.sampleForm.controls.steps.clear();
+    this.addMissingParameterValues(d); // when choosing recipe, that doesn't contain value for child controls it's should be added to form
     for (const s of d.recipe.steps) {
       const step = new FormGroup<{comment: CommentFormControl, parameters: FormArray<ParameterFormControl>}>({
         comment: new FormControl(d.comment),
@@ -230,6 +232,20 @@ export class AddSampleComponent implements OnInit, OnDestroy {
       });
       this.sampleForm.controls.steps.push(step);
       this.subscriptions.push(...this.setupFormService.setParents(step.controls.parameters, this.parameters));
+    }
+  }
+
+  private addMissingParameterValues(d: ReplicationData) {
+    for (const s of d.recipe.steps) {
+      const missingParameter = this.parameters.filter(p =>
+        !s.parameters.find(pv => pv.name === p.name));
+
+      s.parameters.push(...missingParameter.map(p => ({
+        $type: p.$type,
+        value: p.defaultValue,
+        name: p.name,
+        unit: p.$type !== 'text' ? '' : (p as NumericParameter).unit,
+      } as ParameterValue)));
     }
   }
 }

@@ -90,7 +90,6 @@ export class SetupFormService {
     for (const stepControls of stepsControls.controls) {
       steps.push({
         parameters: stepControls.controls.parameters.controls
-          .filter(c => c.value !== null)
           .map(c => ({
             $type: c.item.$type,
             id: c.item.id,
