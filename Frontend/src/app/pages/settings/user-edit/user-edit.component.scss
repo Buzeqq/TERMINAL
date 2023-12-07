@@ -25,7 +25,12 @@
   }
 
   &__form-buttons {
-    width: 50%;
+    display: flex;
+    width: 100%;
     gap: 1rem;
+    &__right-most {
+      margin-left: auto;
+    }
   }
+
 }

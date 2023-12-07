@@ -9,6 +9,8 @@ import {UserDetails} from "../../../core/models/users/user-details";
 import {AuthService} from "../../../core/services/auth/auth.service";
 import { MatDialog } from '@angular/material/dialog';
 import { AddUserComponent } from 'src/app/core/components/dialogs/add-user/add-user.component';
+import {NotificationService} from "../../../core/services/notification/notification.service";
+import {DeleteDialogComponent} from "../../../core/components/dialogs/delete-dialog/delete-dialog.component";
 
 @Component({
   selector: 'app-user-edit',
@@ -30,7 +32,7 @@ export class UserEditComponent {
 
   constructor(
     private readonly userService: UserService,
-    private readonly snackBar: MatSnackBar,
+    private readonly notificationService: NotificationService,
     private readonly authService: AuthService,
     private readonly dialog: MatDialog
   ) {  }
@@ -44,12 +46,9 @@ export class UserEditComponent {
     this._userId = id;
     this.userDetails$ = this.userService.getUser(this._userId!)
       .pipe(
-        tap(r => console.log(r)),
         catchError((err, _) => {
           console.log(err);
-          this.snackBar.open('Failed to load user', 'Close', {
-            duration: 3000
-          });
+          this.notificationService.notifyError('Failed to load user');
           return EMPTY;
         }),
         tap(r => {
@@ -73,6 +72,10 @@ export class UserEditComponent {
     return this.userDetails!.role !== this.userRoleFormControl.value
   }
 
+  addUser(){
+    this.dialog.open(AddUserComponent);
+  }
+
   editUser() {
     // TODO send a request with new form values
     // don't forget to map User to Registered
@@ -81,8 +84,16 @@ export class UserEditComponent {
     }
   }
 
-  addUser(){
-    this.dialog.open(AddUserComponent);
+  deleteUser() {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: {
+        title: `Delete User ${this.userDetails?.email}`,
+        message: 'Attention! This action is irreversible.'
+      }});
+    dialogRef.afterClosed().subscribe(deleteConfirmed => {
+      if (deleteConfirmed)
+        this.userService.deleteUser(this._userId!).subscribe();
+    })
   }
 }
 
