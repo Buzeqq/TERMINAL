@@ -32,4 +32,13 @@ public sealed class Sample
         CreatedAtUtc = createdAtUtc;
         Comment = comment;
     }
+
+    public void Update(Project project, Recipe? recipe, IEnumerable<SampleStep> steps, IEnumerable<Tag> tags, string comment)
+    {
+        Project = project;
+        Recipe = recipe;
+        Steps = steps.ToList();
+        Tags = tags.ToList();
+        Comment = comment;
+    }
 }

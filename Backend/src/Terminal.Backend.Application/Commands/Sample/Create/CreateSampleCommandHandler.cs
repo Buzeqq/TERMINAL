@@ -1,5 +1,6 @@
 using MediatR;
 using Terminal.Backend.Application.Abstractions;
+using Terminal.Backend.Application.Exceptions;
 using Terminal.Backend.Core.Abstractions.Repositories;
 using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.Exceptions;
@@ -55,6 +56,11 @@ internal sealed class CreateSampleCommandHandler : IRequestHandler<CreateSampleC
         
         var tags = await _convertService.ConvertAsync(tagsDto.Select(t => new TagId(t)), ct);
         var project = await _projectRepository.GetAsync(projectId, ct) ?? throw new ProjectNotFoundException();
+        if (!project.IsActive)
+        {
+            throw new ProjectNotActiveException(project.Name);
+        }
+        
         var sample = new Core.Entities.Sample(sampleId,
             project,
             recipe,

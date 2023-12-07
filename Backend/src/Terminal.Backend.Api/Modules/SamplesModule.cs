@@ -1,7 +1,10 @@
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Api.Swagger;
 using Terminal.Backend.Application.Commands.Sample.Create;
+using Terminal.Backend.Application.Commands.Sample.Delete;
+using Terminal.Backend.Application.Commands.Sample.Update;
 using Terminal.Backend.Application.DTO.ParameterValues;
 using Terminal.Backend.Application.DTO.Samples;
 using Terminal.Backend.Application.Queries.Samples.Get;
@@ -63,7 +66,7 @@ public static class SamplesModule
             var recentSamples = await sender.Send(new GetRecentSamplesQuery(length), ct);
             return Results.Ok(recentSamples);
         }).RequireAuthorization(Permission.SampleRead.ToString())
-        .WithTags(SwaggerSetup.SampleTag);
+            .WithTags(SwaggerSetup.SampleTag);
 
         app.MapGet(ApiRouteBase + "/{id:guid}", async (Guid id, ISender sender, CancellationToken ct) =>
         {
@@ -71,7 +74,7 @@ public static class SamplesModule
             var sample = await sender.Send(query, ct);
             return sample is null ? Results.NotFound() : Results.Ok(sample);
         }).RequireAuthorization(Permission.SampleRead.ToString())
-        .WithTags(SwaggerSetup.SampleTag);
+            .WithTags(SwaggerSetup.SampleTag);
 
         app.MapGet(ApiRouteBase, async (
             [FromQuery] int pageNumber, 
@@ -85,7 +88,7 @@ public static class SamplesModule
             var samples = await sender.Send(query, ct);
             return Results.Ok(samples);
         }).RequireAuthorization(Permission.SampleRead.ToString())
-        .WithTags(SwaggerSetup.SampleTag);
+            .WithTags(SwaggerSetup.SampleTag);
         
         app.MapGet(ApiRouteBase + "/amount", async (
             ISender sender, 
@@ -95,7 +98,7 @@ public static class SamplesModule
             var amount = await sender.Send(query, ct);
             return Results.Ok(amount);
         }).RequireAuthorization(Permission.SampleRead.ToString())
-        .WithTags(SwaggerSetup.SampleTag);
+            .WithTags(SwaggerSetup.SampleTag);
 
         app.MapGet(ApiRouteBase + "/search", async (
             [FromQuery] string searchPhrase, 
@@ -108,6 +111,28 @@ public static class SamplesModule
             var samples = await sender.Send(query, ct);
             return Results.Ok(samples);
         }).RequireAuthorization(Permission.SampleRead.ToString())
+            .WithTags(SwaggerSetup.SampleTag);
+
+        app.MapDelete(ApiRouteBase + "/{id:guid}", async (
+            Guid id,
+            ISender sender,
+            CancellationToken ct) =>
+        {
+            await sender.Send(new DeleteSampleCommand(id), ct);
+            return Results.Ok();
+        }).RequireAuthorization(Permission.SampleDelete.ToString())
+            .WithTags(SwaggerSetup.SampleTag);
+
+        app.MapPatch(ApiRouteBase + "/{id:guid}", async (
+            Guid id,
+            ISender sender,
+            UpdateSampleCommand command,
+            CancellationToken ct) =>
+        {
+            command = command with { Id = id };
+            await sender.Send(command, ct);
+            return Results.Ok();
+        }).RequireAuthorization(Permission.SampleUpdate.ToString())
         .WithTags(SwaggerSetup.SampleTag);
     }
 }
