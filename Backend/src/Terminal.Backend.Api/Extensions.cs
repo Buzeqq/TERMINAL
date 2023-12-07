@@ -1,5 +1,7 @@
 using System.Security.Claims;
 
+namespace Terminal.Backend.Api;
+
 public static class Extensions
 {
     public static Guid? GetUserId(this ClaimsPrincipal claimsPrincipal)
