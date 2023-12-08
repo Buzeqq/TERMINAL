@@ -5,6 +5,7 @@ import {BehaviorSubject, catchError, shareReplay, Subject, tap, throwError, time
 import * as moment from "moment";
 import {jwtDecode} from "jwt-decode";
 import {decodedJWT, successfulLoginResponse} from "../../models/auth/auth";
+import {NotificationService} from "../notification/notification.service";
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class AuthService extends ApiService {
 
   constructor(
     http: HttpClient,
+    private readonly notificationService: NotificationService
   ) {
     super(http)
     /* reload issue, if we reload the page a new Auth Service is created so we need to set labels again */
@@ -36,7 +38,18 @@ export class AuthService extends ApiService {
       )
   }
 
+  refresh() {
+    return this.post<successfulLoginResponse>('users/refresh', {})
+      .pipe(
+        tap(r => this.setSession(r)),
+        tap(_ => this.notificationService.notifySuccess('Session refreshed'))
+      );
+  }
+
   private setSession(r: successfulLoginResponse) {
+    localStorage.removeItem('token');
+    localStorage.removeItem("expiresAt");
+
     const decoded = jwtDecode(r.token) as decodedJWT;
 
     localStorage.setItem('token', r.token);
@@ -46,15 +59,6 @@ export class AuthService extends ApiService {
     timer(expiresIn.valueOf() - this.alertBefore).subscribe(this.sessionWarningTimer);
 
     this.loggedOut.next(false);
-  }
-
-  renewSession() {
-    // FIXME send request to backend for a new token
-    // localStorage.setItem(
-    //   "expiresAt", JSON.stringify(
-    //     this.getExpiration().add(1, 'hour').valueOf()
-    //   )
-    // );
   }
 
   logout() {

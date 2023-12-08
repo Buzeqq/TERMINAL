@@ -53,7 +53,8 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.authService.sessionWarningTimer$
       .subscribe(_ => this.notificationService.notifySessionExpiration(this.authService.alertBefore)
-        .subscribe(_ => this.authService.renewSession()));
+        .subscribe(_ => this.authService.refresh()
+          .subscribe()));
 
     this.isMobile$.subscribe(result => {
       this.isMobile = result;
