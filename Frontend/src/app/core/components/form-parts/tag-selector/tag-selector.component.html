@@ -9,6 +9,10 @@
     </mat-chip-row>
     <input matInput #tagInput [matChipInputFor]="chipGrid" matChipInputAddOnBlur="true" [formControl]="tagFormControl"
            [matAutocomplete]="tagAutocomplete">
+    <button matSuffix mat-icon-button 
+      (click)="showAddTagDialog()">
+      <mat-icon matTooltip="Add new tag">add</mat-icon>
+    </button>
     <mat-autocomplete #tagAutocomplete (optionSelected)="selectedTag($event)">
       <ng-container *ngIf="tagInput.value.length > 0">
         <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">

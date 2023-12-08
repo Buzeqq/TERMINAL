@@ -5,7 +5,9 @@ import { SearchService } from "../../../services/search/search.service";
 import { BehaviorSubject, combineLatestWith, debounceTime, filter, map, Observable, startWith, switchMap } from "rxjs";
 import { Tag } from "../../../models/tags/tag";
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
+import { MatAutocomplete, MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
+import { MatDialog } from '@angular/material/dialog';
+import { AddTagComponent } from '../../dialogs/add-tag/add-tag.component';
 
 @Component({
   selector: 'app-tag-selector',
@@ -24,7 +26,9 @@ export class TagSelectorComponent implements OnInit, ControlValueAccessor {
   formControl?: TagsFormControl;
 
   constructor(private readonly tagService: TagsService,
-              private readonly searchService: SearchService) {
+              private readonly searchService: SearchService,
+              private readonly dialog: MatDialog
+              ) {
 
   }
 
@@ -97,4 +101,11 @@ export class TagSelectorComponent implements OnInit, ControlValueAccessor {
   writeValue(obj: any): void {
 
   }
+
+  @ViewChild('tagAutocomplete') tagAutocomplete!: MatAutocomplete
+
+  showAddTagDialog() {
+    this.dialog.open(AddTagComponent)
+  }
+
 }

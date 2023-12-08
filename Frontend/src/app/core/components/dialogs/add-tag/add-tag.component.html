@@ -1,0 +1,19 @@
+<div class="add-tag-dialog">
+    <h1 class="add-tag-dialog__title" mat-dialog-title>Add new tag</h1>
+    <mat-form-field class="add-tag-dialog__form">
+      <mat-label>New tag name</mat-label>
+      <input [(ngModel)]="tagName" [formControl]="tagNameControl" matInput type="text">
+      
+      <button (click)="tagName=''" *ngIf="tagName" aria-label="Clear" mat-icon-button matSuffix>
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+    <div mat-dialog-actions>
+      <button mat-button mat-dialog-close>Close</button>
+      <button (click)="addTag()" [disabled]="tagNameControl.invalid" 
+              [mat-dialog-close]="true" color="primary"
+              mat-raised-button>Add
+      </button>
+    </div>
+  </div>
+  
