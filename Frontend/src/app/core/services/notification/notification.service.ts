@@ -41,4 +41,16 @@ export class NotificationService {
       duration: 5000
     });
   }
+
+  notifyUpdated(entity: string) {
+    this.snackBar.open(`${entity} updated. Reload page to see changes.`, 'Close', {
+      duration: 5000
+    });
+  }
+
+  notifyUpdatingFailed(entity: string) {
+    this.snackBar.open(`Failed updating ${entity}. Check your network connection.`, 'Close', {
+      duration: 5000
+    });
+  }
 }

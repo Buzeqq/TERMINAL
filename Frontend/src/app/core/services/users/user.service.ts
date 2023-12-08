@@ -41,9 +41,42 @@ export class UserService extends ApiService {
   deleteUser(id: string) {
     return this.delete(`users/${id}`)
       .pipe(
-        tap(_ => this.notificationService.notifySuccess('Deleted user')),
+        tap(_ => this.notificationService.notifySuccess('Deleted user. Reload page to see changes.')),
         catchError(_ => {
-          this.notificationService.notifyError('Failed deletion of user')
+          this.notificationService.notifyError('Failed deleting user. Check your network connection.')
+          return EMPTY;
+        })
+      )
+  }
+
+  updateEmail(id: string | undefined, data: {email: string | null}) {
+    return this.patch(`users/${id}/email`, data)
+      .pipe(
+        tap(_ => this.notificationService.notifyUpdated('User')),
+        catchError(_ => {
+          this.notificationService.notifyUpdatingFailed('User');
+          return EMPTY;
+        })
+      )
+  }
+
+  updateRole(id: string | undefined, data: {role: string | null}) {
+    return this.patch(`users/${id}/role`, data)
+      .pipe(
+        tap(_ => this.notificationService.notifyUpdated('User')),
+        catchError(_ => {
+          this.notificationService.notifyUpdatingFailed('User');
+          return EMPTY;
+        })
+      )
+  }
+
+  updatePassword(id: string, data: { newPassword: string }) {
+    return this.patch(`users/${id}/password`, data)
+      .pipe(
+        tap(_ => this.notificationService.notifyUpdated('User')),
+        catchError(_ => {
+          this.notificationService.notifyUpdatingFailed('User');
           return EMPTY;
         })
       )

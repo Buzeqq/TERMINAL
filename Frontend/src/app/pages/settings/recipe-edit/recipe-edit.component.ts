@@ -1,10 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {catchError, EMPTY, Observable, tap} from "rxjs";
-import {Recipe} from "../../../core/models/recipes/recipe";
 import {FormControl} from "@angular/forms";
 import {whitespaceValidator} from "../../../core/components/validators/whitespaceValidator";
 import {RecipesService} from "../../../core/services/recipes/recipes.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {RecipeDetails} from "../../../core/models/recipes/recipeDetails";
 import {NotificationService} from "../../../core/services/notification/notification.service";
 import {MatDialog} from "@angular/material/dialog";
@@ -17,7 +15,7 @@ import {DeleteDialogComponent} from "../../../core/components/dialogs/delete-dia
 })
 export class RecipeEditComponent {
   private _recipeId?: string;
-  recipeDetails$: Observable<Recipe> = new Observable<Recipe>();
+  recipeDetails$: Observable<RecipeDetails> = new Observable<RecipeDetails>();
   private recipeDetails?: RecipeDetails;
   loading: 'determinate' | 'indeterminate' | 'buffer' | 'query' = 'query';
 
@@ -64,7 +62,15 @@ export class RecipeEditComponent {
   }
 
   editRecipe() {
-    // TODO send a request with new form values
+    if (this.dirtyForm() && this.recipeDetails && this.recipeNameFormControl.value) {
+      this.recipeService.editRecipe(this.recipeDetails.id, {
+        id: this.recipeDetails.id,
+        name: this.recipeNameFormControl.value,
+        steps: this.recipeDetails.steps
+      }).subscribe();
+    }
+    else
+      this.notificationService.notifyError('Updating failed, check if provided value is valid.')
   }
 
   deleteRecipe() {

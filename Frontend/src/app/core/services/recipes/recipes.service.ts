@@ -55,11 +55,22 @@ export class RecipesService extends ApiService {
   deleteRecipe(id: string, name: string) {
     return this.delete(`recipes/${id}`)
       .pipe(
-        tap(_ => this.notificationService.notifySuccess(`Deleted recipe ${name}`)),
+        tap(_ => this.notificationService.notifySuccess(`Deleted recipe ${name}. Reload page to see changes.`)),
         catchError(_ => {
-          this.notificationService.notifyError(`Failed deletion of recipe ${name}`)
+          this.notificationService.notifyError(`Failed deleting recipe ${name}. Check your network connection.`)
           return EMPTY;
         })
       );
+  }
+
+  editRecipe(id: string, data: RecipeDetails) {
+    return this.patch(`recipes/${id}`, data)
+      .pipe(
+        tap(_ => this.notificationService.notifyUpdated('Recipe')),
+        catchError(_ => {
+          this.notificationService.notifyUpdatingFailed('Recipe');
+          return EMPTY;
+        })
+      )
   }
 }

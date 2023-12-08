@@ -40,6 +40,7 @@ import { StepsCreatorComponent } from './components/form-parts/steps-creator/ste
 import { MatSelectModule } from "@angular/material/select";
 import { MatTabsModule } from "@angular/material/tabs";
 import { DeleteDialogComponent } from './components/dialogs/delete-dialog/delete-dialog.component';
+import { NewPasswordDialogComponent } from './components/dialogs/new-password-dialog/new-password-dialog.component';
 
 
 @NgModule({
@@ -60,7 +61,8 @@ import { DeleteDialogComponent } from './components/dialogs/delete-dialog/delete
     PrettyjsonPipe,
     UserViewsComponent,
     StepsCreatorComponent,
-    DeleteDialogComponent
+    DeleteDialogComponent,
+    NewPasswordDialogComponent
   ],
   exports: [
     TimeAgoPipe,
