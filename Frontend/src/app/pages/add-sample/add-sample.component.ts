@@ -224,7 +224,7 @@ export class AddSampleComponent implements OnInit, OnDestroy {
 
     this.samplesService.addSample(addSample)
       .pipe(catchError((err, _) => {
-        this.notificationService.notifyError(err);
+        this.notificationService.notifyError(err.error.reason);
         return EMPTY;
       }))
       .subscribe(_ => {
@@ -288,8 +288,9 @@ export class AddSampleComponent implements OnInit, OnDestroy {
             this.parameters.find(p2 => p1.id   === p2.id)!, p1.value
           )))
       });
-      this.sampleForm.controls.steps.push(step);
+
       this.subscriptions.push(...this.setupFormService.setParents(step.controls.parameters, this.parameters));
+      this.sampleForm.controls.steps.push(step);
     }
   }
 
