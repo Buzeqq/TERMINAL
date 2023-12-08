@@ -5,7 +5,7 @@
   <section class="settings__cards">
     <section>
       <mat-card class="settings__cards__views">
-        <mat-tab-group>
+        <mat-tab-group [(selectedIndex)]="tabIndex">
           <mat-tab>
             <ng-template mat-tab-label>
               <mat-icon class="tab-icon">folder</mat-icon>

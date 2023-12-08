@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { SamplesService } from "../samples/samples.service";
 import { RecipesService } from "../recipes/recipes.service";
 import { EMPTY, map, Observable } from "rxjs";
-import { RecipeDetails} from "../../models/recipes/recipeDetails";
-import { Step } from "../../models/steps/step";
-import { SampleDetails } from "../../models/samples/sampleDetails";
+import {Tag} from "../../models/tags/tag";
+import {StepDetails} from "../../models/steps/stepDetails";
+import {Recipe} from "../../models/recipes/recipe";
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +26,9 @@ export class ReplicationService {
             name: d.code
           },
           comment: d.comment,
-          steps: d.steps
+          steps: d.steps,
+          projectId: d.projectId,
+          tags: d.tags
           } as ReplicationData))
         );
     }
@@ -45,13 +47,30 @@ export class ReplicationService {
           }))
         );
     }
+    if (query.type == 'EditSample') {
+      return this.samplesService.getSampleDetails(query.id)
+        .pipe(
+          map(d => ({
+            type: 'Sample',
+            basedOn: {
+              id: d.id,
+              name: d.code
+            },
+            comment: d.comment,
+            steps: d.steps,
+            projectId: d.projectId,
+            tags: d.tags,
+            recipe: d.recipe
+          } as ReplicationData))
+        );
+    }
 
     return EMPTY;
   }
 }
 
 export interface ReplicateQuery {
-  type: 'Sample' | 'Recipe';
+  type: 'Sample' | 'Recipe' | 'EditSample';
   id: string;
 }
 
@@ -62,5 +81,8 @@ export interface ReplicationData {
     name: string;
   };
   comment: string;
-  steps: Step[];
+  steps: StepDetails[];
+  projectId?: string;
+  tags?: Tag[];
+  recipe?: Recipe | null;
 }

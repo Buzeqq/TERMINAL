@@ -2,11 +2,11 @@
   <mat-card-header>
     <mat-card-title>
       <mat-icon>science</mat-icon>
-      Add sample
+      {{editMode ? 'Edit' : 'Add'}} sample
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <p *ngIf="replicationData$ | async as d">Adding sample based on: {{d.basedOn.name}}</p>
+    <p *ngIf="replicationData$ | async as d">{{editMode ? 'Editing' : 'Adding'}} sample {{editMode ? '' : 'based on'}}: {{d.basedOn.name}}</p>
     <form class="add-sample__main" [formGroup]="sampleForm" *ngIf="formData$ | async as formData else loading;">
       <mat-card>
         <mat-form-field>
@@ -53,7 +53,7 @@
           </mat-autocomplete>
         </mat-form-field>
 
-        <app-tag-selector [formControl]="sampleForm.controls.tags"></app-tag-selector>
+        <app-tag-selector [formControl]="sampleForm.controls.tags" [initTags]="initTagsEventEmitter.asObservable()"></app-tag-selector>
 
         <mat-form-field>
           <mat-label>Comment</mat-label>
@@ -61,12 +61,12 @@
         </mat-form-field>
       </mat-card>
 
-      <app-steps-creator [stepsControls]="sampleForm.controls.steps" [parameters]="parameters"></app-steps-creator>
+      <app-steps-creator [stepsControls]="sampleForm.controls.steps" [parameters]="parameters" [editMode]="editMode"></app-steps-creator>
 
     </form>
   </mat-card-content>
   <mat-card-footer>
-    <mat-card-actions class="add-sample__actions">
+    <mat-card-actions *ngIf="!editMode" class="add-sample__actions">
       <button mat-raised-button [disabled]="!sampleForm.valid" (click)="addSample()">
         <mat-icon>add</mat-icon>
         Add sample
@@ -79,6 +79,12 @@
           <input [formControl]="saveRecipeFormGroup.controls.recipeName" matInput type="text">
         </mat-form-field>
       </ng-container>
+    </mat-card-actions>
+    <mat-card-actions *ngIf="editMode" class="add-sample__actions">
+      <button mat-raised-button color="primary" [disabled]="!sampleForm.valid" (click)="editSample()">
+        <mat-icon>done</mat-icon>
+        Submit changes
+      </button>
     </mat-card-actions>
   </mat-card-footer>
   <pre *ngIf="!environment.production" [innerHTML]="sampleForm.value | prettyjson"></pre>

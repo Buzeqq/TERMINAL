@@ -30,6 +30,7 @@ const routes: Routes = [
   {path: 'recipes', component: ItemViewsComponent, canActivate: [PagesGuard], data: {type: 'Recipe'}},
   {path: 'recipes/:id', component: ItemDetailsComponent, canActivate: [PagesGuard], data: {type: 'Recipe'}},
   {path: 'settings', component: SettingsComponent, canActivate: [AdminOnlineFeaturesGuard, PagesGuard]},
+  {path: 'edit-sample', component: AddSampleComponent, canActivate: [OnlineFeaturesGuard, PagesGuard]},
   {path: 'register/:token', component: RegisterComponent },
 
   // must be the last

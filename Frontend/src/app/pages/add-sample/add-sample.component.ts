@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import { ParametersService } from "../../core/services/parameters/parameters.service";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import {
@@ -30,7 +30,7 @@ import { Tag } from "../../core/models/tags/tag";
 import { Recipe } from "../../core/models/recipes/recipe";
 import { SetupFormService } from "../../core/services/setup-form/setup-form.service";
 import { ReplicateQuery, ReplicationData, ReplicationService } from "../../core/services/steps/replication.service";
-import { ParameterValue } from "../../core/models/parameters/parameter-value";
+import {EditSample} from "../../core/models/samples/editSample";
 
 @Component({
   selector: 'app-add-sample',
@@ -38,14 +38,17 @@ import { ParameterValue } from "../../core/models/parameters/parameter-value";
   styleUrls: ['./add-sample.component.scss'],
 })
 export class AddSampleComponent implements OnInit, OnDestroy {
+  editMode = false;
+  private sampleId?: string;
+  private replicationData?: ReplicationData;
   parameters: Parameter[] = [];
   private sampleFormData = new BehaviorSubject<AddSampleFormData>({
     projects: [],
     recipes: [],
     tags: []
   });
-  public formData$: Observable<AddSampleFormData> = this.sampleFormData.asObservable();
 
+  public formData$: Observable<AddSampleFormData> = this.sampleFormData.asObservable();
   sampleForm = new FormGroup({
     date: new FormControl<Date>(new Date(), [Validators.required, Validators.nullValidator]) as DateFormControl,
     project: new ComplexTypeFormControl<Project | null, string | null>(null, null, [Validators.required]) as ProjectFormControl,
@@ -54,6 +57,9 @@ export class AddSampleComponent implements OnInit, OnDestroy {
     comment: new FormControl<string | null>(null, [Validators.maxLength(1024)]) as CommentFormControl,
     steps: new FormArray<StepFormArray>([])
   }) as SampleForm;
+
+  // for initializing tag selector form with tags on edit and redo
+  @Output() initTagsEventEmitter = new EventEmitter<Tag[]>();
 
   constructor(protected readonly parameterService: ParametersService,
               private readonly searchService: SearchService,
@@ -150,33 +156,47 @@ export class AddSampleComponent implements OnInit, OnDestroy {
           id: recipeId,
         };
 
+        this.editMode = p['editMode'];
         const sampleId = p['sampleId'];
+        if (this.editMode && sampleId) {
+          this.sampleId = sampleId;
+          return {
+            type: 'EditSample',
+            id: sampleId
+          }
+        }
+
         if (sampleId) return {
           type: 'Sample',
           id: sampleId
         };
 
         const projectId = p['projectId'];
-        if (projectId) {
-          this.projectService.getProject(projectId)
-            .subscribe(p => {
-              this.sampleForm.controls.project.setItem({id: p.id, name: p.name}, null);
-              this.sampleForm.controls.project.setValue(p.name);
-            });
-        }
+        if (projectId)
+          this.setProject(projectId)
 
         return undefined;
       }),
       filter(q => q !== undefined),
       switchMap(q => this.replicationService.getReplicationData(q!)),
       tap(d => {
-        // form will automatically fill
         if (d.type === 'Recipe') {
           this.sampleForm.controls.recipe.setItem({ name: d.basedOn.name, id: d.basedOn.id } as Recipe, d.basedOn.name);
         }
+
+        this.replicationData = d;
         this.fillForm(d);
       })
     );
+    if (this.editMode)
+      this.sampleForm.controls.recipe.disable();
+  }
+
+  private setProject(id: string) {
+    this.projectService.getProject(id)
+      .subscribe(p =>
+        this.sampleForm.controls.project.setItem({id: p.id, name: p.name} as Project, p.name)
+      );
   }
 
   ngOnDestroy(): void {
@@ -213,13 +233,46 @@ export class AddSampleComponent implements OnInit, OnDestroy {
       });
   }
 
+  editSample() {
+    const steps = this.setupFormService.getStepsDto(this.sampleForm.controls.steps)
+      .map((s, index) => ({id: this.replicationData!.steps[index].id , ...s}));
+    const finalValues = {
+      recipeId: this.sampleForm.controls.recipe.item?.id || this.replicationData?.recipe?.id || null,
+      comment: this.sampleForm.controls.comment.value ?? '',
+      projectId: this.sampleForm.controls.project.item?.id,
+      steps: steps,
+      tagIds: this.sampleForm.controls.tags.value,
+    } as EditSample;
+
+    if (this.sampleId)
+      this.samplesService.editSample(this.sampleId, finalValues)
+        .pipe(
+          catchError(_ => {
+            this.notificationService.notifyError(`Failed updating sample`)
+            return EMPTY;
+          })
+        )
+        .subscribe(_ => {
+          this.router.navigate(['/settings'], {queryParams: {tab: 'Samples'}})
+            .then(_ => this.notificationService.notifySuccess('Sample updated successfully!'));
+        });
+    else
+      this.notificationService.notifyError('Failed updating sample');
+  }
+
   public saveRecipeFormGroup = new FormGroup({
     saveAsRecipe: new FormControl<boolean>(false),
     recipeName: new FormControl<string | null>('')
   })
+
   protected readonly environment = environment;
 
   private fillForm(d: ReplicationData) {
+    if (d.tags)
+      this.initTagsEventEmitter.emit(d.tags)
+    if (d.projectId)
+      this.setProject(d.projectId);
+    this.sampleForm.controls.comment.setValue(d.comment);
     this.sampleForm.controls.steps.clear();
     this.addMissingParameterValues(d); // when choosing recipe, that doesn't contain value for child controls it's should be added to form
     for (const s of d.steps) {

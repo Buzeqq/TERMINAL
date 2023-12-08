@@ -1,6 +1,6 @@
-import { Step } from "../steps/step";
 import { Recipe } from "../recipes/recipe";
 import { Tag } from "../tags/tag";
+import {StepDetails} from "../steps/stepDetails";
 
 export interface SampleDetails {
   id: string;
@@ -9,6 +9,6 @@ export interface SampleDetails {
   createdAtUtc: Date;
   comment: string | null;
   projectId: string;
-  steps: Step[];
+  steps: StepDetails[];
   tags: Tag[];
 }

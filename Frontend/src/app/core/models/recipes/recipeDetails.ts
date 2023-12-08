@@ -1,7 +1,7 @@
-import { Step } from "../steps/step";
+import {StepDetails} from "../steps/stepDetails";
 
 export interface RecipeDetails {
   id: string;
   name: string;
-  steps: Step[];
+  steps: StepDetails[];
 }
