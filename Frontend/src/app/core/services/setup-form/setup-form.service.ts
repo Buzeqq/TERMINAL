@@ -85,7 +85,7 @@ export class SetupFormService {
     return firstStep;
   }
 
-  getStepsDto(stepsControls: FormArray<StepFormArray>) {
+  getStepsDto(stepsControls: FormArray<StepFormArray>): Step[] {
     const steps: Step[] = [];
     for (const stepControls of stepsControls.controls) {
       steps.push({

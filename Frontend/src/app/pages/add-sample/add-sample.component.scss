@@ -11,12 +11,14 @@
 
   &__actions {
     display: flex;
+    margin-left: 1rem;
 
     .break {
       display: none;
     }
 
     .recipe_name_input {
+      margin-left: 0.5rem;
       width: auto;
     }
   }

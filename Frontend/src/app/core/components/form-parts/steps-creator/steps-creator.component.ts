@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from "@angular/forms";
 import {
   CommentFormControl,
@@ -22,6 +22,9 @@ export class StepsCreatorComponent implements OnInit, OnDestroy {
 
   @Input({ required: true })
   parameters: Parameter[] = [];
+
+  @Input()
+  editMode = false;
 
   private subscriptions: Subscription[] = [];
 

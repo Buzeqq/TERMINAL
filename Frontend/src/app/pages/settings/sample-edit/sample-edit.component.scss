@@ -1,14 +1,18 @@
 .sample-edit {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1em;
+  align-items: center;
 
   &__header {
     grid-column: span 2;
     font-size: x-large;
+    margin-bottom: 1rem;
   }
 
-  &__form-fields {
-    width: 80%;
+  &__label {
+    font-weight: 500;
+    font-size: large;
   }
 
   &__hint_below {
@@ -16,11 +20,13 @@
   }
 
   &__form-buttons {
+    margin-left: 0.8rem;
     width: 50%;
     gap: 1rem;
   }
 }
 
-.first-field {
-  margin-top: 1rem;
+mat-card-content {
+  margin-left: 0.5rem;
+  padding: 1em;
 }

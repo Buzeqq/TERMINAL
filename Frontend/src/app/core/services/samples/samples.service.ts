@@ -8,6 +8,7 @@ import { SampleDetails } from "../../models/samples/sampleDetails";
 import {PingService} from "../ping/ping.service";
 import {IndexedDbService} from "../indexed-db/indexed-db.service";
 import {NotificationService} from "../notification/notification.service";
+import {EditSample} from "../../models/samples/editSample";
 
 @Injectable({
   providedIn: 'root'
@@ -80,6 +81,10 @@ export class SamplesService extends ApiService {
 
   addSample(form: AddSample) {
     return this.post<never>(`samples`, form);
+  }
+
+  editSample(id: string, data: EditSample) {
+    return this.patch(`samples/${id}`, data);
   }
 
   getSamplesAmount(): Observable<number> {

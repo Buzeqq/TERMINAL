@@ -18,7 +18,7 @@ export class SampleInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const url = /\/samples\/[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i;
-    if (request.url.match(url)) {
+    if (request.url.match(url) && request.method == 'GET') {
       return next.handle(request).pipe(
         tap((event) => {
           if (event instanceof HttpResponse)

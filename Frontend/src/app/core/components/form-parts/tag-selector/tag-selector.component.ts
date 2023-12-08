@@ -1,4 +1,4 @@
-import { Component, ElementRef, forwardRef, Input, OnInit, ViewChild } from '@angular/core';
+import {Component, ElementRef, forwardRef, Input, OnInit, ViewChild} from '@angular/core';
 import { TagsFormControl } from "../../../../pages/add-sample/types/addSampleTypes";
 import { TagsService } from "../../../services/tags/tags.service";
 import { SearchService } from "../../../services/search/search.service";
@@ -25,6 +25,9 @@ export class TagSelectorComponent implements OnInit, ControlValueAccessor {
   @Input({ required: true })
   formControl?: TagsFormControl;
 
+  @Input()
+  initTags?: Observable<Tag[]>;
+
   constructor(private readonly tagService: TagsService,
               private readonly searchService: SearchService,
               private readonly dialog: MatDialog
@@ -46,6 +49,13 @@ export class TagSelectorComponent implements OnInit, ControlValueAccessor {
   public tagFormControl = new FormControl<string>('');
 
   ngOnInit(): void {
+    if (this.initTags) {
+      this.initTags.subscribe(tags => {
+        this.formControl?.setValue(tags.map(t => t.id));
+        this.chosenTags.next(tags);
+      })
+    }
+
     this.filteredTags$ = this.tagFormControl.valueChanges.pipe(
       startWith(''),
       debounceTime(500),

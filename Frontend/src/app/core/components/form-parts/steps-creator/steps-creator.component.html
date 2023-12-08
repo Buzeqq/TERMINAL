@@ -37,7 +37,7 @@
           <textarea matInput [formControl]="stepControls.controls.comment"></textarea>
         </mat-form-field>
       </div>
-      <mat-card-footer>
+      <mat-card-footer *ngIf="!editMode">
         <mat-card-actions class="step__actions">
           <button mat-raised-button color="primary" (click)="addTab(i)" [disabled]="!stepsControls.controls[i].valid">Add step</button>
           <button mat-raised-button color="primary" (click)="removeTab(i)" [disabled]="stepsControls.length === 1">Delete step</button>
