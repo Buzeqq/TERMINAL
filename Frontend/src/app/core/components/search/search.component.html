@@ -8,14 +8,15 @@
           <mat-icon>close</mat-icon>
         </button>
       </mat-form-field>
-      <button class="quick-actions__search-button" mat-fab (click)="searchClicked()">
+      <button class="quick-actions__search-button" mat-fab (click)="searchClicked()" color="primary">
         <mat-icon>search</mat-icon>
       </button>
     </div>
     <div class="quick-actions__filters">
       <mat-checkbox (change)="updateFilterState(filter.key!, $event)"
                     *ngFor="let filter of (filters$ | async)! | keyvalue"
-                    [checked]="filter.value">
+                    [checked]="filter.value"
+                    color="primary">
         {{filter.key.charAt(0).toUpperCase() + filter.key.slice(1)}}
       </mat-checkbox>
     </div>
@@ -25,7 +26,7 @@
       <mat-icon>add</mat-icon>
       Add sample
     </button>
-    <button (click)="router.navigate(['/add-recipe'])" color="primary" mat-raised-button [class.disabled]="!moderatorPermissions">
+    <button (click)="router.navigate(['/add-recipe'])" color="primary" mat-raised-button>
       <mat-icon>assignment_add</mat-icon>
       Add recipe
     </button>
