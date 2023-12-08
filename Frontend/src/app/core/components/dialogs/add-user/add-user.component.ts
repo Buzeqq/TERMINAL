@@ -5,6 +5,7 @@ import { FormMatcher } from '../../matchers/formMatcher';
 import { RegistrationService } from 'src/app/core/services/registration/registration.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-add-user',
@@ -27,8 +28,7 @@ export class AddUserComponent {
 
   constructor(
     private readonly registrationService: RegistrationService,
-    private readonly clipboard: Clipboard,
-    private readonly router: Router
+    private readonly clipboard: Clipboard
     ) {
   }
 
@@ -39,7 +39,11 @@ export class AddUserComponent {
 
     this.registrationService.createInvitation(email, role).subscribe(
       r => {
-        this.link = window.location.protocol + '//' + window.location.hostname + '/register/' + r.invitationLink;
+        // when development include port
+        if (!environment.production)
+          this.link = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/register/${r.invitationLink}`;
+        else
+          this.link = `${window.location.protocol}//${window.location.hostname}/register/${r.invitationLink}`;
       }
     );
   }

@@ -39,6 +39,10 @@ export class TagsService extends ApiService {
     return this.get<number>('tags/amount');
   }
 
+  createTag(name: string): Observable<Tag> {
+    return this.post('tags', { name });
+  }
+
   deleteTag(id: string, name: string) {
     return this.delete(`tags/${id}`)
       .pipe(

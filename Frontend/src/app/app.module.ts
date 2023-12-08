@@ -60,6 +60,7 @@ import {SampleInterceptor} from "./core/interceptors/samples/sample.interceptor"
 import {RecipeInterceptor} from "./core/interceptors/recipes/recipe.interceptor";
 import { RegisterComponent } from './pages/register/register.component';
 import { AddUserComponent } from './core/components/dialogs/add-user/add-user.component';
+import { AddTagComponent } from './core/components/dialogs/add-tag/add-tag.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +83,8 @@ import { AddUserComponent } from './core/components/dialogs/add-user/add-user.co
     AddRecipeComponent,
     RecipeEditComponent,
     RegisterComponent,
-    AddUserComponent
+    AddUserComponent,
+    AddTagComponent
   ],
   imports: [
     BrowserModule,
