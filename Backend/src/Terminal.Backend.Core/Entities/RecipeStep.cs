@@ -17,7 +17,7 @@ public sealed class RecipeStep : Step
     {
         Recipe = recipe;
     }
-    
+
 
     private RecipeStep(StepId id, Comment comment) : base(id, comment)
     {

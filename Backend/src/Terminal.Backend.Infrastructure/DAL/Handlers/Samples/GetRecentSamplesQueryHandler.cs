@@ -6,7 +6,7 @@ using Terminal.Backend.Core.Entities;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers.Samples;
 
-internal sealed class GetRecentSamplesQueryHandler : 
+internal sealed class GetRecentSamplesQueryHandler :
     IRequestHandler<GetRecentSamplesQuery, GetRecentSamplesDto>
 {
     private readonly DbSet<Sample> _samples;
@@ -23,7 +23,9 @@ internal sealed class GetRecentSamplesQueryHandler :
             RecentSamples = await _samples
                 .OrderByDescending(m => m.CreatedAtUtc)
                 .Take(request.Length)
-                .Select(m => new GetSamplesDto.SampleDto(m.Id, m.Code.Value, m.Project.Name, m.CreatedAtUtc.ToString("o"), m.Comment))
+                .Select(m =>
+                    new GetSamplesDto.SampleDto(m.Id, m.Code.Value, m.Project.Name, m.CreatedAtUtc.ToString("o"),
+                        m.Comment))
                 .ToListAsync(cancellationToken)
         };
 }

@@ -20,20 +20,22 @@ internal sealed class SampleConfiguration : IEntityTypeConfiguration<Sample>
                 c => new SampleCode(c))
             .HasValueGenerator(typeof(SampleCodeValueGenerator));
         builder.Property(m => m.Comment)
-            .HasConversion(c => c.Value, 
+            .HasConversion(c => c.Value,
                 c => new Comment(c));
-        
+
         builder
             .HasMany(m => m.Tags)
             .WithMany();
-        
+
         builder.HasMany(m => m.Steps)
             .WithOne()
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(m => m.Recipe)
-            .WithMany();
-        
+            .WithMany()
+            .OnDelete(DeleteBehavior.SetNull);
+
         // search index
         builder
             .HasIndex(m => new { m.Code, m.Comment })

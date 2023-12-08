@@ -6,7 +6,7 @@ using Terminal.Backend.Core.Entities;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers.Tags;
 
-internal sealed class GetTagQueryHandler: IRequestHandler<GetTagQuery, GetTagDto?>
+internal sealed class GetTagQueryHandler : IRequestHandler<GetTagQuery, GetTagDto?>
 {
     private readonly DbSet<Tag> _tags;
 
@@ -14,7 +14,7 @@ internal sealed class GetTagQueryHandler: IRequestHandler<GetTagQuery, GetTagDto
     {
         _tags = dbContext.Tags;
     }
-    
+
     public async Task<GetTagDto?> Handle(GetTagQuery request, CancellationToken ct)
     {
         var tagId = request.TagId;

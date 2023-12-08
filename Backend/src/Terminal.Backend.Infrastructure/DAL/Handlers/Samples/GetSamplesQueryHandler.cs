@@ -14,7 +14,7 @@ internal sealed class GetSamplesQueryHandler : IRequestHandler<GetSamplesQuery, 
     {
         _samples = dbContext.Samples;
     }
-    
+
     public async Task<GetSamplesDto> Handle(GetSamplesQuery request, CancellationToken ct)
     {
         var samples = await _samples
@@ -26,7 +26,7 @@ internal sealed class GetSamplesQueryHandler : IRequestHandler<GetSamplesQuery, 
             .Select(m => new GetSamplesDto.SampleDto(
                 m.Id, m.Code.Value, m.Project.Name, m.CreatedAtUtc.ToString("o"), m.Comment))
             .ToListAsync(ct);
-        
+
         return new GetSamplesDto { Samples = samples };
     }
 }

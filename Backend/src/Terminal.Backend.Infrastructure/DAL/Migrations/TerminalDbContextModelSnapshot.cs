@@ -939,7 +939,7 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
                     b.HasOne("Terminal.Backend.Core.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -997,7 +997,8 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations
 
                     b.HasOne("Terminal.Backend.Core.Entities.Recipe", "Recipe")
                         .WithMany()
-                        .HasForeignKey("RecipeId");
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Project");
 

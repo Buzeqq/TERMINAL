@@ -10,4 +10,5 @@ public interface ITagRepository
     Task UpdateAsync(Tag tag, CancellationToken ct);
     Task<IEnumerable<Tag>> GetManyAsync(IEnumerable<TagId> tagIds, CancellationToken ct);
     Task DeleteAsync(Tag tag, CancellationToken cancellationToken);
+    Task<bool> IsNameUniqueAsync(TagName name, CancellationToken cancellationToken);
 }

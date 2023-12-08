@@ -8,7 +8,7 @@ public class SearchRecipeQuery : IRequest<GetRecipesDto>
 {
     public string SearchPhrase { get; set; }
     public PagingParameters Parameters { get; set; }
-    
+
     public SearchRecipeQuery(string searchPhrase, int pageNumber, int pageSize)
     {
         SearchPhrase = searchPhrase;

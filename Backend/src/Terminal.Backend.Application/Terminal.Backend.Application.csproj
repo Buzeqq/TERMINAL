@@ -6,23 +6,23 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="MediatR" Version="12.1.1" />
-      <PackageReference Include="Scrutor" Version="4.2.2" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0"/>
+        <PackageReference Include="MediatR" Version="12.1.1"/>
+        <PackageReference Include="Scrutor" Version="4.2.2"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+        <FrameworkReference Include="Microsoft.AspNetCore.App"/>
     </ItemGroup>
-    
+
     <ItemGroup>
-      <ProjectReference Include="..\Terminal.Backend.Core\Terminal.Backend.Core.csproj" />
+        <ProjectReference Include="..\Terminal.Backend.Core\Terminal.Backend.Core.csproj"/>
     </ItemGroup>
-    
+
     <ItemGroup>
-      <Reference Include="Microsoft.AspNetCore.Http.Abstractions">
-        <HintPath>..\..\..\..\..\..\..\usr\share\dotnet\shared\Microsoft.AspNetCore.App\7.0.12\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
-      </Reference>
-      <Reference Include="Microsoft.AspNetCore.Http.Features" />
+        <Reference Include="Microsoft.AspNetCore.Http.Abstractions">
+            <HintPath>..\..\..\..\..\..\..\usr\share\dotnet\shared\Microsoft.AspNetCore.App\7.0.12\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.AspNetCore.Http.Features"/>
     </ItemGroup>
 </Project>

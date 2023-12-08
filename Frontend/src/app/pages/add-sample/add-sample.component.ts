@@ -156,14 +156,14 @@ export class AddSampleComponent implements OnInit, OnDestroy {
           id: sampleId
         };
 
-        // const projectId = p['projectId'];
-        // if (projectId) {
-        //   this.projectService.getProject(projectId)
-        //     .subscribe(p => {
-        //       this.sampleForm.controls.project.setItem({id: p.id, name: p.name}, null);
-        //       this.sampleForm.controls.project.setValue(p.name);
-        //     });
-        // }
+        const projectId = p['projectId'];
+        if (projectId) {
+          this.projectService.getProject(projectId)
+            .subscribe(p => {
+              this.sampleForm.controls.project.setItem({id: p.id, name: p.name}, null);
+              this.sampleForm.controls.project.setValue(p.name);
+            });
+        }
 
         return undefined;
       }),

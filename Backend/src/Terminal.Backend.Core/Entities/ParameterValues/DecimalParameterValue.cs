@@ -14,7 +14,7 @@ public sealed class DecimalParameterValue : ParameterValue
         {
             throw new DecimalParameterValueNotValidException(parameter, value);
         }
-        
+
         Value = value;
     }
 
@@ -25,8 +25,8 @@ public sealed class DecimalParameterValue : ParameterValue
 
     public override ParameterValue DeepCopy(ParameterValueId id)
     {
-        return new DecimalParameterValue(id, 
-            Parameter as DecimalParameter 
+        return new DecimalParameterValue(id,
+            Parameter as DecimalParameter
             ?? throw new ParameterValueCopyException(typeof(DecimalParameter), Parameter.GetType()),
             Value);
     }
@@ -41,7 +41,7 @@ public sealed class DecimalParameterValue : ParameterValue
         {
             throw new DecimalParameterValueNotValidException(decimalParameter, value);
         }
-        
+
         Value = value;
     }
 }

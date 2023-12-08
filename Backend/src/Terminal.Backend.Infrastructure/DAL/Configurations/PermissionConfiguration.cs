@@ -14,12 +14,12 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
 
         builder
             .Property(x => x.Id)
-            .HasConversion(x => x.Value, 
+            .HasConversion(x => x.Value,
                 x => new PermissionId(x));
-        
+
         builder
             .Property(x => x.Name)
-            .HasConversion(x => x.Value, 
+            .HasConversion(x => x.Value,
                 x => new PermissionName(x));
 
         var permissions = Enum.GetValues<Core.Enums.Permission>()

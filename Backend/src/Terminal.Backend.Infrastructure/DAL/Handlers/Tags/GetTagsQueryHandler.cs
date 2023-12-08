@@ -6,7 +6,7 @@ using Terminal.Backend.Core.Entities;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers.Tags;
 
-internal sealed class GetTagsQueryHandler : 
+internal sealed class GetTagsQueryHandler :
     // IRequestHandler<GetMostPopularTagsQuery, GetTagsDto>,
     IRequestHandler<GetTagsQuery, GetTagsDto>
 {
@@ -18,7 +18,7 @@ internal sealed class GetTagsQueryHandler :
         _samples = dbContext.Samples;
         _tags = dbContext.Tags;
     }
-    
+
     // public async Task<GetTagsDto> Handle(GetMostPopularTagsQuery query, CancellationToken ct)
     //     => (await _samples
     //         .AsNoTracking()

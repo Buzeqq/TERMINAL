@@ -30,7 +30,7 @@ internal sealed class UpdateUserRoleCommandHandler : IRequestHandler<UpdateUserR
         {
             throw new RoleNotFoundException(role);
         }
-        
+
         user.SetRole(newRole);
         await _userRepository.UpdateAsync(user, cancellationToken);
     }

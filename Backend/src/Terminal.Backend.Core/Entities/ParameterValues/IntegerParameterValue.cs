@@ -14,7 +14,7 @@ public sealed class IntegerParameterValue : ParameterValue
         {
             throw new IntegerParameterValueNotValidException(parameter, value);
         }
-        
+
         Value = value;
     }
 
@@ -22,11 +22,11 @@ public sealed class IntegerParameterValue : ParameterValue
     {
         Value = value;
     }
-    
+
     public override ParameterValue DeepCopy(ParameterValueId id)
     {
-        return new IntegerParameterValue(id, 
-            Parameter as IntegerParameter 
+        return new IntegerParameterValue(id,
+            Parameter as IntegerParameter
             ?? throw new ParameterValueCopyException(typeof(IntegerParameter), Parameter.GetType()),
             Value);
     }
@@ -41,7 +41,7 @@ public sealed class IntegerParameterValue : ParameterValue
         {
             throw new IntegerParameterValueNotValidException(integerParameter, value);
         }
-        
+
         Value = value;
     }
 }

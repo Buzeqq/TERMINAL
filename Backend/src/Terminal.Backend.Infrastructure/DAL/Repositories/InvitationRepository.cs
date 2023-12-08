@@ -14,7 +14,7 @@ internal sealed class InvitationRepository : IInvitationRepository
         _invitations = dbContext.Invitations;
     }
 
-    public async Task AddAsync(Invitation invitation, CancellationToken ct) 
+    public async Task AddAsync(Invitation invitation, CancellationToken ct)
         => await _invitations.AddAsync(invitation, ct);
 
     public async Task DeleteAllForUserAsync(User user, CancellationToken ct)

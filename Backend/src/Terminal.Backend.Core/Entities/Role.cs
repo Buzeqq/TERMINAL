@@ -9,7 +9,7 @@ public sealed class Role : Enumeration<Role, RoleId>
     public static readonly Role Moderator = new(new RoleId(2), nameof(Moderator));
     public static readonly Role Registered = new(new RoleId(1), nameof(Registered));
     public static readonly Role Guest = new(new RoleId(0), nameof(Guest));
-    
+
     private Role(RoleId value, string name) : base(value, name)
     {
     }

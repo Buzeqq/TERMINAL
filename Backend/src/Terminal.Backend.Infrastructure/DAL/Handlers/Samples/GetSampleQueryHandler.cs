@@ -1,13 +1,14 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Terminal.Backend.Application.DTO.Recipes;
 using Terminal.Backend.Application.DTO.Samples;
 using Terminal.Backend.Application.Queries.Samples.Get;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers.Samples;
+
 internal class GetSampleQueryHandler : IRequestHandler<GetSampleQuery, GetSampleDto?>
 {
     private readonly TerminalDbContext _dbContext;
+
     public GetSampleQueryHandler(TerminalDbContext dbContext)
     {
         _dbContext = dbContext;
@@ -22,9 +23,9 @@ internal class GetSampleQueryHandler : IRequestHandler<GetSampleQuery, GetSample
             .Include(s => s.Steps)
             .ThenInclude(s => s.Parameters)
             .ThenInclude(p => p.Parameter)
-            .Include(s => s.Tags) 
+            .Include(s => s.Tags)
             .SingleOrDefaultAsync(s => s.Id.Equals(request.Id), ct);
-        
+
         return sample?.AsGetSampleDto();
     }
 }

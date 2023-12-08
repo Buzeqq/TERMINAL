@@ -5,7 +5,7 @@ using Terminal.Backend.Core.Abstractions.Repositories;
 
 namespace Terminal.Backend.Application.Commands.Users.Update.Password.WithAdminPrivileges;
 
-internal sealed class UpdateUserPasswordAdministratorCommandHandler 
+internal sealed class UpdateUserPasswordAdministratorCommandHandler
     : IRequestHandler<UpdateUserPasswordAdministratorCommand>
 {
     private readonly IUserRepository _userRepository;
@@ -25,7 +25,7 @@ internal sealed class UpdateUserPasswordAdministratorCommandHandler
         {
             throw new UserNotFoundException();
         }
-        
+
         user.UpdatePassword(_passwordHasher.Hash(newPassword));
         await _userRepository.UpdateAsync(user, cancellationToken);
     }

@@ -6,6 +6,5 @@ public class ColumnNotFoundException : TerminalException
 {
     public ColumnNotFoundException(string columnName) : base($"Column not found {columnName}")
     {
-        
     }
 }

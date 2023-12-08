@@ -8,9 +8,9 @@ namespace Terminal.Backend.Infrastructure.DAL.ValueGenerators;
 internal sealed class SampleCodeValueGenerator : ValueGenerator<SampleCode>
 {
     public override bool GeneratesTemporaryValues => false;
-    
+
     private const ulong InitialNumberValue = 1;
-    
+
     public override SampleCode Next(EntityEntry entry)
     {
         var dbContext = entry.Context as TerminalDbContext ?? throw new InvalidDataException();
@@ -18,7 +18,7 @@ internal sealed class SampleCodeValueGenerator : ValueGenerator<SampleCode>
             .OrderBy(m => m.Code)
             .Select(m => m.Code)
             .LastOrDefault()?.Number;
-        
+
         return lastCodeNumber is null
             ? new SampleCode(InitialNumberValue)
             : new SampleCode((ulong)(lastCodeNumber + 1));
@@ -29,7 +29,9 @@ internal sealed class SampleCodeValueGenerator : ValueGenerator<SampleCode>
         var dbContext = entry.Context as TerminalDbContext ?? throw new InvalidDataException(); // FIXME
         var lastCodeNumber = (await dbContext.Samples.OrderBy(m => m.Code).LastOrDefaultAsync(ct))
             ?.Code.Number;
-        
-        return lastCodeNumber is null ? new SampleCode(InitialNumberValue) : new SampleCode((ulong)(lastCodeNumber + 1));
+
+        return lastCodeNumber is null
+            ? new SampleCode(InitialNumberValue)
+            : new SampleCode((ulong)(lastCodeNumber + 1));
     }
 }

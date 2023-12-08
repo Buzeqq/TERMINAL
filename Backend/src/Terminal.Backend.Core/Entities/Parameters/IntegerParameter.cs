@@ -10,10 +10,10 @@ public sealed class IntegerParameter : NumericParameter
     public IntegerParameter(ParameterId id,
         ParameterName name,
         string unit,
-        int step, 
-        int defaultValue = 0, 
+        int step,
+        int defaultValue = 0,
         uint order = 0,
-        bool isActive = true) : 
+        bool isActive = true) :
         base(id, name, unit, order, isActive)
     {
         Step = step;

@@ -6,7 +6,7 @@ namespace Terminal.Backend.Application.Exceptions;
 
 public sealed class UnknownParameterTypeException : TerminalException
 {
-    public UnknownParameterTypeException(Parameter parameter) : 
+    public UnknownParameterTypeException(Parameter parameter) :
         base($"Unknown type of parameter {typeof(Parameter).FullName}")
     {
     }

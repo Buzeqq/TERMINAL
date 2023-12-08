@@ -9,10 +9,10 @@ public sealed class TextParameter : Parameter
 
     public TextParameter(ParameterId id,
         ParameterName name,
-        List<string> allowedValues, 
-        uint defaultValue = 0, 
+        List<string> allowedValues,
+        uint defaultValue = 0,
         uint order = 0,
-        bool isActive = true) 
+        bool isActive = true)
         : base(id, name, order, isActive)
     {
         AllowedValues = allowedValues;

@@ -8,13 +8,11 @@ namespace Terminal.Backend.Infrastructure.DAL.Handlers.Recipes;
 
 internal sealed class GetRecipeDetailsQueryHandler : IRequestHandler<GetRecipeDetailsQuery, GetRecipeDetailsDto?>
 {
-    private DbSet<Recipe> _recipes;
-    private DbSet<RecipeStep> _steps;
+    private readonly DbSet<Recipe> _recipes;
 
     public GetRecipeDetailsQueryHandler(TerminalDbContext dbContext)
     {
         _recipes = dbContext.Recipes;
-        _steps = dbContext.RecipeSteps;
     }
 
     public async Task<GetRecipeDetailsDto?> Handle(GetRecipeDetailsQuery request, CancellationToken cancellationToken)
@@ -24,9 +22,9 @@ internal sealed class GetRecipeDetailsQueryHandler : IRequestHandler<GetRecipeDe
             .ThenInclude(s => s.Parameters)
             .ThenInclude(s => s.Parameter)
             .SingleOrDefaultAsync(r => r.Id.Equals(request.Id), cancellationToken);
-        
-        return recipe is null ? 
-            null : 
-            new GetRecipeDetailsDto(recipe.Id, recipe.RecipeName.Name, recipe.Steps.AsStepsDto());
+
+        return recipe is null
+            ? null
+            : new GetRecipeDetailsDto(recipe.Id, recipe.RecipeName.Name, recipe.Steps.AsStepsDto());
     }
 }

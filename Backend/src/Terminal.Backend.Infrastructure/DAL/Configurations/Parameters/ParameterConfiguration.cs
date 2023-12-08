@@ -16,10 +16,10 @@ internal sealed class ParameterConfiguration : IEntityTypeConfiguration<Paramete
             .Property(p => p.Id)
             .HasConversion(p => p.Value,
                 p => new ParameterId(p));
-        
+
         builder
             .Property(p => p.Name)
-            .HasConversion(n => n.Value, 
+            .HasConversion(n => n.Value,
                 n => new ParameterName(n));
 
         builder.HasMany<ParameterValue>()

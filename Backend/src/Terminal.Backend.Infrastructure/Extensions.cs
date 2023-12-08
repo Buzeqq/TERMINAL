@@ -40,7 +40,7 @@ public static class Extensions
                 Type = SecuritySchemeType.ApiKey,
                 Scheme = "Bearer"
             });
-            
+
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
@@ -66,27 +66,16 @@ public static class Extensions
             cfg.RegisterServicesFromAssembly(AssemblyReference.Assembly);
             cfg.AddOpenBehavior(typeof(UnitOfWorkBehaviour<,>));
         });
-        
+
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer();
         services.AddAuthorization();
         services.AddAuthorizationBuilder()
-            .AddPolicy(Role.Registered, policy =>
-            {
-                policy.AddRequirements(new RoleRequirement(Role.Registered));
-            })
-            .AddPolicy(Role.Guest, policy =>
-            {
-                policy.AddRequirements(new RoleRequirement(Role.Guest));
-            })
-            .AddPolicy(Role.Moderator, policy =>
-            {
-                policy.AddRequirements(new RoleRequirement(Role.Moderator));
-            })
-            .AddPolicy(Role.Administrator, policy =>
-            {
-                policy.AddRequirements(new RoleRequirement(Role.Administrator));
-            });
+            .AddPolicy(Role.Registered, policy => { policy.AddRequirements(new RoleRequirement(Role.Registered)); })
+            .AddPolicy(Role.Guest, policy => { policy.AddRequirements(new RoleRequirement(Role.Guest)); })
+            .AddPolicy(Role.Moderator, policy => { policy.AddRequirements(new RoleRequirement(Role.Moderator)); })
+            .AddPolicy(Role.Administrator,
+                policy => { policy.AddRequirements(new RoleRequirement(Role.Administrator)); });
         services.AddScoped<IAuthorizationService, AuthorizationService>();
         services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
         services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
@@ -121,7 +110,7 @@ public static class Extensions
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
-        
+
         using var scope = app.Services.CreateScope();
         using var dbContext = scope.ServiceProvider.GetRequiredService<TerminalDbContext>();
 
@@ -142,7 +131,7 @@ public static class Extensions
                     passwordHasher.Hash(adminOptions.Password));
                 admin.SetRole(adminRole);
                 dbContext.Users.Add(admin);
-        
+
                 dbContext.SaveChanges();
             }
         }
@@ -153,7 +142,7 @@ public static class Extensions
 
         if (!app.Configuration.GetOptions<PostgresOptions>("Postgres").Seed ||
             !app.Environment.IsDevelopment()) return app;
-        
+
         using var seedTransaction = dbContext.Database.BeginTransaction();
         var seeder = new TerminalDbSeeder(dbContext);
         try

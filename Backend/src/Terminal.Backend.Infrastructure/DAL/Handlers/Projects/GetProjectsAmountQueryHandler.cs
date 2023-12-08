@@ -13,7 +13,7 @@ internal sealed class GetProjectsAmountQueryHandler : IRequestHandler<GetProject
     {
         _projects = dbContext.Projects;
     }
-    
+
     public async Task<int> Handle(GetProjectsAmountQuery request, CancellationToken cancellationToken)
     {
         var amount = _projects

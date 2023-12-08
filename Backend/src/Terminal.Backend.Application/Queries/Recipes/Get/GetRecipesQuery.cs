@@ -13,6 +13,6 @@ public sealed class GetRecipesQuery : IRequest<GetRecipesDto>
     }
 
     public PagingParameters Parameters { get; set; }
-    
+
     public OrderingParameters OrderingParameters { get; set; }
 }

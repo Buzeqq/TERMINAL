@@ -22,7 +22,7 @@ public static class Extensions
         {
             Projects = entities.Select(p => new GetProjectsDto.ProjectDto(p.Id, p.Name))
         };
-    
+
     public static GetRecipesDto AsGetRecipesDto(this IEnumerable<Recipe> entities)
         => new()
         {
@@ -46,10 +46,10 @@ public static class Extensions
 
     public static GetTagDto AsGetTagDto(this Tag entity)
         => new(entity.Id, entity.Name, entity.IsActive);
-    
+
     public static GetSampleDto AsGetSampleDto(this Sample entity)
         => new()
-        { 
+        {
             Id = entity.Id.Value,
             ProjectId = entity.Project.Id.Value,
             Recipe = entity.Recipe?.AsDto(),
@@ -61,21 +61,24 @@ public static class Extensions
         };
 
     public static IEnumerable<GetSampleStepsDto> AsStepsDto<TStep>(this IEnumerable<TStep> steps)
-    where TStep: Step
+        where TStep : Step
         => steps.Select(s => new GetSampleStepsDto(
             s.Id,
             s.Parameters.Select(p =>
             {
                 GetSampleBaseParameterValueDto b = p switch
                 {
-                    DecimalParameterValue d => new GetSampleDecimalParameterValueDto(d.Parameter.Id, d.Parameter.Name, d.Value, (d.Parameter as DecimalParameter)!.Unit),
-                    IntegerParameterValue i => new GetSampleIntegerParameterValueDto(i.Parameter.Id, i.Parameter.Name, i.Value, (i.Parameter as IntegerParameter)!.Unit),
-                    TextParameterValue t => new GetSampleTextParameterValueDto(t.Parameter.Id, t.Parameter.Name, t.Value),
+                    DecimalParameterValue d => new GetSampleDecimalParameterValueDto(d.Parameter.Id, d.Parameter.Name,
+                        d.Value, (d.Parameter as DecimalParameter)!.Unit),
+                    IntegerParameterValue i => new GetSampleIntegerParameterValueDto(i.Parameter.Id, i.Parameter.Name,
+                        i.Value, (i.Parameter as IntegerParameter)!.Unit),
+                    TextParameterValue t => new GetSampleTextParameterValueDto(t.Parameter.Id, t.Parameter.Name,
+                        t.Value),
                     _ => throw new ArgumentOutOfRangeException(nameof(p))
                 };
                 return b;
             }), s.Comment));
-    
+
     // public static IEnumerable<GetSampleStepsDto> AsStepsDto(this IEnumerable<RecipeStep> steps)
     //     => steps.Select(s => new GetSampleStepsDto(
     //         s.Parameters.Select(p =>
@@ -97,7 +100,7 @@ public static class Extensions
             Email = entity.Email,
             Role = entity.Role,
         };
-    
+
     public static GetParametersDto AsGetParametersDto(this IEnumerable<Parameter> parameters)
     {
         return new GetParametersDto
@@ -110,17 +113,21 @@ public static class Extensions
     {
         return parameter switch
         {
-            IntegerParameter i => new GetIntegerParameterDto(i.Id, i.Name, i.Unit, i.Step, i.Order, i.DefaultValue, i.Parent?.Id.Value),
-            DecimalParameter d => new GetDecimalParameterDto(d.Id, d.Name, d.Unit, d.Step, d.Order, d.DefaultValue, d.Parent?.Id.Value),
-            TextParameter t => new GetTextParameterDto(t.Id, t.Name, t.AllowedValues, t.Order, t.DefaultValue, t.Parent?.Id.Value),
+            IntegerParameter i => new GetIntegerParameterDto(i.Id, i.Name, i.Unit, i.Step, i.Order, i.DefaultValue,
+                i.Parent?.Id.Value),
+            DecimalParameter d => new GetDecimalParameterDto(d.Id, d.Name, d.Unit, d.Step, d.Order, d.DefaultValue,
+                d.Parent?.Id.Value),
+            TextParameter t => new GetTextParameterDto(t.Id, t.Name, t.AllowedValues, t.Order, t.DefaultValue,
+                t.Parent?.Id.Value),
             _ => throw new ArgumentOutOfRangeException(nameof(parameter))
         };
     }
 
     public static IQueryable<T> Paginate<T>(this IQueryable<T> queryable, PagingParameters parameters)
         => queryable.Skip(parameters.PageNumber * parameters.PageSize).Take(parameters.PageSize);
-    
-    public static IOrderedQueryable<TEntity> OrderBy<TEntity>(this IQueryable<TEntity> source, OrderingParameters parameters)
+
+    public static IOrderedQueryable<TEntity> OrderBy<TEntity>(this IQueryable<TEntity> source,
+        OrderingParameters parameters)
     {
         var command = parameters.Desc ? "OrderByDescending" : "OrderBy";
         var type = typeof(TEntity);

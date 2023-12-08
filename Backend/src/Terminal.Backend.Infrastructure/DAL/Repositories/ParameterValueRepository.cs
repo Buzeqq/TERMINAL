@@ -15,4 +15,4 @@ internal sealed class ParameterValueRepository : IParameterValueRepository
 
     public async Task AddAsync(ParameterValue value, CancellationToken ct)
         => await _values.AddAsync(value, ct);
-}   
+}

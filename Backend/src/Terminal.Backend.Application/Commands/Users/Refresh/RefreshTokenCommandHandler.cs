@@ -25,7 +25,7 @@ internal sealed class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenC
         {
             throw new UserNotFoundException();
         }
-        
+
         var token = _jwtProvider.Generate(user);
         return token;
     }

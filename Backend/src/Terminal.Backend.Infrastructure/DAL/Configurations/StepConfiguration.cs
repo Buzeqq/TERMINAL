@@ -10,7 +10,7 @@ internal sealed class StepConfiguration : IEntityTypeConfiguration<Step>
     public void Configure(EntityTypeBuilder<Step> builder)
     {
         builder.HasKey(s => s.Id);
-        
+
         builder.Property(s => s.Id)
             .HasConversion(i => i.Value,
                 i => new StepId(i));
@@ -22,7 +22,8 @@ internal sealed class StepConfiguration : IEntityTypeConfiguration<Step>
         builder
             .HasMany(s => s.Parameters)
             .WithOne()
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.UseTpcMappingStrategy();
     }

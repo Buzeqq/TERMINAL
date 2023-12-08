@@ -28,7 +28,7 @@ internal sealed class CreateUserCommandHandler : IRequestHandler<CreateUserComma
     {
         var (email, role) = request;
         var user = await _userRepository.GetUserByEmailAsync(email, cancellationToken);
-        
+
         if (user is null)
         {
             user = User.CreateInactiveUser(UserId.Create(), email);
@@ -36,13 +36,13 @@ internal sealed class CreateUserCommandHandler : IRequestHandler<CreateUserComma
                               ?? throw new RoleNotFoundException(role);
             user.SetRole(newUserRole);
             await _userRepository.AddUserAsync(user, cancellationToken);
-
         }
 
         if (user.Activated)
         {
             throw new UserAlreadyExistsException(email);
         }
+
         var invitation = await _invitationFactory.CrateAsync(user, cancellationToken);
         await _mailService.SendInvitation(invitation);
 

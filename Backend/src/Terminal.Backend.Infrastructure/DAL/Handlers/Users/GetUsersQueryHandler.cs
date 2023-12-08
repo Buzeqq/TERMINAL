@@ -14,7 +14,7 @@ internal sealed class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, GetU
     {
         _users = dbContext.Users;
     }
-    
+
     public async Task<GetUsersDto> Handle(GetUsersQuery request, CancellationToken ct)
     {
         var users = await _users
@@ -23,7 +23,7 @@ internal sealed class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, GetU
             .Paginate(request.Parameters)
             .Select(u => new GetUsersDto.UserDto(u.Id.Value, u.Email.Value, u.Role.Name))
             .ToListAsync(ct);
-        
-        return new GetUsersDto { Users = users};
+
+        return new GetUsersDto { Users = users };
     }
 }

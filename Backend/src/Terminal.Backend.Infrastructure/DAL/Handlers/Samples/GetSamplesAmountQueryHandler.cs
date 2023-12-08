@@ -13,7 +13,7 @@ internal sealed class GetSamplesAmountQueryHandler : IRequestHandler<GetSamplesA
     {
         _samples = dbContext.Samples;
     }
-    
+
     public async Task<int> Handle(GetSamplesAmountQuery request, CancellationToken ct)
     {
         var amount = _samples

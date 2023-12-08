@@ -18,11 +18,12 @@ internal sealed class InvitationConfiguration : IEntityTypeConfiguration<Invitat
 
         builder
             .Property(i => i.Link)
-            .HasConversion(l => l.Value, 
+            .HasConversion(l => l.Value,
                 l => new InvitationLink(l));
 
         builder
             .HasOne(i => i.User)
-            .WithMany();
+            .WithMany()
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

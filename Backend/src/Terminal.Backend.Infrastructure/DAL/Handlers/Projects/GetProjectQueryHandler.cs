@@ -14,7 +14,7 @@ internal sealed class GetProjectQueryHandler : IRequestHandler<GetProjectQuery, 
     {
         _projects = dbContext.Projects;
     }
-    
+
     public async Task<GetProjectDto?> Handle(GetProjectQuery query, CancellationToken ct)
     {
         var projectId = query.ProjectId;
@@ -24,7 +24,7 @@ internal sealed class GetProjectQueryHandler : IRequestHandler<GetProjectQuery, 
             .SingleOrDefaultAsync(p => p.Id.Equals(projectId), ct))?.AsGetProjectDto();
 
         if (project is null) return project;
-        
+
         var sampleIds = await _projects
             .AsNoTracking()
             .Where(p => p.Id.Equals(projectId))
@@ -33,7 +33,7 @@ internal sealed class GetProjectQueryHandler : IRequestHandler<GetProjectQuery, 
             .ToListAsync(ct);
 
         project.SamplesIds = sampleIds;
-        
+
         return project;
     }
 }

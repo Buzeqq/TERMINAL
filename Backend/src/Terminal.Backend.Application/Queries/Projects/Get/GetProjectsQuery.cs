@@ -7,9 +7,9 @@ namespace Terminal.Backend.Application.Queries.Projects.Get;
 public sealed class GetProjectsQuery : IRequest<GetProjectsDto>
 {
     public PagingParameters Parameters { get; set; }
-    
+
     public OrderingParameters OrderingParameters { get; set; }
-    
+
     public bool OnlyActive { get; set; }
 
     public GetProjectsQuery(int pageNumber, int pageSize, bool desc, bool onlyActive = true)

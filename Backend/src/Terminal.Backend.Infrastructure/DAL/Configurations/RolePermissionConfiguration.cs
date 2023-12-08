@@ -14,7 +14,7 @@ internal sealed class RolePermissionConfiguration : IEntityTypeConfiguration<Rol
 
         builder
             .Property(x => x.PermissionId)
-            .HasConversion(x => x.Value, 
+            .HasConversion(x => x.Value,
                 x => new PermissionId(x));
 
         builder

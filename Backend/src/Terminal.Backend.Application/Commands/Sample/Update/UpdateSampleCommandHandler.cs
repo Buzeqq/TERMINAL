@@ -27,7 +27,7 @@ internal sealed class UpdateSampleCommandHandler : IRequestHandler<UpdateSampleC
 
     public async Task Handle(UpdateSampleCommand request, CancellationToken cancellationToken)
     {
-        var (id, projectId, recipeId, stepsDto, tagIds, comment) 
+        var (id, projectId, recipeId, stepsDto, tagIds, comment)
             = request;
         var sample = await _sampleRepository.GetAsync(id, cancellationToken);
         if (sample is null)
@@ -40,11 +40,12 @@ internal sealed class UpdateSampleCommandHandler : IRequestHandler<UpdateSampleC
         {
             throw new ProjectNotFoundException();
         }
+
         if (!project.IsActive)
         {
             throw new ProjectNotActiveException(project.Name);
         }
-        
+
         Core.Entities.Recipe? recipe = null;
         if (recipeId is not null)
         {

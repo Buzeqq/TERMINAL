@@ -10,7 +10,7 @@ public abstract class Parameter
     public bool IsActive { get; private set; }
 
     public Parameter? Parent { get; private set; }
-    
+
     protected Parameter(ParameterId id, ParameterName name, uint order = 0, bool isActive = true)
     {
         Id = id;

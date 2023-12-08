@@ -15,9 +15,9 @@ public sealed record ProjectId
 
         Value = id;
     }
+
     private ProjectId()
     {
-        
     }
 
     public static ProjectId Create() => new(Guid.NewGuid());

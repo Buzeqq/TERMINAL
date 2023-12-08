@@ -18,5 +18,4 @@ internal sealed class StepsRepository : IStepsRepository
         => (await _recipes
             .Include(r => r.Steps)
             .SingleOrDefaultAsync(r => r.Id == id, ct))?.Steps ?? new List<RecipeStep>();
-
 }
