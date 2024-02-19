@@ -57,9 +57,11 @@ export class SamplesService extends ApiService {
         map(r => r.map(sample => ({
           ...sample,
           createdAtUtc: new Date(sample.createdAtUtc)
-        })))
+        }))),
+        tap(console.log)
       );
-    else return this.idbService.getRecentSamples(length).pipe(map(s => s.map(sample => ({
+    else return this.idbService.getRecentSamples(length)
+      .pipe(map(s => s.map(sample => ({
         ...sample, createdAtUtc: new Date(sample.createdAtUtc)
       }))));
   }

@@ -15,7 +15,10 @@ export class DashboardComponent {
   displayedColumns: string[] = ['code', 'project', 'created'];
   selectedSample?: SelectedItem;
   recentSamples$: Observable<Sample[]> = this.samplesService.getRecentSamples(10)
-    .pipe(tap(r => this.selectedSample = {type: 'Sample', id: r[0].id, config: {init: true}}));
+    .pipe(tap(r => {
+      if (r.length === 0) return;
+      this.selectedSample = { type: 'Sample', id: r[0].id, config: {init: true} }
+    }));
 
   constructor(
     private readonly samplesService: SamplesService,

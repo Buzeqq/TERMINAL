@@ -8,30 +8,32 @@
           <h2>Recent samples</h2>
         </div>
       </mat-card-header>
-      <div *ngIf="recentSamples$ | async as recentSamples; else loading" class="recent-samples__list">
-        <mat-table [dataSource]="recentSamples" class="recent-samples__list-content mat-elevation-z8">
-          <ng-container matColumnDef="code">
-            <mat-header-cell *matHeaderCellDef> Code</mat-header-cell>
-            <mat-cell *matCellDef="let sample"> {{sample.code}} </mat-cell>
-          </ng-container>
+      <div *ngIf="recentSamples$ | async as recentSamples else loading" class="recent-samples__list">
+        <div *ngIf="recentSamples.length > 0; else empty">
+          <mat-table [dataSource]="recentSamples" class="recent-samples__list-content mat-elevation-z8">
+            <ng-container matColumnDef="code">
+              <mat-header-cell *matHeaderCellDef> Code</mat-header-cell>
+              <mat-cell *matCellDef="let sample"> {{sample.code}} </mat-cell>
+            </ng-container>
 
-          <ng-container matColumnDef="project">
-            <mat-header-cell *matHeaderCellDef> Project</mat-header-cell>
-            <mat-cell *matCellDef="let sample"> {{sample.project}} </mat-cell>
-          </ng-container>
+            <ng-container matColumnDef="project">
+              <mat-header-cell *matHeaderCellDef> Project</mat-header-cell>
+              <mat-cell *matCellDef="let sample"> {{sample.project}} </mat-cell>
+            </ng-container>
 
-          <ng-container matColumnDef="created">
-            <mat-header-cell *matHeaderCellDef> Created</mat-header-cell>
-            <mat-cell *matCellDef="let sample"> {{sample.createdAtUtc | timeAgo}} </mat-cell>
-          </ng-container>
+            <ng-container matColumnDef="created">
+              <mat-header-cell *matHeaderCellDef> Created</mat-header-cell>
+              <mat-cell *matCellDef="let sample"> {{sample.createdAtUtc | timeAgo}} </mat-cell>
+            </ng-container>
 
-          <mat-header-row *matHeaderRowDef="displayedColumns" class="recent-samples__list-header"></mat-header-row>
-          <mat-row
-            mat-ripple
-            *matRowDef="let row; columns: displayedColumns;"
-            (click)="selectSample(row);"
-            [class.recent-samples__row--is-clicked]="row.id === selectedSample?.id"></mat-row>
-        </mat-table>
+            <mat-header-row *matHeaderRowDef="displayedColumns" class="recent-samples__list-header"></mat-header-row>
+            <mat-row
+              mat-ripple
+              *matRowDef="let row; columns: displayedColumns;"
+              (click)="selectSample(row);"
+              [class.recent-samples__row--is-clicked]="row.id === selectedSample?.id"></mat-row>
+          </mat-table>
+        </div>
       </div>
     </mat-card>
     <app-item-details class="sample-details" [item]="selectedSample"></app-item-details>
@@ -40,4 +42,7 @@
 
 <ng-template #loading>
   <mat-spinner></mat-spinner>
+</ng-template>
+<ng-template #empty>
+  <p>No data!</p>
 </ng-template>
