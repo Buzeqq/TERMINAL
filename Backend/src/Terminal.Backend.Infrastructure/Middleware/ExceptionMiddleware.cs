@@ -4,15 +4,8 @@ using Terminal.Backend.Core.Exceptions;
 
 namespace Terminal.Backend.Infrastructure.Middleware;
 
-internal sealed class ExceptionMiddleware : IMiddleware
+internal sealed class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger) : IMiddleware
 {
-    private readonly ILogger<ExceptionMiddleware> _logger;
-
-    public ExceptionMiddleware(ILogger<ExceptionMiddleware> logger)
-    {
-        _logger = logger;
-    }
-
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         try
@@ -21,7 +14,7 @@ internal sealed class ExceptionMiddleware : IMiddleware
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "{Message}", exception.Message);
+            logger.LogError(exception, "{Message}", exception.Message);
             await HandleErrorAsync(context, exception);
         }
     }

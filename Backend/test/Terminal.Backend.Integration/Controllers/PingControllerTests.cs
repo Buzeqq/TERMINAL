@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Terminal.Backend.Integration.Controllers;
 
-public class PingControllerTests : BaseControllerTests
+public class PingControllerTests(OptionsProvider optionsProvider) : BaseControllerTests(optionsProvider)
 {
     [Fact]
     public async Task get_ping_endpoint_should_return_200_ok_status_code_and_message()
@@ -15,9 +15,5 @@ public class PingControllerTests : BaseControllerTests
         
         // Assert
         content.Should().Be("backend reachable");
-    }
-
-    public PingControllerTests(OptionsProvider optionsProvider) : base(optionsProvider)
-    {
     }
 }

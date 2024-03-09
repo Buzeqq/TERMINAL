@@ -2,20 +2,15 @@ using System.Reflection;
 
 namespace Terminal.Backend.Core.Abstractions;
 
-public abstract class Enumeration<TEnum, TId> : IEquatable<Enumeration<TEnum, TId>>
-    where TEnum : Enumeration<TEnum, TId> where TId : notnull
+public abstract class Enumeration<TEnum, TId>(TId value, string name) : IEquatable<Enumeration<TEnum, TId>>
+    where TEnum : Enumeration<TEnum, TId>
+    where TId : notnull
 {
     private static readonly Dictionary<TId, TEnum>? Enumerations = CreateEnumerations();
 
-    public TId Value { get; protected init; }
+    public TId Value { get; protected init; } = value;
 
-    public string Name { get; protected init; }
-
-    protected Enumeration(TId value, string name)
-    {
-        Value = value;
-        Name = name;
-    }
+    public string Name { get; protected init; } = name;
 
     public static TEnum? FromValue(TId value)
     {

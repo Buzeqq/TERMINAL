@@ -1,8 +1,3 @@
 namespace Terminal.Backend.Core.Exceptions;
 
-public abstract class TerminalException : Exception
-{
-    protected TerminalException(string message) : base(message)
-    {
-    }
-}
+public abstract class TerminalException(string message) : Exception(message);

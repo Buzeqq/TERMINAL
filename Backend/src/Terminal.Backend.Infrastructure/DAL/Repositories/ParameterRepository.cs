@@ -5,14 +5,9 @@ using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Infrastructure.DAL.Repositories;
 
-internal sealed class ParameterRepository : IParameterRepository
+internal sealed class ParameterRepository(TerminalDbContext dbContext) : IParameterRepository
 {
-    private readonly DbSet<Parameter> _parameters;
-
-    public ParameterRepository(TerminalDbContext dbContext)
-    {
-        _parameters = dbContext.Parameters;
-    }
+    private readonly DbSet<Parameter> _parameters = dbContext.Parameters;
 
     public async Task<T?> GetAsync<T>(ParameterId id, CancellationToken ct)
         where T : Parameter

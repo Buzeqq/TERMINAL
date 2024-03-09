@@ -11,17 +11,9 @@ using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Services;
 
-internal sealed class ConvertDtoService : IConvertDtoService
+internal sealed class ConvertDtoService(IParameterRepository parameterRepository, ITagRepository tagRepository)
+    : IConvertDtoService
 {
-    private readonly IParameterRepository _parameterRepository;
-    private readonly ITagRepository _tagRepository;
-
-    public ConvertDtoService(IParameterRepository parameterRepository, ITagRepository tagRepository)
-    {
-        _parameterRepository = parameterRepository;
-        _tagRepository = tagRepository;
-    }
-
     public async Task<IEnumerable<SampleStep>> ConvertAsync(IEnumerable<CreateSampleStepDto> stepsDto,
         CancellationToken ct)
     {
@@ -68,13 +60,13 @@ internal sealed class ConvertDtoService : IConvertDtoService
         ParameterValue parameter = parameterDto switch
         {
             CreateSampleDecimalParameterValueDto @decimal
-                => new DecimalParameterValue(id, await _parameterRepository.GetAsync<DecimalParameter>(@decimal.Id, ct)
+                => new DecimalParameterValue(id, await parameterRepository.GetAsync<DecimalParameter>(@decimal.Id, ct)
                                                  ?? throw new ParameterNotFoundException(), @decimal.Value),
             CreateSampleIntegerParameterValueDto integer
-                => new IntegerParameterValue(id, await _parameterRepository.GetAsync<IntegerParameter>(integer.Id, ct)
+                => new IntegerParameterValue(id, await parameterRepository.GetAsync<IntegerParameter>(integer.Id, ct)
                                                  ?? throw new ParameterNotFoundException(), integer.Value),
             CreateSampleTextParameterValueDto text
-                => new TextParameterValue(id, await _parameterRepository.GetAsync<TextParameter>(text.Id, ct)
+                => new TextParameterValue(id, await parameterRepository.GetAsync<TextParameter>(text.Id, ct)
                                               ?? throw new ParameterNotFoundException(), text.Value),
             _ => throw new UnknownParameterTypeException(parameterDto)
         };
@@ -82,5 +74,5 @@ internal sealed class ConvertDtoService : IConvertDtoService
     }
 
     public Task<IEnumerable<Tag>> ConvertAsync(IEnumerable<TagId> tagIds, CancellationToken ct)
-        => _tagRepository.GetManyAsync(tagIds, ct);
+        => tagRepository.GetManyAsync(tagIds, ct);
 }

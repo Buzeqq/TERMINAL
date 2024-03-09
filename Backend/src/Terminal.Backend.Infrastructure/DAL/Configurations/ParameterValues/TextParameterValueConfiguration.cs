@@ -4,11 +4,12 @@ using Terminal.Backend.Core.Entities.ParameterValues;
 
 namespace Terminal.Backend.Infrastructure.DAL.Configurations.ParameterValues;
 
-internal sealed class TextParameterValueConfiguration : IEntityTypeConfiguration<TextParameterValue>
+internal class TextParameterValueConfiguration : IEntityTypeConfiguration<TextParameterValue>
 {
+    private static string Prefix => "text";
+
     public void Configure(EntityTypeBuilder<TextParameterValue> builder)
     {
-        builder.Property(p => p.Value)
-            .HasColumnName($"{nameof(TextParameterValue)}_Value");
+        builder.Property(v => v.Value).HasColumnName($"{Prefix}_value");
     }
 }

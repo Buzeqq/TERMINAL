@@ -5,14 +5,9 @@ using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Infrastructure.DAL.Repositories;
 
-internal sealed class TagRepository : ITagRepository
+internal sealed class TagRepository(TerminalDbContext dbContext) : ITagRepository
 {
-    private readonly DbSet<Tag> _tags;
-
-    public TagRepository(TerminalDbContext dbContext)
-    {
-        _tags = dbContext.Tags;
-    }
+    private readonly DbSet<Tag> _tags = dbContext.Tags;
 
     public async Task AddAsync(Tag tag, CancellationToken ct)
         => await _tags.AddAsync(tag, ct);

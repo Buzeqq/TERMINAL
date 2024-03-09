@@ -1,30 +1,26 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Terminal.Backend.Application.Abstractions;
-using Terminal.Backend.Core.Entities;
-using Terminal.Backend.Core.ValueObjects;
-using Terminal.Backend.Infrastructure.Administrator;
-using Terminal.Backend.Infrastructure.Authentication;
-using Terminal.Backend.Infrastructure.Authentication.OptionsSetup;
-using Terminal.Backend.Infrastructure.Authentication.Requirements;
 using Terminal.Backend.Infrastructure.DAL;
 using Terminal.Backend.Infrastructure.DAL.Behaviours;
-using Terminal.Backend.Infrastructure.Mails;
+using Terminal.Backend.Infrastructure.Identity;
+using Terminal.Backend.Infrastructure.Identity.Mails;
 using Terminal.Backend.Infrastructure.Middleware;
-using IAuthorizationService = Terminal.Backend.Infrastructure.Authentication.IAuthorizationService;
 
 namespace Terminal.Backend.Infrastructure;
 
 public static class Extensions
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddControllers();
         services.AddSingleton<ExceptionMiddleware>();
@@ -67,32 +63,40 @@ public static class Extensions
             cfg.AddOpenBehavior(typeof(UnitOfWorkBehaviour<,>));
         });
 
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer();
-        services.AddAuthorization();
-        services.AddAuthorizationBuilder()
-            .AddPolicy(Role.Registered, policy => { policy.AddRequirements(new RoleRequirement(Role.Registered)); })
-            .AddPolicy(Role.Guest, policy => { policy.AddRequirements(new RoleRequirement(Role.Guest)); })
-            .AddPolicy(Role.Moderator, policy => { policy.AddRequirements(new RoleRequirement(Role.Moderator)); })
-            .AddPolicy(Role.Administrator,
-                policy => { policy.AddRequirements(new RoleRequirement(Role.Administrator)); });
-        services.AddScoped<IAuthorizationService, AuthorizationService>();
-        services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
-        services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
-        services.AddSingleton<IAuthorizationHandler, RoleAuthorizationHandler>();
-        services.ConfigureOptions<JwtOptionsSetup>();
-        services.ConfigureOptions<JwtBearerOptionsSetup>();
-        services.ConfigureOptions<AdministratorOptionsSetup>();
-        services.AddScoped<IJwtProvider, JwtProvider>();
-        services.AddScoped<IMailService, MailService>();
+        services.AddAuthentication(IdentityConstants.BearerScheme)
+            .AddJwtBearer(IdentityConstants.BearerScheme, o =>
+            {
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = true,
+                    ValidateIssuer = true
+                };
+            });
+        services.AddAuthorizationBuilder();
 
-        return services;
+        services.AddIdentityCore<ApplicationUser>()
+            .AddDefaultTokenProviders()
+            .AddEntityFrameworkStores<UserDbContext>();
+
+        services.AddHttpClient(nameof(EmailSender), (serviceProvider, httpClient) =>
+        {
+            var options = serviceProvider.GetRequiredService<IOptions<EmailSenderOptions>>().Value;
+            httpClient.BaseAddress = new Uri(options.BaseAddress);
+            httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {options.Token}");
+        });
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IEmailSender<ApplicationUser>, EmailSender>();
+
+        services.AddOptions<EmailSenderOptions>()
+            .BindConfiguration(nameof(EmailSender))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
     }
 
-    public static WebApplication UseInfrastructure(this WebApplication app)
+    public static void UseInfrastructure(this WebApplication app)
     {
         app.UseMiddleware<ExceptionMiddleware>();
-        if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+        if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -106,56 +110,11 @@ public static class Extensions
                 .AllowAnyMethod()
                 .AllowAnyOrigin());
         }
-
+        
         app.UseAuthentication();
         app.UseAuthorization();
+        
         app.MapControllers();
-
-        using var scope = app.Services.CreateScope();
-        using var dbContext = scope.ServiceProvider.GetRequiredService<TerminalDbContext>();
-
-        if (app.Environment.IsProduction())
-        {
-            dbContext.Database.Migrate();
-        }
-
-        var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
-        var adminOptions = app.Configuration.GetOptions<AdministratorOptions>(AdministratorOptionsSetup.SectionName);
-        try
-        {
-            var administratorExists = dbContext.Users.Any(u => u.Role == Role.Administrator);
-            if (!administratorExists)
-            {
-                var adminRole = dbContext.Attach(Role.Administrator).Entity;
-                var admin = User.CreateActiveUser(UserId.Create(), new Email(adminOptions.Email),
-                    passwordHasher.Hash(adminOptions.Password));
-                admin.SetRole(adminRole);
-                dbContext.Users.Add(admin);
-
-                dbContext.SaveChanges();
-            }
-        }
-        catch (Exception)
-        {
-            // log admin already exists, skipping...
-        }
-
-        if (!app.Configuration.GetOptions<PostgresOptions>("Postgres").Seed ||
-            !app.Environment.IsDevelopment()) return app;
-
-        using var seedTransaction = dbContext.Database.BeginTransaction();
-        var seeder = new TerminalDbSeeder(dbContext);
-        try
-        {
-            seeder.Seed();
-            seedTransaction.Commit();
-        }
-        catch (Exception)
-        {
-            seedTransaction.Rollback();
-        }
-
-        return app;
     }
 
     public static T GetOptions<T>(this IConfiguration configuration, string sectionName) where T : class, new()

@@ -1,5 +1,9 @@
-using Serilog;
-using Terminal.Backend.Api.Modules;
+using Terminal.Backend.Api.Parameters;
+using Terminal.Backend.Api.Projects;
+using Terminal.Backend.Api.Recipes;
+using Terminal.Backend.Api.Samples;
+using Terminal.Backend.Api.Tags;
+using Terminal.Backend.Api.Users;
 using Terminal.Backend.Application;
 using Terminal.Backend.Core;
 using Terminal.Backend.Infrastructure;
@@ -11,35 +15,28 @@ builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration);
 
-builder.Services
-    .AddSwaggerGen();
-
-builder.Host.UseSerilog((context, loggerConfiguration) =>
-{
-    loggerConfiguration
-        .WriteTo.Console();
-
-    if (context.HostingEnvironment.IsProduction())
-    {
-        loggerConfiguration
-            .WriteTo.File(context.Configuration["LogFile"] ?? "terminal.log");
-    }
-});
+builder.Services.AddSwaggerGen();
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
+
+app.MapHealthChecks("/api/health");
+
+app.UseIdentityEndpoints();
 app.UseInfrastructure();
-app.UsePingEndpoints();
 app.UseProjectsEndpoints();
 app.UseTagEndpoints();
 app.UseRecipesEndpoints();
 app.UseParametersEndpoints();
 app.UseSamplesEndpoints();
-app.UseUsersEndpoints();
+
 app.Run();
+
+#region Program class declaration for testing purposes
 
 namespace Terminal.Backend.Api
 {
-    public class Program
-    {
-    }
+    public class Program;
 }
+
+#endregion

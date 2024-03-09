@@ -1,14 +1,13 @@
 using System.Linq.Expressions;
+using Terminal.Backend.Application.Common;
+using Terminal.Backend.Application.Common.QueryParameters;
 using Terminal.Backend.Application.DTO.Parameters;
 using Terminal.Backend.Application.DTO.ParameterValues;
 using Terminal.Backend.Application.DTO.Projects;
 using Terminal.Backend.Application.DTO.Recipes;
 using Terminal.Backend.Application.DTO.Samples;
 using Terminal.Backend.Application.DTO.Tags;
-using Terminal.Backend.Application.DTO.Users;
-using Terminal.Backend.Application.DTO.Users.Invitations;
 using Terminal.Backend.Application.Exceptions;
-using Terminal.Backend.Application.Queries.QueryParameters;
 using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.Entities.Parameters;
 using Terminal.Backend.Core.Entities.ParameterValues;
@@ -79,28 +78,6 @@ public static class Extensions
                 return b;
             }), s.Comment));
 
-    // public static IEnumerable<GetSampleStepsDto> AsStepsDto(this IEnumerable<RecipeStep> steps)
-    //     => steps.Select(s => new GetSampleStepsDto(
-    //         s.Parameters.Select(p =>
-    //         {
-    //             GetSampleBaseParameterValueDto b = p switch
-    //             {
-    //                 DecimalParameterValue d => new GetSampleDecimalParameterValueDto(d.Parameter.Id, d.Parameter.Name, d.Value, (d.Parameter as DecimalParameter)!.Unit),
-    //                 IntegerParameterValue i => new GetSampleIntegerParameterValueDto(i.Parameter.Id, i.Parameter.Name, i.Value, (i.Parameter as IntegerParameter)!.Unit),
-    //                 TextParameterValue t => new GetSampleTextParameterValueDto(t.Parameter.Id, t.Parameter.Name, t.Value),
-    //                 _ => throw new ArgumentOutOfRangeException(nameof(p))
-    //             };
-    //             return b;
-    //         }), s.Comment));
-
-    public static GetUserDto AsGetUserDto(this User entity)
-        => new()
-        {
-            Id = entity.Id,
-            Email = entity.Email,
-            Role = entity.Role,
-        };
-
     public static GetParametersDto AsGetParametersDto(this IEnumerable<Parameter> parameters)
     {
         return new GetParametersDto
@@ -133,10 +110,8 @@ public static class Extensions
         var type = typeof(TEntity);
         var parameter = Expression.Parameter(type, "p");
 
-        // Split the column name into individual property names
         var properties = parameters.OrderBy.Split('.');
 
-        // Build expression for each property in the chain
         Expression propertyAccess = parameter;
         foreach (var property in properties)
         {
@@ -147,18 +122,15 @@ public static class Extensions
             }
 
             propertyAccess = Expression.MakeMemberAccess(propertyAccess, propertyInfo);
-            type = propertyInfo.PropertyType; // Update type for the next iteration
+            type = propertyInfo.PropertyType;
         }
 
         var orderByExpression = Expression.Lambda(propertyAccess, parameter);
-        var resultExpression = Expression.Call(typeof(Queryable), command, new Type[] { typeof(TEntity), type },
+        var resultExpression = Expression.Call(typeof(Queryable), command, [typeof(TEntity), type],
             source.Expression, Expression.Quote(orderByExpression));
 
         return (IOrderedQueryable<TEntity>)source.Provider.CreateQuery<TEntity>(resultExpression);
     }
 
     public static GetRecipeDto AsDto(this Recipe recipe) => new(recipe.Id, recipe.RecipeName);
-
-    public static GetInvitationDto AsGetInvitationDto(this Invitation invitation) =>
-        new(invitation.ExpiresIn > DateTime.UtcNow, invitation.User.Email);
 }

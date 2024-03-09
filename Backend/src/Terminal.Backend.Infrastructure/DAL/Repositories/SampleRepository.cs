@@ -5,14 +5,9 @@ using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Infrastructure.DAL.Repositories;
 
-internal sealed class SampleRepository : ISampleRepository
+internal sealed class SampleRepository(TerminalDbContext dbContext) : ISampleRepository
 {
-    private readonly DbSet<Sample> _samples;
-
-    public SampleRepository(TerminalDbContext dbContext)
-    {
-        _samples = dbContext.Samples;
-    }
+    private readonly DbSet<Sample> _samples = dbContext.Samples;
 
     public async Task AddAsync(Sample sample, CancellationToken ct)
         => await _samples.AddAsync(sample, ct);

@@ -1,19 +1,14 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Terminal.Backend.Application.DTO.Tags;
-using Terminal.Backend.Application.Queries.Tags.Search;
+using Terminal.Backend.Application.Tags.Search;
 using Terminal.Backend.Core.Entities;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers.Tags;
 
-internal sealed class SearchTagQueryHandler : IRequestHandler<SearchTagQuery, GetTagsDto>
+internal sealed class SearchTagQueryHandler(TerminalDbContext dbContext) : IRequestHandler<SearchTagQuery, GetTagsDto>
 {
-    private readonly DbSet<Tag> _tags;
-
-    public SearchTagQueryHandler(TerminalDbContext dbContext)
-    {
-        _tags = dbContext.Tags;
-    }
+    private readonly DbSet<Tag> _tags = dbContext.Tags;
 
     public async Task<GetTagsDto> Handle(SearchTagQuery request, CancellationToken ct)
         => (await _tags

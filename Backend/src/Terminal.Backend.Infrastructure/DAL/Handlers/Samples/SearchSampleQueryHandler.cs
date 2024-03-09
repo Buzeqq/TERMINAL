@@ -1,19 +1,15 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Terminal.Backend.Application.DTO.Samples;
-using Terminal.Backend.Application.Queries.Samples.Search;
+using Terminal.Backend.Application.Samples.Search;
 using Terminal.Backend.Core.Entities;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers.Samples;
 
-internal sealed class SearchSampleQueryHandler : IRequestHandler<SearchSampleQuery, GetSamplesDto>
+internal sealed class SearchSampleQueryHandler(TerminalDbContext dbContext)
+    : IRequestHandler<SearchSampleQuery, GetSamplesDto>
 {
-    private readonly DbSet<Sample> _samples;
-
-    public SearchSampleQueryHandler(TerminalDbContext dbContext)
-    {
-        _samples = dbContext.Samples;
-    }
+    private readonly DbSet<Sample> _samples = dbContext.Samples;
 
     public async Task<GetSamplesDto> Handle(SearchSampleQuery request, CancellationToken ct)
     {
@@ -27,7 +23,7 @@ internal sealed class SearchSampleQueryHandler : IRequestHandler<SearchSampleQue
                     EF.Functions.ToTsVector("english", "AX" + m.Code + " " + m.Comment)
                         .Matches(EF.Functions.PhraseToTsQuery($"{request.SearchPhrase}:*")) ||
                     EF.Functions.ILike(m.Project.Name, $"%{request.SearchPhrase}%") ||
-                    EF.Functions.ILike(m.Recipe.RecipeName, $"%{request.SearchPhrase}%"))
+                    EF.Functions.ILike(m.Recipe!.RecipeName, $"%{request.SearchPhrase}%"))
                 .Select(m => new GetSamplesDto.SampleDto(m.Id, m.Code.Value, m.Project.Name,
                     m.CreatedAtUtc.ToString("o"), m.Comment))
                 .Paginate(request.Parameters)

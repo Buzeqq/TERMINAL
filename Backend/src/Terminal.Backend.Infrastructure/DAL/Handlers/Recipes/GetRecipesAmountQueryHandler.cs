@@ -1,25 +1,17 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Terminal.Backend.Application.Queries.Recipes.Get;
+using Terminal.Backend.Application.Recipes.Get;
 using Terminal.Backend.Core.Entities;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers.Recipes;
 
-internal sealed class GetRecipesAmountQueryHandler : IRequestHandler<GetRecipesAmountQuery, int>
+internal sealed class GetRecipesAmountQueryHandler(TerminalDbContext dbContext)
+    : IRequestHandler<GetRecipesAmountQuery, int>
 {
-    private readonly DbSet<Recipe> _recipes;
+    private readonly DbSet<Recipe> _recipes = dbContext.Recipes;
 
-    public GetRecipesAmountQueryHandler(TerminalDbContext dbContext)
-    {
-        _recipes = dbContext.Recipes;
-    }
-
-    public async Task<int> Handle(GetRecipesAmountQuery request, CancellationToken cancellationToken)
-    {
-        var amount = _recipes
+    public Task<int> Handle(GetRecipesAmountQuery request, CancellationToken cancellationToken) =>
+        _recipes
             .AsNoTracking()
-            .Count();
-
-        return amount;
-    }
+            .CountAsync(cancellationToken);
 }

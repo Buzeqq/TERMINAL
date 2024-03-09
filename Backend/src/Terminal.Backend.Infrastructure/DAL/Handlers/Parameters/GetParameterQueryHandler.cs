@@ -1,18 +1,14 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Terminal.Backend.Application.Queries.Parameters.Get;
+using Terminal.Backend.Application.Parameters.Get;
 using Terminal.Backend.Core.Entities.Parameters;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers.Parameters;
 
-internal sealed class GetParameterQueryHandler : IRequestHandler<GetParameterQuery, Parameter?>
+internal sealed class GetParameterQueryHandler(TerminalDbContext dbContext)
+    : IRequestHandler<GetParameterQuery, Parameter?>
 {
-    private readonly DbSet<Parameter> _parameters;
-
-    public GetParameterQueryHandler(TerminalDbContext dbContext)
-    {
-        _parameters = dbContext.Parameters;
-    }
+    private readonly DbSet<Parameter> _parameters = dbContext.Parameters;
 
     public Task<Parameter?> Handle(GetParameterQuery query, CancellationToken ct)
     {

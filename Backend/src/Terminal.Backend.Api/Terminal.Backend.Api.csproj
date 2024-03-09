@@ -5,19 +5,25 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <LangVersion>12</LangVersion>
+        <UserSecretsId>939024b4-f4a5-4bd4-a4c3-0b012d33dd6c</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
+        <PackageReference Include="MediatR" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore"/>
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Terminal.Backend.Infrastructure\Terminal.Backend.Infrastructure.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="localhost.pfx" />
     </ItemGroup>
 </Project>

@@ -1,19 +1,15 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Terminal.Backend.Application.DTO.Projects;
-using Terminal.Backend.Application.Queries.Projects.Get;
+using Terminal.Backend.Application.Projects.Get;
 using Terminal.Backend.Core.Entities;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers.Projects;
 
-internal sealed class GetProjectQueryHandler : IRequestHandler<GetProjectQuery, GetProjectDto?>
+internal sealed class GetProjectQueryHandler(TerminalDbContext dbContext)
+    : IRequestHandler<GetProjectQuery, GetProjectDto?>
 {
-    private readonly DbSet<Project> _projects;
-
-    public GetProjectQueryHandler(TerminalDbContext dbContext)
-    {
-        _projects = dbContext.Projects;
-    }
+    private readonly DbSet<Project> _projects = dbContext.Projects;
 
     public async Task<GetProjectDto?> Handle(GetProjectQuery query, CancellationToken ct)
     {

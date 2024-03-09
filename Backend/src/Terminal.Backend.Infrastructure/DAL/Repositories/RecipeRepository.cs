@@ -5,14 +5,9 @@ using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Infrastructure.DAL.Repositories;
 
-internal sealed class RecipeRepository : IRecipeRepository
+internal sealed class RecipeRepository(TerminalDbContext dbContext) : IRecipeRepository
 {
-    private readonly DbSet<Recipe> _recipes;
-
-    public RecipeRepository(TerminalDbContext dbContext)
-    {
-        _recipes = dbContext.Recipes;
-    }
+    private readonly DbSet<Recipe> _recipes = dbContext.Recipes;
 
     public Task<Recipe?> GetAsync(RecipeId recipeId, CancellationToken ct)
         => _recipes

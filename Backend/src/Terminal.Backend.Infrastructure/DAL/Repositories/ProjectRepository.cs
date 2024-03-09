@@ -5,14 +5,9 @@ using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Infrastructure.DAL.Repositories;
 
-internal sealed class ProjectRepository : IProjectRepository
+internal sealed class ProjectRepository(TerminalDbContext dbContext) : IProjectRepository
 {
-    private readonly DbSet<Project> _projects;
-
-    public ProjectRepository(TerminalDbContext dbContext)
-    {
-        _projects = dbContext.Projects;
-    }
+    private readonly DbSet<Project> _projects = dbContext.Projects;
 
     public Task<Project?> GetAsync(ProjectId id, CancellationToken ct)
         => _projects.SingleOrDefaultAsync(p => p.Id == id, ct);
