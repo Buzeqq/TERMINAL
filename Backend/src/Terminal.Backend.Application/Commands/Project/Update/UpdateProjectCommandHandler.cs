@@ -22,7 +22,12 @@ internal sealed class UpdateProjectCommandHandler : IRequestHandler<UpdateProjec
             throw new ProjectNotFoundException();
         }
 
-        if (project.Name != request.Name && !await _projectRepository.IsNameUniqueAsync(request.Name, cancellationToken))
+        if (project.Name == request.Name)
+        {
+            return;
+        }
+        
+        if (!await _projectRepository.IsNameUniqueAsync(request.Name, cancellationToken))
         {
             throw new InvalidProjectNameException(request.Name);
         }

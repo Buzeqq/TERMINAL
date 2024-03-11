@@ -33,5 +33,5 @@ internal sealed class ProjectRepository : IProjectRepository
     }
 
     public Task<bool> IsNameUniqueAsync(ProjectName requestName, CancellationToken cancellationToken) 
-        => _projects.AllAsync(p => p.Name != requestName, cancellationToken);
+        => _projects.AllAsync(p => !p.Name.Equals(requestName), cancellationToken);
 }
