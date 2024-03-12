@@ -85,10 +85,6 @@ export class SamplesService extends ApiService {
     return this.post<never>(`samples`, form);
   }
 
-  editSample(id: string, data: EditSample) {
-    return this.patch(`samples/${id}`, data);
-  }
-
   getSamplesAmount(): Observable<number> {
     if (this.online) return this.get<number>('samples/amount');
     else return this.idbService.getSamplesAmount();
@@ -97,11 +93,15 @@ export class SamplesService extends ApiService {
   deleteSample(id: string, code: string) {
     return this.delete(`samples/${id}`)
       .pipe(
-        tap(_ => this.notificationService.notifySuccess(`Deleted sample ${code}`)),
+        tap(_ => this.notificationService.notifySuccess(`Deleted sample ${code}. Reload page to see changes.`)),
         catchError(_ => {
-          this.notificationService.notifyError(`Failed deletion of sample ${code}`)
+          this.notificationService.notifyError(`Failed deleting sample ${code}. Check your network connection.`)
           return EMPTY;
         })
       );
+  }
+
+  editSample(id: string, data: EditSample) {
+    return this.patch(`samples/${id}`, data);
   }
 }

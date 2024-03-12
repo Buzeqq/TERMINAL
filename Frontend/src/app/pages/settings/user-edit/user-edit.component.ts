@@ -1,9 +1,8 @@
 import {Component, Input} from '@angular/core';
-import {catchError, EMPTY, Observable, tap} from "rxjs";
+import {catchError, EMPTY, firstValueFrom, Observable, tap} from "rxjs";
 import {User} from "../../../core/models/users/user";
 import {FormControl, Validators} from "@angular/forms";
 import {whitespaceValidator} from "../../../core/components/validators/whitespaceValidator";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {UserService} from "../../../core/services/users/user.service";
 import {UserDetails} from "../../../core/models/users/user-details";
 import {AuthService} from "../../../core/services/auth/auth.service";
@@ -11,6 +10,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddUserComponent } from 'src/app/core/components/dialogs/add-user/add-user.component';
 import {NotificationService} from "../../../core/services/notification/notification.service";
 import {DeleteDialogComponent} from "../../../core/components/dialogs/delete-dialog/delete-dialog.component";
+import {
+  NewPasswordDialogComponent
+} from "../../../core/components/dialogs/new-password-dialog/new-password-dialog.component";
 
 @Component({
   selector: 'app-user-edit',
@@ -27,6 +29,9 @@ export class UserEditComponent {
     Validators.required,
     whitespaceValidator])
   availableRoles = ["Administrator", "Moderator", "User"];
+  userEmailFormControl = new FormControl('',[
+    Validators.required,
+    Validators.email])
 
   adminPermissions = this.authService.isAdmin();
 
@@ -48,7 +53,7 @@ export class UserEditComponent {
       .pipe(
         catchError((err, _) => {
           console.log(err);
-          this.notificationService.notifyError('Failed to load user');
+          this.notificationService.notifyError('Failed to load user.');
           return EMPTY;
         }),
         tap(r => {
@@ -62,6 +67,7 @@ export class UserEditComponent {
 
   resetForm() {
     this.userRoleFormControl.setValue(this.userDetails!.role);
+    this.userEmailFormControl.setValue(this.userDetails!.email);
   }
 
   readyToSubmit() {
@@ -69,19 +75,27 @@ export class UserEditComponent {
   }
 
   dirtyForm() {
-    return this.userDetails!.role !== this.userRoleFormControl.value
+    return this.userDetails!.role !== this.userRoleFormControl.value ||
+      this.userDetails!.email !== this.userEmailFormControl.value
   }
 
   addUser(){
     this.dialog.open(AddUserComponent);
   }
 
-  editUser() {
-    // TODO send a request with new form values
-    // don't forget to map User to Registered
-    if (this.userRoleFormControl.value == 'User') {
-      let role = 'Registered';
-    }
+  async editUser() {
+    if (this.userDetails!.email != this.userEmailFormControl.value)
+      await firstValueFrom(this.userService
+        .updateEmail(this._userId, {email: this.userEmailFormControl.value}));
+
+    if (this.userDetails!.role != this.userRoleFormControl.value)
+      await firstValueFrom(this.userService
+        .updateRole(this._userId, {role: this.getRole(this.userRoleFormControl.value)}));
+  }
+
+  private getRole(role: string | null) {
+    return role == 'User' ?
+      'Registered' : role;
   }
 
   deleteUser() {
@@ -93,6 +107,15 @@ export class UserEditComponent {
     dialogRef.afterClosed().subscribe(deleteConfirmed => {
       if (deleteConfirmed)
         this.userService.deleteUser(this._userId!).subscribe();
+    })
+  }
+
+  newPassword() {
+    const dialogRef = this.dialog.open(NewPasswordDialogComponent, {
+      data: {email: this.userDetails?.email}});
+    dialogRef.afterClosed().subscribe(data => {
+      if (data.confirmed)
+        this.userService.updatePassword(this._userId!, {newPassword: data.password}).subscribe();
     })
   }
 }

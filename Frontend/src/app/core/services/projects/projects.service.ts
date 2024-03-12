@@ -67,9 +67,9 @@ export class ProjectsService extends ApiService {
   deleteProject(id: string, name:string) {
     return this.delete(`projects/${id}`)
       .pipe(
-        tap(_ => this.notificationService.notifySuccess(`Deleted project ${name}`)),
+        tap(_ => this.notificationService.notifySuccess(`Deleted project ${name}. Reload page to see changes.`)),
         catchError(_ => {
-          this.notificationService.notifyError(`Failed deletion of project ${name}`);
+          this.notificationService.notifyError(`Failed deleting project ${name}. Check your network connection.`);
           return EMPTY;
         })
       );
@@ -78,9 +78,9 @@ export class ProjectsService extends ApiService {
   activateProject(id: string | undefined) {
     return this.post(`projects/${id}/activate`, {})
       .pipe(
-        tap(_ => this.notificationService.notifySuccess(`Project updated`)),
+        tap(_ => this.notificationService.notifyUpdated('Project')),
         catchError(_ => {
-          this.notificationService.notifyError(`Failed updating project`);
+          this.notificationService.notifyUpdatingFailed('Project');
           return EMPTY;
         })
       );
@@ -89,9 +89,9 @@ export class ProjectsService extends ApiService {
   deactivateProject(id: string | undefined) {
     return this.post(`projects/${id}/deactivate`, {})
       .pipe(
-        tap(_ => this.notificationService.notifySuccess(`Project updated`)),
+        tap(_ => this.notificationService.notifyUpdated('Project')),
         catchError(_ => {
-          this.notificationService.notifyError(`Failed updating project`);
+          this.notificationService.notifyUpdatingFailed('Project');
           return EMPTY;
         })
       );
@@ -100,9 +100,9 @@ export class ProjectsService extends ApiService {
   updateProject(id: string | undefined, data: {name: string | null}) {
     return this.patch(`projects/${id}`, data)
       .pipe(
-        tap(_ => this.notificationService.notifySuccess(`Project updated`)),
+        tap(_ => this.notificationService.notifyUpdated('Project')),
         catchError(_ => {
-          this.notificationService.notifyError(`Failed updating project`);
+          this.notificationService.notifyUpdatingFailed('Project');
           return EMPTY;
         })
       );

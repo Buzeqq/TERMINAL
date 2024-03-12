@@ -188,8 +188,6 @@ export class AddSampleComponent implements OnInit, OnDestroy {
         this.fillForm(d);
       })
     );
-    if (this.editMode)
-      this.sampleForm.controls.recipe.disable();
   }
 
   private setProject(id: string) {
@@ -248,16 +246,16 @@ export class AddSampleComponent implements OnInit, OnDestroy {
       this.samplesService.editSample(this.sampleId, finalValues)
         .pipe(
           catchError(_ => {
-            this.notificationService.notifyError(`Failed updating sample`)
+            this.notificationService.notifyUpdatingFailed('Sample')
             return EMPTY;
           })
         )
         .subscribe(_ => {
           this.router.navigate(['/settings'], {queryParams: {tab: 'Samples'}})
-            .then(_ => this.notificationService.notifySuccess('Sample updated successfully!'));
+            .then(_ => this.notificationService.notifySuccess(`Sample ${this.replicationData?.basedOn.name} updated successfully!`));
         });
     else
-      this.notificationService.notifyError('Failed updating sample');
+      this.notificationService.notifyUpdatingFailed('Sample');
   }
 
   public saveRecipeFormGroup = new FormGroup({

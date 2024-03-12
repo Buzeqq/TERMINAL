@@ -46,9 +46,9 @@ export class TagsService extends ApiService {
   deleteTag(id: string, name: string) {
     return this.delete(`tags/${id}`)
       .pipe(
-        tap(_ => this.notificationService.notifySuccess(`Deleted tag ${name}`)),
+        tap(_ => this.notificationService.notifySuccess(`Deleted tag ${name}. Reload page to see changes.`)),
         catchError(_ => {
-          this.notificationService.notifyError(`Failed deletion of tag ${name}`);
+          this.notificationService.notifyError(`Failed deleting tag ${name}. Check your network connection.`);
           return EMPTY;
         })
       )
@@ -57,9 +57,9 @@ export class TagsService extends ApiService {
   updateTag(id: string | undefined, data: {name: string | null}) {
     return this.patch(`tags/${id}`, data)
       .pipe(
-        tap(_ => this.notificationService.notifySuccess(`Tag updated`)),
+        tap(_ => this.notificationService.notifyUpdated('Tag')),
         catchError(_ => {
-          this.notificationService.notifyError(`Failed updating tag`);
+          this.notificationService.notifyUpdatingFailed(`Tag`);
           return EMPTY;
         })
       );
@@ -68,9 +68,9 @@ export class TagsService extends ApiService {
   activateTag(id: string | undefined) {
     return this.post(`tags/${id}/activate`, {})
       .pipe(
-        tap(_ => this.notificationService.notifySuccess(`Tag updated`)),
+        tap(_ => this.notificationService.notifyUpdated('Tag')),
         catchError(_ => {
-          this.notificationService.notifyError(`Failed updating tag`);
+          this.notificationService.notifyUpdatingFailed(`Tag`);
           return EMPTY;
         })
       );
@@ -79,9 +79,9 @@ export class TagsService extends ApiService {
   deactivateTag(id: string | undefined) {
     return this.post(`tags/${id}/deactivate`, {})
       .pipe(
-        tap(_ => this.notificationService.notifySuccess(`Tag updated`)),
+        tap(_ => this.notificationService.notifyUpdated('Tag')),
         catchError(_ => {
-          this.notificationService.notifyError(`Failed updating tag`);
+          this.notificationService.notifyUpdatingFailed(`Tag`);
           return EMPTY;
         })
       );
