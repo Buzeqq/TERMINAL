@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroupDirective, NgForm, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EMPTY, catchError } from 'rxjs';
+import { EMPTY, catchError, firstValueFrom } from 'rxjs';
 import { InvitationDetails } from 'src/app/core/models/users/invitations/invitationDetails';
 import { NotificationService } from 'src/app/core/services/notification/notification.service';
 import { RegistrationService } from 'src/app/core/services/registration/registration.service';
@@ -21,13 +21,15 @@ export class PasswordsStateMatcher implements ErrorStateMatcher {
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   constructor(
     private readonly registrationService: RegistrationService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly notificationService: NotificationService
-  ){}
+  ){
+    this.token = this.route.snapshot.paramMap.get('token');
+  }
 
   matcher = new PasswordsStateMatcher();
   invitationDetails?: InvitationDetails;
@@ -35,7 +37,7 @@ export class RegisterComponent {
   firstPassword = new FormControl('', [Validators.required, Validators.minLength(8)]);
   secondPassword = new FormControl('', [Validators.required, Validators.minLength(8)]);
   showPassword = false;
-  token = this.route.snapshot.paramMap.get('token');
+  token: string | null = null;
 
   checkPasswords: ValidatorFn = (group: AbstractControl):  ValidationErrors | null => {
     let pass = group.get('firstPassword')?.value;
@@ -49,14 +51,15 @@ export class RegisterComponent {
   }, {validators: this.checkPasswords});
 
   ngOnInit() {
-    this.registrationService.getInvitation(this.route.snapshot.paramMap.get('token')!).pipe(
+    this.registrationService.getInvitation(this.token ?? '').pipe(
       catchError(() => {
+        console.error('Invitation not found!');
         this.router.navigate(['/']);
         return EMPTY;
       })
     ).subscribe(r => this.invitationDetails = r);
   }
-  
+
   onSubmit() {
     if (this.form.valid && this.invitationDetails) {
       this.registrationService.confirmInvitation(
@@ -70,6 +73,6 @@ export class RegisterComponent {
   }
 
 
-  
+
 
 }

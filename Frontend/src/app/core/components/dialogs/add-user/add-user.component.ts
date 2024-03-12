@@ -33,8 +33,8 @@ export class AddUserComponent {
   }
 
   inviteUser() {
-    var email = this.userEmail.value!;
-    var role = this.userRole.value!;
+    const email = this.userEmail.value!;
+    let role = this.userRole.value!;
     if (role == 'User') role = 'Registered';
 
     this.registrationService.createInvitation(email, role).subscribe(
