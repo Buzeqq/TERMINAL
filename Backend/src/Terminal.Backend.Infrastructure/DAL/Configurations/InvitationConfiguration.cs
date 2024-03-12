@@ -24,6 +24,6 @@ internal sealed class InvitationConfiguration : IEntityTypeConfiguration<Invitat
         builder
             .HasOne(i => i.User)
             .WithMany()
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
