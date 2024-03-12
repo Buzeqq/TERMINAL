@@ -26,6 +26,8 @@ services:
   terminal.frontend:
     build:
       context: ./Frontend
+    volumes:
+      - ./config/frontend:/etc/nginx/conf.d/:ro
     depends_on:
       - terminal.backend
 
