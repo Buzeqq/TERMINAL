@@ -13,16 +13,11 @@
         border: 2px solid gray;
       }
     }
-
-    //.menu {
-    //  background-color: mat.get-color-from-palette($accent-palette, 700);
-    //}
-    //
     .recent-samples {
-      //background-color: mat.get-color-from-palette($accent-palette, 800);
-
-      &__list-header {
-        background-color: mat.get-color-from-palette($accent-palette, 700);
+      &__row {
+        &--is-clicked {
+          background-color: mat.get-color-from-palette($accent-palette, darker);
+        }
       }
     }
   } @else {
@@ -31,16 +26,11 @@
         border: 2px solid black;
       }
     }
-
-    //.menu {
-    //  background-color: mat.get-color-from-palette($primary-palette, 100);
-    //}
-    //
     .recent-samples {
-      //background-color: mat.get-color-from-palette($primary-palette, 100);
-
-      &__list-header {
-        background-color: mat.get-color-from-palette($primary-palette, 200);
+      &__row {
+        &--is-clicked {
+          background-color: mat.get-color-from-palette($primary-palette, 200);
+        }
       }
     }
   }

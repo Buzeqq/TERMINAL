@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @use '@angular/material' as mat;
 @use 'app/pages/dashboard/dashboard-theme' as dashboard;
+@use 'app/core/components/item-views/item-views-theme' as itemviews;
 @use '@ng-matero/extensions' as mtx;
 
 @include mat.core();
@@ -30,6 +31,7 @@ $current-theme: $dark-theme;
 
 @include mat.all-component-themes($current-theme);
 @include dashboard.theme($current-theme);
+@include itemviews.theme($current-theme);
 @include mtx.all-component-themes($current-theme);
 
 // Apply the light theme only when the user prefers light styles.
@@ -39,6 +41,7 @@ $current-theme: $dark-theme;
   $current-theme: $light-theme;
   @include mat.all-component-themes($current-theme);
   @include dashboard.theme($current-theme);
+  @include itemviews.theme($current-theme);
   @include mtx.all-component-themes($current-theme);
 }
 

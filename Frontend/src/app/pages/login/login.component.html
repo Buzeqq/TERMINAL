@@ -8,7 +8,7 @@
         <mat-form-field class="grid-element">
           <mat-label>Email</mat-label>
           <input type="text" matInput [formControl]="emailFormControl" name="email"
-                 placeholder="Email">
+                 placeholder="Email" (keydown.enter)="tryLogin()">
           <mat-error *ngIf="emailFormControl.hasError('required')">
             Email is <strong>required</strong>
           </mat-error>
@@ -20,7 +20,7 @@
         <mat-form-field class="grid-element">
           <mat-label>Password</mat-label>
           <input type="password" matInput [formControl]="passwordFormControl"
-                 placeholder="Password">
+                 placeholder="Password" (keydown.enter)="tryLogin()">
           <mat-error *ngIf="passwordFormControl.hasError('required')">
             Password is <strong>required</strong>
           </mat-error>
