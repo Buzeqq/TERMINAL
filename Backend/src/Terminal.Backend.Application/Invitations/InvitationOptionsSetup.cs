@@ -15,6 +15,7 @@ internal sealed class InvitationOptionsSetup : IConfigureOptions<InvitationOptio
 
     public void Configure(InvitationOptions options)
     {
-        _configuration.GetSection(SectionName).Bind(options);
+        _configuration.GetRequiredSection(SectionName)
+            .Bind(options);
     }
 }

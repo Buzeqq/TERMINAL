@@ -13,7 +13,11 @@ public static class Extensions
     {
         services.AddMediatR(cfg => { cfg.RegisterServicesFromAssembly(AssemblyReference.Assembly); });
 
-        services.ConfigureOptions<InvitationOptionsSetup>();
+        services.AddOptions<InvitationOptions>()
+            .BindConfiguration("Invitations")
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+        
         services.AddScoped<IConvertDtoService, ConvertDtoService>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IInvitationFactory, InvitationFactory>();
