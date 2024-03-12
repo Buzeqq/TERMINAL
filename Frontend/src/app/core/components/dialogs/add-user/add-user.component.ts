@@ -39,11 +39,7 @@ export class AddUserComponent {
 
     this.registrationService.createInvitation(email, role).subscribe(
       r => {
-        // when development include port
-        if (!environment.production)
-          this.link = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/register/${r.invitationLink}`;
-        else
-          this.link = `${window.location.protocol}//${window.location.hostname}/register/${r.invitationLink}`;
+        this.link = r.invitationLink;
       }
     );
   }
