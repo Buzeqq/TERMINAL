@@ -2,4 +2,4 @@ using Terminal.Backend.Core.Exceptions;
 
 namespace Terminal.Backend.Application.Exceptions;
 
-public sealed class PagingParametersInvalidFormatException(string message) : TerminalException(message);
+public sealed class PagingParametersInvalidFormatException(string title) : TerminalException(title);

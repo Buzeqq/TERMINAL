@@ -8,6 +8,9 @@ internal sealed class RegisterCommandHandler(IUserService userService) : IReques
     public async Task Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
         var (email, password) = request;
+        
+        // TODO: Add invitations handling
+        
         await userService.RegisterAsync(email, password);
     }
 }

@@ -1,5 +1,4 @@
 using MediatR;
-using Terminal.Backend.Application.Common;
 using Terminal.Backend.Application.Common.QueryParameters;
 using Terminal.Backend.Application.DTO.Tags;
 

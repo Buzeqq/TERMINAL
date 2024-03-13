@@ -1,4 +1,3 @@
-using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
@@ -22,8 +21,9 @@ public static class Extensions
 {
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddExceptionHandler<DefaultExceptionHandler>();
         services.AddControllers();
-        services.AddSingleton<ExceptionMiddleware>();
+        services.AddSingleton<RequestLogContextMiddleware>();
         services.AddHttpContextAccessor();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
@@ -73,8 +73,10 @@ public static class Extensions
                 };
             });
         services.AddAuthorizationBuilder();
+        services.AddAntiforgery();
 
         services.AddIdentityCore<ApplicationUser>()
+            .AddApiEndpoints()
             .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<UserDbContext>();
 
@@ -95,7 +97,9 @@ public static class Extensions
 
     public static void UseInfrastructure(this WebApplication app)
     {
-        app.UseMiddleware<ExceptionMiddleware>();
+        app.UseExceptionHandler();
+        app.UseMiddleware<RequestLogContextMiddleware>();
+        
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
@@ -110,9 +114,12 @@ public static class Extensions
                 .AllowAnyMethod()
                 .AllowAnyOrigin());
         }
+
+        // app.MapIdentityApi<ApplicationUser>();
         
         app.UseAuthentication();
         app.UseAuthorization();
+        app.UseAntiforgery();
         
         app.MapControllers();
     }

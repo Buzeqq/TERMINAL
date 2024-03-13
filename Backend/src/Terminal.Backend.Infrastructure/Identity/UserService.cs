@@ -1,9 +1,11 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.WebUtilities;
 using Terminal.Backend.Application.Abstractions;
+using Terminal.Backend.Application.Exceptions;
 using Terminal.Backend.Core.Exceptions;
 
 namespace Terminal.Backend.Infrastructure.Identity;
@@ -16,10 +18,15 @@ internal sealed class UserService(
 {
     public async Task RegisterAsync(string email, string password)
     {
+        if (!new EmailAddressAttribute().IsValid(email))
+        {
+            throw new InvalidEmailException(email);
+        }
+        
         var user = await userManager.FindByEmailAsync(email);
         if (user is not null)
         {
-            throw new InvalidEmailException($"User with email {email} already exists.");
+            throw new EmailAlreadyExistsException(email);
         }
 
         var newUser = new ApplicationUser { Email = email, UserName = email };
@@ -27,7 +34,10 @@ internal sealed class UserService(
 
         if (!result.Succeeded)
         {
-            throw new Exception(); // TODO
+            throw new FailedToRegisterUserException(string.Empty)
+            {
+                Errors = result.Errors.Select(e => e.Description)
+            };
         }
         
         var code = WebEncoders.Base64UrlEncode(

@@ -14,6 +14,7 @@ internal sealed class EmailSender(
     {
         var client = clientFactory.CreateClient(nameof(EmailSender));
         logger.LogInformation("Sending confirmation link to {@Email}", email);
+        
         var requestBody = new SendEmailRequest(
             new SendEmailRequest.Sender(options.Value.From, "Terminal Client"),
             [new SendEmailRequest.Recipient(email, user.UserName ?? string.Empty)],

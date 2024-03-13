@@ -90,6 +90,7 @@ public static class ParametersModule
 
     public static void UseParametersEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGroup(ApiBaseRoute).MapParametersEndpoints();
+        app.MapGroup(ApiBaseRoute)
+            .MapParametersEndpoints();
     }
 }

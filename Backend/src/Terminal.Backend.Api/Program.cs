@@ -1,3 +1,4 @@
+using Serilog;
 using Terminal.Backend.Api.Parameters;
 using Terminal.Backend.Api.Projects;
 using Terminal.Backend.Api.Recipes;
@@ -10,6 +11,9 @@ using Terminal.Backend.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host.UseSerilog((context, loggerConfig) => 
+    loggerConfig.ReadFrom.Configuration(context.Configuration));
+
 builder.Services
     .AddCore()
     .AddApplication()
@@ -17,13 +21,16 @@ builder.Services
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
 app.MapHealthChecks("/api/health");
 
-app.UseIdentityEndpoints();
 app.UseInfrastructure();
+app.UseSerilogRequestLogging();
+
+app.UseIdentityEndpoints();
 app.UseProjectsEndpoints();
 app.UseTagEndpoints();
 app.UseRecipesEndpoints();

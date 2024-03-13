@@ -8,12 +8,7 @@ public sealed class UnitOfWorkBehaviour<TRequest, TResponse>(IUnitOfWork<TRespon
 {
     public Task<TResponse> Handle(TRequest command, RequestHandlerDelegate<TResponse> next, CancellationToken ct)
     {
-        if (!IsCommand())
-        {
-            return next();
-        }
-
-        return unitOfWork.ExecuteAsync(next);
+        return !IsCommand() ? next() : unitOfWork.ExecuteAsync(next);
     }
 
     private static bool IsCommand() => typeof(TRequest).Name.EndsWith("Command");
