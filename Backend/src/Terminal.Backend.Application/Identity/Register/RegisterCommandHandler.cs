@@ -1,7 +1,7 @@
 using MediatR;
 using Terminal.Backend.Application.Abstractions;
 
-namespace Terminal.Backend.Application.Users.Register;
+namespace Terminal.Backend.Application.Identity.Register;
 
 internal sealed class RegisterCommandHandler(IUserService userService) : IRequestHandler<RegisterCommand>
 {

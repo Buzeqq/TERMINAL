@@ -2,10 +2,10 @@ using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Api.Swagger;
-using Terminal.Backend.Application.Users.Login;
-using Terminal.Backend.Application.Users.Register;
+using Terminal.Backend.Application.Identity.Login;
+using Terminal.Backend.Application.Identity.Register;
 
-namespace Terminal.Backend.Api.Users;
+namespace Terminal.Backend.Api.Identity;
 
 internal static class IdentityEndpointsModule
 {
@@ -25,11 +25,14 @@ internal static class IdentityEndpointsModule
         
         app.MapPost("/login", async (
             [FromBody] LoginRequest loginRequest,
+            [FromQuery] bool useCookies,
+            [FromQuery] bool useSessionCookies,
             ISender sender,
             CancellationToken cancellationToken) =>
         {
             var command = loginRequest.Adapt<LoginCommand>();
-            var result = await sender.Send(command, cancellationToken);
+            command = command with { UseCookies = useCookies, UseSessionCookies = useSessionCookies };
+            await sender.Send(command, cancellationToken);
         })
         .WithTags(SwaggerSetup.IdentityTag);
 

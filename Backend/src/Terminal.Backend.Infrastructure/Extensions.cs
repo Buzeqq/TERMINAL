@@ -1,11 +1,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Terminal.Backend.Application.Abstractions;
@@ -63,15 +61,10 @@ public static class Extensions
             cfg.AddOpenBehavior(typeof(UnitOfWorkBehaviour<,>));
         });
 
-        services.AddAuthentication(IdentityConstants.BearerScheme)
-            .AddJwtBearer(IdentityConstants.BearerScheme, o =>
-            {
-                o.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateAudience = true,
-                    ValidateIssuer = true
-                };
-            });
+        services.AddAuthentication(IdentityConstants.ApplicationScheme)
+            .AddCookie(IdentityConstants.ApplicationScheme)
+            .AddBearerToken(IdentityConstants.BearerScheme);
+        
         services.AddAuthorizationBuilder();
         services.AddAntiforgery();
 

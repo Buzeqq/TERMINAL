@@ -28,4 +28,9 @@
         <Folder Include="DAL\Migrations\"/>
         <Folder Include="DAL\Migrations\Data\" />
     </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Terminal.Backend.Unit"/>
+        <InternalsVisibleTo Include="DynamicProxyGenAssembly2"/>
+    </ItemGroup>
 </Project>

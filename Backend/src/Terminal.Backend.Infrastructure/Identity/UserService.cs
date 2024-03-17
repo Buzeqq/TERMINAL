@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.WebUtilities;
@@ -11,7 +13,8 @@ using Terminal.Backend.Core.Exceptions;
 namespace Terminal.Backend.Infrastructure.Identity;
 
 internal sealed class UserService(
-    UserManager<ApplicationUser> userManager, 
+    UserManager<ApplicationUser> userManager,
+    SignInManager<ApplicationUser> signInManager,
     IEmailSender<ApplicationUser> emailSender,
     IHttpContextAccessor httpContextAccessor,
     LinkGenerator linkGenerator) : IUserService
@@ -48,12 +51,42 @@ internal sealed class UserService(
             ["code"] = code
         };
         
-        var link = linkGenerator.GetUriByName(httpContextAccessor.HttpContext!, "Email confirmation endpoint", routeParameters);
-        if (link is null)
+        var link = linkGenerator.GetUriByName(httpContextAccessor.HttpContext!, "Email confirmation endpoint", routeParameters)!;
+        await emailSender.SendConfirmationLinkAsync(newUser, email, link);
+    }
+
+    public async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult>> SignInAsync(
+        string email,
+        string password,
+        string? twoFactorCode,
+        string? twoFactorRecoveryCode,
+        bool useCookies = false,
+        bool useSessionCookies = false)
+    {
+        signInManager.AuthenticationScheme =
+            useCookies ? IdentityConstants.ApplicationScheme : IdentityConstants.BearerScheme;
+
+        var isPersistent = useCookies && !useSessionCookies;
+        var result = await signInManager.PasswordSignInAsync(email, password, isPersistent, 
+            true);
+        
+        if (result.RequiresTwoFactor)
         {
-            throw new Exception(); // TODO
+            if (!string.IsNullOrWhiteSpace(twoFactorCode))
+            {
+                result = await signInManager.TwoFactorAuthenticatorSignInAsync(twoFactorCode, useSessionCookies, useSessionCookies);
+            }
+            else if (!string.IsNullOrWhiteSpace(twoFactorRecoveryCode))
+            {
+                result = await signInManager.TwoFactorRecoveryCodeSignInAsync(twoFactorRecoveryCode);
+            }
         }
         
-        await emailSender.SendConfirmationLinkAsync(newUser, email, link);
+        if (!result.Succeeded)
+        {
+            throw new LoginFailedException(result.ToString());
+        }
+
+        return TypedResults.Empty;
     }
 }

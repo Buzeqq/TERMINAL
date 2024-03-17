@@ -1,10 +1,10 @@
 using Serilog;
+using Terminal.Backend.Api.Identity;
 using Terminal.Backend.Api.Parameters;
 using Terminal.Backend.Api.Projects;
 using Terminal.Backend.Api.Recipes;
 using Terminal.Backend.Api.Samples;
 using Terminal.Backend.Api.Tags;
-using Terminal.Backend.Api.Users;
 using Terminal.Backend.Application;
 using Terminal.Backend.Core;
 using Terminal.Backend.Infrastructure;
