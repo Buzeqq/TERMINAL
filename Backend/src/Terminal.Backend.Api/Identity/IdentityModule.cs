@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Api.Swagger;
 using Terminal.Backend.Application.Identity.Login;
+using Terminal.Backend.Application.Identity.Logout;
 using Terminal.Backend.Application.Identity.Register;
 
 namespace Terminal.Backend.Api.Identity;
@@ -37,10 +38,14 @@ internal static class IdentityEndpointsModule
         .WithTags(SwaggerSetup.IdentityTag);
 
         
-        app.MapGet("/logout", () =>
-        {
-            
-        })
+        app.MapPost("/logout", async (
+            [FromBody] LogoutRequest logoutRequest,
+            ISender sender,
+            CancellationToken cancellationToken) =>
+            {
+                await sender.Send(new LogoutCommand(), cancellationToken);
+            })
+        .RequireAuthorization()
         .WithTags(SwaggerSetup.IdentityTag);
 
         

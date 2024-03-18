@@ -89,4 +89,9 @@ internal sealed class UserService(
 
         return TypedResults.Empty;
     }
+
+    public Task SignOutAsync()
+    {
+        return signInManager.SignOutAsync();
+    }
 }

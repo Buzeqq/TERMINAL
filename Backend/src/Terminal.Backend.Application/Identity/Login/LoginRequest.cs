@@ -4,7 +4,7 @@ namespace Terminal.Backend.Application.Identity.Login;
 
 public sealed record LoginRequest(string Email, string Password, string? TwoFactorCode, string? TwoFactorRecoveryCode);
 
-public sealed class LoginRequestRegister : IRegister
+internal sealed class LoginRequestRegister : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {

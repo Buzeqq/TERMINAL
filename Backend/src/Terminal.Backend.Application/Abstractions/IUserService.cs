@@ -1,8 +1,5 @@
 using Microsoft.AspNetCore.Authentication.BearerToken;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Terminal.Backend.Application.Abstractions;
 
@@ -17,4 +14,6 @@ public interface IUserService
         string? twoFactorRecoveryCode,
         bool useCookies = true,
         bool useSessionCookies = true);
+
+    Task SignOutAsync();
 }
