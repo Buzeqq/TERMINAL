@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Options;
 using Terminal.Backend.Application.Exceptions;
 using Terminal.Backend.Core.Exceptions;
 using Terminal.Backend.Infrastructure.Identity;
@@ -16,11 +18,20 @@ public class UserServiceTests
     private readonly IHttpContextAccessor _httpContextAccessor = Substitute.For<IHttpContextAccessor>();
     private readonly LinkGenerator _linkGenerator = Substitute.For<LinkGenerator>();
     private readonly SignInManager<ApplicationUser> _signInManager = Substitute.For<SignInManager<ApplicationUser>>();
+    private readonly IOptionsMonitor<BearerTokenOptions> _options = Substitute.For<IOptionsMonitor<BearerTokenOptions>>();
+    private readonly TimeProvider _timeProvider = Substitute.For<TimeProvider>();
+    
     private readonly UserService _userService;
 
     public UserServiceTests()
     {
-        _userService = new UserService(_userManager, _signInManager, _emailSender, _httpContextAccessor, _linkGenerator);
+        _userService = new UserService(_userManager,
+            _signInManager,
+            _emailSender,
+            _httpContextAccessor,
+            _linkGenerator,
+            _options,
+            _timeProvider);
     }
 
     [Fact]

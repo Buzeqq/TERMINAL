@@ -16,4 +16,5 @@ public interface IUserService
         bool useSessionCookies = true);
 
     Task SignOutAsync();
+    Task RefreshTokenAsync(string refreshToken);
 }

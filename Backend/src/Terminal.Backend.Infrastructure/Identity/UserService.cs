@@ -1,11 +1,13 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Options;
 using Terminal.Backend.Application.Abstractions;
 using Terminal.Backend.Application.Exceptions;
 using Terminal.Backend.Core.Exceptions;
@@ -17,7 +19,9 @@ internal sealed class UserService(
     SignInManager<ApplicationUser> signInManager,
     IEmailSender<ApplicationUser> emailSender,
     IHttpContextAccessor httpContextAccessor,
-    LinkGenerator linkGenerator) : IUserService
+    LinkGenerator linkGenerator,
+    IOptionsMonitor<BearerTokenOptions> bearerTokenOptions,
+    TimeProvider timeProvider) : IUserService
 {
     public async Task RegisterAsync(string email, string password)
     {
@@ -93,5 +97,18 @@ internal sealed class UserService(
     public Task SignOutAsync()
     {
         return signInManager.SignOutAsync();
+    }
+
+    public async Task RefreshTokenAsync(string refreshToken)
+    {
+        var ticket = bearerTokenOptions.Get(IdentityConstants.BearerScheme).RefreshTokenProtector.Unprotect(refreshToken);
+        var expiresUtc = ticket?.Properties.ExpiresUtc;
+        var isExpired = expiresUtc is null || timeProvider.GetUtcNow() >= expiresUtc;
+
+        if (isExpired) throw new RefreshTokenExpiredException(expiresUtc);
+        
+        var user = await signInManager.ValidateSecurityStampAsync(ticket?.Principal);
+        var cp = await signInManager.CreateUserPrincipalAsync(user!);
+        await httpContextAccessor.HttpContext!.SignInAsync(IdentityConstants.BearerScheme, cp);
     }
 }

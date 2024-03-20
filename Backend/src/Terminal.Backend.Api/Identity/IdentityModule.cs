@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Api.Swagger;
 using Terminal.Backend.Application.Identity.Login;
 using Terminal.Backend.Application.Identity.Logout;
+using Terminal.Backend.Application.Identity.Refresh;
 using Terminal.Backend.Application.Identity.Register;
 
 namespace Terminal.Backend.Api.Identity;
@@ -49,9 +50,13 @@ internal static class IdentityEndpointsModule
         .WithTags(SwaggerSetup.IdentityTag);
 
         
-        app.MapPost("/refresh", () =>
+        app.MapPost("/refresh", async (
+            [FromBody] RefreshRequest refreshRequest,
+            ISender sender,
+            CancellationToken cancellationToken) =>
         {
-            
+            var command = refreshRequest.Adapt<RefreshCommand>();
+            var result = await sender.Send(command, cancellationToken);
         })
         .WithTags(SwaggerSetup.IdentityTag);
 

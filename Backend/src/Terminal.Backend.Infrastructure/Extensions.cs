@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Terminal.Backend.Application.Abstractions;
+using Terminal.Backend.Core.ValueObjects;
 using Terminal.Backend.Infrastructure.DAL;
 using Terminal.Backend.Infrastructure.DAL.Behaviours;
 using Terminal.Backend.Infrastructure.Identity;
@@ -22,6 +23,7 @@ public static class Extensions
         services.AddExceptionHandler<DefaultExceptionHandler>();
         services.AddControllers();
         services.AddSingleton<RequestLogContextMiddleware>();
+        services.AddSingleton(TimeProvider.System);
         services.AddHttpContextAccessor();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
@@ -68,7 +70,10 @@ public static class Extensions
         services.AddAuthorizationBuilder();
         services.AddAntiforgery();
 
-        services.AddIdentityCore<ApplicationUser>()
+        services.AddIdentityCore<ApplicationUser>((o) =>
+            {
+                o.User.RequireUniqueEmail = true;
+            })
             .AddApiEndpoints()
             .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<UserDbContext>();
