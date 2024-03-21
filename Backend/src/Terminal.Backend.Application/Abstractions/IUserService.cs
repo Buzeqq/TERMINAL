@@ -1,13 +1,10 @@
-using Microsoft.AspNetCore.Authentication.BearerToken;
-using Microsoft.AspNetCore.Http.HttpResults;
-
 namespace Terminal.Backend.Application.Abstractions;
 
 public interface IUserService
 {
     Task RegisterAsync(string email, string password);
 
-    Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult>> SignInAsync(
+    Task SignInAsync(
         string email,
         string password,
         string? twoFactorCode,
@@ -17,4 +14,5 @@ public interface IUserService
 
     Task SignOutAsync();
     Task RefreshTokenAsync(string refreshToken);
+    Task ConfirmEmailAsync(string userId, string code, string? newEmail = default);
 }

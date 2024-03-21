@@ -18,8 +18,8 @@ internal sealed class EmailSender(
         var requestBody = new SendEmailRequest(
             new SendEmailRequest.Sender(options.Value.From, "Terminal Client"),
             [new SendEmailRequest.Recipient(email, user.UserName ?? string.Empty)],
-            "Confirm you account!",
-            $"<h3>Confirm your account at terminal-client.dev!</h3><a href=\"{confirmationLink}\">Click here!</a>");
+            "Confirm your email",
+            $"Please confirm your account by <a href=\"{confirmationLink}\">clicking here</a>");
         var content = JsonContent.Create(requestBody);
         var response = await client.PostAsync("/v1/email", content);
 

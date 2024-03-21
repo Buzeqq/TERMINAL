@@ -10,7 +10,7 @@ internal sealed class DefaultExceptionHandler : IExceptionHandler
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
         var (statusCode, title) = exception is TerminalException terminalException
-            ? (StatusCodes.Status400BadRequest, terminalException.Message)
+            ? (terminalException.StatusCode as int? ?? StatusCodes.Status400BadRequest, terminalException.Message)
             : (StatusCodes.Status500InternalServerError, "An unexpected error occured");
         
         httpContext.Response.StatusCode = statusCode;

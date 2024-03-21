@@ -2,6 +2,7 @@ using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Api.Swagger;
+using Terminal.Backend.Application.Identity.ConfirmEmail;
 using Terminal.Backend.Application.Identity.Login;
 using Terminal.Backend.Application.Identity.Logout;
 using Terminal.Backend.Application.Identity.Refresh;
@@ -45,6 +46,7 @@ internal static class IdentityEndpointsModule
             CancellationToken cancellationToken) =>
             {
                 await sender.Send(new LogoutCommand(), cancellationToken);
+                return Results.Ok();
             })
         .RequireAuthorization()
         .WithTags(SwaggerSetup.IdentityTag);
@@ -56,15 +58,22 @@ internal static class IdentityEndpointsModule
             CancellationToken cancellationToken) =>
         {
             var command = refreshRequest.Adapt<RefreshCommand>();
-            var result = await sender.Send(command, cancellationToken);
+            await sender.Send(command, cancellationToken);
         })
         .WithTags(SwaggerSetup.IdentityTag);
 
         
-        app.MapGet("/confirm-email", () =>
-        {
-            
-        }).WithName("Email confirmation endpoint")
+        app.MapGet("/confirm-email", async(
+                [FromQuery] string userId,
+                [FromQuery] string code,
+                [FromQuery] string? changedEmail,
+                ISender sender,
+                CancellationToken cancellationToken) =>
+            {
+                var command = new ConfirmEmailCommand(userId, code, changedEmail);
+                await sender.Send(command, cancellationToken);
+                return Results.Ok();
+            }).WithName("Email confirmation endpoint")
         .WithTags(SwaggerSetup.IdentityTag);
 
         

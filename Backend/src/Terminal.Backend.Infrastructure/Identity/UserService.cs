@@ -59,7 +59,7 @@ internal sealed class UserService(
         await emailSender.SendConfirmationLinkAsync(newUser, email, link);
     }
 
-    public async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult>> SignInAsync(
+    public async Task SignInAsync(
         string email,
         string password,
         string? twoFactorCode,
@@ -90,8 +90,6 @@ internal sealed class UserService(
         {
             throw new LoginFailedException(result.ToString());
         }
-
-        return TypedResults.Empty;
     }
 
     public Task SignOutAsync()
@@ -110,5 +108,36 @@ internal sealed class UserService(
         var user = await signInManager.ValidateSecurityStampAsync(ticket?.Principal);
         var cp = await signInManager.CreateUserPrincipalAsync(user!);
         await httpContextAccessor.HttpContext!.SignInAsync(IdentityConstants.BearerScheme, cp);
+    }
+
+    public async Task ConfirmEmailAsync(string userId, string code, string? newEmail = default)
+    {
+        var user = await userManager.FindByIdAsync(userId);
+        if (user is null)
+        {
+            throw new UserNotFoundException();
+        }
+
+        try
+        {
+            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+        }
+        catch (FormatException e)
+        {
+            throw; // TODO
+        }
+
+        if (string.IsNullOrWhiteSpace(newEmail))
+        {
+            await userManager.ConfirmEmailAsync(user, code);
+        }
+        else
+        {
+            var result = await userManager.ChangeEmailAsync(user, newEmail, code);
+            if (result.Succeeded)
+            {
+                await userManager.SetUserNameAsync(user, newEmail);
+            }
+        }
     }
 }
