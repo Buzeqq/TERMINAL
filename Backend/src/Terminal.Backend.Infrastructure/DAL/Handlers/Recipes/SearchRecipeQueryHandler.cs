@@ -14,7 +14,7 @@ internal sealed class SearchRecipeQueryHandler(TerminalDbContext dbContext)
     public async Task<GetRecipesDto> Handle(SearchRecipeQuery request, CancellationToken ct) =>
         new()
         {
-            Recipes = await _recipes
+            Recipes = await this._recipes
                 .AsNoTracking()
                 .Where(r => EF.Functions.ILike(r.RecipeName, $"%{request.SearchPhrase}%"))
                 .Select(r => new GetRecipesDto.RecipeDto(r.Id, r.RecipeName))

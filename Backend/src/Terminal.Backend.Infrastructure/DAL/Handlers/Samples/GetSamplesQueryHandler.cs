@@ -13,7 +13,7 @@ internal sealed class GetSamplesQueryHandler(TerminalDbContext dbContext)
 
     public async Task<GetSamplesDto> Handle(GetSamplesQuery request, CancellationToken ct)
     {
-        var samples = await _samples
+        var samples = await this._samples
             .AsNoTracking()
             .Include(m => m.Project)
             .Include(m => m.Tags)

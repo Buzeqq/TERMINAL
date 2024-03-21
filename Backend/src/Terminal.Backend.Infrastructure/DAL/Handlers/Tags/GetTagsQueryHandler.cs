@@ -24,7 +24,7 @@ internal sealed class GetTagsQueryHandler(TerminalDbContext dbContext) :
     //         .ToListAsync(ct)).AsGetTagsDto();
 
     public async Task<GetTagsDto> Handle(GetTagsQuery request, CancellationToken ct)
-        => (await _tags
+        => (await this._tags
             .AsNoTracking()
             .Where(t => t.IsActive || t.IsActive == request.OnlyActive)
             .OrderBy(request.OrderingParameters)

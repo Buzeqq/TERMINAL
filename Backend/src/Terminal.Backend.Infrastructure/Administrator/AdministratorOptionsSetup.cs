@@ -7,8 +7,5 @@ internal sealed class AdministratorOptionsSetup(IConfiguration configuration) : 
 {
     public const string SectionName = "Administrator";
 
-    public void Configure(AdministratorOptions options)
-    {
-        configuration.GetSection(SectionName).Bind(options);
-    }
+    public void Configure(AdministratorOptions options) => configuration.GetSection(SectionName).Bind(options);
 }

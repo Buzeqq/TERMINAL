@@ -77,17 +77,14 @@ public static class Extensions
                 return b;
             }), s.Comment));
 
-    public static GetParametersDto AsGetParametersDto(this IEnumerable<Parameter> parameters)
-    {
-        return new GetParametersDto
+    public static GetParametersDto AsGetParametersDto(this IEnumerable<Parameter> parameters) =>
+        new()
         {
             Parameters = parameters.Select(MapParameters)
         };
-    }
 
-    private static GetParameterDto MapParameters(Parameter parameter)
-    {
-        return parameter switch
+    private static GetParameterDto MapParameters(Parameter parameter) =>
+        parameter switch
         {
             IntegerParameter i => new GetIntegerParameterDto(i.Id, i.Name, i.Unit, i.Step, i.Order, i.DefaultValue,
                 i.Parent?.Id.Value),
@@ -97,7 +94,6 @@ public static class Extensions
                 t.Parent?.Id.Value),
             _ => throw new ArgumentOutOfRangeException(nameof(parameter))
         };
-    }
 
     public static IQueryable<T> Paginate<T>(this IQueryable<T> queryable, PagingParameters parameters)
         => queryable.Skip(parameters.PageNumber * parameters.PageSize).Take(parameters.PageSize);

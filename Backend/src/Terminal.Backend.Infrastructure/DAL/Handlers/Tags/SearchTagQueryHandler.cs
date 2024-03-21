@@ -11,7 +11,7 @@ internal sealed class SearchTagQueryHandler(TerminalDbContext dbContext) : IRequ
     private readonly DbSet<Tag> _tags = dbContext.Tags;
 
     public async Task<GetTagsDto> Handle(SearchTagQuery request, CancellationToken ct)
-        => (await _tags
+        => (await this._tags
             .AsNoTracking()
             .Where(t => EF.Functions.ILike(t.Name, $"%{request.SearchPhrase}%"))
             .Select(t => t)

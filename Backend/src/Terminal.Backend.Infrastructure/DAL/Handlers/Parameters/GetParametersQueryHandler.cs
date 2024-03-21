@@ -12,7 +12,7 @@ internal sealed class GetParametersQueryHandler(TerminalDbContext dbContext)
     private readonly DbSet<Parameter> _parameters = dbContext.Parameters;
 
     public async Task<GetParametersDto> Handle(GetParametersQuery request, CancellationToken ct)
-        => (await _parameters
+        => (await this._parameters
                 .AsNoTracking()
                 .Include(p => p.Parent)
                 .Where(p => p.IsActive)

@@ -9,9 +9,8 @@ internal sealed class TerminalTestApp : WebApplicationFactory<Program>
 {
     public HttpClient Client { get; }
 
-    public TerminalTestApp(Action<IServiceCollection>? services = null)
-    {
-        Client = WithWebHostBuilder(builder =>
+    public TerminalTestApp(Action<IServiceCollection>? services = null) =>
+        this.Client = this.WithWebHostBuilder(builder =>
         {
             if (services is not null)
             {
@@ -19,5 +18,4 @@ internal sealed class TerminalTestApp : WebApplicationFactory<Program>
             }
             builder.UseEnvironment("test");
         }).CreateClient();
-    }
 }

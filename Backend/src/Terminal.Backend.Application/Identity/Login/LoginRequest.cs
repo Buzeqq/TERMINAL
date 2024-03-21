@@ -6,10 +6,8 @@ public sealed record LoginRequest(string Email, string Password, string? TwoFact
 
 internal sealed class LoginRequestRegister : IRegister
 {
-    public void Register(TypeAdapterConfig config)
-    {
+    public void Register(TypeAdapterConfig config) =>
         config.NewConfig<(LoginRequest, bool, bool), LoginCommand>()
             .Map(dest => dest.UseCookies, src => src.Item2)
             .Map(dest => dest.UseSessionCookies, src => src.Item3);
-    }
 }

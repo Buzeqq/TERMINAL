@@ -106,8 +106,5 @@ public static class RecipeModule
             .WithTags(SwaggerSetup.RecipeTag);
     }
 
-    public static void UseRecipesEndpoints(this IEndpointRouteBuilder app)
-    {
-        app.MapGroup(ApiBaseRoute).AddRecipesEndpoints();
-    }
+    public static void UseRecipesEndpoints(this IEndpointRouteBuilder app) => app.MapGroup(ApiBaseRoute).AddRecipesEndpoints();
 }

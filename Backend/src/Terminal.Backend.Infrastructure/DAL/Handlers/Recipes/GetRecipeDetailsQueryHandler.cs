@@ -13,7 +13,7 @@ internal sealed class GetRecipeDetailsQueryHandler(TerminalDbContext dbContext)
 
     public async Task<GetRecipeDetailsDto?> Handle(GetRecipeDetailsQuery request, CancellationToken cancellationToken)
     {
-        var recipe = await _recipes.AsNoTracking()
+        var recipe = await this._recipes.AsNoTracking()
             .Include(r => r.Steps)
             .ThenInclude(s => s.Parameters)
             .ThenInclude(s => s.Parameter)

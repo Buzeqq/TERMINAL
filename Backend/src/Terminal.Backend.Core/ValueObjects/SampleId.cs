@@ -13,7 +13,7 @@ public sealed record SampleId
             throw new InvalidEntityIdException(id);
         }
 
-        Value = id;
+        this.Value = id;
     }
 
     public static SampleId Create() => new(Guid.NewGuid());

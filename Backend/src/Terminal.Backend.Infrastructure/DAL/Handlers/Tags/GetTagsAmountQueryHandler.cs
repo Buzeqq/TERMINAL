@@ -10,7 +10,7 @@ internal sealed class GetTagsAmountQueryHandler(TerminalDbContext dbContext) : I
     private readonly DbSet<Tag> _tags = dbContext.Tags;
 
     public Task<int> Handle(GetTagsAmountQuery request, CancellationToken cancellationToken) =>
-        _tags
+        this._tags
             .AsNoTracking()
             .CountAsync(cancellationToken);
 }

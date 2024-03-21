@@ -3,7 +3,6 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.WebUtilities;
@@ -14,6 +13,8 @@ using Terminal.Backend.Core.Exceptions;
 
 namespace Terminal.Backend.Infrastructure.Identity;
 
+using Core.ValueObjects;
+
 internal sealed class UserService(
     UserManager<ApplicationUser> userManager,
     SignInManager<ApplicationUser> signInManager,
@@ -23,13 +24,13 @@ internal sealed class UserService(
     IOptionsMonitor<BearerTokenOptions> bearerTokenOptions,
     TimeProvider timeProvider) : IUserService
 {
-    public async Task RegisterAsync(string email, string password)
+    public async Task RegisterAsync(Email email, Password password)
     {
         if (!new EmailAddressAttribute().IsValid(email))
         {
             throw new InvalidEmailException(email);
         }
-        
+
         var user = await userManager.FindByEmailAsync(email);
         if (user is not null)
         {
@@ -37,7 +38,7 @@ internal sealed class UserService(
         }
 
         var newUser = new ApplicationUser { Email = email, UserName = email };
-        var result = await userManager.CreateAsync(newUser, password);
+        var result = await userManager.CreateAsync(newUser, password.Value);
 
         if (!result.Succeeded)
         {
@@ -46,7 +47,12 @@ internal sealed class UserService(
                 Errors = result.Errors.Select(e => e.Description)
             };
         }
-        
+
+        await this.SendConfirmationEmailAsync(email, newUser);
+    }
+
+    private async Task SendConfirmationEmailAsync(Email email, ApplicationUser newUser)
+    {
         var code = WebEncoders.Base64UrlEncode(
             Encoding.UTF8.GetBytes(await userManager.GenerateEmailConfirmationTokenAsync(newUser)));
         var routeParameters = new RouteValueDictionary
@@ -54,14 +60,14 @@ internal sealed class UserService(
             ["userId"] = newUser.Id,
             ["code"] = code
         };
-        
+
         var link = linkGenerator.GetUriByName(httpContextAccessor.HttpContext!, "Email confirmation endpoint", routeParameters)!;
         await emailSender.SendConfirmationLinkAsync(newUser, email, link);
     }
 
     public async Task SignInAsync(
-        string email,
-        string password,
+        Email email,
+        Password password,
         string? twoFactorCode,
         string? twoFactorRecoveryCode,
         bool useCookies = false,
@@ -71,9 +77,9 @@ internal sealed class UserService(
             useCookies ? IdentityConstants.ApplicationScheme : IdentityConstants.BearerScheme;
 
         var isPersistent = useCookies && !useSessionCookies;
-        var result = await signInManager.PasswordSignInAsync(email, password, isPersistent, 
+        var result = await signInManager.PasswordSignInAsync(email.Value, password.Value, isPersistent,
             true);
-        
+
         if (result.RequiresTwoFactor)
         {
             if (!string.IsNullOrWhiteSpace(twoFactorCode))
@@ -85,17 +91,14 @@ internal sealed class UserService(
                 result = await signInManager.TwoFactorRecoveryCodeSignInAsync(twoFactorRecoveryCode);
             }
         }
-        
+
         if (!result.Succeeded)
         {
             throw new LoginFailedException(result.ToString());
         }
     }
 
-    public Task SignOutAsync()
-    {
-        return signInManager.SignOutAsync();
-    }
+    public Task SignOutAsync() => signInManager.SignOutAsync();
 
     public async Task RefreshTokenAsync(string refreshToken)
     {
@@ -103,14 +106,17 @@ internal sealed class UserService(
         var expiresUtc = ticket?.Properties.ExpiresUtc;
         var isExpired = expiresUtc is null || timeProvider.GetUtcNow() >= expiresUtc;
 
-        if (isExpired) throw new RefreshTokenExpiredException(expiresUtc);
-        
+        if (isExpired)
+        {
+            throw new RefreshTokenExpiredException(expiresUtc);
+        }
+
         var user = await signInManager.ValidateSecurityStampAsync(ticket?.Principal);
         var cp = await signInManager.CreateUserPrincipalAsync(user!);
         await httpContextAccessor.HttpContext!.SignInAsync(IdentityConstants.BearerScheme, cp);
     }
 
-    public async Task ConfirmEmailAsync(string userId, string code, string? newEmail = default)
+    public async Task ConfirmEmailAsync(string userId, string code, Email? newEmail = default)
     {
         var user = await userManager.FindByIdAsync(userId);
         if (user is null)
@@ -122,12 +128,12 @@ internal sealed class UserService(
         {
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
         }
-        catch (FormatException e)
+        catch (FormatException)
         {
-            throw; // TODO
+            throw new BadCodeException();
         }
 
-        if (string.IsNullOrWhiteSpace(newEmail))
+        if (newEmail is null)
         {
             await userManager.ConfirmEmailAsync(user, code);
         }
@@ -139,5 +145,16 @@ internal sealed class UserService(
                 await userManager.SetUserNameAsync(user, newEmail);
             }
         }
+    }
+
+    public async Task ResendConfirmationEmailAsync(Email email)
+    {
+        var user = await userManager.FindByEmailAsync(email);
+        if (user is null)
+        {
+            throw new UserNotFoundException();
+        }
+
+        await this.SendConfirmationEmailAsync(email, user);
     }
 }

@@ -37,6 +37,6 @@ internal sealed class TerminalDbContext(DbContextOptions<TerminalDbContext> opti
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("data");
-        modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
     }
 }

@@ -13,7 +13,7 @@ public sealed record UserId
             throw new InvalidEntityIdException(value);
         }
 
-        Value = value;
+        this.Value = value;
     }
 
     public static UserId Create() => new(Guid.NewGuid());

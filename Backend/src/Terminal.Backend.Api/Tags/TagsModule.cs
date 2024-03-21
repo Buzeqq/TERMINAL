@@ -127,8 +127,5 @@ public static class TagsModule
             .WithTags(SwaggerSetup.TagTag);
     }
 
-    public static void UseTagEndpoints(this IEndpointRouteBuilder app)
-    {
-        app.MapGroup(ApiBaseRoute).AddTagEndpoints();
-    }
+    public static void UseTagEndpoints(this IEndpointRouteBuilder app) => app.MapGroup(ApiBaseRoute).AddTagEndpoints();
 }

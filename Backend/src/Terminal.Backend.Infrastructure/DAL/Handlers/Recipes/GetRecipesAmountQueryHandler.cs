@@ -11,7 +11,7 @@ internal sealed class GetRecipesAmountQueryHandler(TerminalDbContext dbContext)
     private readonly DbSet<Recipe> _recipes = dbContext.Recipes;
 
     public Task<int> Handle(GetRecipesAmountQuery request, CancellationToken cancellationToken) =>
-        _recipes
+        this._recipes
             .AsNoTracking()
             .CountAsync(cancellationToken);
 }

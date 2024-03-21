@@ -6,10 +6,7 @@ public sealed class UnitOfWorkBehaviour<TRequest, TResponse>(IUnitOfWork<TRespon
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull
 {
-    public Task<TResponse> Handle(TRequest command, RequestHandlerDelegate<TResponse> next, CancellationToken ct)
-    {
-        return !IsCommand() ? next() : unitOfWork.ExecuteAsync(next);
-    }
+    public Task<TResponse> Handle(TRequest command, RequestHandlerDelegate<TResponse> next, CancellationToken ct) => !IsCommand() ? next() : unitOfWork.ExecuteAsync(next);
 
     private static bool IsCommand() => typeof(TRequest).Name.EndsWith("Command");
 }

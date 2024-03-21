@@ -7,7 +7,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Terminal.Backend.Application.Abstractions;
-using Terminal.Backend.Core.ValueObjects;
 using Terminal.Backend.Infrastructure.DAL;
 using Terminal.Backend.Infrastructure.DAL.Behaviours;
 using Terminal.Backend.Infrastructure.Identity;

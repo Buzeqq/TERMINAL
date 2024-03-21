@@ -15,7 +15,7 @@ internal sealed class CreateRecipeCommandHandler(
     {
         var (id, name, steps) = request;
 
-        var recipe = new Core.Entities.Recipe(id, name);
+        var recipe = new Recipe(id, name);
         foreach (var step in await convertDtoService.ConvertAsync(steps, cancellationToken))
         {
             recipe.Steps.Add(new RecipeStep(StepId.Create(), step.Comment, step.Parameters, recipe));

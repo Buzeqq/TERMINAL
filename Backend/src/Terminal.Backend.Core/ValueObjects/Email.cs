@@ -14,7 +14,7 @@ public sealed record Email
             throw new InvalidEmailException(value);
         }
 
-        Value = value;
+        this.Value = value;
     }
 
     public static implicit operator string(Email email) => email.Value;

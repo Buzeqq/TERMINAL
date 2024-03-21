@@ -12,7 +12,7 @@ internal sealed class GetRecipesQueryHandler(TerminalDbContext dbContext)
     private readonly DbSet<Recipe> _recipes = dbContext.Recipes;
 
     public async Task<GetRecipesDto> Handle(GetRecipesQuery request,
-        CancellationToken ct) => (await _recipes
+        CancellationToken ct) => (await this._recipes
         .AsNoTracking()
         .OrderBy(request.OrderingParameters)
         .Paginate(request.Parameters)

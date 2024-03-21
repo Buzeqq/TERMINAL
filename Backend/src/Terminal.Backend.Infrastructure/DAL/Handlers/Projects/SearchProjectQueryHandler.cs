@@ -14,7 +14,7 @@ internal sealed class SearchProjectQueryHandler(TerminalDbContext dbContext)
     public async Task<GetProjectsDto> Handle(SearchProjectQuery request, CancellationToken cancellationToken)
         => new()
         {
-            Projects = await _projects
+            Projects = await this._projects
                 .AsNoTracking()
                 .Where(p => EF.Functions.ILike(p.Name, $"%{request.SearchPhrase}%"))
                 .Select(p => new GetProjectsDto.ProjectDto(p.Id, p.Name))

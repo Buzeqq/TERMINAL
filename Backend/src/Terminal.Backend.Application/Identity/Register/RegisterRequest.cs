@@ -6,8 +6,5 @@ public sealed record RegisterRequest(string Email, string Password);
 
 public sealed class RegisterRequestRegister : IRegister
 {
-    public void Register(TypeAdapterConfig config)
-    {
-        config.NewConfig<RegisterRequest, RegisterCommand>();
-    }
+    public void Register(TypeAdapterConfig config) => config.NewConfig<RegisterRequest, RegisterCommand>();
 }

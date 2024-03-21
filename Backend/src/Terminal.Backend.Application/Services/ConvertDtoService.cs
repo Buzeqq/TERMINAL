@@ -24,7 +24,7 @@ internal sealed class ConvertDtoService(IParameterRepository parameterRepository
             foreach (var parameterDto in stepDto.Parameters)
             {
                 var id = ParameterValueId.Create();
-                var parameter = await GetParameterValueAsync(id, parameterDto, ct);
+                var parameter = await this.GetParameterValueAsync(id, parameterDto, ct);
                 parameters.Add(parameter);
             }
 
@@ -44,7 +44,7 @@ internal sealed class ConvertDtoService(IParameterRepository parameterRepository
             foreach (var parameterDto in stepDto.Parameters)
             {
                 var id = parameterDto.Id;
-                var parameter = await GetParameterValueAsync(id, parameterDto, ct);
+                var parameter = await this.GetParameterValueAsync(id, parameterDto, ct);
                 parameters.Add(parameter);
             }
 

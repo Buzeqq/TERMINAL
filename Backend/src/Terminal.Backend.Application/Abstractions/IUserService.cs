@@ -1,12 +1,14 @@
 namespace Terminal.Backend.Application.Abstractions;
 
+using Core.ValueObjects;
+
 public interface IUserService
 {
-    Task RegisterAsync(string email, string password);
+    Task RegisterAsync(Email email, Password password);
 
     Task SignInAsync(
-        string email,
-        string password,
+        Email email,
+        Password password,
         string? twoFactorCode,
         string? twoFactorRecoveryCode,
         bool useCookies = true,
@@ -14,5 +16,6 @@ public interface IUserService
 
     Task SignOutAsync();
     Task RefreshTokenAsync(string refreshToken);
-    Task ConfirmEmailAsync(string userId, string code, string? newEmail = default);
+    Task ConfirmEmailAsync(string userId, string code, Email? newEmail = default);
+    Task ResendConfirmationEmailAsync(Email email);
 }

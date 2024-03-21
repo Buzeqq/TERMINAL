@@ -13,8 +13,8 @@ public abstract class BaseControllerTests : IClassFixture<OptionsProvider>
 
     protected BaseControllerTests(OptionsProvider optionsProvider)
     {
-        var app = new TerminalTestApp(ConfigureServices);
-        Client = app.Client;
+        var app = new TerminalTestApp(this.ConfigureServices);
+        this.Client = app.Client;
     }
 
     protected virtual void ConfigureServices(IServiceCollection services)

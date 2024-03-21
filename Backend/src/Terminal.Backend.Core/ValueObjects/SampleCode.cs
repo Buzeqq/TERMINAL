@@ -5,13 +5,10 @@ namespace Terminal.Backend.Core.ValueObjects;
 public sealed record SampleCode
 {
     private const string Prefix = "AX"; // TODO: move to configuration file
-    public string Value => $"{Prefix}{Number}";
+    public string Value => $"{Prefix}{this.Number}";
     public ulong Number { get; }
 
-    public SampleCode(ulong number)
-    {
-        Number = number;
-    }
+    public SampleCode(ulong number) => this.Number = number;
 
     public SampleCode(string code)
     {
@@ -25,7 +22,7 @@ public sealed record SampleCode
             throw new InvalidSampleCodeException(code);
         }
 
-        Number = number;
+        this.Number = number;
     }
 
     public static implicit operator string(SampleCode code) => code.Value;

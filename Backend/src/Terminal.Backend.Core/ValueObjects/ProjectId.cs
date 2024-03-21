@@ -13,7 +13,7 @@ public sealed record ProjectId
             throw new InvalidEntityIdException(id);
         }
 
-        Value = id;
+        this.Value = id;
     }
 
     private ProjectId()

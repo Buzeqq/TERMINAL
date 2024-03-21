@@ -14,14 +14,17 @@ internal sealed class GetProjectQueryHandler(TerminalDbContext dbContext)
     public async Task<GetProjectDto?> Handle(GetProjectQuery query, CancellationToken ct)
     {
         var projectId = query.ProjectId;
-        var project = (await _projects
+        var project = (await this._projects
             .AsNoTracking()
             // FIXME: .Include(p => p.Samples)
             .SingleOrDefaultAsync(p => p.Id.Equals(projectId), ct))?.AsGetProjectDto();
 
-        if (project is null) return project;
+        if (project is null)
+        {
+            return project;
+        }
 
-        var sampleIds = await _projects
+        var sampleIds = await this._projects
             .AsNoTracking()
             .Where(p => p.Id.Equals(projectId))
             .SelectMany(p => p.Samples)

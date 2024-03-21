@@ -13,6 +13,9 @@ public sealed record Password
             throw new InvalidPasswordException();
         }
 
-        Value = value;
+        this.Value = value;
     }
+
+    public static implicit operator string(Password password) => password.Value;
+    public static implicit operator Password(string value) => new(value);
 }

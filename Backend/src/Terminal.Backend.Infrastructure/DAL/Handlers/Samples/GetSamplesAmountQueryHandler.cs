@@ -10,10 +10,8 @@ internal sealed class GetSamplesAmountQueryHandler(TerminalDbContext dbContext)
 {
     private readonly DbSet<Sample> _samples = dbContext.Samples;
 
-    public Task<int> Handle(GetSamplesAmountQuery request, CancellationToken ct)
-    {
-        return _samples
+    public Task<int> Handle(GetSamplesAmountQuery request, CancellationToken ct) =>
+        this._samples
             .AsNoTracking()
             .CountAsync(ct);
-    }
 }

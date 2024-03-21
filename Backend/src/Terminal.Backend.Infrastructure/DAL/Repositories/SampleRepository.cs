@@ -10,10 +10,11 @@ internal sealed class SampleRepository(TerminalDbContext dbContext) : ISampleRep
     private readonly DbSet<Sample> _samples = dbContext.Samples;
 
     public async Task AddAsync(Sample sample, CancellationToken ct)
-        => await _samples.AddAsync(sample, ct);
+        => await this._samples.AddAsync(sample, ct);
 
     public Task<Sample?> GetAsync(SampleId id, CancellationToken cancellationToken)
-        => _samples
+        =>
+            this._samples
             .Include(s => s.Project)
             .Include(s => s.Recipe)
             .Include(s => s.Steps)
@@ -24,13 +25,13 @@ internal sealed class SampleRepository(TerminalDbContext dbContext) : ISampleRep
 
     public Task DeleteAsync(Sample sample, CancellationToken cancellationToken)
     {
-        _samples.Remove(sample);
+        this._samples.Remove(sample);
         return Task.CompletedTask;
     }
 
     public Task UpdateAsync(Sample sample, CancellationToken cancellationToken)
     {
-        _samples.Update(sample);
+        this._samples.Update(sample);
         return Task.CompletedTask;
     }
 }

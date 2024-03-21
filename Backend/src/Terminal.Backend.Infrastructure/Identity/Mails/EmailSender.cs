@@ -32,13 +32,7 @@ internal sealed class EmailSender(
         logger.LogError("Failed to send confirmation link to {@Email}.", email);
     }
 
-    public Task SendPasswordResetLinkAsync(ApplicationUser user, string email, string resetLink)
-    {
-        return Task.CompletedTask;
-    }
+    public Task SendPasswordResetLinkAsync(ApplicationUser user, string email, string resetLink) => Task.CompletedTask;
 
-    public Task SendPasswordResetCodeAsync(ApplicationUser user, string email, string resetCode)
-    {
-        return Task.CompletedTask;
-    }
+    public Task SendPasswordResetCodeAsync(ApplicationUser user, string email, string resetCode) => Task.CompletedTask;
 }

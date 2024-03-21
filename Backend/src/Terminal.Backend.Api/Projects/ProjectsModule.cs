@@ -135,8 +135,5 @@ public static class ProjectsModule
             .WithTags(SwaggerSetup.ProjectTag);
     }
 
-    public static void UseProjectsEndpoints(this IEndpointRouteBuilder app)
-    {
-        app.MapGroup(ApiRouteBase).AddProjectsEndpoints();
-    }
+    public static void UseProjectsEndpoints(this IEndpointRouteBuilder app) => app.MapGroup(ApiRouteBase).AddProjectsEndpoints();
 }

@@ -6,12 +6,10 @@ namespace Terminal.Backend.Infrastructure.DAL.Configurations;
 
 internal sealed class RecipeStepConfiguration : IEntityTypeConfiguration<RecipeStep>
 {
-    public void Configure(EntityTypeBuilder<RecipeStep> builder)
-    {
+    public void Configure(EntityTypeBuilder<RecipeStep> builder) =>
         builder
             .HasOne(s => s.Recipe)
             .WithMany(r => r.Steps)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
-    }
 }

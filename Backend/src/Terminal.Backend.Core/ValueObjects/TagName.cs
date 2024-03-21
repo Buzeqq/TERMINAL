@@ -13,7 +13,7 @@ public sealed record TagName
             throw new InvalidEntityIdException(value);
         }
 
-        Value = value;
+        this.Value = value;
     }
 
     public static implicit operator string(TagName name) => name.Value;

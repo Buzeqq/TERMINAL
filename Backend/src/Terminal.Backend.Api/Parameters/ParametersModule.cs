@@ -88,9 +88,7 @@ public static class ParametersModule
             .WithTags(SwaggerSetup.ParameterTag);
     }
 
-    public static void UseParametersEndpoints(this IEndpointRouteBuilder app)
-    {
+    public static void UseParametersEndpoints(this IEndpointRouteBuilder app) =>
         app.MapGroup(ApiBaseRoute)
             .MapParametersEndpoints();
-    }
 }

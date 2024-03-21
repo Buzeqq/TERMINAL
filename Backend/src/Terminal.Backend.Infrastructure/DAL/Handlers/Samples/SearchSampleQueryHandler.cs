@@ -11,11 +11,10 @@ internal sealed class SearchSampleQueryHandler(TerminalDbContext dbContext)
 {
     private readonly DbSet<Sample> _samples = dbContext.Samples;
 
-    public async Task<GetSamplesDto> Handle(SearchSampleQuery request, CancellationToken ct)
-    {
-        return new GetSamplesDto
+    public async Task<GetSamplesDto> Handle(SearchSampleQuery request, CancellationToken ct) =>
+        new()
         {
-            Samples = await _samples
+            Samples = await this._samples
                 .AsNoTracking()
                 .Include(m => m.Project)
                 .Include(m => m.Recipe)
@@ -29,5 +28,4 @@ internal sealed class SearchSampleQueryHandler(TerminalDbContext dbContext)
                 .Paginate(request.Parameters)
                 .ToListAsync(ct)
         };
-    }
 }

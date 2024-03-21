@@ -22,7 +22,7 @@ internal sealed class CreateSampleCommandHandler(
             comment, saveAsRecipe, recipeName) = command;
 
         var steps = (await convertService.ConvertAsync(stepsDto, ct)).ToList();
-        Core.Entities.Recipe? recipe = null;
+        Recipe? recipe = null;
         if (saveAsRecipe)
         {
             if (recipeName is null)
@@ -31,7 +31,7 @@ internal sealed class CreateSampleCommandHandler(
             }
 
             // for new recipe we need to copy every step, and every parameter value in steps
-            recipe = new Core.Entities.Recipe(RecipeId.Create(), recipeName);
+            recipe = new Recipe(RecipeId.Create(), recipeName);
             foreach (var step in steps)
             {
                 var parameters = new List<ParameterValue>(step.Parameters
@@ -53,7 +53,7 @@ internal sealed class CreateSampleCommandHandler(
             throw new ProjectNotActiveException(project.Name);
         }
 
-        var sample = new Core.Entities.Sample(sampleId,
+        var sample = new Sample(sampleId,
             project,
             recipe,
             new Comment(comment),

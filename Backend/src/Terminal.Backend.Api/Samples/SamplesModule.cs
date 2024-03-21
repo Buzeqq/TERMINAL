@@ -136,8 +136,5 @@ public static class SamplesModule
             .WithTags(SwaggerSetup.SampleTag);
     }
 
-    public static void UseSamplesEndpoints(this IEndpointRouteBuilder app)
-    {
-        app.MapGroup(ApiRouteBase).AddSamplesEndpoints();
-    }
+    public static void UseSamplesEndpoints(this IEndpointRouteBuilder app) => app.MapGroup(ApiRouteBase).AddSamplesEndpoints();
 }
