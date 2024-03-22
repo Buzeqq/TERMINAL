@@ -14,7 +14,7 @@ internal sealed class EmailSender(
     {
         var client = clientFactory.CreateClient(nameof(EmailSender));
         logger.LogInformation("Sending confirmation link to {@Email}", email);
-        
+
         var requestBody = new SendEmailRequest(
             new SendEmailRequest.Sender(options.Value.From, "Terminal Client"),
             [new SendEmailRequest.Recipient(email, user.UserName ?? string.Empty)],
@@ -28,11 +28,31 @@ internal sealed class EmailSender(
             logger.LogInformation("Successfully sent confirmation link to {@Email}", email);
             return;
         }
-        
+
         logger.LogError("Failed to send confirmation link to {@Email}.", email);
     }
 
     public Task SendPasswordResetLinkAsync(ApplicationUser user, string email, string resetLink) => Task.CompletedTask;
 
-    public Task SendPasswordResetCodeAsync(ApplicationUser user, string email, string resetCode) => Task.CompletedTask;
+    public async Task SendPasswordResetCodeAsync(ApplicationUser user, string email, string resetCode)
+    {
+        var client = clientFactory.CreateClient(nameof(EmailSender));
+        logger.LogInformation("Sending password reset code to {@Email}", email);
+
+        var requestBody = new SendEmailRequest(
+            new SendEmailRequest.Sender(options.Value.From, "Terminal Client"),
+            [new SendEmailRequest.Recipient(email, user.UserName ?? string.Empty)],
+            "Password reset code",
+            $"Here is your password reset code: <strong>{resetCode}</strong>");
+        var content = JsonContent.Create(requestBody);
+        var response = await client.PostAsync("/v1/email", content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            logger.LogInformation("Successfully sent password reset code to {@Email}", email);
+            return;
+        }
+
+        logger.LogError("Failed to send password code to {@Email}.", email);
+    }
 }

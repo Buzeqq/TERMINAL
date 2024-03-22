@@ -18,4 +18,6 @@ public interface IUserService
     Task RefreshTokenAsync(string refreshToken);
     Task ConfirmEmailAsync(string userId, string code, Email? newEmail = default);
     Task ResendConfirmationEmailAsync(Email email);
+    Task ForgotPasswordAsync(Email email);
+    Task ResetPasswordAsync(Email email, Password newPassword, string code);
 }

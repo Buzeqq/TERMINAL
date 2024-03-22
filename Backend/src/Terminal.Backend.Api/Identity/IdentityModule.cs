@@ -7,15 +7,12 @@ using Terminal.Backend.Application.Identity.Login;
 using Terminal.Backend.Application.Identity.Logout;
 using Terminal.Backend.Application.Identity.Refresh;
 using Terminal.Backend.Application.Identity.Register;
+using Terminal.Backend.Application.Identity.ForgotPassword;
+using Terminal.Backend.Application.Identity.ResendConfirmationEmail;
+using Terminal.Backend.Application.Identity.ResetPassword;
+using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Api.Identity;
-
-using Application.Identity.ResendConfirmationEmail;
-using Core.ValueObjects;
-using LoginRequest = LoginRequest;
-using RefreshRequest = RefreshRequest;
-using RegisterRequest = RegisterRequest;
-using ResendConfirmationEmailRequest = Application.Identity.ResendConfirmationEmail.ResendConfirmationEmailRequest;
 
 internal static class IdentityEndpointsModule
 {
@@ -97,27 +94,50 @@ internal static class IdentityEndpointsModule
             {
                 var command = request.Adapt<ResendConfirmationEmailCommand>();
                 await sender.Send(command, cancellationToken);
+                return Results.Ok();
+            })
+            .WithTags(SwaggerSetup.IdentityTag);
+
+        app.MapPost("/forgotPassword", async (
+                [FromBody] ForgotPasswordRequest request,
+                ISender sender,
+                CancellationToken cancellationToken) =>
+            {
+                var command = request.Adapt<ForgotPasswordCommand>();
+                await sender.Send(command, cancellationToken);
+                return Results.Ok();
+            })
+            .WithTags(SwaggerSetup.IdentityTag);
+
+        app.MapPost("/resetPassword", async (
+                [FromBody] ResetPasswordRequest request,
+                ISender sender,
+                CancellationToken cancellationToken) =>
+            {
+                var command = request.Adapt<ResetPasswordCommand>();
+                await sender.Send(command, cancellationToken);
+                return Results.Ok();
             })
             .WithTags(SwaggerSetup.IdentityTag);
 
 
-        app.MapPost("/resetPassword", () => { })
-            .WithTags(SwaggerSetup.IdentityTag);
-
-
         app.MapGet("/2fa", () => { })
+            .RequireAuthorization()
             .WithTags(SwaggerSetup.IdentityTag);
 
 
         app.MapPost("/account/2fa", () => { })
+            .RequireAuthorization()
             .WithTags(SwaggerSetup.IdentityTag);
 
 
         app.MapGet("/account/info", () => { })
+            .RequireAuthorization()
             .WithTags(SwaggerSetup.IdentityTag);
 
 
         app.MapPost("/account/info", () => { })
+            .RequireAuthorization()
             .WithTags(SwaggerSetup.IdentityTag);
     }
 

@@ -13,6 +13,7 @@ using Terminal.Backend.Core.Exceptions;
 
 namespace Terminal.Backend.Infrastructure.Identity;
 
+using System.Text.Encodings.Web;
 using Core.ValueObjects;
 
 internal sealed class UserService(
@@ -156,5 +157,58 @@ internal sealed class UserService(
         }
 
         await this.SendConfirmationEmailAsync(email, user);
+    }
+
+    public async Task ForgotPasswordAsync(Email email)
+    {
+        var user = await userManager.FindByEmailAsync(email);
+        if (user is null)
+        {
+            throw new UserNotFoundException();
+        }
+
+        if (!await userManager.IsEmailConfirmedAsync(user))
+        {
+            throw new EmailNotConfirmedException("To reset password you must confirm email first.");
+        }
+
+        var code = WebEncoders.Base64UrlEncode(
+            Encoding.UTF8.GetBytes(await userManager.GeneratePasswordResetTokenAsync(user)));
+        await emailSender.SendPasswordResetCodeAsync(user, email, HtmlEncoder.Default.Encode(code));
+    }
+
+    public async Task ResetPasswordAsync(Email email, Password newPassword, string code)
+    {
+        var user = await userManager.FindByEmailAsync(email);
+        if (user is null)
+        {
+            throw new UserNotFoundException();
+        }
+
+        if (!await userManager.IsEmailConfirmedAsync(user))
+        {
+            throw new EmailNotConfirmedException("To reset password you must confirm email first.");
+        }
+
+        IdentityResult result;
+        try
+        {
+            var decodedCode = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+            result = await userManager.ResetPasswordAsync(user, decodedCode, newPassword);
+        }
+        catch (FormatException)
+        {
+            throw new BadCodeException();
+        }
+
+        if (result.Succeeded)
+        {
+            return;
+        }
+
+        throw new FailedToResetPasswordException
+        {
+            Errors = result.Errors.Select(e => e.Description)
+        };
     }
 }
