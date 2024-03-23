@@ -1,4 +1,3 @@
-using MediatR;
 using Terminal.Backend.Application.DTO.Parameters;
 
 namespace Terminal.Backend.Application.Parameters.Get;

@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using MediatR;
 using Terminal.Backend.Application.DTO.Samples;
 using Terminal.Backend.Core.ValueObjects;
 

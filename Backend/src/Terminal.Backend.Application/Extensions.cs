@@ -1,9 +1,9 @@
 using System.Reflection;
 using Mapster;
 using Microsoft.Extensions.DependencyInjection;
-using Terminal.Backend.Application.Abstractions;
 using Terminal.Backend.Application.Abstractions.Behaviors;
-using Terminal.Backend.Application.Services;
+using Terminal.Backend.Application.Common.Emails;
+using Terminal.Backend.Application.Common.Services;
 
 namespace Terminal.Backend.Application;
 
@@ -20,6 +20,7 @@ public static class Extensions
         var typeAdapterConfig = TypeAdapterConfig.GlobalSettings;
         typeAdapterConfig.Scan(Assembly.GetExecutingAssembly());
         services.AddScoped<IConvertDtoService, ConvertDtoService>();
+        services.AddScoped<IEmailConfirmationEmailSender, EmailConfirmationEmailSender>();
 
         return services;
     }

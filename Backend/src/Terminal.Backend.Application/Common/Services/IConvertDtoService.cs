@@ -2,7 +2,7 @@ using Terminal.Backend.Application.DTO.Samples;
 using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.ValueObjects;
 
-namespace Terminal.Backend.Application.Abstractions;
+namespace Terminal.Backend.Application.Common.Services;
 
 internal interface IConvertDtoService
 {

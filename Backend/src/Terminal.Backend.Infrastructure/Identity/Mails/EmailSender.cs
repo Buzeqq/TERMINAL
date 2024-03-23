@@ -2,6 +2,7 @@ using System.Net.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Terminal.Backend.Application.Common;
 
 namespace Terminal.Backend.Infrastructure.Identity.Mails;
 

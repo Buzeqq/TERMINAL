@@ -1,4 +1,3 @@
-using MediatR;
 using Terminal.Backend.Core.Abstractions.Repositories;
 using Terminal.Backend.Core.Exceptions;
 

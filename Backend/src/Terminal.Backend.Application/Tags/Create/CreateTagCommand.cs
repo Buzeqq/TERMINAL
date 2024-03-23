@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using MediatR;
 using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Tags.Create;

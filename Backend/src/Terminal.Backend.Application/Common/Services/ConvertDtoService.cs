@@ -1,4 +1,3 @@
-using Terminal.Backend.Application.Abstractions;
 using Terminal.Backend.Application.DTO.ParameterValues;
 using Terminal.Backend.Application.DTO.Samples;
 using Terminal.Backend.Application.Exceptions;
@@ -9,7 +8,7 @@ using Terminal.Backend.Core.Entities.ParameterValues;
 using Terminal.Backend.Core.Exceptions;
 using Terminal.Backend.Core.ValueObjects;
 
-namespace Terminal.Backend.Application.Services;
+namespace Terminal.Backend.Application.Common.Services;
 
 internal sealed class ConvertDtoService(IParameterRepository parameterRepository, ITagRepository tagRepository)
     : IConvertDtoService

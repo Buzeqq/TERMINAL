@@ -6,10 +6,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
-using Terminal.Backend.Application.Abstractions;
+using Terminal.Backend.Application.Common;
 using Terminal.Backend.Infrastructure.DAL;
 using Terminal.Backend.Infrastructure.DAL.Behaviours;
-using Terminal.Backend.Infrastructure.Identity;
 using Terminal.Backend.Infrastructure.Identity.Mails;
 using Terminal.Backend.Infrastructure.Middleware;
 
@@ -29,7 +28,7 @@ public static class Extensions
         {
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                Description = "JWT Authorization header using the Bearer scheme. Use 'Bearer {token}' format.",
+                Description = "Authorization header using the Bearer scheme. Use 'Bearer {token}' format.",
                 Name = "Authorization",
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.ApiKey,
@@ -65,7 +64,7 @@ public static class Extensions
         services.AddAuthentication(IdentityConstants.ApplicationScheme)
             .AddCookie(IdentityConstants.ApplicationScheme)
             .AddBearerToken(IdentityConstants.BearerScheme);
-        
+
         services.AddAuthorizationBuilder();
         services.AddAntiforgery();
 
@@ -83,7 +82,6 @@ public static class Extensions
             httpClient.BaseAddress = new Uri(options.BaseAddress);
             httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {options.Token}");
         });
-        services.AddScoped<IUserService, UserService>();
         services.AddScoped<IEmailSender<ApplicationUser>, EmailSender>();
 
         services.AddOptions<EmailSenderOptions>()
@@ -96,7 +94,7 @@ public static class Extensions
     {
         app.UseExceptionHandler();
         app.UseMiddleware<RequestLogContextMiddleware>();
-        
+
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
@@ -113,11 +111,11 @@ public static class Extensions
         }
 
         // app.MapIdentityApi<ApplicationUser>();
-        
+
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseAntiforgery();
-        
+
         app.MapControllers();
     }
 

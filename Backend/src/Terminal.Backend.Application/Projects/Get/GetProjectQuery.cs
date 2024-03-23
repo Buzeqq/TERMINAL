@@ -1,4 +1,3 @@
-using MediatR;
 using Terminal.Backend.Application.DTO.Projects;
 
 namespace Terminal.Backend.Application.Projects.Get;

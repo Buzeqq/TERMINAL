@@ -2,11 +2,11 @@ using Terminal.Backend.Core.Exceptions;
 
 namespace Terminal.Backend.Core.ValueObjects;
 
-public sealed record UserId
+public sealed record AuthorId
 {
     public Guid Value { get; }
 
-    public UserId(Guid value)
+    public AuthorId(Guid value)
     {
         if (value == Guid.Empty)
         {
@@ -16,8 +16,8 @@ public sealed record UserId
         this.Value = value;
     }
 
-    public static UserId Create() => new(Guid.NewGuid());
+    public static AuthorId Create() => new(Guid.NewGuid());
 
-    public static implicit operator Guid(UserId id) => id.Value;
-    public static implicit operator UserId(Guid id) => new(id);
+    public static implicit operator Guid(AuthorId id) => id.Value;
+    public static implicit operator AuthorId(Guid id) => new(id);
 }

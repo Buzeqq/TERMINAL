@@ -1,5 +1,3 @@
-using MediatR;
-
 namespace Terminal.Backend.Application.Identity.Login;
 
 public sealed record LoginCommand(

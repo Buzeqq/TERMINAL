@@ -1,5 +1,4 @@
 using System.Reflection;
-using MediatR;
 using Microsoft.AspNetCore.Http;
 using Terminal.Backend.Application.DTO.Samples;
 

@@ -10,9 +10,12 @@ using Terminal.Backend.Application.Identity.Register;
 using Terminal.Backend.Application.Identity.ForgotPassword;
 using Terminal.Backend.Application.Identity.ResendConfirmationEmail;
 using Terminal.Backend.Application.Identity.ResetPassword;
+using Terminal.Backend.Application.Identity.UpdateAccount;
 using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Api.Identity;
+
+using Application.Identity.GetUserInfo;
 
 internal static class IdentityEndpointsModule
 {
@@ -131,12 +134,22 @@ internal static class IdentityEndpointsModule
             .WithTags(SwaggerSetup.IdentityTag);
 
 
-        app.MapGet("/account/info", () => { })
+        app.MapGet("/account/info", async (
+                ISender sender,
+                CancellationToken cancellationToken) =>
+            {
+                var userInfo = await sender.Send(new GetUserInfoQuery(), cancellationToken);
+                return Results.Ok(userInfo);
+            })
             .RequireAuthorization()
             .WithTags(SwaggerSetup.IdentityTag);
 
 
-        app.MapPost("/account/info", () => { })
+        app.MapPost("/account/info", async (
+                [FromBody] UpdateAccountRequest request) =>
+            {
+
+            })
             .RequireAuthorization()
             .WithTags(SwaggerSetup.IdentityTag);
     }

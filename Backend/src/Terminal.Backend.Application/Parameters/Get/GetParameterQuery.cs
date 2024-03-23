@@ -1,4 +1,3 @@
-using MediatR;
 using Terminal.Backend.Core.Entities.Parameters;
 using Terminal.Backend.Core.ValueObjects;
 

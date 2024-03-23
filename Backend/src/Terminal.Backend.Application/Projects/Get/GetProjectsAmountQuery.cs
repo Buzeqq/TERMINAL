@@ -1,5 +1,3 @@
-using MediatR;
-
 namespace Terminal.Backend.Application.Projects.Get;
 
 public sealed class GetProjectsAmountQuery(bool onlyActive = true) : IRequest<int>

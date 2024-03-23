@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Terminal.Backend.Infrastructure.Identity;
+using Terminal.Backend.Application.Common;
 
 namespace Terminal.Backend.Infrastructure.DAL;
 

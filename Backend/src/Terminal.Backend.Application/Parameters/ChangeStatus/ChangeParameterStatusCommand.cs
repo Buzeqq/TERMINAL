@@ -1,4 +1,3 @@
-using MediatR;
 using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Parameters.ChangeStatus;

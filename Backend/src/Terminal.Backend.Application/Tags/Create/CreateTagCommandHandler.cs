@@ -1,4 +1,3 @@
-using MediatR;
 using Terminal.Backend.Core.Abstractions.Repositories;
 
 namespace Terminal.Backend.Application.Tags.Create;

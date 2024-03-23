@@ -1,4 +1,3 @@
-using MediatR;
 using Terminal.Backend.Application.DTO.Samples;
 
 namespace Terminal.Backend.Application.Samples.Get;
