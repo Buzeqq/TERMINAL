@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -30,17 +29,20 @@ public static class MocksFactory
         Substitute.For<IAuthenticationSchemeProvider>(),
         Substitute.For<IUserConfirmation<ApplicationUser>>());
 
-    public static IHttpContextAccessor CreateHttpContextAccessor(
-        bool useCookies, string id, string userName, string emailAddress)
+    public static HttpContext CreateHttpContext()
     {
-
-        var accessor = Substitute.For<IHttpContextAccessor>();
-        accessor.HttpContext?.User.Returns(new ClaimsPrincipal(
-            new ClaimsIdentity([new Claim(ClaimTypes.Name, userName), new Claim(ClaimTypes.NameIdentifier, id), new Claim(ClaimTypes.Email, emailAddress)],
-                useCookies ? IdentityConstants.ApplicationScheme : IdentityConstants.BearerScheme,
-            ClaimTypes.Name,
-            ClaimTypes.Role)));
-
-        return accessor;
+        var context = Substitute.For<HttpContext>();
+        var authenticationService = Substitute.For<IAuthenticationService>();
+        var serviceProvider = Substitute.For<IServiceProvider>();
+        var authSchemaProvider = Substitute.For<IAuthenticationSchemeProvider>();
+        authSchemaProvider.GetDefaultAuthenticateSchemeAsync()!.Returns(
+            Task.FromResult(new AuthenticationScheme(IdentityConstants.BearerScheme,
+                IdentityConstants.BearerScheme,
+                typeof(IAuthenticationHandler))));
+        serviceProvider.GetService(typeof(IAuthenticationService)).Returns(authenticationService);
+        serviceProvider.GetService(typeof(TimeProvider)).Returns(TimeProvider.System);
+        serviceProvider.GetService(typeof(IAuthenticationSchemeProvider)).Returns(authSchemaProvider);
+        context.RequestServices.Returns(serviceProvider);
+        return context;
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Text;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.WebUtilities;
+﻿using Microsoft.AspNetCore.Identity;
 using Terminal.Backend.Application.Common;
 using Terminal.Backend.Application.Exceptions;
 using Terminal.Backend.Application.Identity.ConfirmEmail;
@@ -33,7 +31,7 @@ public class ConfirmEmailCommandHandlerTest
 
         // Assert
         await _userManagerMock.Received(1)
-            .ConfirmEmailAsync(user, EncodeCode(command.Code));
+            .ConfirmEmailAsync(user, CodeEncoder.Decode(command.Code));
     }
 
     [Fact]
@@ -43,7 +41,7 @@ public class ConfirmEmailCommandHandlerTest
         var user = UserFactory.Create("id", "test@test.com");
         _userManagerMock.FindByIdAsync(Arg.Any<string>()).Returns(user);
         var command = new ConfirmEmailCommand("id", "code", "test2@test.com");
-        _userManagerMock.ChangeEmailAsync(user, command.NewEmail!, EncodeCode(command.Code))
+        _userManagerMock.ChangeEmailAsync(user, command.NewEmail!, CodeEncoder.Decode(command.Code))
             .Returns(IdentityResult.Success);
         _userManagerMock.SetUserNameAsync(user, command.NewEmail!)
             .Returns(IdentityResult.Success);
@@ -53,7 +51,7 @@ public class ConfirmEmailCommandHandlerTest
 
         // Assert
         await _userManagerMock.Received(1)
-            .ChangeEmailAsync(user, command.NewEmail!, EncodeCode(command.Code));
+            .ChangeEmailAsync(user, command.NewEmail!, CodeEncoder.Decode(command.Code));
         await _userManagerMock.Received(1)
             .SetUserNameAsync(user, command.NewEmail!);
     }
@@ -65,13 +63,13 @@ public class ConfirmEmailCommandHandlerTest
         var user = UserFactory.Create("id", "test@test.com");
         _userManagerMock.FindByIdAsync(Arg.Any<string>()).Returns(user);
         var command = new ConfirmEmailCommand("id", "code", "test2@test.com");
-        _userManagerMock.ChangeEmailAsync(user, command.NewEmail!, EncodeCode(command.Code))
+        _userManagerMock.ChangeEmailAsync(user, command.NewEmail!, CodeEncoder.Decode(command.Code))
             .Returns(IdentityResult.Failed());
 
         // Act & Assert
         await Assert.ThrowsAsync<FailedToUpdateEmailException>(() => _handler.Handle(command, CancellationToken.None));
         await _userManagerMock.Received(1)
-            .ChangeEmailAsync(user, command.NewEmail!, EncodeCode(command.Code));
+            .ChangeEmailAsync(user, command.NewEmail!, CodeEncoder.Decode(command.Code));
         await _userManagerMock.Received(0)
             .SetUserNameAsync(user, command.NewEmail!);
     }
@@ -83,7 +81,7 @@ public class ConfirmEmailCommandHandlerTest
         var user = UserFactory.Create("id", "test@test.com");
         _userManagerMock.FindByIdAsync(Arg.Any<string>()).Returns(user);
         var command = new ConfirmEmailCommand("id", "code", "test2@test.com");
-        _userManagerMock.ChangeEmailAsync(user, command.NewEmail!, EncodeCode(command.Code))
+        _userManagerMock.ChangeEmailAsync(user, command.NewEmail!, CodeEncoder.Decode(command.Code))
             .Returns(IdentityResult.Success);
         const string errorDescription = "desc";
         _userManagerMock.SetUserNameAsync(user, command.NewEmail!)
@@ -93,7 +91,7 @@ public class ConfirmEmailCommandHandlerTest
         var e = await Assert.ThrowsAsync<FailedToUpdateEmailException>(() => _handler.Handle(command, CancellationToken.None));
         e.Errors.Should().ContainSingle(d => d == errorDescription);
         await _userManagerMock.Received(1)
-            .ChangeEmailAsync(user, command.NewEmail!, EncodeCode(command.Code));
+            .ChangeEmailAsync(user, command.NewEmail!, CodeEncoder.Decode(command.Code));
         await _userManagerMock.Received(1)
             .SetUserNameAsync(user, command.NewEmail!);
     }
@@ -118,6 +116,4 @@ public class ConfirmEmailCommandHandlerTest
         // Act & Assert
         await Assert.ThrowsAsync<BadCodeException>(() => _handler.Handle(command, CancellationToken.None));
     }
-
-    private static string EncodeCode(string code) => Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
 }

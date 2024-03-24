@@ -4,7 +4,7 @@ namespace Terminal.Backend.Unit.Identity.Common;
 
 public static class UserFactory
 {
-    public static ApplicationUser Create(string id, string email) => new ApplicationUser()
+    public static ApplicationUser Create(string id = "id", string email = "test@test.com") => new()
     {
         Id = id,
         Email = email
