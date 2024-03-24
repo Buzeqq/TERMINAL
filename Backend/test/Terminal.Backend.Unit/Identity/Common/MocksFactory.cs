@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -28,4 +29,18 @@ public static class MocksFactory
         Substitute.For<ILogger<SignInManager<ApplicationUser>>>(),
         Substitute.For<IAuthenticationSchemeProvider>(),
         Substitute.For<IUserConfirmation<ApplicationUser>>());
+
+    public static IHttpContextAccessor CreateHttpContextAccessor(
+        bool useCookies, string id, string userName, string emailAddress)
+    {
+
+        var accessor = Substitute.For<IHttpContextAccessor>();
+        accessor.HttpContext?.User.Returns(new ClaimsPrincipal(
+            new ClaimsIdentity([new Claim(ClaimTypes.Name, userName), new Claim(ClaimTypes.NameIdentifier, id), new Claim(ClaimTypes.Email, emailAddress)],
+                useCookies ? IdentityConstants.ApplicationScheme : IdentityConstants.BearerScheme,
+            ClaimTypes.Name,
+            ClaimTypes.Role)));
+
+        return accessor;
+    }
 }
