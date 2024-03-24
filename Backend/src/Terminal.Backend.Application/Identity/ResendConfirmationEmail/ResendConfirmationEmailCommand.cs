@@ -1,3 +1,5 @@
+using Terminal.Backend.Core.ValueObjects;
+
 namespace Terminal.Backend.Application.Identity.ResendConfirmationEmail;
 
-public record ResendConfirmationEmailCommand(string Email) : IRequest;
+public record ResendConfirmationEmailCommand(Email Email) : IRequest;

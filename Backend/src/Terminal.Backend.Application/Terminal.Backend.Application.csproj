@@ -31,4 +31,9 @@
           <HintPath>..\..\..\..\..\.nuget\packages\serilog\3.1.1\lib\net7.0\Serilog.dll</HintPath>
         </Reference>
     </ItemGroup>
+
+    <ItemGroup>
+      <InternalsVisibleTo Include="Terminal.Backend.Unit"/>
+      <InternalsVisibleTo Include="DynamicProxyGenAssembly2"/>
+    </ItemGroup>
 </Project>
