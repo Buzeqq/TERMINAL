@@ -40,7 +40,7 @@ internal sealed class ConfirmEmailCommandHandler(UserManager<ApplicationUser> us
 
             if (!result.Succeeded)
             {
-                throw new FailedToUpdateEmailException() { Errors = result.Errors.Select(e => e.Description) };
+                throw new FailedToUpdateEmailException { Errors = result.Errors.Select(e => e.Description) };
             }
         }
     }

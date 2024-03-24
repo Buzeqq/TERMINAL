@@ -11,9 +11,6 @@ namespace Terminal.Backend.Unit.Identity.GetUserInfo;
 [TestSubject(typeof(GetUserInfoQueryHandler))]
 public class GetUserInfoQueryHandlerTest
 {
-    private const string UserId = "id";
-    private const string Email = "test@test.com";
-
     private readonly IHttpContextAccessor _httpContextAccessorMock = Substitute.For<IHttpContextAccessor>();
     private readonly UserManager<ApplicationUser> _userManagerMock = MocksFactory.CreateUserManager();
 
