@@ -13,17 +13,19 @@ internal sealed class EmailConfirmationEmailSender(
     IHttpContextAccessor httpContextAccessor,
     IEmailSender<ApplicationUser> emailSender) : IEmailConfirmationEmailSender
 {
-    public async Task SendConfirmationEmailAsync(Email email, ApplicationUser newUser)
+    public async Task SendConfirmationEmailAsync(Email email, ApplicationUser user, bool isChange = false)
     {
-        var code = WebEncoders.Base64UrlEncode(
-            Encoding.UTF8.GetBytes(await userManager.GenerateEmailConfirmationTokenAsync(newUser)));
+        var code = isChange ? await userManager.GenerateEmailConfirmationTokenAsync(user) :
+                await userManager.GenerateChangeEmailTokenAsync(user, email);
+        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
         var routeParameters = new RouteValueDictionary
         {
-            ["userId"] = newUser.Id,
+            ["userId"] = user.Id,
             ["code"] = code
         };
 
         var link = linkGenerator.GetUriByName(httpContextAccessor.HttpContext!, "Email confirmation endpoint", routeParameters)!;
-        await emailSender.SendConfirmationLinkAsync(newUser, email, link);
+        await emailSender.SendConfirmationLinkAsync(user, email, link);
     }
 }

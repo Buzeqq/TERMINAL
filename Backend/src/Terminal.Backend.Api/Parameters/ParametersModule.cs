@@ -1,4 +1,3 @@
-using MediatR;
 using Terminal.Backend.Api.Swagger;
 using Terminal.Backend.Application.DTO.Parameters;
 using Terminal.Backend.Application.Parameters.ChangeStatus;

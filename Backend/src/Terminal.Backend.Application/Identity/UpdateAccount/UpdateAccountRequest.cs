@@ -2,7 +2,7 @@ namespace Terminal.Backend.Application.Identity.UpdateAccount;
 
 public class UpdateAccountRequest
 {
-    public required string NewEmail { get; init; }
-    public required string NewPassword { get; init; }
-    public required string OldPassword { get; init; }
+    public string? NewEmail { get; init; }
+    public string? NewPassword { get; init; }
+    public string? OldPassword { get; init; }
 }

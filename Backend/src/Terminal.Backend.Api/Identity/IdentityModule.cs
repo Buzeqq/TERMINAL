@@ -1,5 +1,3 @@
-using Mapster;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Terminal.Backend.Api.Swagger;
 using Terminal.Backend.Application.Identity.ConfirmEmail;
@@ -11,11 +9,9 @@ using Terminal.Backend.Application.Identity.ForgotPassword;
 using Terminal.Backend.Application.Identity.ResendConfirmationEmail;
 using Terminal.Backend.Application.Identity.ResetPassword;
 using Terminal.Backend.Application.Identity.UpdateAccount;
-using Terminal.Backend.Core.ValueObjects;
+using Terminal.Backend.Application.Identity.GetUserInfo;
 
 namespace Terminal.Backend.Api.Identity;
-
-using Application.Identity.GetUserInfo;
 
 internal static class IdentityEndpointsModule
 {
@@ -77,15 +73,10 @@ internal static class IdentityEndpointsModule
                 ISender sender,
                 CancellationToken cancellationToken) =>
             {
-                Email? email = null;
-                if (changedEmail is not null)
-                {
-                    email = changedEmail;
-                }
-
-                var command = new ConfirmEmailCommand(userId, code, email);
+                var request = new ConfirmEmailRequest { UserId = userId, Code = code, ChangedEmail = changedEmail };
+                var command = request.Adapt<ConfirmEmailCommand>();
                 await sender.Send(command, cancellationToken);
-                return Results.Ok();
+                return Results.Ok("Thank you for confirming your email.");
             }).WithName("Email confirmation endpoint")
             .WithTags(SwaggerSetup.IdentityTag);
 
@@ -146,9 +137,13 @@ internal static class IdentityEndpointsModule
 
 
         app.MapPost("/account/info", async (
-                [FromBody] UpdateAccountRequest request) =>
+                [FromBody] UpdateAccountRequest request,
+                ISender sender,
+                CancellationToken cancellationToken) =>
             {
-
+                var command = request.Adapt<UpdateAccountCommand>();
+                await sender.Send(command, cancellationToken);
+                return Results.Ok();
             })
             .RequireAuthorization()
             .WithTags(SwaggerSetup.IdentityTag);

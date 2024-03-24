@@ -33,6 +33,15 @@ internal sealed class ConfirmEmailCommandHandler(UserManager<ApplicationUser> us
         else
         {
             var result = await userManager.ChangeEmailAsync(user, newEmail, code);
+            if (result.Succeeded)
+            {
+                result = await userManager.SetUserNameAsync(user, newEmail);
+            }
+
+            if (!result.Succeeded)
+            {
+                throw new FailedToUpdateEmailException() { Errors = result.Errors.Select(e => e.Description) };
+            }
         }
     }
 }

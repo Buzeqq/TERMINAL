@@ -26,6 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\Terminal.Backend.Application\Terminal.Backend.Application.csproj" />
       <ProjectReference Include="..\..\src\Terminal.Backend.Infrastructure\Terminal.Backend.Infrastructure.csproj" />
     </ItemGroup>
 
