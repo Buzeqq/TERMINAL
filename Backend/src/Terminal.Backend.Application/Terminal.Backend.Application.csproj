@@ -12,6 +12,7 @@
         <PackageReference Include="MediatR" />
         <PackageReference Include="Scrutor"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+        <PackageReference Include="Serilog" />
     </ItemGroup>
 
     <ItemGroup>

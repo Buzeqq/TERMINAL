@@ -1,10 +1,8 @@
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using Terminal.Backend.Application.Common;
 using Terminal.Backend.Application.Common.Emails;
 using Terminal.Backend.Application.Exceptions;
 using Terminal.Backend.Core.Exceptions;
-using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Identity.Register;
 
