@@ -16,12 +16,8 @@ internal sealed class RegisterCommandHandler(
     public async Task Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
         var (email, password) = request;
-        if (!new EmailAddressAttribute().IsValid(email))
-        {
-            throw new InvalidEmailException(email);
-        }
 
-        var user = await userManager.FindByEmailAsync(new Email(email));
+        var user = await userManager.FindByEmailAsync(email);
         if (user is not null)
         {
             throw new EmailAlreadyExistsException(email);

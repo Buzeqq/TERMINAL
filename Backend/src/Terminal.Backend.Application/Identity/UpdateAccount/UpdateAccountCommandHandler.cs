@@ -41,11 +41,6 @@ internal sealed class UpdateAccountCommandHandler(
 
         if (newEmail is not null)
         {
-            if (!new EmailAddressAttribute().IsValid(newEmail.Value))
-            {
-                throw new InvalidEmailException(newEmail);
-            }
-
             if ((await userManager.GetEmailAsync(user))! != newEmail)
             {
                 await emailConfirmationEmailSender.SendConfirmationEmailAsync(newEmail, user, true);
