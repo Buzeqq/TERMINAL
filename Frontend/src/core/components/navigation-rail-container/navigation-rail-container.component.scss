@@ -1,0 +1,25 @@
+@use "../../../styles/mixins/rwd" as rwd;
+
+:host {
+  display: grid;
+  grid-template-columns: 80px auto;
+  grid-template-rows: auto;
+  height: 100vh;
+
+  @include rwd.breakpoint(mobile) {
+      grid-template-columns: auto;
+      grid-template-rows: auto 80px;
+  }
+
+  .rail {
+    min-width: 80px;
+
+    @include rwd.breakpoint(mobile) {
+      grid-row-start: 2;
+    }
+  }
+
+  .content {
+    margin: 15px;
+  }
+}

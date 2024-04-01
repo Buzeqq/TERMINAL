@@ -1,0 +1,46 @@
+<aside>
+  <nav>
+    <div class="navigation-rail-fab navigation-rail-button">
+      <button mat-fab class="fab" color="tertiary">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+    <ul>
+      <button mat-button
+              class="navigation-rail-button"
+              [class.active]="activeButton() === 'dashboard'"
+              (click)="setActive('dashboard', '/dashboard')">
+        <mat-icon>home</mat-icon>
+        Dashboard
+      </button>
+      <button mat-button
+              class="navigation-rail-button"
+              [class.active]="activeButton() === 'samples'"
+              (click)="setActive('samples', '/samples')">
+        <mat-icon>science</mat-icon>
+        Samples
+      </button>
+      <button mat-button
+              class="navigation-rail-button"
+              [class.active]="activeButton() === 'recipe'"
+              (click)="setActive('recipe', '/recipes')">
+        <mat-icon>assignment</mat-icon>
+        Recipes
+      </button>
+      <button mat-button
+              class="navigation-rail-button"
+              [class.active]="activeButton() === 'projects'"
+              (click)="setActive('projects', '/projects')">
+        <mat-icon>folder</mat-icon>
+        Projects
+      </button>
+      <button mat-button
+              class="navigation-rail-button"
+              [class.active]="activeButton() === 'account'"
+              (click)="setActive('account', '/account')">
+        <mat-icon>account_circle</mat-icon>
+        Account
+      </button>
+    </ul>
+  </nav>
+</aside>
