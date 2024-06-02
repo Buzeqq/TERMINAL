@@ -1,0 +1,25 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin color($theme) {
+  .terminal-icon {
+    $white: mat.get-theme-color($theme, neutral, 100);
+    $black: mat.get-theme-color($theme, neutral, 0);
+
+    fill: if(mat.get-theme-type($theme) == dark, $white, $black);
+  }
+}
+
+@mixin typography($theme) {
+
+}
+
+@mixin theme($theme) {
+  @if mat.theme-has($theme, color) {
+    @include color($theme);
+  }
+
+  @if mat.theme-has($theme, typography) {
+    @include typography($theme);
+  }
+}

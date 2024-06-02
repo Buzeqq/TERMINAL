@@ -1,3 +1,5 @@
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 using Terminal.Backend.Api.Identity;
 using Terminal.Backend.Api.Parameters;
@@ -11,7 +13,7 @@ using Terminal.Backend.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog((context, loggerConfig) => 
+builder.Host.UseSerilog((context, loggerConfig) =>
     loggerConfig.ReadFrom.Configuration(context.Configuration));
 
 builder.Services
@@ -25,7 +27,12 @@ builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
-app.MapHealthChecks("/api/health");
+app.MapHealthChecks("/api/health", new HealthCheckOptions
+{
+    ResponseWriter = app.Environment.IsDevelopment() ?
+        UIResponseWriter.WriteHealthCheckUIResponse :
+        UIResponseWriter.WriteHealthCheckUIResponseNoExceptionDetails
+});
 
 app.UseInfrastructure();
 app.UseSerilogRequestLogging();

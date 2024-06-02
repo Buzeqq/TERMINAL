@@ -30,4 +30,9 @@
       <ProjectReference Include="..\..\src\Terminal.Backend.Api\Terminal.Backend.Api.csproj" />
     </ItemGroup>
 
+
+    <ItemGroup>
+      <PackageVersion Update="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.6" />
+    </ItemGroup>
+
 </Project>

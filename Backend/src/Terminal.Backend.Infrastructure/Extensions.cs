@@ -105,12 +105,11 @@ public static class Extensions
                 c.EnableDeepLinking();
             });
             app.UseCors(x => x
+                .AllowCredentials()
+                .WithOrigins("http://localhost:4200")
                 .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowAnyOrigin());
+                .AllowAnyMethod());
         }
-
-        // app.MapIdentityApi<ApplicationUser>();
 
         app.UseAuthentication();
         app.UseAuthorization();

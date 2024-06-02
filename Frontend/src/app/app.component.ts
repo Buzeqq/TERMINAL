@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { NavigationRailComponent } from '../core/components/navigation-rail/navigation-rail.component';
@@ -8,6 +8,9 @@ import {
 import {
   NavigationRailContentComponent
 } from "../core/components/navigation-rail-content/navigation-rail-content.component";
+import { Store } from "@ngrx/store";
+import { selectIdentity } from "../core/state/identity/identity.selectors";
+import { LoginComponent } from "../pages/login/login.component";
 
 @Component({
   selector: 'app-root',
@@ -17,11 +20,13 @@ import {
     RouterOutlet,
     NavigationRailComponent,
     NavigationRailContainerComponent,
-    NavigationRailContentComponent
+    NavigationRailContentComponent,
+    LoginComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'terminal';
+  private readonly store = inject(Store);
+  isLoggedIn = computed(() => this.store.selectSignal(selectIdentity)().isAuthenticated);
 }

@@ -1,8 +1,13 @@
 <main>
-  <app-navigation-rail-container>
-    <app-navigation-rail></app-navigation-rail>
-    <app-navigation-rail-content>
-      <router-outlet></router-outlet>
-    </app-navigation-rail-content>
-  </app-navigation-rail-container>
+  @if (isLoggedIn())
+  {
+    <app-navigation-rail-container>
+      <app-navigation-rail></app-navigation-rail>
+      <app-navigation-rail-content>
+        <router-outlet></router-outlet>
+      </app-navigation-rail-content>
+    </app-navigation-rail-container>
+  } @else {
+    <app-login></app-login>
+  }
 </main>

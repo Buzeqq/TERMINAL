@@ -1,10 +1,12 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { MatListItem, MatNavList } from "@angular/material/list";
 import { MatIcon } from "@angular/material/icon";
 import { MatButton, MatFabButton, MatIconButton } from "@angular/material/button";
 import { MatRipple } from "@angular/material/core";
 import { NavigationRailButtonComponent } from "../navigation-rail-button/navigation-rail-button.component";
-import {Router} from "@angular/router";
+import { Router } from "@angular/router";
+import { Store } from "@ngrx/store";
+import { selectIdentity } from "../../state/identity/identity.selectors";
 
 type ActiveButton = 'dashboard' | 'samples' | 'recipe' | 'projects' | 'account';
 @Component({
@@ -26,8 +28,10 @@ type ActiveButton = 'dashboard' | 'samples' | 'recipe' | 'projects' | 'account';
 })
 export class NavigationRailComponent {
   protected activeButton = signal<ActiveButton | undefined>(undefined);
-
-  constructor(protected readonly router: Router) {}
+  private readonly router = inject(Router);
+  private readonly store = inject(Store);
+  private readonly userInfo = this.store.selectSignal(selectIdentity);
+  isVisible = computed(() => this.userInfo().isAuthenticated);
 
   async setActive(button: ActiveButton, route: string) {
     this.activeButton.set(button);
