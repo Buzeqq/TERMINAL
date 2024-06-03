@@ -13,7 +13,7 @@ export const initialState: Readonly<Identity> = {
 
 export const identityReducer = createReducer(
   initialState,
-  on(IdentityActions.userLoggedIn, (state, { identity }): Identity => {
+  on(IdentityActions.userLoaded, (state, { identity }): Identity => {
     if (state.isAuthenticated) return state;
 
     return identity;

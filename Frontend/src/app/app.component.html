@@ -1,12 +1,19 @@
 <main>
   @if (isLoggedIn())
   {
-    <app-navigation-rail-container>
-      <app-navigation-rail></app-navigation-rail>
-      <app-navigation-rail-content>
-        <router-outlet></router-outlet>
-      </app-navigation-rail-content>
-    </app-navigation-rail-container>
+    @defer (when isLoggedIn()) {
+      <app-navigation-rail-container>
+        <app-navigation-rail></app-navigation-rail>
+        <app-navigation-rail-content>
+          <router-outlet></router-outlet>
+        </app-navigation-rail-content>
+      </app-navigation-rail-container>
+    } @loading (minimum 1000ms)
+    {
+      <div class="center">
+        <mat-spinner></mat-spinner>
+      </div>
+    }
   } @else {
     <app-login></app-login>
   }

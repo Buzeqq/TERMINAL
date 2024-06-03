@@ -7,14 +7,17 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { identityReducer, identityFeatureKey } from "../core/state/identity/identity.reducer";
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from "@ngrx/store-devtools";
-import { loginEffect } from "../core/state/identity/identity.effect";
+import { userLoggedInEffect } from "../core/state/identity/identity.effect";
 import { provideHttpClient, withFetch, withInterceptors } from "@angular/common/http";
 import { credentialsInterceptor } from "../core/interceptors/credentials.interceptor";
+import { provideComponentStore } from "@ngrx/component-store";
+import { LoginStore } from "../pages/login/login.store";
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideStore(),
+    provideComponentStore(LoginStore),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),
@@ -28,7 +31,7 @@ export const appConfig: ApplicationConfig = {
     }),
     provideAnimationsAsync(),
     provideEffects({
-      loginEffect
+      userLoggedInEffect,
     }),
     provideHttpClient(
       withFetch(),

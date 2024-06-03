@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { TerminalIconComponent } from "../../core/components/terminal-icon/terminal-icon.component";
 import { MatError, MatFormField, MatLabel, MatSuffix } from "@angular/material/form-field";
 import { MatInput } from "@angular/material/input";
@@ -6,9 +6,9 @@ import { MatButton, MatIconButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { JsonPipe } from "@angular/common";
-import { Store } from "@ngrx/store";
-import { IdentityActions } from "../../core/state/identity/identityActions";
+import { AsyncPipe, JsonPipe } from "@angular/common";
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { LoginStore } from "./login.store";
 import { LoginForm } from "../../core/identity/identity.model";
 
 @Component({
@@ -26,20 +26,28 @@ import { LoginForm } from "../../core/identity/identity.model";
     ReactiveFormsModule,
     JsonPipe,
     MatSuffix,
-    MatError
+    MatError,
+    MatProgressSpinner,
+    AsyncPipe
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
     rememberMe: new FormControl(false, { nonNullable: true })
   });
+  private readonly store = inject(LoginStore);
+  readonly isLoading$ = this.store.isLoading$;
 
-  private readonly store = inject(Store);
+  ngOnInit() {
+    this.store.tryToLoadUser();
+  }
+
   onSubmit() {
-    this.store.dispatch(IdentityActions.tryToLogIn({ form: this.loginForm.value as LoginForm }));
+    this.store.tryToLogIn(this.loginForm.value as LoginForm);
   }
 }

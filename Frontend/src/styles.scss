@@ -62,3 +62,10 @@ $terminal-light-theme: matx.define-theme((
 /* You can add global styles to this file, and also import other style files */
 html, body { height: 100%; color-scheme: light dark }
 body { margin: 0; font-family: Roboto, "Roboto Mono", sans-serif; }
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
