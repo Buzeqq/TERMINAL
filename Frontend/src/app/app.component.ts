@@ -11,6 +11,7 @@ import {
 import { Store } from "@ngrx/store";
 import { selectIdentity } from "../core/state/identity/identity.selectors";
 import { LoginComponent } from "../pages/login/login.component";
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-root',
@@ -21,7 +22,8 @@ import { LoginComponent } from "../pages/login/login.component";
     NavigationRailComponent,
     NavigationRailContainerComponent,
     NavigationRailContentComponent,
-    LoginComponent
+    LoginComponent,
+    MatProgressSpinner
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
