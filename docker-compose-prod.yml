@@ -11,7 +11,7 @@ services:
   
   terminal.backend:
     build:
-      context: ./Backend/src
+      context: ./Backend
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - Postgres__ConnectionString

@@ -22,5 +22,10 @@
 **/obj
 **/secrets.dev.yaml
 **/values.dev.yaml
+**/postgres-data
+**/test
+.editorconfig
+.gitignore
+Terminal.Backend.sln.DotSettings.user
 LICENSE
 README.md
