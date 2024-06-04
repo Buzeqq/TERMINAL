@@ -16,6 +16,6 @@ internal sealed class TerminalTestApp : WebApplicationFactory<Program>
             {
                 builder.ConfigureServices(services);
             }
-            builder.UseEnvironment("test");
+            builder.UseEnvironment("Test");
         }).CreateClient();
 }
