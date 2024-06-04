@@ -2,26 +2,11 @@ using MediatR;
 
 namespace Terminal.Backend.Infrastructure.DAL.Behaviours;
 
-public sealed class UnitOfWorkBehaviour<TRequest, TResponse>
+public sealed class UnitOfWorkBehaviour<TRequest, TResponse>(IUnitOfWork<TResponse> unitOfWork)
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull
 {
-    private readonly IUnitOfWork<TResponse> _unitOfWork;
-
-    public UnitOfWorkBehaviour(IUnitOfWork<TResponse> unitOfWork)
-    {
-        _unitOfWork = unitOfWork;
-    }
-
-    public Task<TResponse> Handle(TRequest command, RequestHandlerDelegate<TResponse> next, CancellationToken ct)
-    {
-        if (!IsCommand())
-        {
-            return next();
-        }
-
-        return _unitOfWork.ExecuteAsync(next);
-    }
+    public Task<TResponse> Handle(TRequest command, RequestHandlerDelegate<TResponse> next, CancellationToken ct) => !IsCommand() ? next() : unitOfWork.ExecuteAsync(next);
 
     private static bool IsCommand() => typeof(TRequest).Name.EndsWith("Command");
 }

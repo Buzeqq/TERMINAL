@@ -15,33 +15,29 @@ public sealed class IntegerParameterValue : ParameterValue
             throw new IntegerParameterValueNotValidException(parameter, value);
         }
 
-        Value = value;
+        this.Value = value;
     }
 
-    private IntegerParameterValue(ParameterValueId id, int value) : base(id)
-    {
-        Value = value;
-    }
+    private IntegerParameterValue(ParameterValueId id, int value) : base(id) => this.Value = value;
 
-    public override ParameterValue DeepCopy(ParameterValueId id)
-    {
-        return new IntegerParameterValue(id,
-            Parameter as IntegerParameter
-            ?? throw new ParameterValueCopyException(typeof(IntegerParameter), Parameter.GetType()),
-            Value);
-    }
+    public override ParameterValue DeepCopy(ParameterValueId id) =>
+        new IntegerParameterValue(id, this.Parameter as IntegerParameter
+            ?? throw new ParameterValueCopyException(typeof(IntegerParameter), this.Parameter.GetType()), this.Value);
 
     public override void Update(ParameterValue newParameterValue)
     {
-        if (newParameterValue is not IntegerParameterValue newIntegerParameterValue) return;
+        if (newParameterValue is not IntegerParameterValue newIntegerParameterValue)
+        {
+            return;
+        }
 
-        var integerParameter = (IntegerParameter)Parameter;
+        var integerParameter = (IntegerParameter)this.Parameter;
         var value = newIntegerParameterValue.Value;
         if (value % integerParameter.Step != 0)
         {
             throw new IntegerParameterValueNotValidException(integerParameter, value);
         }
 
-        Value = value;
+        this.Value = value;
     }
 }

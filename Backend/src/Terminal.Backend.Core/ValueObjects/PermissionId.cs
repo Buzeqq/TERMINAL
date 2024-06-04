@@ -14,7 +14,7 @@ public sealed record PermissionId
             throw new InvalidEntityIdException(value);
         }
 
-        Value = value;
+        this.Value = value;
     }
 
     public static implicit operator int(PermissionId id) => id.Value;

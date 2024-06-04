@@ -1,26 +1,21 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Terminal.Backend.Application.DTO.Samples;
-using Terminal.Backend.Application.Queries.Samples.Get;
+using Terminal.Backend.Application.Samples.Get;
 using Terminal.Backend.Core.Entities;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers.Samples;
 
-internal sealed class GetRecentSamplesQueryHandler :
+internal sealed class GetRecentSamplesQueryHandler(TerminalDbContext dbContext) :
     IRequestHandler<GetRecentSamplesQuery, GetRecentSamplesDto>
 {
-    private readonly DbSet<Sample> _samples;
-
-    public GetRecentSamplesQueryHandler(TerminalDbContext dbContext)
-    {
-        _samples = dbContext.Samples;
-    }
+    private readonly DbSet<Sample> _samples = dbContext.Samples;
 
     public async Task<GetRecentSamplesDto> Handle(GetRecentSamplesQuery request,
         CancellationToken cancellationToken)
         => new()
         {
-            RecentSamples = await _samples
+            RecentSamples = await this._samples
                 .OrderByDescending(m => m.CreatedAtUtc)
                 .Take(request.Length)
                 .Select(m =>

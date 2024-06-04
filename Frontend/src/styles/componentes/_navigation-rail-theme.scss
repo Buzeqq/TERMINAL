@@ -1,0 +1,31 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin color($theme) {
+  .navigation-rail-button {
+  }
+
+  .active {
+    $hue: if(mat.get-theme-type($theme) == dark, 10, 90);
+
+    background-color: mat.get-theme-color($theme, primary, $hue);
+  }
+}
+
+@mixin typography($theme) {
+  .navigation-rail-button {
+    span {
+      font: mat.get-theme-typography($theme, label-small);
+    }
+  }
+}
+
+@mixin theme($theme) {
+  @if mat.theme-has($theme, color) {
+    @include color($theme);
+  }
+
+  @if mat.theme-has($theme, typography) {
+    @include typography($theme);
+  }
+}

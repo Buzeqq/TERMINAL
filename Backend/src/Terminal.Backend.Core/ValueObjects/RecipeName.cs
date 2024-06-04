@@ -13,7 +13,7 @@ public sealed record RecipeName
             throw new InvalidRecipeNameException(name);
         }
 
-        Name = name;
+        this.Name = name;
     }
 
     public static implicit operator string(RecipeName name) => name.Name;

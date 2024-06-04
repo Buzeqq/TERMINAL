@@ -5,7 +5,7 @@ using Terminal.Backend.Core.Entities.ParameterValues;
 
 namespace Terminal.Backend.Infrastructure.DAL;
 
-internal sealed class TerminalDbContext : DbContext
+internal sealed class TerminalDbContext(DbContextOptions<TerminalDbContext> options) : DbContext(options)
 {
     public DbSet<Project> Projects { get; set; }
     public DbSet<Sample> Samples { get; set; }
@@ -22,17 +22,21 @@ internal sealed class TerminalDbContext : DbContext
     public DbSet<DecimalParameterValue> DecimalParameterValues { get; set; }
     public DbSet<TextParameterValue> TextParameterValues { get; set; }
     public DbSet<Tag> Tags { get; set; }
-    public DbSet<User> Users { get; set; }
-    public DbSet<Invitation> Invitations { get; set; }
-    public DbSet<Role> Roles { get; set; }
-    public DbSet<Permission> Permissions { get; set; }
+    // public DbSet<User> Users { get; set; }
+    // public DbSet<Invitation> Invitations { get; set; }
+    // public DbSet<Role> Roles { get; set; }
+    // public DbSet<Permission> Permissions { get; set; }
 
-    public TerminalDbContext(DbContextOptions<TerminalDbContext> options) : base(options)
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        optionsBuilder.UseNpgsql()
+            .UseSnakeCaseNamingConvention();
+        base.OnConfiguring(optionsBuilder);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+        modelBuilder.HasDefaultSchema("data");
+        modelBuilder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
     }
 }

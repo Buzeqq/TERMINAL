@@ -6,7 +6,7 @@ public sealed class OptionsProvider
 {
     private readonly IConfigurationRoot _configuration = GetConfigurationRoot();
 
-    public T Get<T>(string sectionName) where T : class, new() => _configuration.GetSection(sectionName).Get<T>()!;
+    public T Get<T>(string sectionName) where T : class, new() => this._configuration.GetSection(sectionName).Get<T>()!;
 
     private static IConfigurationRoot GetConfigurationRoot()
         => new ConfigurationBuilder()

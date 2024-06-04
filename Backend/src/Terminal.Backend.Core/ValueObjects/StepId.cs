@@ -13,7 +13,7 @@ public sealed record StepId
             throw new InvalidEntityIdException(id);
         }
 
-        Value = id;
+        this.Value = id;
     }
 
     public static StepId Create() => new(Guid.NewGuid());

@@ -15,33 +15,29 @@ public sealed class DecimalParameterValue : ParameterValue
             throw new DecimalParameterValueNotValidException(parameter, value);
         }
 
-        Value = value;
+        this.Value = value;
     }
 
-    private DecimalParameterValue(ParameterValueId id, decimal value) : base(id)
-    {
-        Value = value;
-    }
+    private DecimalParameterValue(ParameterValueId id, decimal value) : base(id) => this.Value = value;
 
-    public override ParameterValue DeepCopy(ParameterValueId id)
-    {
-        return new DecimalParameterValue(id,
-            Parameter as DecimalParameter
-            ?? throw new ParameterValueCopyException(typeof(DecimalParameter), Parameter.GetType()),
-            Value);
-    }
+    public override ParameterValue DeepCopy(ParameterValueId id) =>
+        new DecimalParameterValue(id, this.Parameter as DecimalParameter
+            ?? throw new ParameterValueCopyException(typeof(DecimalParameter), this.Parameter.GetType()), this.Value);
 
     public override void Update(ParameterValue newParameterValue)
     {
-        if (newParameterValue is not DecimalParameterValue newDecimalParameterValue) return;
+        if (newParameterValue is not DecimalParameterValue newDecimalParameterValue)
+        {
+            return;
+        }
 
-        var decimalParameter = (DecimalParameter)Parameter;
+        var decimalParameter = (DecimalParameter)this.Parameter;
         var value = newDecimalParameterValue.Value;
         if (value % decimalParameter.Step != 0)
         {
             throw new DecimalParameterValueNotValidException(decimalParameter, value);
         }
 
-        Value = value;
+        this.Value = value;
     }
 }

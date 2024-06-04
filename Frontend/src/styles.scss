@@ -1,57 +1,71 @@
-/* You can add global styles to this file, and also import other style files */
 @use '@angular/material' as mat;
-@use 'app/pages/dashboard/dashboard-theme' as dashboard;
-@use 'app/core/components/item-views/item-views-theme' as itemviews;
-@use '@ng-matero/extensions' as mtx;
+@use '@angular/material-experimental' as matx;
+@use '../src/styles/componentes/_navigation-rail-theme.scss' as nav-rail-button;
+@use '../src/styles/componentes/_terminal-icon-theme.scss' as terminal-icon;
+@use '../src/styles/componentes/_login-theme.scss' as login;
 
 @include mat.core();
 
-// Define a dark theme
-$dark-theme: mat.define-dark-theme((
+$terminal-dark-theme: matx.define-theme((
   color: (
-    primary: mat.define-palette(mat.$pink-palette),
-    accent: mat.define-palette(mat.$grey-palette),
+    theme-type: dark,
+    primary: matx.$m3-cyan-palette,
+    tertiary: matx.$m3-orange-palette
   ),
-  // Only include `typography` and `density` in the default dark theme.
-  typography: mat.define-typography-config(),
-  density: 0,
+  typography: (
+    brand-family: 'Roboto Mono',
+    bold-weight: 900
+  ),
+  density: (
+    scale: -1
+  )
+));
+$terminal-light-theme: matx.define-theme((
+  color: (
+    theme-type: light,
+    primary: matx.$m3-azure-palette,
+    tertiary: matx.$m3-blue-palette
+  ),
+  typography: (
+    brand-family: 'Roboto Mono',
+    bold-weight: 900
+  ),
+  density: (
+    scale: -1
+  )
 ));
 
-// Define a light theme
-$light-theme: mat.define-light-theme((
-  color: (
-    primary: mat.define-palette(mat.$indigo-palette),
-    accent: mat.define-palette(mat.$pink-palette),
-  ),
-));
-
-// Apply the dark theme by default
-$current-theme: $dark-theme;
-//$current-theme: $light-theme;
-
-@include mat.all-component-themes($current-theme);
-@include dashboard.theme($current-theme);
-@include itemviews.theme($current-theme);
-@include mtx.all-component-themes($current-theme);
-
-// Apply the light theme only when the user prefers light styles.
 @media (prefers-color-scheme: light) {
-  // Use the `-color` mixins to only apply color styles without reapplying the same
-  // typography and density styles.
-  $current-theme: $light-theme;
-  @include mat.all-component-themes($current-theme);
-  @include dashboard.theme($current-theme);
-  @include itemviews.theme($current-theme);
-  @include mtx.all-component-themes($current-theme);
+  $current-theme: $terminal-light-theme;
+
+  html {
+    @include mat.all-component-themes($current-theme);
+    @include mat.all-component-typographies($current-theme);
+    @include nav-rail-button.theme($current-theme);
+    @include terminal-icon.theme($current-theme);
+    @include login.theme($current-theme);
+  }
 }
 
-html, body {
+@media (prefers-color-scheme: dark) {
+  $current-theme: $terminal-dark-theme;
+
+  html {
+    @include mat.all-component-themes($current-theme);
+    @include mat.all-component-typographies($current-theme);
+    @include nav-rail-button.theme($current-theme);
+    @include terminal-icon.theme($current-theme);
+    @include login.theme($current-theme);
+  }
+}
+
+/* You can add global styles to this file, and also import other style files */
+html, body { height: 100%; color-scheme: light dark }
+body { margin: 0; font-family: Roboto, "Roboto Mono", sans-serif; }
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 100%;
-  color-scheme: light dark;
 }
-
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-}
-

@@ -2,9 +2,4 @@ using Terminal.Backend.Core.Exceptions;
 
 namespace Terminal.Backend.Application.Exceptions;
 
-public class ColumnNotFoundException : TerminalException
-{
-    public ColumnNotFoundException(string columnName) : base($"Column not found {columnName}")
-    {
-    }
-}
+public class ColumnNotFoundException(string columnName) : TerminalException($"Column not found {columnName}");

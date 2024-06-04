@@ -13,7 +13,7 @@ public sealed record ProjectName
             throw new InvalidProjectNameException(name);
         }
 
-        Name = name;
+        this.Name = name;
     }
 
     public static implicit operator string(ProjectName name) => name.Name;

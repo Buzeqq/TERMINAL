@@ -13,7 +13,7 @@ public sealed record InvitationId
             throw new InvalidEntityIdException(id);
         }
 
-        Value = id;
+        this.Value = id;
     }
 
     public static InvitationId Create() => new(Guid.NewGuid());

@@ -4,7 +4,7 @@ namespace Terminal.Backend.Application.DTO.Parameters;
 
 public class GetParametersDto
 {
-    public IEnumerable<GetParameterDto> Parameters { get; set; }
+    public IEnumerable<GetParameterDto> Parameters { get; set; } = [];
 }
 
 [JsonDerivedType(typeof(GetTextParameterDto), "text")]

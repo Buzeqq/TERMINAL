@@ -1,0 +1,32 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+  height: 100%;
+  column-gap: 2em;
+
+  app-terminal-icon {
+    width: 16em;
+  }
+
+  form {
+    display: flex;
+    min-width: 30vw;
+    flex-direction: column;
+
+    .form-buttons {
+      display: flex;
+      align-items: center;
+
+      :last-child {
+        margin-left: auto;
+      }
+    }
+  }
+}
+
+.login {
+  max-width: 90%;
+}

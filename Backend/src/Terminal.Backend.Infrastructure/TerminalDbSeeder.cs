@@ -6,10 +6,8 @@ using Terminal.Backend.Infrastructure.DAL;
 
 namespace Terminal.Backend.Infrastructure;
 
-internal sealed class TerminalDbSeeder
+internal sealed class TerminalDbSeeder(TerminalDbContext dbContext)
 {
-    private readonly TerminalDbContext _dbContext;
-
     public void Seed()
     {
         #region tags
@@ -20,7 +18,7 @@ internal sealed class TerminalDbSeeder
         var tag4 = new Tag(TagId.Create(), "hot");
         var tag5 = new Tag(TagId.Create(), "high-pressure");
 
-        _dbContext.Tags.AddRange(tag1, tag2, tag3, tag4, tag5);
+        dbContext.Tags.AddRange(tag1, tag2, tag3, tag4, tag5);
 
         #endregion
 
@@ -31,7 +29,7 @@ internal sealed class TerminalDbSeeder
         var projectNitro = new Project(ProjectId.Create(), "Nitro");
         var projectNobelium = new Project(ProjectId.Create(), "Nobelium");
 
-        _dbContext.Projects.AddRange(projectUpturn, projectBessy2, projectNitro, projectNobelium);
+        dbContext.Projects.AddRange(projectUpturn, projectBessy2, projectNitro, projectNobelium);
 
         #endregion
 
@@ -42,32 +40,30 @@ internal sealed class TerminalDbSeeder
         var methaneParameter = new IntegerParameter(ParameterId.Create(), "CH\u2084", "sccm", 1);
         var diboranParameter = new IntegerParameter(ParameterId.Create(), "B\u2082H\u2086", "sccm", 1);
         var nucleationParameter = new TextParameter(ParameterId.Create(), "Nucleation Method",
-            new List<string>
-            {
-                "spin-coating",
-                "nucleation",
-                "dip-coating",
-                "without nucleation"
-            });
+        [
+            "spin-coating",
+            "nucleation",
+            "dip-coating",
+            "without nucleation"
+        ]);
         var temperatureParameter = new IntegerParameter(ParameterId.Create(), "Temperature", "C\u2070", 1);
         var pressureParameter = new IntegerParameter(ParameterId.Create(), "Pressure", "Torr", 1);
         var powerParameter = new IntegerParameter(ParameterId.Create(), "Pmw", "W", 1);
         var timeParameter = new DecimalParameter(ParameterId.Create(), "Time", "h", 0.1m);
         var substrateParameter = new TextParameter(ParameterId.Create(), "Substrate",
-            new List<string>
-            {
-                "silicon",
-                "silicon dioxide",
-                "glass",
-                "tantalum"
-            });
+        [
+            "silicon",
+            "silicon dioxide",
+            "glass",
+            "tantalum"
+        ]);
         var bufferParameter = new DecimalParameter(ParameterId.Create(), "Buffer", "h", 0.1m);
         var additionalGasesParameter = new TextParameter(ParameterId.Create(), "Additional gases",
-            new List<string> { "none", "nitrogen", "oxygen" }, order: 12);
+            ["none", "nitrogen", "oxygen"], order: 12);
         var additionalGassesAmountParameter =
             new IntegerParameter(ParameterId.Create(), "Additional gases amount", "sccm", 1);
         additionalGassesAmountParameter.SetParent(additionalGasesParameter);
-        _dbContext.Parameters.AddRange(bufferParameter,
+        dbContext.Parameters.AddRange(bufferParameter,
             substrateParameter,
             timeParameter,
             powerParameter,
@@ -81,7 +77,7 @@ internal sealed class TerminalDbSeeder
             additionalGasesParameter,
             additionalGassesAmountParameter);
 
-        _dbContext.Parameters.AddRange(bufferParameter,
+        dbContext.Parameters.AddRange(bufferParameter,
             substrateParameter,
             timeParameter,
             powerParameter,
@@ -281,8 +277,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step1 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample1);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample1);
+        dbContext.SaveChanges();
 
         var sample2 = new Sample(
             SampleId.Create(),
@@ -291,8 +287,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step2 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample2);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample2);
+        dbContext.SaveChanges();
 
         var sample3 = new Sample(
             SampleId.Create(),
@@ -301,8 +297,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step3 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample3);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample3);
+        dbContext.SaveChanges();
 
         var sample4 = new Sample(
             SampleId.Create(),
@@ -311,8 +307,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step4 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample4);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample4);
+        dbContext.SaveChanges();
 
         var sample5 = new Sample(
             SampleId.Create(),
@@ -321,8 +317,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step5 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample5);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample5);
+        dbContext.SaveChanges();
 
         var sample6 = new Sample(
             SampleId.Create(),
@@ -331,8 +327,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step6 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample6);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample6);
+        dbContext.SaveChanges();
 
         var sample7 = new Sample(
             SampleId.Create(),
@@ -341,8 +337,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step7 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample7);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample7);
+        dbContext.SaveChanges();
 
         var sample8 = new Sample(
             SampleId.Create(),
@@ -351,8 +347,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step8 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample8);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample8);
+        dbContext.SaveChanges();
 
         var sample9 = new Sample(
             SampleId.Create(),
@@ -361,8 +357,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step9 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample9);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample9);
+        dbContext.SaveChanges();
 
         var sample10 = new Sample(
             SampleId.Create(),
@@ -371,8 +367,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample10);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample10);
+        dbContext.SaveChanges();
 
         var sample11 = new Sample(
             SampleId.Create(),
@@ -381,8 +377,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample11);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample11);
+        dbContext.SaveChanges();
 
         var sample12 = new Sample(
             SampleId.Create(),
@@ -391,8 +387,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample12);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample12);
+        dbContext.SaveChanges();
 
         var sample13 = new Sample(
             SampleId.Create(),
@@ -401,8 +397,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample13);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample13);
+        dbContext.SaveChanges();
 
         var sample14 = new Sample(
             SampleId.Create(),
@@ -411,8 +407,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample14);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample14);
+        dbContext.SaveChanges();
 
         var sample15 = new Sample(
             SampleId.Create(),
@@ -421,8 +417,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample15);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample15);
+        dbContext.SaveChanges();
 
         var sample16 = new Sample(
             SampleId.Create(),
@@ -431,8 +427,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample16);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample16);
+        dbContext.SaveChanges();
 
         var sample17 = new Sample(
             SampleId.Create(),
@@ -441,8 +437,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample17);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample17);
+        dbContext.SaveChanges();
 
         var sample18 = new Sample(
             SampleId.Create(),
@@ -451,8 +447,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample18);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample18);
+        dbContext.SaveChanges();
 
         var sample19 = new Sample(
             SampleId.Create(),
@@ -461,8 +457,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample19);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample19);
+        dbContext.SaveChanges();
 
         var sample20 = new Sample(
             SampleId.Create(),
@@ -471,8 +467,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample20);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample20);
+        dbContext.SaveChanges();
 
         var sample21 = new Sample(
             SampleId.Create(),
@@ -481,8 +477,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample21);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample21);
+        dbContext.SaveChanges();
 
         var sample22 = new Sample(
             SampleId.Create(),
@@ -491,8 +487,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample22);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample22);
+        dbContext.SaveChanges();
 
         var sample23 = new Sample(
             SampleId.Create(),
@@ -501,8 +497,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample23);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample23);
+        dbContext.SaveChanges();
 
         var sample24 = new Sample(
             SampleId.Create(),
@@ -511,8 +507,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample24);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample24);
+        dbContext.SaveChanges();
 
         var sample25 = new Sample(
             SampleId.Create(),
@@ -521,8 +517,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample25);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample25);
+        dbContext.SaveChanges();
 
         var sample26 = new Sample(
             SampleId.Create(),
@@ -531,8 +527,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample26);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample26);
+        dbContext.SaveChanges();
 
         var sample27 = new Sample(
             SampleId.Create(),
@@ -541,8 +537,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample27);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample27);
+        dbContext.SaveChanges();
 
         var sample28 = new Sample(
             SampleId.Create(),
@@ -551,8 +547,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample28);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample28);
+        dbContext.SaveChanges();
 
         var sample29 = new Sample(
             SampleId.Create(),
@@ -561,8 +557,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample29);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample29);
+        dbContext.SaveChanges();
 
         var sample30 = new Sample(
             SampleId.Create(),
@@ -571,8 +567,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample30);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample30);
+        dbContext.SaveChanges();
 
         var sample31 = new Sample(
             SampleId.Create(),
@@ -581,8 +577,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample31);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample31);
+        dbContext.SaveChanges();
 
         var sample32 = new Sample(
             SampleId.Create(),
@@ -591,8 +587,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample32);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample32);
+        dbContext.SaveChanges();
 
         var sample33 = new Sample(
             SampleId.Create(),
@@ -601,8 +597,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample33);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample33);
+        dbContext.SaveChanges();
 
         var sample34 = new Sample(
             SampleId.Create(),
@@ -611,8 +607,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample34);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample34);
+        dbContext.SaveChanges();
 
         var sample35 = new Sample(
             SampleId.Create(),
@@ -621,8 +617,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample35);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample35);
+        dbContext.SaveChanges();
 
         var sample36 = new Sample(
             SampleId.Create(),
@@ -631,8 +627,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample36);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample36);
+        dbContext.SaveChanges();
 
         var sample37 = new Sample(
             SampleId.Create(),
@@ -641,8 +637,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample37);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample37);
+        dbContext.SaveChanges();
 
         var sample38 = new Sample(
             SampleId.Create(),
@@ -651,8 +647,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample38);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample38);
+        dbContext.SaveChanges();
 
         var sample39 = new Sample(
             SampleId.Create(),
@@ -661,8 +657,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample39);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample39);
+        dbContext.SaveChanges();
 
         var sample40 = new Sample(
             SampleId.Create(),
@@ -671,8 +667,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample40);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample40);
+        dbContext.SaveChanges();
 
         var sample41 = new Sample(
             SampleId.Create(),
@@ -681,8 +677,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample41);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample41);
+        dbContext.SaveChanges();
 
         var sample42 = new Sample(
             SampleId.Create(),
@@ -691,8 +687,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample42);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample42);
+        dbContext.SaveChanges();
 
         var sample43 = new Sample(
             SampleId.Create(),
@@ -701,8 +697,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample43);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample43);
+        dbContext.SaveChanges();
 
         var sample44 = new Sample(
             SampleId.Create(),
@@ -711,8 +707,8 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample44);
-        _dbContext.SaveChanges();
+        dbContext.Samples.Add(sample44);
+        dbContext.SaveChanges();
 
         var sample45 = new Sample(
             SampleId.Create(),
@@ -721,15 +717,10 @@ internal sealed class TerminalDbSeeder
             new Comment("First sample!"),
             new List<SampleStep> { step10 },
             new List<Tag> { tag1, tag3, tag5 });
-        _dbContext.Samples.Add(sample45);
+        dbContext.Samples.Add(sample45);
 
-        _dbContext.SaveChanges();
+        dbContext.SaveChanges();
 
         #endregion
-    }
-
-    public TerminalDbSeeder(TerminalDbContext dbContext)
-    {
-        _dbContext = dbContext;
     }
 }

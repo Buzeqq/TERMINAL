@@ -2,6 +2,6 @@ namespace Terminal.Backend.Infrastructure.DAL;
 
 internal sealed class PostgresOptions
 {
-    public string ConnectionString { get; set; }
-    public bool Seed { get; set; }
+    public string ConnectionString { get; init; } = string.Empty;
+    public bool Seed { get; init; }
 }

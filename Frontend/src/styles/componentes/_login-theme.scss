@@ -1,0 +1,29 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use '../mixins/rwd' as rwd;
+
+@mixin color($theme) {
+  .login {}
+}
+
+@mixin typography($theme) {
+  .login {
+    h1 {
+      font-size: mat.get-theme-typography($theme, display-large, font-size);
+
+      @include rwd.breakpoint(mobile) {
+        font-size: mat.get-theme-typography($theme, display-small, font-size);
+      }
+    }
+  }
+}
+
+@mixin theme($theme) {
+  @if mat.theme-has($theme, color) {
+    @include color($theme);
+  }
+
+  @if mat.theme-has($theme, typography) {
+    @include typography($theme);
+  }
+}

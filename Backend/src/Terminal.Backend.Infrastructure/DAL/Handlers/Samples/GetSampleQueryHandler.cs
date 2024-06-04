@@ -1,22 +1,15 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Terminal.Backend.Application.DTO.Samples;
-using Terminal.Backend.Application.Queries.Samples.Get;
+using Terminal.Backend.Application.Samples.Get;
 
 namespace Terminal.Backend.Infrastructure.DAL.Handlers.Samples;
 
-internal class GetSampleQueryHandler : IRequestHandler<GetSampleQuery, GetSampleDto?>
+internal class GetSampleQueryHandler(TerminalDbContext dbContext) : IRequestHandler<GetSampleQuery, GetSampleDto?>
 {
-    private readonly TerminalDbContext _dbContext;
-
-    public GetSampleQueryHandler(TerminalDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public async Task<GetSampleDto?> Handle(GetSampleQuery request, CancellationToken ct)
     {
-        var sample = await _dbContext.Samples
+        var sample = await dbContext.Samples
             .AsNoTracking()
             .Include(s => s.Project)
             .Include(s => s.Recipe)

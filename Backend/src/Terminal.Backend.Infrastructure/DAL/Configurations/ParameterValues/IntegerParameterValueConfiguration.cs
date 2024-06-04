@@ -4,11 +4,9 @@ using Terminal.Backend.Core.Entities.ParameterValues;
 
 namespace Terminal.Backend.Infrastructure.DAL.Configurations.ParameterValues;
 
-internal sealed class IntegerParameterValueConfiguration : IEntityTypeConfiguration<IntegerParameterValue>
+internal class IntegerParameterValueConfiguration : IEntityTypeConfiguration<IntegerParameterValue>
 {
-    public void Configure(EntityTypeBuilder<IntegerParameterValue> builder)
-    {
-        builder.Property(p => p.Value)
-            .HasColumnName($"{nameof(IntegerParameterValue)}_Value");
-    }
+    private static string Prefix => "integer";
+
+    public void Configure(EntityTypeBuilder<IntegerParameterValue> builder) => builder.Property(v => v.Value).HasColumnName($"{Prefix}_value");
 }

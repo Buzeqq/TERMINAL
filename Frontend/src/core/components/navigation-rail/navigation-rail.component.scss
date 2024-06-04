@@ -1,0 +1,56 @@
+@use "../../../styles/mixins/rwd" as rwd;
+
+:host {
+  aside {
+    height: 100%;
+  }
+
+  ul {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+
+    @include rwd.breakpoint(mobile) {
+      flex-direction: row;
+    }
+
+    button {
+      margin: 10px 0;
+      text-align: center;
+    }
+  }
+
+  nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+}
+
+.navigation-rail-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  --mat-text-button-icon-spacing: 0;
+  --mat-text-button-icon-offset: 0;
+  --mat-text-button-with-icon-horizontal-padding: 7px;
+
+  @include rwd.breakpoint(mobile) {
+    --mat-text-button-with-icon-horizontal-padding: 5px;
+  }
+}
+
+.navigation-rail-fab {
+  position: absolute;
+  top: 15%;
+  z-index: 2;
+
+  @include rwd.breakpoint(mobile) {
+    top: 75%;
+    right: 5%;
+  }
+}

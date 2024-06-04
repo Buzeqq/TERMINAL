@@ -13,7 +13,7 @@ public sealed record PermissionName
             throw new InvalidPermissionNameException(value);
         }
 
-        Value = value;
+        this.Value = value;
     }
 
     public static implicit operator string(PermissionName name) => name.Value;

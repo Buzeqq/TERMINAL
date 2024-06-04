@@ -4,11 +4,9 @@ using Terminal.Backend.Core.Entities.ParameterValues;
 
 namespace Terminal.Backend.Infrastructure.DAL.Configurations.ParameterValues;
 
-internal sealed class DecimalParameterValueConfiguration : IEntityTypeConfiguration<DecimalParameterValue>
+internal class DecimalParameterValueConfiguration : IEntityTypeConfiguration<DecimalParameterValue>
 {
-    public void Configure(EntityTypeBuilder<DecimalParameterValue> builder)
-    {
-        builder.Property(p => p.Value)
-            .HasColumnName($"{nameof(DecimalParameterValue)}_Value");
-    }
+    private static string Prefix => "decimal";
+
+    public void Configure(EntityTypeBuilder<DecimalParameterValue> builder) => builder.Property(v => v.Value).HasColumnName($"{Prefix}_value");
 }
