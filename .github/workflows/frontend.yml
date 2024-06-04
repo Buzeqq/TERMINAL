@@ -35,15 +35,10 @@ jobs:
     - name: Setup Node
       uses: actions/setup-node@v3
       with: 
-        node-version: 18
+        node-version: '22.x'
 
     - name: Setup Angular
       run: npm install @angular/cli
-      
-    - name: 'Use Node.js 18'
-      uses: 'actions/setup-node@v3'
-      with:
-        node-version: '18.x'
 
     - name: Restore Angular dependencies
       run: npm ci
