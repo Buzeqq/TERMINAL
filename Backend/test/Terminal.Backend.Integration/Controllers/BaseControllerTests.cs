@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Terminal.Backend.Infrastructure.DAL;
 using Xunit;
 
 namespace Terminal.Backend.Integration.Controllers;
@@ -7,17 +8,27 @@ namespace Terminal.Backend.Integration.Controllers;
 /// Class <c>BaseControllerTests</c> is used as arrangement part for testing endpoints.
 /// </summary>
 [Collection("api")]
-public abstract class BaseControllerTests : IClassFixture<OptionsProvider>
+public abstract class BaseControllerTests : IClassFixture<TerminalTestApp>, IDisposable
 {
     protected HttpClient Client { get; }
+    private readonly IServiceScope _scope;
+    private readonly TerminalDbContext _terminalDbContext;
+    private readonly UserDbContext _userDbContext;
 
-    protected BaseControllerTests(OptionsProvider optionsProvider)
+    protected BaseControllerTests(TerminalTestApp terminalTestApp)
     {
-        var app = new TerminalTestApp(this.ConfigureServices);
-        this.Client = app.Client;
+        this.Client = terminalTestApp.Client;
+        this._scope = terminalTestApp.Services.CreateScope();
+
+        this._terminalDbContext = this._scope.ServiceProvider.GetRequiredService<TerminalDbContext>();
+        this._userDbContext = this._scope.ServiceProvider.GetRequiredService<UserDbContext>();
     }
 
-    protected virtual void ConfigureServices(IServiceCollection services)
+    public void Dispose()
     {
+        this._terminalDbContext.Dispose();
+        this._userDbContext.Dispose();
+        this.Client.Dispose();
+        this._scope.Dispose();
     }
 }

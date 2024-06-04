@@ -33,6 +33,7 @@
 
     <ItemGroup>
         <InternalsVisibleTo Include="Terminal.Backend.Unit"/>
+        <InternalsVisibleTo Include="Terminal.Backend.Integration"/>
         <InternalsVisibleTo Include="DynamicProxyGenAssembly2"/>
     </ItemGroup>
 </Project>
