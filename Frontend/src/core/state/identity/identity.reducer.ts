@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
 
-import { IdentityActions } from "./identityActions";
+import { IdentityActions } from "./identity.actions";
 import { Identity } from "../../identity/identity.model";
 
 export const identityFeatureKey = 'Identity';

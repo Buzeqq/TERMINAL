@@ -5,6 +5,7 @@ export const IdentityActions = createActionGroup({
   source: 'Identity actions',
   events: {
     'Try to log in': props<{ form: LoginForm }>(),
+    'Try to log out': emptyProps(),
     'User logged in': emptyProps(),
     'User logged out': emptyProps(),
     'Failed to log in': emptyProps(),

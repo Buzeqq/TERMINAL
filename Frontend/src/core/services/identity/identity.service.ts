@@ -4,7 +4,7 @@ import { catchError, EMPTY, map, Observable, tap } from "rxjs";
 import { Identity, LoginForm } from "../../identity/identity.model";
 import { environment } from "../../../environments/environment";
 import { Store } from "@ngrx/store";
-import { IdentityActions } from "../../state/identity/identityActions";
+import { IdentityActions } from "../../state/identity/identity.actions";
 
 @Injectable({
   providedIn: 'root'
@@ -52,5 +52,9 @@ export class IdentityService {
       }),
       catchError(() => EMPTY)
     );
+  }
+
+  logOut() {
+    return this.http.post<undefined>(this.baseUrl + '/logout', {});
   }
 }

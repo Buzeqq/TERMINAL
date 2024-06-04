@@ -1,3 +1,12 @@
 <app-base-page title="Account">
-
+  @if (userInfo())
+  {
+    <p>Email: <strong>{{ userInfo().email }}</strong></p>
+    <p>Role: <strong>{{ userInfo().role }}</strong></p>
+  } @else {
+    Failed to load the user...
+  }
+  <mat-card-actions>
+    <button mat-flat-button color="warn" (click)="logout()">Logout</button>
+  </mat-card-actions>
 </app-base-page>

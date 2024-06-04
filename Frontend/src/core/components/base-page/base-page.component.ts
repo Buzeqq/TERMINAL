@@ -1,13 +1,14 @@
 import {Component, Input} from '@angular/core';
-import {MatCard, MatCardHeader} from "@angular/material/card";
+import { MatCard, MatCardContent, MatCardHeader } from "@angular/material/card";
 
 @Component({
   selector: 'app-base-page',
   standalone: true,
-    imports: [
-        MatCard,
-        MatCardHeader
-    ],
+  imports: [
+    MatCard,
+    MatCardHeader,
+    MatCardContent
+  ],
   templateUrl: './base-page.component.html',
   styleUrl: './base-page.component.scss'
 })
