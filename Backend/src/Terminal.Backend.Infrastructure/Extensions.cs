@@ -88,6 +88,11 @@ public static class Extensions
             .BindConfiguration(nameof(EmailSender))
             .ValidateDataAnnotations()
             .ValidateOnStart();
+
+        services.AddOptions<CorsOptions>()
+            .BindConfiguration(nameof(CorsOptions))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
     }
 
     public static void UseInfrastructure(this WebApplication app)
@@ -104,12 +109,15 @@ public static class Extensions
                 c.EnableFilter();
                 c.EnableDeepLinking();
             });
-            app.UseCors(x => x
-                .AllowCredentials()
-                .WithOrigins("http://localhost:4200")
-                .AllowAnyHeader()
-                .AllowAnyMethod());
         }
+
+
+        var allowedOrigins = app.Configuration.GetOptions<CorsOptions>(nameof(CorsOptions)).AllowedOrigins;
+        app.UseCors(x => x
+            .AllowCredentials()
+            .WithOrigins(allowedOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod());
 
         app.UseAuthentication();
         app.UseAuthorization();
