@@ -6,6 +6,6 @@ RUN npm install -g @angular/cli
 RUN ng build -c production
 
 FROM nginx:latest as production
-COPY --from=build /app/dist/terminal /usr/share/nginx/html
+COPY --from=build /app/dist/terminal/browser /usr/share/nginx/html
 
 EXPOSE 80
