@@ -4,12 +4,6 @@ services:
       context: ./Backend
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - Postgres__ConnectionString
-      - Jwt__Issuer
-      - Jwt__Audience
-      - Jwt__SecretKey
-      - Administrator__Email
-      - Administrator__Password
     depends_on:
       - terminal.postgres
     ports:
