@@ -51,6 +51,7 @@ jobs:
 
     - name: 'Deploy Application'
       run: |
+        cp /home/ubuntu/terminal-secrets/appsettings.json ./Backend/src/Terminal.Backend.Api/appsettings.json &&
         docker compose --env-file=/home/ubuntu/terminal-secrets/.env -f docker-compose.prod.yml up --build -d
       # Do not run deployment from PR
       if: github.event_name != 'pull_request'
