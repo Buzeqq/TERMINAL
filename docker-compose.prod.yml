@@ -1,14 +1,4 @@
-services:
-  terminal.reverse-proxy:
-    image: nginx:latest
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ./config/nginx:/etc/nginx/:ro
-      - /etc/letsencrypt:/etc/ssl/:ro
-    depends_on: [terminal.backend, terminal.frontend]
-  
+services:  
   terminal.backend:
     build:
       context: ./Backend
@@ -22,6 +12,8 @@ services:
       - Administrator__Password
     depends_on:
       - terminal.postgres
+    ports:
+      - 8080:8080
 
   terminal.frontend:
     build:
@@ -30,6 +22,8 @@ services:
       - ./config/frontend:/etc/nginx/conf.d/:ro
     depends_on:
       - terminal.backend
+    ports:
+      - 8081:80
 
   terminal.postgres:
     image: postgres:latest
