@@ -13,9 +13,6 @@ COPY src/Terminal.Backend.Infrastructure/*.csproj ./Terminal.Backend.Infrastruct
 FROM build AS publish
 COPY /src .
 WORKDIR /src/Terminal.Backend.Api
-RUN dotnet tool install -g dotnet-ef
-RUN /root/.dotnet/tools/dotnet-ef database update  -p ../Terminal.Backend.Infrastructure/Terminal.Backend.Infrastructure.csproj -s Terminal.Backend.Api.csproj -c TerminalDbContext
-RUN /root/.dotnet/tools/dotnet-ef database update  -p ../Terminal.Backend.Infrastructure/Terminal.Backend.Infrastructure.csproj -s Terminal.Backend.Api.csproj -c UserDbContext
 RUN dotnet publish Terminal.Backend.Api.csproj -c Release -o /app/publish
 
 FROM base AS final
