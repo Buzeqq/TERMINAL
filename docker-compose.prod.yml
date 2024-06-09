@@ -5,12 +5,12 @@ services:
       - ./config/reverse-proxy:/etc/nginx/conf.d/:ro
     ports:
       - 8080:80
+    depends_on: [terminal.backend, terminal.frontend]
 
   terminal.backend:
     build:
       context: ./Backend
     environment:
-      - ASPNET_HTTP_PORT=80
       - ASPNETCORE_ENVIRONMENT=Production
     depends_on:
       - terminal.postgres
