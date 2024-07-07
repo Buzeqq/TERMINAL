@@ -111,7 +111,9 @@ public class ConfirmEmailCommandHandlerTest
     public async Task Handle_FailureEmailConfirmDueToBadCode_ThrowsException()
     {
         // Arrange
-        var command = new ConfirmEmailCommand("id", "   ", "test2@test.com");
+        var user = UserFactory.Create("id", "test@test.com");
+        var command = new ConfirmEmailCommand("id", "   ", "test@test.com");
+        _userManagerMock.FindByIdAsync(Arg.Is<string>(s => s == command.UserId)).Returns(user);
 
         // Act & Assert
         await Assert.ThrowsAsync<BadCodeException>(() => _handler.Handle(command, CancellationToken.None));

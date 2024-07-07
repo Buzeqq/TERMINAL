@@ -13,6 +13,6 @@ internal sealed class GetParameterQueryHandler(TerminalDbContext dbContext)
     public Task<Parameter?> Handle(GetParameterQuery query, CancellationToken ct)
     {
         var id = query.Id;
-        return this._parameters.AsNoTracking().SingleOrDefaultAsync(p => p.Id == id, ct);
+        return _parameters.AsNoTracking().SingleOrDefaultAsync(p => p.Id == id, ct);
     }
 }

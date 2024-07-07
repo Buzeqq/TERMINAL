@@ -14,7 +14,7 @@ internal sealed class GetProjectQueryHandler(TerminalDbContext dbContext)
     public async Task<GetProjectDto?> Handle(GetProjectQuery query, CancellationToken ct)
     {
         var projectId = query.ProjectId;
-        var project = (await this._projects
+        var project = (await _projects
             .AsNoTracking()
             // FIXME: .Include(p => p.Samples)
             .SingleOrDefaultAsync(p => p.Id.Equals(projectId), ct))?.AsGetProjectDto();
@@ -24,7 +24,7 @@ internal sealed class GetProjectQueryHandler(TerminalDbContext dbContext)
             return project;
         }
 
-        var sampleIds = await this._projects
+        var sampleIds = await _projects
             .AsNoTracking()
             .Where(p => p.Id.Equals(projectId))
             .SelectMany(p => p.Samples)

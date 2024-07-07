@@ -19,7 +19,7 @@ public abstract class Enumeration<TEnum, TId>(TId value, string name) : IEquatab
             .Values
             .SingleOrDefault(e => string.Equals(e.Name, name, StringComparison.OrdinalIgnoreCase));
 
-    public override string ToString() => this.Name;
+    public override string ToString() => Name;
 
     public static IEnumerable<TEnum> GetValues() => Enumerations!.Values;
 
@@ -57,7 +57,7 @@ public abstract class Enumeration<TEnum, TId>(TId value, string name) : IEquatab
             return true;
         }
 
-        return EqualityComparer<TId>.Default.Equals(this.Value, other.Value) && this.Name == other.Name;
+        return EqualityComparer<TId>.Default.Equals(Value, other.Value) && Name == other.Name;
     }
 
     public override bool Equals(object? obj)
@@ -72,15 +72,15 @@ public abstract class Enumeration<TEnum, TId>(TId value, string name) : IEquatab
             return true;
         }
 
-        if (obj.GetType() != this.GetType())
+        if (obj.GetType() != GetType())
         {
             return false;
         }
 
-        return this.Equals((Enumeration<TEnum, TId>)obj);
+        return Equals((Enumeration<TEnum, TId>)obj);
     }
 
-    public override int GetHashCode() => HashCode.Combine(this.Value, this.Name);
+    public override int GetHashCode() => HashCode.Combine(Value, Name);
 
     public static bool operator ==(Enumeration<TEnum, TId>? left, Enumeration<TEnum, TId>? right) => Equals(left, right);
 

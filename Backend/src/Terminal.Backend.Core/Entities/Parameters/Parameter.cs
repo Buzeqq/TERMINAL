@@ -11,7 +11,7 @@ public abstract class Parameter(ParameterId id, ParameterName name, uint order =
 
     public Parameter? Parent { get; private set; }
 
-    public void ChangeStatus(bool isActive) => this.IsActive = isActive;
+    public void ChangeStatus(bool isActive) => IsActive = isActive;
 
-    public void SetParent(Parameter parent) => this.Parent = parent;
+    public void SetParent(Parameter parent) => Parent = parent;
 }

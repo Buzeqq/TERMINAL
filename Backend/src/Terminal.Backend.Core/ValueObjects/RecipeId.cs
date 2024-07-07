@@ -13,7 +13,7 @@ public sealed record RecipeId
             throw new InvalidEntityIdException(id);
         }
 
-        this.Value = id;
+        Value = id;
     }
 
     public static RecipeId Create() => new(Guid.NewGuid());

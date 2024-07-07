@@ -9,5 +9,5 @@ internal sealed class ParameterValueRepository(TerminalDbContext dbContext) : IP
     private readonly DbSet<ParameterValue> _values = dbContext.ParameterValues;
 
     public async Task AddAsync(ParameterValue value, CancellationToken ct)
-        => await this._values.AddAsync(value, ct);
+        => await _values.AddAsync(value, ct);
 }

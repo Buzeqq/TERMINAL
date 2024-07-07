@@ -13,7 +13,7 @@ public sealed record ParameterId
             throw new InvalidEntityIdException(id);
         }
 
-        this.Value = id;
+        Value = id;
     }
 
     public static ParameterId Create() => new(Guid.NewGuid());

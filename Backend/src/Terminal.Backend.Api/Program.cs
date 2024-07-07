@@ -50,7 +50,9 @@ app.Run();
 
 namespace Terminal.Backend.Api
 {
-    public class Program;
+    // ReSharper disable once PartialTypeWithSinglePart
+    // ReSharper disable once ClassNeverInstantiated.Global
+    public partial class Program;
 }
 
 #endregion

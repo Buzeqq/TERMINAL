@@ -11,16 +11,16 @@ internal sealed class ParameterRepository(TerminalDbContext dbContext) : IParame
 
     public async Task<T?> GetAsync<T>(ParameterId id, CancellationToken ct)
         where T : Parameter
-        => await this._parameters
+        => await _parameters
             .Include(p => p.Parent)
             .SingleOrDefaultAsync(p => p.Id == id, ct) as T;
 
     public async Task AddAsync(Parameter parameter, CancellationToken ct)
-        => await this._parameters.AddAsync(parameter, ct);
+        => await _parameters.AddAsync(parameter, ct);
 
     public Task UpdateAsync(Parameter parameter)
     {
-        this._parameters.Update(parameter);
+        _parameters.Update(parameter);
         return Task.CompletedTask;
     }
 }

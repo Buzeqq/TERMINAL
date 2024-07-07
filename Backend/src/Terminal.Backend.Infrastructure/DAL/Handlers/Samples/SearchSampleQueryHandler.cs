@@ -14,7 +14,7 @@ internal sealed class SearchSampleQueryHandler(TerminalDbContext dbContext)
     public async Task<GetSamplesDto> Handle(SearchSampleQuery request, CancellationToken ct) =>
         new()
         {
-            Samples = await this._samples
+            Samples = await _samples
                 .AsNoTracking()
                 .Include(m => m.Project)
                 .Include(m => m.Recipe)

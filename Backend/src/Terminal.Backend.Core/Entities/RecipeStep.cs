@@ -7,11 +7,11 @@ public sealed class RecipeStep : Step
 {
     public Recipe Recipe { get; set; } = null!;
 
-    public RecipeStep(StepId id, Comment comment, Recipe recipe) : base(id, comment) => this.Recipe = recipe;
+    public RecipeStep(StepId id, Comment comment, Recipe recipe) : base(id, comment) => Recipe = recipe;
 
     public RecipeStep(StepId id, Comment comment, ICollection<ParameterValue> parameters, Recipe recipe) : base(id,
         comment, parameters) =>
-        this.Recipe = recipe;
+        Recipe = recipe;
 
 
     // Entity Framework constructor

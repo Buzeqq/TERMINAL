@@ -8,12 +8,13 @@ namespace Terminal.Backend.Application.Identity.Register;
 
 internal sealed class RegisterCommandHandler(
     UserManager<ApplicationUser> userManager,
+    RoleManager<ApplicationRole> roleManager,
     IEmailConfirmationEmailSender emailConfirmationEmailSender) : IRequestHandler<RegisterCommand>
 {
     // TODO: Add invitations handling
     public async Task Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-        var (email, password) = request;
+        var (email, password, roleName) = request;
 
         var user = await userManager.FindByEmailAsync(email);
         if (user is not null)
@@ -22,6 +23,13 @@ internal sealed class RegisterCommandHandler(
         }
 
         var newUser = new ApplicationUser { Email = email, UserName = email };
+        var role = await roleManager.FindByNameAsync(roleName);
+        if (role is null)
+        {
+            throw new FailedToRegisterUserException("Role not found");
+        }
+
+        newUser.Role = role;
         var result = await userManager.CreateAsync(newUser, password);
 
         if (!result.Succeeded)
@@ -31,7 +39,6 @@ internal sealed class RegisterCommandHandler(
                 Errors = result.Errors.Select(e => e.Description)
             };
         }
-
         await emailConfirmationEmailSender.SendConfirmationEmailAsync(email, newUser);
     }
 }

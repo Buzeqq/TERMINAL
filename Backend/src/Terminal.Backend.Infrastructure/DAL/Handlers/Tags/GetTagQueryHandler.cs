@@ -13,7 +13,7 @@ internal sealed class GetTagQueryHandler(TerminalDbContext dbContext) : IRequest
     public async Task<GetTagDto?> Handle(GetTagQuery request, CancellationToken ct)
     {
         var tagId = request.TagId;
-        var tag = (await this._tags
+        var tag = (await _tags
             .AsNoTracking()
             .SingleOrDefaultAsync(t => t.Id.Equals(tagId), ct))?.AsGetTagDto();
 

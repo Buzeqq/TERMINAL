@@ -13,7 +13,7 @@ public sealed record TagId
             throw new InvalidEntityIdException(id);
         }
 
-        this.Value = id;
+        Value = id;
     }
 
     public static TagId Create() => new(Guid.NewGuid());

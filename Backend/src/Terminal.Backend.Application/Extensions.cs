@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Mapster;
 using Microsoft.Extensions.DependencyInjection;
 using Terminal.Backend.Application.Abstractions.Behaviors;
@@ -16,6 +17,7 @@ public static class Extensions
             cfg.RegisterServicesFromAssembly(AssemblyReference.Assembly);
             cfg.AddOpenBehavior(typeof(RequestLoggingPipelineBehavior<,>));
         });
+
         services.AddMapster();
         var typeAdapterConfig = TypeAdapterConfig.GlobalSettings;
         typeAdapterConfig.Scan(Assembly.GetExecutingAssembly());

@@ -15,14 +15,14 @@ public sealed class TextParameterValue : ParameterValue
             throw new TextParameterValueNotValidException(parameter, value);
         }
 
-        this.Value = value;
+        Value = value;
     }
 
-    private TextParameterValue(ParameterValueId id, string value) : base(id) => this.Value = value;
+    private TextParameterValue(ParameterValueId id, string value) : base(id) => Value = value;
 
     public override ParameterValue DeepCopy(ParameterValueId id) =>
-        new TextParameterValue(id, this.Parameter as TextParameter
-            ?? throw new ParameterValueCopyException(typeof(TextParameterValue), this.Parameter.GetType()), this.Value);
+        new TextParameterValue(id, Parameter as TextParameter
+            ?? throw new ParameterValueCopyException(typeof(TextParameterValue), Parameter.GetType()), Value);
 
     public override void Update(ParameterValue newParameterValue)
     {
@@ -31,13 +31,13 @@ public sealed class TextParameterValue : ParameterValue
             return;
         }
 
-        var textParameter = (TextParameter)this.Parameter;
+        var textParameter = (TextParameter)Parameter;
         var value = newTextParameterValue.Value;
         if (!textParameter.AllowedValues.Contains(value))
         {
             throw new TextParameterValueNotValidException(textParameter, value);
         }
 
-        this.Value = value;
+        Value = value;
     }
 }

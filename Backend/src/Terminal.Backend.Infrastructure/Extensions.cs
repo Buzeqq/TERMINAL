@@ -72,7 +72,9 @@ public static class Extensions
             {
                 o.User.RequireUniqueEmail = true;
             })
-            .AddApiEndpoints()
+            .AddRoles<ApplicationRole>()
+            .AddSignInManager()
+            .AddRoleManager<RoleManager<ApplicationRole>>()
             .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<UserDbContext>();
 
@@ -110,7 +112,6 @@ public static class Extensions
                 c.EnableDeepLinking();
             });
         }
-
 
         var allowedOrigins = app.Configuration.GetOptions<CorsOptions>(nameof(CorsOptions)).AllowedOrigins;
         app.UseCors(x => x

@@ -10,7 +10,7 @@ public sealed class Project(ProjectId id, string name, bool isActive = true)
 
     public ICollection<Sample> Samples { get; } = [];
 
-    public void ChangeStatus(bool isActive) => this.IsActive = isActive;
+    public void ChangeStatus(bool isActive) => IsActive = isActive;
 
-    public void Update(ProjectName name) => this.Name = name;
+    public void Update(ProjectName name) => Name = name;
 }

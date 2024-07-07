@@ -11,7 +11,7 @@ internal sealed class GetProjectsAmountQueryHandler(TerminalDbContext dbContext)
     private readonly DbSet<Project> _projects = dbContext.Projects;
 
     public Task<int> Handle(GetProjectsAmountQuery request, CancellationToken cancellationToken) =>
-        this._projects
+        _projects
             .AsNoTracking()
             .CountAsync(cancellationToken);
 }

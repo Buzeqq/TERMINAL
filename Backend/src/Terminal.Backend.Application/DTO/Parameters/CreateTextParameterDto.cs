@@ -5,5 +5,5 @@ namespace Terminal.Backend.Application.DTO.Parameters;
 
 public sealed record CreateTextParameterDto(ParameterId Id, string Name, List<string> AllowedValues)
 {
-    public TextParameter AsParameter() => new(this.Id, this.Name, this.AllowedValues);
+    public TextParameter AsParameter() => new(Id, Name, AllowedValues);
 }

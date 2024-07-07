@@ -45,4 +45,12 @@ public static class MocksFactory
         context.RequestServices.Returns(serviceProvider);
         return context;
     }
+
+    public static RoleManager<ApplicationRole> CreateRoleManager() =>
+        Substitute.For<RoleManager<ApplicationRole>>(
+            Substitute.For<IRoleStore<ApplicationRole>>(),
+            Substitute.For<IEnumerable<IRoleValidator<ApplicationRole>>>(),
+            Substitute.For<ILookupNormalizer>(),
+            new IdentityErrorDescriber(),
+            Substitute.For<ILogger<RoleManager<ApplicationRole>>>());
 }

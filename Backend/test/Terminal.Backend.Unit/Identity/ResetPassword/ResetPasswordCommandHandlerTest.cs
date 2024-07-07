@@ -23,6 +23,8 @@ public class ResetPasswordCommandHandlerTest
     {
         // Arrange
         var command = new ResetPasswordCommand("test@test.com", "StrongPassword!23", "code");
+        var user = UserFactory.Create(email: command.Email);
+        _userManager.FindByEmailAsync(Arg.Is<string>(e => e == command.Email)).Returns(user);
         _userManager.IsEmailConfirmedAsync(Arg.Any<ApplicationUser>()).Returns(true);
         _userManager.ResetPasswordAsync(
                 Arg.Any<ApplicationUser>(),
@@ -57,6 +59,8 @@ public class ResetPasswordCommandHandlerTest
     {
         // Arrange
         var command = new ResetPasswordCommand("test@test.com", "StrongPassword!23", "code");
+        var user = UserFactory.Create(email: command.Email);
+        _userManager.FindByEmailAsync(Arg.Is<string>(e => e == command.Email)).Returns(user);
         _userManager.IsEmailConfirmedAsync(Arg.Any<ApplicationUser>()).Returns(false);
 
         // Act && Assert
@@ -69,6 +73,8 @@ public class ResetPasswordCommandHandlerTest
     {
         // Arrange
         var command = new ResetPasswordCommand("test@test.com", "StrongPassword!23", " ");
+        var user = UserFactory.Create(email: command.Email);
+        _userManager.FindByEmailAsync(Arg.Is<string>(e => e == command.Email)).Returns(user);
         _userManager.IsEmailConfirmedAsync(Arg.Any<ApplicationUser>()).Returns(true);
 
         // Act && Assert
@@ -80,6 +86,8 @@ public class ResetPasswordCommandHandlerTest
     {
         // Arrange
         var command = new ResetPasswordCommand("test@test.com", "StrongPassword!23", "code");
+        var user = UserFactory.Create(email: command.Email);
+        _userManager.FindByEmailAsync(Arg.Is<string>(e => e == command.Email)).Returns(user);
         _userManager.IsEmailConfirmedAsync(Arg.Any<ApplicationUser>()).Returns(true);
         const string description = "internal error";
         _userManager.ResetPasswordAsync(

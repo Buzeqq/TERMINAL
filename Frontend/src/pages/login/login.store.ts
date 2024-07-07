@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { ComponentStore } from "@ngrx/component-store";
-import { catchError, delay, EMPTY, finalize, Observable, switchMap, tap } from "rxjs";
+import { delay, finalize, Observable, switchMap, tap } from "rxjs";
 import { LoginForm } from "../../core/identity/identity.model";
 import { IdentityService } from "../../core/services/identity/identity.service";
 

@@ -11,15 +11,15 @@ public sealed class Recipe(RecipeId id, RecipeName recipeName)
 
     public void AddStep(RecipeStep step)
     {
-        this.Steps.Add(step);
+        Steps.Add(step);
         step.Recipe = this;
     }
 
     public void Update(RecipeName name, IEnumerable<RecipeStep> steps)
     {
-        this.RecipeName = name;
+        RecipeName = name;
 
-        var mergedSteps = this.Steps.Join(steps, s => s.Id, s => s.Id,
+        var mergedSteps = Steps.Join(steps, s => s.Id, s => s.Id,
             (s1, s2) => new Tuple<RecipeStep, RecipeStep>(s1, s2));
         foreach (var (oldStep, newStep) in mergedSteps)
         {

@@ -17,29 +17,29 @@ public sealed class Sample
     public Sample(SampleId id, Project project, Recipe? recipe, Comment comment, ICollection<SampleStep> steps,
         ICollection<Tag> tags)
     {
-        this.Id = id;
-        this.Recipe = recipe;
-        this.Comment = comment;
-        this.Steps = steps;
-        this.Tags = tags;
-        this.Project = project;
-        this.CreatedAtUtc = DateTime.UtcNow;
+        Id = id;
+        Recipe = recipe;
+        Comment = comment;
+        Steps = steps;
+        Tags = tags;
+        Project = project;
+        CreatedAtUtc = DateTime.UtcNow;
     }
 
     private Sample(SampleId id, SampleCode code, DateTime createdAtUtc, Comment comment)
     {
-        this.Id = id;
-        this.Code = code;
-        this.CreatedAtUtc = createdAtUtc;
-        this.Comment = comment;
+        Id = id;
+        Code = code;
+        CreatedAtUtc = createdAtUtc;
+        Comment = comment;
     }
 
     public void Update(Project project, Recipe? recipe, IEnumerable<SampleStep> steps, IEnumerable<Tag> tags,
         string comment)
     {
-        this.Project = project;
-        this.Recipe = recipe;
-        var mergedSteps = this.Steps
+        Project = project;
+        Recipe = recipe;
+        var mergedSteps = Steps
             .Join(steps, s1 => s1.Id, s2 => s2.Id,
                 (s1, s2) => new Tuple<SampleStep, SampleStep>(s1, s2));
         foreach (var (oldStep, newStep) in mergedSteps)
@@ -47,7 +47,7 @@ public sealed class Sample
             oldStep.Update(newStep.Parameters, newStep.Comment);
         }
 
-        this.Tags = tags.ToList();
-        this.Comment = comment;
+        Tags = tags.ToList();
+        Comment = comment;
     }
 }

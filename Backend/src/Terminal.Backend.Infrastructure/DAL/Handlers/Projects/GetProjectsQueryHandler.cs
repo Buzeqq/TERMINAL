@@ -13,7 +13,7 @@ internal sealed class GetProjectsQueryHandler(TerminalDbContext dbContext)
 
     public async Task<GetProjectsDto> Handle(GetProjectsQuery request,
         CancellationToken ct)
-        => (await this._projects
+        => (await _projects
             .AsNoTracking()
             .Where(p => p.IsActive || p.IsActive == request.OnlyActive)
             .OrderBy(request.OrderingParameters)

@@ -11,21 +11,21 @@ public abstract class Step
 
     protected Step(StepId id, Comment comment, ICollection<ParameterValue> parameters)
     {
-        this.Id = id;
-        this.Comment = comment;
-        this.Parameters = parameters;
+        Id = id;
+        Comment = comment;
+        Parameters = parameters;
     }
 
     protected Step(StepId id, Comment comment)
     {
-        this.Id = id;
-        this.Comment = comment;
+        Id = id;
+        Comment = comment;
     }
 
     public void Update(IEnumerable<ParameterValue> parameters, Comment comment)
     {
-        this.Comment = comment;
-        var mergedParameters = this.Parameters.Join(parameters, p => p.Parameter.Id,
+        Comment = comment;
+        var mergedParameters = Parameters.Join(parameters, p => p.Parameter.Id,
             p => p.Parameter.Id, (p1, p2) => new Tuple<ParameterValue, ParameterValue>(p1, p2));
         foreach (var (oldParameterValue, newParameterValue) in mergedParameters)
         {

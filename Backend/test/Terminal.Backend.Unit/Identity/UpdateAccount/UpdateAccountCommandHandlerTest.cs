@@ -60,6 +60,8 @@ public class UpdateAccountCommandHandlerTest
     {
         // Arrange
         var command = new UpdateAccountCommand(null, "strong-password1", null);
+        var user = UserFactory.Create();
+        _userManagerMock.GetUserAsync(Arg.Any<ClaimsPrincipal>()).Returns(user);
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidPasswordException>(() => _handler.Handle(command, CancellationToken.None));

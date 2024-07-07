@@ -13,7 +13,7 @@ public sealed record ParameterName
             throw new InvalidEntityIdException(value);
         }
 
-        this.Value = value;
+        Value = value;
     }
 
     public static implicit operator string(ParameterName name) => name.Value;

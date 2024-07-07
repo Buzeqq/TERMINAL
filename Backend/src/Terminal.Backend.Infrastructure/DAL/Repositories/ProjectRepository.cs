@@ -11,24 +11,24 @@ internal sealed class ProjectRepository(TerminalDbContext dbContext) : IProjectR
 
     public Task<Project?> GetAsync(ProjectId id, CancellationToken ct)
         =>
-            this._projects.SingleOrDefaultAsync(p => p.Id == id, ct);
+            _projects.SingleOrDefaultAsync(p => p.Id == id, ct);
 
     public async Task AddAsync(Project project, CancellationToken ct)
-        => await this._projects.AddAsync(project, ct);
+        => await _projects.AddAsync(project, ct);
 
     public Task UpdateAsync(Project project, CancellationToken ct)
     {
-        this._projects.Update(project);
+        _projects.Update(project);
         return Task.CompletedTask;
     }
 
     public Task DeleteAsync(Project project, CancellationToken cancellationToken)
     {
-        this._projects.Remove(project);
+        _projects.Remove(project);
         return Task.CompletedTask;
     }
 
     public Task<bool> IsNameUniqueAsync(ProjectName requestName, CancellationToken cancellationToken) 
         =>
-            this._projects.AllAsync(p => p.Name != requestName, cancellationToken);
+            _projects.AllAsync(p => p.Name != requestName, cancellationToken);
 }

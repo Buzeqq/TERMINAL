@@ -9,7 +9,7 @@ public sealed class PagingParameters
 
     public int PageSize
     {
-        get => this._pageSize;
-        set => this._pageSize = Math.Min(MaxPageSize, value);
+        get => _pageSize;
+        set => _pageSize = Math.Min(MaxPageSize, value);
     }
 }

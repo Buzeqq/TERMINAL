@@ -14,7 +14,7 @@ internal sealed class GetRecipeQueryHandler(TerminalDbContext dbContext)
     public async Task<GetRecipeDto?> Handle(GetRecipeQuery request, CancellationToken cancellationToken)
     {
         var name = request.Name;
-        var recipe = await this._recipes.Include(r => r.Steps)
+        var recipe = await _recipes.Include(r => r.Steps)
             .SingleOrDefaultAsync(r => r.RecipeName.Equals(name),
                 cancellationToken);
 

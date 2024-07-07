@@ -15,7 +15,7 @@ internal sealed class GetRecentSamplesQueryHandler(TerminalDbContext dbContext) 
         CancellationToken cancellationToken)
         => new()
         {
-            RecentSamples = await this._samples
+            RecentSamples = await _samples
                 .OrderByDescending(m => m.CreatedAtUtc)
                 .Take(request.Length)
                 .Select(m =>
