@@ -10,6 +10,16 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Users
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "fk_asp_net_role_claims_asp_net_roles_role_id",
+                schema: "users",
+                table: "AspNetRoleClaims");
+
+            migrationBuilder.DropForeignKey(
+                name: "fk_asp_net_user_roles_asp_net_roles_role_id",
+                schema: "users",
+                table: "AspNetUserRoles");
+
             migrationBuilder.DropPrimaryKey(
                 name: "pk_asp_net_roles",
                 schema: "users",
@@ -97,6 +107,26 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Users
                 schema: "users",
                 table: "AspNetRoles",
                 column: "id");
+
+            migrationBuilder.AddForeignKey(
+                name: "fk_asp_net_role_claims_asp_net_roles_role_id",
+                column: "role_id",
+                schema: "users",
+                table: "AspNetRoleClaims",
+                principalSchema: "users",
+                principalTable: "AspNetRoles",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "fk_asp_net_user_roles_asp_net_roles_role_id",
+                column: "role_id",
+                schema: "users",
+                table: "AspNetUserRoles",
+                principalSchema: "users",
+                principalTable: "AspNetRoles",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Cascade);
         }
     }
 }

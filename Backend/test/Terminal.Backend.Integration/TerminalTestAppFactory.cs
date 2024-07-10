@@ -17,7 +17,6 @@ public sealed class TerminalTestAppFactory : WebApplicationFactory<Program>, IAs
         .WithDatabase("terminal")
         .WithUsername("root")
         .WithPassword("root")
-        .WithPortBinding(5432, 5432)
         .Build();
 
 
