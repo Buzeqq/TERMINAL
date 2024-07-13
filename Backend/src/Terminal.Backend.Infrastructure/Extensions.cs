@@ -99,6 +99,8 @@ public static class Extensions
 
     public static void UseInfrastructure(this WebApplication app)
     {
+        app.SeedData();
+
         app.UseExceptionHandler();
         app.UseMiddleware<RequestLogContextMiddleware>();
 
@@ -125,6 +127,19 @@ public static class Extensions
         app.UseAntiforgery();
 
         app.MapControllers();
+    }
+
+    private static void SeedData(this WebApplication app)
+    {
+        using var scope = app.Services.CreateScope();
+        using var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+        var admin = new ApplicationUser
+        {
+            Email = "admin@terminal.com", UserName = "admin@terminal.com", EmailConfirmed = true
+        };
+        userManager.CreateAsync(admin, "1qaz@WSX").Wait();
+        userManager.AddToRoleAsync(admin, nameof(ApplicationRole.Administrator)).Wait();
     }
 
     public static T GetOptions<T>(this IConfiguration configuration, string sectionName) where T : class, new()

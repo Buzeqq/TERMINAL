@@ -1,12 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Terminal.Backend.Infrastructure.DAL.Migrations.Users
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,6 +23,7 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Users
                 columns: table => new
                 {
                     id = table.Column<string>(type: "text", nullable: false),
+                    role_type = table.Column<string>(type: "character varying(21)", maxLength: 21, nullable: false),
                     name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     normalized_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     concurrency_stamp = table.Column<string>(type: "text", nullable: true)
@@ -170,6 +174,18 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Users
                         principalTable: "AspNetUsers",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                schema: "users",
+                table: "AspNetRoles",
+                columns: new[] { "id", "concurrency_stamp", "name", "normalized_name", "role_type" },
+                values: new object[,]
+                {
+                    { "301ab7d0-02cd-4c1f-909d-5e53ce3bbaaf", null, "Guest", "GUEST", "ApplicationRole" },
+                    { "30761bca-c638-411c-8f84-29ab8782505e", null, "User", "USER", "ApplicationRole" },
+                    { "74d0a152-8219-460b-8bc3-6320fa78f7ba", null, "Administrator", "ADMINISTRATOR", "ApplicationRole" },
+                    { "7e1c5435-77b9-4f13-8871-49bc540be37d", null, "Moderator", "MODERATOR", "ApplicationRole" }
                 });
 
             migrationBuilder.CreateIndex(

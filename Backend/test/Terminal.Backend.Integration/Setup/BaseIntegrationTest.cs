@@ -1,6 +1,4 @@
-using MediatR;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Terminal.Backend.Integration.Setup;
 

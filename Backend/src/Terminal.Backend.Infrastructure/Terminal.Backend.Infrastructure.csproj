@@ -30,6 +30,7 @@
     <ItemGroup>
         <Folder Include="DAL\Migrations\"/>
         <Folder Include="DAL\Migrations\Data\" />
+        <Folder Include="DAL\Migrations\Users\" />
     </ItemGroup>
 
     <ItemGroup>

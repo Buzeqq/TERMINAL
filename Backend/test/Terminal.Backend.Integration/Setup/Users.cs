@@ -11,7 +11,6 @@ public static class Users
     {
         Email = AdminEmail,
         UserName = AdminEmail,
-        Role = ApplicationRole.Administrator,
         EmailConfirmed = true,
         TwoFactorEnabled = false
     };
@@ -21,7 +20,6 @@ public static class Users
     {
         Email = ModeratorEmail,
         UserName = ModeratorEmail,
-        Role = ApplicationRole.Moderator,
         EmailConfirmed = true,
         TwoFactorEnabled = false
     };
@@ -31,7 +29,6 @@ public static class Users
     {
         Email = UserEmail,
         UserName = UserEmail,
-        Role = ApplicationRole.User,
         EmailConfirmed = true,
         TwoFactorEnabled = false
     };
@@ -41,7 +38,6 @@ public static class Users
     {
         Email = GuestEmail,
         UserName = GuestEmail,
-        Role = ApplicationRole.Guest,
         EmailConfirmed = false,
         TwoFactorEnabled = false
     };

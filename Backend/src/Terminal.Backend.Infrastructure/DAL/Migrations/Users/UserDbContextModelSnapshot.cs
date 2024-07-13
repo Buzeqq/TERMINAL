@@ -44,7 +44,14 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Users
                         .HasColumnType("character varying(256)")
                         .HasColumnName("normalized_name");
 
-                    b.HasKey("Id");
+                    b.Property<string>("RoleType")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("character varying(21)")
+                        .HasColumnName("role_type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_asp_net_roles");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
@@ -52,7 +59,9 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Users
 
                     b.ToTable("AspNetRoles", "users");
 
-                    b.UseTptMappingStrategy();
+                    b.HasDiscriminator<string>("RoleType").HasValue("IdentityRole");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -242,11 +251,6 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Users
                         .HasColumnType("boolean")
                         .HasColumnName("phone_number_confirmed");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("role_id");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text")
                         .HasColumnName("security_stamp");
@@ -270,9 +274,6 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Users
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.HasIndex("RoleId")
-                        .HasDatabaseName("ix_asp_net_users_role_id");
-
                     b.ToTable("AspNetUsers", "users");
                 });
 
@@ -280,28 +281,34 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Users
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
 
-                    b.ToTable("application_role", "users");
+                    b.ToTable("AspNetRoles", "users");
+
+                    b.HasDiscriminator().HasValue("ApplicationRole");
 
                     b.HasData(
                         new
                         {
-                            Id = "559e49c8-f017-4972-b42c-47ba70038b73",
-                            Name = "Administrator"
+                            Id = "74d0a152-8219-460b-8bc3-6320fa78f7ba",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "c4172e25-403e-4582-a63e-4fde76f515ea",
-                            Name = "Moderator"
+                            Id = "7e1c5435-77b9-4f13-8871-49bc540be37d",
+                            Name = "Moderator",
+                            NormalizedName = "MODERATOR"
                         },
                         new
                         {
-                            Id = "73d5cbbc-3b79-4a6c-bff9-0190326588dd",
-                            Name = "User"
+                            Id = "30761bca-c638-411c-8f84-29ab8782505e",
+                            Name = "User",
+                            NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "f059ba24-56e2-4cf8-b25c-9665329966cb",
-                            Name = "Guest"
+                            Id = "301ab7d0-02cd-4c1f-909d-5e53ce3bbaaf",
+                            Name = "Guest",
+                            NormalizedName = "GUEST"
                         });
                 });
 
@@ -360,28 +367,6 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Users
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_asp_net_user_tokens_asp_net_users_user_id");
-                });
-
-            modelBuilder.Entity("Terminal.Backend.Application.Common.ApplicationUser", b =>
-                {
-                    b.HasOne("Terminal.Backend.Application.Common.ApplicationRole", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_asp_net_users_roles_role_id");
-
-                    b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("Terminal.Backend.Application.Common.ApplicationRole", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithOne()
-                        .HasForeignKey("Terminal.Backend.Application.Common.ApplicationRole", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_application_role_asp_net_roles_id");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Terminal.Backend.Application.Common;
@@ -18,10 +19,13 @@ internal class UserDbContext(DbContextOptions<UserDbContext> options) : Identity
         builder.HasDefaultSchema("users");
         base.OnModelCreating(builder);
 
-        builder.Entity<ApplicationRole>().HasData(
-            ApplicationRole.Administrator,
-            ApplicationRole.Moderator,
-            ApplicationRole.User,
-            ApplicationRole.Guest);
+        builder.Entity<IdentityRole>()
+            .UseTphMappingStrategy()
+            .HasDiscriminator<string>("RoleType")
+            .HasValue<ApplicationRole>(nameof(ApplicationRole));
+
+        builder.Entity<ApplicationRole>()
+            .ToTable("AspNetRoles", schema: "users")
+            .HasData(ApplicationRole.AvailableRoles);
     }
 }

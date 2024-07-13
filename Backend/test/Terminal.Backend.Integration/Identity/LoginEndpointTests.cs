@@ -12,9 +12,13 @@ public class LoginEndpointTests(TerminalTestAppFactory factory) : BaseIntegratio
         // Arrange
         var user = Users.Admin;
         var request = new LoginRequest(user.Email!, Users.Password, null, null);
+        const bool useCookies = true;
+        const bool useSessionCookies = true;
 
         // Act
-        var response = await Client.PostAsJsonAsync($"identity/login?useCookies=true&useSessionCookies=true", request);
+        var response = await Client
+            .PostAsJsonAsync($"identity/login?useCookies={useCookies}&useSessionCookies={useSessionCookies}",
+                request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);

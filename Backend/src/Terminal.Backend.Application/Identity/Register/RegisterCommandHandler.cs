@@ -29,9 +29,7 @@ internal sealed class RegisterCommandHandler(
             throw new FailedToRegisterUserException("Role not found");
         }
 
-        newUser.Role = role;
         var result = await userManager.CreateAsync(newUser, password);
-
         if (!result.Succeeded)
         {
             throw new FailedToRegisterUserException(string.Empty)
@@ -39,6 +37,16 @@ internal sealed class RegisterCommandHandler(
                 Errors = result.Errors.Select(e => e.Description)
             };
         }
+
+        result = await userManager.AddToRoleAsync(newUser, roleName);
+        if (!result.Succeeded)
+        {
+            throw new FailedToRegisterUserException(string.Empty)
+            {
+                Errors = result.Errors.Select(e => e.Description)
+            };
+        }
+
         await emailConfirmationEmailSender.SendConfirmationEmailAsync(email, newUser);
     }
 }

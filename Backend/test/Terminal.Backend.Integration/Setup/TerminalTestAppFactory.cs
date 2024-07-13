@@ -68,13 +68,20 @@ public sealed class TerminalTestAppFactory : WebApplicationFactory<Program>, IAs
 
     Task IAsyncLifetime.DisposeAsync() => _dbContainer.StopAsync();
 
-    private async Task InitUsers(IServiceProvider serviceProvider)
+    private static async Task InitUsers(IServiceProvider serviceProvider)
     {
         var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
         await userManager.CreateAsync(Users.Admin, Users.Password);
+        await userManager.AddToRoleAsync(Users.Admin, ApplicationRole.Administrator.Name!);
+
         await userManager.CreateAsync(Users.Moderator, Users.Password);
+        await userManager.AddToRoleAsync(Users.Moderator, ApplicationRole.Moderator.Name!);
+
         await userManager.CreateAsync(Users.User, Users.Password);
+        await userManager.AddToRoleAsync(Users.User, ApplicationRole.User.Name!);
+
         await userManager.CreateAsync(Users.Guest, Users.Password);
+        await userManager.AddToRoleAsync(Users.Guest, ApplicationRole.Guest.Name!);
     }
 }

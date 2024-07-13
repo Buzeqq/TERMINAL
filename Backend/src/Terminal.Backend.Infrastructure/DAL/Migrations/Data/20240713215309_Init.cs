@@ -5,7 +5,7 @@
 namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,7 +29,7 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_parameters_decimal", x => x.id);
+                    table.PrimaryKey("pk_decimal_parameters", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -48,7 +48,7 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_parameters_integer", x => x.id);
+                    table.PrimaryKey("pk_integer_parameters", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -125,7 +125,7 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_parameters_text", x => x.id);
+                    table.PrimaryKey("pk_text_parameters", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -289,7 +289,7 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
                 name: "ix_samples_code_comment",
                 schema: "data",
                 table: "samples",
-                columns: ["code", "comment"])
+                columns: new[] { "code", "comment" })
                 .Annotation("Npgsql:IndexMethod", "GIN")
                 .Annotation("Npgsql:TsVectorConfig", "english");
 

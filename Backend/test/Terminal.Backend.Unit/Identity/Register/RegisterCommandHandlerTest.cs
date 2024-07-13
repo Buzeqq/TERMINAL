@@ -41,6 +41,10 @@ public class RegisterCommandHandlerTest
             .Received(1)
             .CreateAsync(Arg.Is<ApplicationUser>(u
                 => u.Email == command.Email.Value && u.UserName == command.Email.Value), command.Password);
+        await _userManagerMock
+            .Received(1)
+            .AddToRoleAsync(Arg.Is<ApplicationUser>(u
+                => u.Email == command.Email.Value && u.UserName == command.Email.Value), command.RoleName);
         await _userRoleManagerMock
             .Received(1)
             .FindByNameAsync(Arg.Is<string>(r => r == command.RoleName));
