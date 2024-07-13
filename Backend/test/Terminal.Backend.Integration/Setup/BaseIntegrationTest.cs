@@ -1,8 +1,8 @@
 using MediatR;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
-using Terminal.Backend.Infrastructure.DAL;
 
-namespace Terminal.Backend.Integration.Controllers;
+namespace Terminal.Backend.Integration.Setup;
 
 /// <summary>
 /// Class <c>BaseIntegrationTest</c> is used as arrangement part for testing endpoints.
@@ -10,17 +10,16 @@ namespace Terminal.Backend.Integration.Controllers;
 [Collection("api")]
 public abstract class BaseIntegrationTest : IClassFixture<TerminalTestAppFactory>
 {
-    private readonly IServiceScope _scope;
     protected readonly HttpClient Client;
-    protected readonly ISender Sender;
 
     /// <summary>
     /// Class <c>BaseIntegrationTest</c> is used as arrangement part for testing endpoints.
     /// </summary>
     protected BaseIntegrationTest(TerminalTestAppFactory factory)
     {
-        _scope = factory.Services.CreateScope();
-        Sender = _scope.ServiceProvider.GetRequiredService<ISender>();
-        Client = factory.CreateClient();
+        Client = factory.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            BaseAddress = new Uri("http://localhost/api/")
+        });
     }
 }

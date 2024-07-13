@@ -17,5 +17,11 @@ internal class UserDbContext(DbContextOptions<UserDbContext> options) : Identity
     {
         builder.HasDefaultSchema("users");
         base.OnModelCreating(builder);
+
+        builder.Entity<ApplicationRole>().HasData(
+            ApplicationRole.Administrator,
+            ApplicationRole.Moderator,
+            ApplicationRole.User,
+            ApplicationRole.Guest);
     }
 }

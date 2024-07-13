@@ -1,13 +1,15 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Terminal.Backend.Api;
+using Terminal.Backend.Application.Common;
 using Terminal.Backend.Infrastructure.DAL;
 using Testcontainers.PostgreSql;
 
-namespace Terminal.Backend.Integration;
+namespace Terminal.Backend.Integration.Setup;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 public sealed class TerminalTestAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
@@ -60,8 +62,19 @@ public sealed class TerminalTestAppFactory : WebApplicationFactory<Program>, IAs
 
         var userDbContext = scope.ServiceProvider.GetRequiredService<UserDbContext>();
         await userDbContext.Database.MigrateAsync();
+        await InitUsers(scope.ServiceProvider);
         await userDbContext.DisposeAsync();
     }
 
     Task IAsyncLifetime.DisposeAsync() => _dbContainer.StopAsync();
+
+    private async Task InitUsers(IServiceProvider serviceProvider)
+    {
+        var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+        await userManager.CreateAsync(Users.Admin, Users.Password);
+        await userManager.CreateAsync(Users.Moderator, Users.Password);
+        await userManager.CreateAsync(Users.User, Users.Password);
+        await userManager.CreateAsync(Users.Guest, Users.Password);
+    }
 }
