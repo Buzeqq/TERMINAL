@@ -19,11 +19,14 @@ public sealed class TerminalTestAppFactory : WebApplicationFactory<Program>, IAs
         .WithDatabase("terminal")
         .WithUsername("root")
         .WithPassword("root")
+        .WithPortBinding(5433, 5432)
         .Build();
 
 
     protected override void ConfigureWebHost(IWebHostBuilder builder) =>
-        builder.ConfigureTestServices(services =>
+        builder
+            .UseEnvironment("Test")
+            .ConfigureTestServices(services =>
         {
             var descriptors = services
                 .Where(d => d.ServiceType == typeof(DbContextOptions<TerminalDbContext>) ||

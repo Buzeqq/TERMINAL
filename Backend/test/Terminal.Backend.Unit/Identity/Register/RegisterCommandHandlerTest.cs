@@ -29,9 +29,14 @@ public class RegisterCommandHandlerTest
         // Arrange
         var command = new RegisterCommand("newUser@test.com", "StrongPassword!1", "User");
         _userManagerMock.FindByEmailAsync(command.Email).ReturnsNull();
-        _userRoleManagerMock.FindByNameAsync(Arg.Is<string>(s => s == command.RoleName)).Returns(ApplicationRole.User);
+        _userRoleManagerMock.FindByNameAsync(Arg.Is<string>(s => s == command.RoleName))
+            .Returns(ApplicationRole.User);
         _userManagerMock.CreateAsync(Arg.Is<ApplicationUser>(u
-            => u.Email == command.Email.Value && u.UserName == command.Email.Value), command.Password).Returns(IdentityResult.Success);
+            => u.Email == command.Email.Value && u.UserName == command.Email.Value), command.Password)
+            .Returns(IdentityResult.Success);
+        _userManagerMock.AddToRoleAsync(Arg.Is<ApplicationUser>(u
+                => u.Email == command.Email.Value && u.UserName == command.Email.Value), command.RoleName)
+            .Returns(IdentityResult.Success);
 
         // Act
         await _handler.Handle(command, CancellationToken.None);
@@ -47,7 +52,7 @@ public class RegisterCommandHandlerTest
                 => u.Email == command.Email.Value && u.UserName == command.Email.Value), command.RoleName);
         await _userRoleManagerMock
             .Received(1)
-            .FindByNameAsync(Arg.Is<string>(r => r == command.RoleName));
+            .FindByNameAsync(command.RoleName);
         await _emailConfirmationEmailSenderMock
             .Received(1)
             .SendConfirmationEmailAsync(command.Email, Arg.Is<ApplicationUser>(u
@@ -71,7 +76,7 @@ public class RegisterCommandHandlerTest
         // Arrange
         var command = new RegisterCommand("newUser@test.com", "StrongPassword!1", "User");
         _userManagerMock.FindByEmailAsync(command.Email).ReturnsNull();
-        _userRoleManagerMock.FindByNameAsync(Arg.Is<string>(s => s == command.RoleName)).Returns(ApplicationRole.User);
+        _userRoleManagerMock.FindByNameAsync(command.RoleName).Returns(ApplicationRole.User);
         _userManagerMock.CreateAsync(Arg.Is<ApplicationUser>(u
             => u.Email == command.Email.Value && u.UserName == command.Email.Value), command.Password)
             .Returns(IdentityResult.Failed([new IdentityError { Code = "0", Description = "Internal error" }]));
@@ -81,7 +86,7 @@ public class RegisterCommandHandlerTest
             _handler.Handle(command, CancellationToken.None));
         await _userRoleManagerMock
             .Received(1)
-            .FindByNameAsync(Arg.Is<string>(r => r == command.RoleName));
+            .FindByNameAsync(command.RoleName);
         await _userManagerMock
             .Received(1)
             .CreateAsync(Arg.Is<ApplicationUser>(u
@@ -94,6 +99,7 @@ public class RegisterCommandHandlerTest
     {
         // Arrange
         var command = new RegisterCommand("newUser@test.com", "StrongPassword!1", "NotExistingRole");
+        _userManagerMock.FindByEmailAsync(command.Email).ReturnsNull();
         _userRoleManagerMock.FindByNameAsync(command.Email).ReturnsNull();
 
         // Act & Assert
@@ -101,7 +107,7 @@ public class RegisterCommandHandlerTest
             _handler.Handle(command, CancellationToken.None));
         await _userRoleManagerMock
             .Received(1)
-            .FindByNameAsync(Arg.Is<string>(r => r == command.RoleName));
+            .FindByNameAsync(command.RoleName);
         exception.Details.Should().Be("Role not found");
     }
 }
