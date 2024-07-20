@@ -41,16 +41,17 @@ public sealed class TerminalTestAppFactory : WebApplicationFactory<Program>, IAs
                 }
             }
 
+            var connectionString = string.Join(';', _dbContainer.GetConnectionString(), "Pooling=false");
             services.AddDbContext<TerminalDbContext>(options =>
             {
                 options
-                    .UseNpgsql(_dbContainer.GetConnectionString())
+                    .UseNpgsql(connectionString)
                     .UseSnakeCaseNamingConvention();
             });
             services.AddDbContext<UserDbContext>(options =>
             {
                 options
-                    .UseNpgsql(_dbContainer.GetConnectionString());
+                    .UseNpgsql(connectionString);
             });
         });
 
@@ -61,12 +62,10 @@ public sealed class TerminalTestAppFactory : WebApplicationFactory<Program>, IAs
 
         var terminalDbContext = scope.ServiceProvider.GetRequiredService<TerminalDbContext>();
         await terminalDbContext.Database.MigrateAsync();
-        await terminalDbContext.DisposeAsync();
 
         var userDbContext = scope.ServiceProvider.GetRequiredService<UserDbContext>();
         await userDbContext.Database.MigrateAsync();
         await InitUsers(scope.ServiceProvider);
-        await userDbContext.DisposeAsync();
     }
 
     Task IAsyncLifetime.DisposeAsync() => _dbContainer.StopAsync();
