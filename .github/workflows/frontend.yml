@@ -37,18 +37,15 @@ jobs:
       with: 
         node-version: '22.x'
 
-    - name: Setup Angular
-      run: npm install @angular/cli
-
-    - name: Restore Angular dependencies
+    - name: Restore dependencies
       run: npm ci
       working-directory: ./Frontend
 
     - name: Build Angular
-      run: ng b -c production
+      run: npm run build --omit=dev
       working-directory: ./Frontend
 
     - name: 'Deploy Application'
-      run: docker compose --env-file=/home/ubuntu/terminal-secrets/.env -f docker-compose-prod.yml up --build -d
+      run: docker compose --env-file=/home/ubuntu/terminal-secrets/.env -f docker-compose.prod.yml up --build -d
       # Do not run deployment from PR
       if: github.event_name != 'pull_request'
