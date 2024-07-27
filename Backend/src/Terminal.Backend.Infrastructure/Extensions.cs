@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +10,7 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 using Terminal.Backend.Application.Common;
 using Terminal.Backend.Infrastructure.DAL;
 using Terminal.Backend.Infrastructure.DAL.Behaviours;
+using Terminal.Backend.Infrastructure.Identity;
 using Terminal.Backend.Infrastructure.Identity.Mails;
 using Terminal.Backend.Infrastructure.Middleware;
 
@@ -61,22 +63,10 @@ public static class Extensions
             cfg.AddOpenBehavior(typeof(UnitOfWorkBehaviour<,>));
         });
 
-        services.AddAuthentication(IdentityConstants.ApplicationScheme)
-            .AddCookie(IdentityConstants.ApplicationScheme)
-            .AddBearerToken(IdentityConstants.BearerScheme);
-
         services.AddAuthorizationBuilder();
         services.AddAntiforgery();
 
-        services.AddIdentityCore<ApplicationUser>((o) =>
-            {
-                o.User.RequireUniqueEmail = true;
-            })
-            .AddRoles<ApplicationRole>()
-            .AddSignInManager()
-            .AddRoleManager<RoleManager<ApplicationRole>>()
-            .AddDefaultTokenProviders()
-            .AddEntityFrameworkStores<UserDbContext>();
+        services.AddIdentity();
 
         services.AddHttpClient(nameof(EmailSender), (serviceProvider, httpClient) =>
         {

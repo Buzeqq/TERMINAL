@@ -2,6 +2,7 @@
 @use '../src/styles/componentes/_navigation-rail-theme.scss' as nav-rail-button;
 @use '../src/styles/componentes/_terminal-icon-theme.scss' as terminal-icon;
 @use '../src/styles/componentes/_login-theme.scss' as login;
+@use '../src/styles/mixins/rwd.scss' as rwd;
 
 @include mat.core();
 

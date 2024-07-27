@@ -1,5 +1,5 @@
 import { createActionGroup, emptyProps, props } from "@ngrx/store";
-import { Identity, LoginForm } from "../../identity/identity.model";
+import { Identity, LoginForm } from "../identity.model";
 
 export const IdentityActions = createActionGroup({
   source: 'Identity actions',

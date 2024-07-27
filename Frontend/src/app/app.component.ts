@@ -1,17 +1,17 @@
 import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { NavigationRailComponent } from '../core/components/navigation-rail/navigation-rail.component';
+import { Store } from "@ngrx/store";
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { NavigationRailComponent } from "./core/components/navigation-rail/navigation-rail.component";
 import {
   NavigationRailContainerComponent
-} from "../core/components/navigation-rail-container/navigation-rail-container.component";
+} from "./core/components/navigation-rail/navigation-rail-container/navigation-rail-container.component";
 import {
   NavigationRailContentComponent
-} from "../core/components/navigation-rail-content/navigation-rail-content.component";
-import { Store } from "@ngrx/store";
-import { selectIdentity } from "../core/state/identity/identity.selectors";
-import { LoginComponent } from "../pages/login/login.component";
-import { MatProgressSpinner } from "@angular/material/progress-spinner";
+} from "./core/components/navigation-rail/navigation-rail-content/navigation-rail-content.component";
+import { LoginComponent } from "./pages/login/login.component";
+import { selectIdentity } from "./core/identity/state/identity.selectors";
 
 @Component({
   selector: 'app-root',

@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
     rememberMe: new FormControl(false, { nonNullable: true })
   });
   private readonly store = inject(LoginStore);
-  readonly isLoading$ = this.store.isLoading$;
+  readonly isLoading = this.store.selectSignal((state) => state.isLoading);
 
   ngOnInit() {
     this.store.tryToLoadUser();

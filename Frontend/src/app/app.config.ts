@@ -4,14 +4,15 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideState, provideStore } from '@ngrx/store';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { identityReducer, identityFeatureKey } from "../core/state/identity/identity.reducer";
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from "@ngrx/store-devtools";
-import { userLoggedInEffect, userLoggedOutEffect } from "../core/state/identity/identity.effect";
 import { provideHttpClient, withFetch, withInterceptors } from "@angular/common/http";
-import { credentialsInterceptor } from "../core/interceptors/credentials.interceptor";
 import { provideComponentStore } from "@ngrx/component-store";
-import { LoginStore } from "../pages/login/login.store";
+import { LoginStore } from "./pages/login/login.store";
+import { identityFeatureKey, identityReducer } from "./core/identity/state/identity.reducer";
+import { userLoggedInEffect, userLoggedOutEffect } from "./core/identity/state/identity.effect";
+import { credentialsInterceptor } from "./core/interceptors/credentials.interceptor";
+import { globalErrorHandlerInterceptor } from "./core/interceptors/global-error-handler.interceptor";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -36,6 +37,6 @@ export const appConfig: ApplicationConfig = {
     }),
     provideHttpClient(
       withFetch(),
-      withInterceptors([credentialsInterceptor]))
+      withInterceptors([credentialsInterceptor, globalErrorHandlerInterceptor]))
   ]
 };

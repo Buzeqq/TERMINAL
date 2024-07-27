@@ -2,10 +2,10 @@ import { Component, inject } from '@angular/core';
 import { MatCard, MatCardActions, MatCardHeader, MatCardTitle } from "@angular/material/card";
 import { BasePageComponent } from "../../core/components/base-page/base-page.component";
 import { Store } from "@ngrx/store";
-import { selectIdentity } from "../../core/state/identity/identity.selectors";
+import { selectIdentity } from "../../core/identity/state/identity.selectors";
 import { MatTabGroup } from "@angular/material/tabs";
 import { MatButton } from "@angular/material/button";
-import { IdentityActions } from "../../core/state/identity/identity.actions";
+import { IdentityActions } from "../../core/identity/state/identity.actions";
 
 @Component({
   selector: 'app-account-details',

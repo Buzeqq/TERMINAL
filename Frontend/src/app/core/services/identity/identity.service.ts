@@ -1,18 +1,16 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { catchError, EMPTY, map, Observable, tap } from "rxjs";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { catchError, map, Observable } from "rxjs";
 import { Identity, LoginForm } from "../../identity/identity.model";
-import { environment } from "../../../environments/environment";
-import { Store } from "@ngrx/store";
-import { IdentityActions } from "../../state/identity/identity.actions";
+import { environment } from "../../../../environments/environment";
+import { FailedToLoginError } from "../../errors/errors";
 
 @Injectable({
   providedIn: 'root'
 })
 export class IdentityService {
   private readonly http = inject(HttpClient);
-  private readonly store = inject(Store);
-  private readonly baseUrl = environment.apiUrl + 'api/identity';
+  private readonly baseUrl = environment.apiUrl + '/identity';
 
   getUserInfo(): Observable<Identity> {
     return this.http.get<{
@@ -27,10 +25,6 @@ export class IdentityService {
           isAuthenticated: true,
           role: 'administrator'
         } as Identity)),
-        tap({
-          next: (identity) => this.store.dispatch(IdentityActions.userLoaded({ identity })),
-          error: () => this.store.dispatch(IdentityActions.failedToLoadUser())
-        })
       );
   }
 
@@ -46,11 +40,9 @@ export class IdentityService {
         useSessionCookies: !rememberMe
       }
     }).pipe(
-      tap({
-        next: () => this.store.dispatch(IdentityActions.userLoggedIn()),
-        error: () => this.store.dispatch(IdentityActions.failedToLogIn())
-      }),
-      catchError(() => EMPTY)
+      catchError((response: HttpErrorResponse) => {
+        throw new FailedToLoginError(response.error);
+      })
     );
   }
 

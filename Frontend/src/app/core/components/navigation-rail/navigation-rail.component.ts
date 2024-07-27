@@ -3,10 +3,10 @@ import { MatListItem, MatNavList } from "@angular/material/list";
 import { MatIcon } from "@angular/material/icon";
 import { MatButton, MatFabButton, MatIconButton } from "@angular/material/button";
 import { MatRipple } from "@angular/material/core";
-import { NavigationRailButtonComponent } from "../navigation-rail-button/navigation-rail-button.component";
+import { NavigationRailButtonComponent } from "./navigation-rail-button/navigation-rail-button.component";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { selectIdentity } from "../../state/identity/identity.selectors";
+import { selectIdentity } from "../../identity/state/identity.selectors";
 
 type ActiveButton = 'dashboard' | 'samples' | 'recipe' | 'projects' | 'account';
 @Component({

@@ -4,7 +4,9 @@ using Terminal.Backend.Application.Exceptions;
 
 namespace Terminal.Backend.Application.Identity.Login;
 
-internal sealed class LoginCommandHandler(SignInManager<ApplicationUser> signInManager)
+internal sealed class LoginCommandHandler(
+    SignInManager<ApplicationUser> signInManager,
+    UserManager<ApplicationUser> userManager)
     : IRequestHandler<LoginCommand>
 {
     public async Task Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -30,7 +32,15 @@ internal sealed class LoginCommandHandler(SignInManager<ApplicationUser> signInM
 
         if (!result.Succeeded)
         {
-            throw new LoginFailedException(string.Empty);
+            var details = result switch
+            {
+                { IsLockedOut: true } => "Account is locked out",
+                { IsNotAllowed: true } => "Account is not allowed",
+                { RequiresTwoFactor: true } => "Two factor authentication is required",
+                _ => "Failed to login, please check your credentials again"
+            };
+
+            throw new LoginFailedException(details);
         }
     }
 }
