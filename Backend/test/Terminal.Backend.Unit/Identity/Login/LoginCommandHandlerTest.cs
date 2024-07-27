@@ -15,7 +15,8 @@ public class LoginCommandHandlerTest
     public LoginCommandHandlerTest()
     {
         _mockSignInManager = MocksFactory.CreateSignInManager();
-        _handler = new LoginCommandHandler(_mockSignInManager);
+        var mockUserManager = MocksFactory.CreateUserManager();
+        _handler = new LoginCommandHandler(_mockSignInManager, mockUserManager);
     }
 
     [Fact]

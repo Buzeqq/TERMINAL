@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { catchError, map, Observable } from "rxjs";
-import { Identity, LoginForm } from "../../identity/identity.model";
+import { Identity, LoginForm } from "../identity.model";
 import { environment } from "../../../../environments/environment";
 import { FailedToLoginError } from "../../errors/errors";
 
@@ -23,7 +23,7 @@ export class IdentityService {
         map(r => ({
           email: r.email,
           isAuthenticated: true,
-          role: 'administrator'
+          roles: r.roles
         } as Identity)),
       );
   }

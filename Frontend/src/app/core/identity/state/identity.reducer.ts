@@ -8,7 +8,7 @@ export const identityFeatureKey = 'Identity';
 export const initialState: Readonly<Identity> = {
   isAuthenticated: false,
   email: null,
-  role: 'guest'
+  roles: ['guest']
 };
 
 export const identityReducer = createReducer(
@@ -21,6 +21,6 @@ export const identityReducer = createReducer(
   on(IdentityActions.userLoggedOut, (_): Identity => ({
     email: null,
     isAuthenticated: false,
-    role: 'guest'
+    roles: ['guest']
   }))
 );

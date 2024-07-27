@@ -26,7 +26,14 @@ export class TerminalError extends Error implements ProblemDetails {
 }
 
 export class NotAuthorizedError extends TerminalError {}
+export class ServerError extends TerminalError {}
 export class FailedToLoginError extends TerminalError {
+  constructor(error: ProblemDetails) {
+    super(error);
+  }
+}
+
+export class FailedToLoadSamplesError extends TerminalError {
   constructor(error: ProblemDetails) {
     super(error);
   }

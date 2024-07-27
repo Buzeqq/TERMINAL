@@ -13,12 +13,14 @@ import { identityFeatureKey, identityReducer } from "./core/identity/state/ident
 import { userLoggedInEffect, userLoggedOutEffect } from "./core/identity/state/identity.effect";
 import { credentialsInterceptor } from "./core/interceptors/credentials.interceptor";
 import { globalErrorHandlerInterceptor } from "./core/interceptors/global-error-handler.interceptor";
+import { DashboardStore } from "./pages/dashboard/dashboard.store";
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideStore(),
     provideComponentStore(LoginStore),
+    provideComponentStore(DashboardStore),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),

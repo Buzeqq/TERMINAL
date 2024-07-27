@@ -2,7 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { ComponentStore } from "@ngrx/component-store";
 import { catchError, EMPTY, Observable, switchMap, tap } from "rxjs";
 import { LoginForm } from "../../core/identity/identity.model";
-import { IdentityService } from "../../core/services/identity/identity.service";
+import { IdentityService } from "../../core/identity/services/identity.service";
 import { Store } from "@ngrx/store";
 import { IdentityActions } from "../../core/identity/state/identity.actions";
 import { TerminalError } from "../../core/errors/errors";
@@ -25,9 +25,8 @@ export class LoginStore extends ComponentStore<LoginState> {
   private readonly notificationService = inject(NotificationService);
 
   readonly tryToLogIn = this.effect((loginForm$: Observable<LoginForm>) => {
-    this.patchState({ isLoading: true });
-
     return loginForm$.pipe(
+      tap(() => this.patchState({ isLoading: true })),
       switchMap((form) => this.service.login(form).pipe(
         tap(() => {
           this.patchState({ isLoading: false });

@@ -1,3 +1,47 @@
 <app-base-page title="Dashboard">
+  <header>
+    <div class="recent-samples__header">
+      <mat-icon [inline]="true" fontIcon="history"></mat-icon>
+      <h2>Recent samples</h2>
+    </div>
+  </header>
+  @if (recentSamples().length === 0)
+  {
+    <p class="hint">
+      <mat-icon [inline]="true" fontIcon="info"></mat-icon>
+      Here will be displayed the latest samples, for now there are none, add a new sample to see it here.
+    </p>
+    <button mat-button color="primary">Add sample</button>
+  } @else {
+    <div class="dashboard__cards">
+      <section>
+        <mat-table [dataSource]="recentSamples()">
+          <ng-container matColumnDef="code">
+            <mat-header-cell *matHeaderCellDef>Code</mat-header-cell>
+            <mat-cell *matCellDef="let sample">{{ sample.code }}</mat-cell>
+          </ng-container>
 
+          <ng-container matColumnDef="project">
+            <mat-header-cell *matHeaderCellDef>Project</mat-header-cell>
+            <mat-cell *matCellDef="let sample">{{ sample.project }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="created">
+            <mat-header-cell *matHeaderCellDef>Created</mat-header-cell>
+            <mat-cell *matCellDef="let sample">{{ sample.createdAtUtc | timeAgo }}</mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row
+            mat-ripple
+            *matRowDef="let row; columns: displayedColumns;"
+            (click)="showSampleDetails(row)"
+            [class.recent-samples__row--is-clicked]="false"></mat-row>
+        </mat-table>
+      </section>
+      <section>
+
+      </section>
+    </div>
+  }
 </app-base-page>

@@ -20,12 +20,13 @@ public class GetUserInfoQueryHandler(
             throw new UserNotFoundException();
         }
 
-        // TODO: var roles = await userManager.GetRolesAsync(user);
+        var roles = await userManager.GetRolesAsync(user);
         return new UserInfo()
         {
             Id = user.Id,
             Email = user.Email!,
-            IsEmailConfirmed = user.EmailConfirmed
+            IsEmailConfirmed = user.EmailConfirmed,
+            Roles = roles
         };
     }
 }

@@ -1,6 +1,6 @@
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { inject } from "@angular/core";
-import { IdentityService } from "../../services/identity/identity.service";
+import { IdentityService } from "../services/identity.service";
 import { IdentityActions } from "./identity.actions";
 import { map, switchMap } from "rxjs";
 

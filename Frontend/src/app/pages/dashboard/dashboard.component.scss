@@ -1,0 +1,20 @@
+.dashboard {
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 0.5rem;
+  }
+}
+
+.recent-samples {
+  &__header {
+    display: flex;
+    align-items: center;
+    vertical-align: text-top;
+    font-size: large;
+
+    mat-icon {
+      margin-right: 10px;
+    }
+  }
+}

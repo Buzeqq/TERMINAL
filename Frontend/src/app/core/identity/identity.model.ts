@@ -1,7 +1,9 @@
+export type Role = 'administrator' | 'moderator' | 'user' | 'guest';
+
 export interface Identity {
   isAuthenticated: boolean,
   email: string | null,
-  role: 'administrator' | 'moderator' | 'user' | 'guest'
+  roles: Role[]
 }
 
 export interface LoginForm {
