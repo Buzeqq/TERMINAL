@@ -50,7 +50,7 @@ dotnet run
 npm ci
 ```
 
-6. To run frontend, then head to https://localhost:4200
+6. To run frontend, then head to http://localhost:4200
 ```bash
 npm run start
 ```
