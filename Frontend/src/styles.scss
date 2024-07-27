@@ -1,16 +1,15 @@
 @use '@angular/material' as mat;
-@use '@angular/material-experimental' as matx;
 @use '../src/styles/componentes/_navigation-rail-theme.scss' as nav-rail-button;
 @use '../src/styles/componentes/_terminal-icon-theme.scss' as terminal-icon;
 @use '../src/styles/componentes/_login-theme.scss' as login;
 
 @include mat.core();
 
-$terminal-dark-theme: matx.define-theme((
+$terminal-dark-theme: mat.define-theme((
   color: (
     theme-type: dark,
-    primary: matx.$m3-cyan-palette,
-    tertiary: matx.$m3-orange-palette
+    primary: mat.$cyan-palette,
+    tertiary: mat.$orange-palette
   ),
   typography: (
     brand-family: 'Roboto Mono',
@@ -20,11 +19,11 @@ $terminal-dark-theme: matx.define-theme((
     scale: -1
   )
 ));
-$terminal-light-theme: matx.define-theme((
+$terminal-light-theme: mat.define-theme((
   color: (
     theme-type: light,
-    primary: matx.$m3-azure-palette,
-    tertiary: matx.$m3-blue-palette
+    primary: mat.$azure-palette,
+    tertiary: mat.$blue-palette
   ),
   typography: (
     brand-family: 'Roboto Mono',
@@ -35,27 +34,17 @@ $terminal-light-theme: matx.define-theme((
   )
 ));
 
-@media (prefers-color-scheme: light) {
-  $current-theme: $terminal-light-theme;
+html {
+  @include mat.all-component-themes($terminal-dark-theme);
+  @include terminal-icon.theme($terminal-dark-theme);
+  @include nav-rail-button.theme($terminal-dark-theme);
+  @include login.theme($terminal-dark-theme);
 
-  html {
-    @include mat.all-component-themes($current-theme);
-    @include mat.all-component-typographies($current-theme);
-    @include nav-rail-button.theme($current-theme);
-    @include terminal-icon.theme($current-theme);
-    @include login.theme($current-theme);
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  $current-theme: $terminal-dark-theme;
-
-  html {
-    @include mat.all-component-themes($current-theme);
-    @include mat.all-component-typographies($current-theme);
-    @include nav-rail-button.theme($current-theme);
-    @include terminal-icon.theme($current-theme);
-    @include login.theme($current-theme);
+  @media (prefers-color-scheme: light) {
+    @include mat.core-color($terminal-light-theme);
+    @include mat.button-color($terminal-light-theme);
+    @include terminal-icon.color($terminal-light-theme);
+    @include login.color($terminal-light-theme);
   }
 }
 
