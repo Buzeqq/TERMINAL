@@ -1,4 +1,6 @@
-<img width="1669" src="https://user-images.githubusercontent.com/46223928/229259166-1ce9f748-09c8-43f7-869c-b083d848f624.svg" alt="Terminal logo"/>
+<p align="center">
+  <img height="300px" src="https://user-images.githubusercontent.com/46223928/229259166-1ce9f748-09c8-43f7-869c-b083d848f624.svg" alt="Terminal logo"/>  
+</p>
 
 # Welcome
 
