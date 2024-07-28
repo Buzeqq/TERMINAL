@@ -42,9 +42,9 @@ html {
   @include login.theme($terminal-dark-theme);
 
   @media (prefers-color-scheme: light) {
-    @include mat.core-color($terminal-light-theme);
-    @include mat.button-color($terminal-light-theme);
+    @include mat.all-component-colors($terminal-light-theme);
     @include terminal-icon.color($terminal-light-theme);
+    @include nav-rail-button.color($terminal-dark-theme);
     @include login.color($terminal-light-theme);
   }
 }

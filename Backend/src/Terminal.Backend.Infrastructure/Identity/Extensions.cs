@@ -28,6 +28,12 @@ internal static class Extensions
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     return Task.CompletedTask;
                 };
+
+                o.Events.OnRedirectToAccessDenied = context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                    return Task.CompletedTask;
+                };
             })
             .AddBearerToken(IdentityConstants.BearerScheme);
     }

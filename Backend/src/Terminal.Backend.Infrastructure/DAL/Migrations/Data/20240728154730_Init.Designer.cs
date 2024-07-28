@@ -13,7 +13,7 @@ using Terminal.Backend.Infrastructure.DAL;
 namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
 {
     [DbContext(typeof(TerminalDbContext))]
-    [Migration("20240713215309_Init")]
+    [Migration("20240728154730_Init")]
     partial class Init
     {
         /// <inheritdoc />

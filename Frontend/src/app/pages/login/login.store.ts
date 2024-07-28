@@ -7,6 +7,7 @@ import { Store } from "@ngrx/store";
 import { IdentityActions } from "../../core/identity/state/identity.actions";
 import { TerminalError } from "../../core/errors/errors";
 import { NotificationService } from "../../core/services/notification.service";
+import { Router } from "@angular/router";
 
 export interface LoginState {
   isLoading: boolean;
@@ -22,19 +23,16 @@ export class LoginStore extends ComponentStore<LoginState> {
 
   private readonly service = inject(IdentityService);
   private readonly store = inject(Store);
+  private readonly router = inject(Router);
   private readonly notificationService = inject(NotificationService);
 
   readonly tryToLogIn = this.effect((loginForm$: Observable<LoginForm>) => {
     return loginForm$.pipe(
       tap(() => this.patchState({ isLoading: true })),
       switchMap((form) => this.service.login(form).pipe(
-        tap(() => {
-          this.patchState({ isLoading: false });
-          this.store.dispatch(IdentityActions.userLoggedIn());
-        })
+        tap(() => this.store.dispatch(IdentityActions.userLoggedIn()))
       )),
       catchError((err: TerminalError) => {
-        this.patchState({ isLoading: false });
         this.notificationService.notifyError(err.detail ?? err.title);
         this.store.dispatch(IdentityActions.failedToLogIn());
         return EMPTY;
@@ -46,13 +44,13 @@ export class LoginStore extends ComponentStore<LoginState> {
     this.patchState({ isLoading: true });
 
     return this.service.getUserInfo().pipe(
-      tap((identity) => {
-        this.patchState({ isLoading: false });
+      tap(async (identity) => {
         this.store.dispatch(IdentityActions.userLoaded({ identity }));
+        await this.router.navigate(['/']);
       }),
       catchError((_: TerminalError) => {
-        this.patchState({ isLoading: false });
         this.store.dispatch(IdentityActions.failedToLoadUser());
+        this.patchState({ isLoading: false });
         return EMPTY;
       })
     );

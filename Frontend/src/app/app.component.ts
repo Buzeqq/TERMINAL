@@ -1,7 +1,6 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { Store } from "@ngrx/store";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { NavigationRailComponent } from "./core/components/navigation-rail/navigation-rail.component";
 import {
@@ -11,7 +10,6 @@ import {
   NavigationRailContentComponent
 } from "./core/components/navigation-rail/navigation-rail-content/navigation-rail-content.component";
 import { LoginComponent } from "./pages/login/login.component";
-import { selectIdentity } from "./core/identity/state/identity.selectors";
 
 @Component({
   selector: 'app-root',
@@ -29,6 +27,4 @@ import { selectIdentity } from "./core/identity/state/identity.selectors";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  private readonly store = inject(Store);
-  isLoggedIn = computed(() => this.store.selectSignal(selectIdentity)().isAuthenticated);
 }

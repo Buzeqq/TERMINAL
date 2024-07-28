@@ -26,7 +26,10 @@ export class SamplesService {
         map(r => r.map(sample => ({
           ...sample,
           createdAtUtc: new Date(sample.createdAtUtc)
-        })))
+        }))),
+        map(r => r
+          .sort((a, b) =>
+            b.createdAtUtc.getTime() - a.createdAtUtc.getTime()))
       );
   }
 }
