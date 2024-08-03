@@ -39,6 +39,7 @@ export const appConfig: ApplicationConfig = {
     }),
     provideHttpClient(
       withFetch(),
-      withInterceptors([credentialsInterceptor, globalErrorHandlerInterceptor]))
+      withInterceptors([credentialsInterceptor, globalErrorHandlerInterceptor])
+    ),
   ]
 };

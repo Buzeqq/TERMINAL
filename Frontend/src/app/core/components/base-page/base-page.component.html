@@ -1,8 +1,14 @@
 <mat-card>
   <mat-card-header>
-    <h1>{{ title }}</h1>
+    <header>
+      <h1>{{ title | titlecase }}</h1>
+      <ng-content select="app-base-page-header"></ng-content>
+    </header>
   </mat-card-header>
   <mat-card-content>
-    <ng-content></ng-content>
+    <ng-content select="app-base-page-content"></ng-content>
   </mat-card-content>
+  <mat-card-footer>
+    <ng-content select="app-base-page-footer"></ng-content>
+  </mat-card-footer>
 </mat-card>

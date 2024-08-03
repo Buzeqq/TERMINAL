@@ -38,3 +38,9 @@ export class FailedToLoadSamplesError extends TerminalError {
     super(error);
   }
 }
+
+export class FailedToLoadSampleDetailsError extends TerminalError {
+  constructor(error: ProblemDetails) {
+    super(error);
+  }
+}

@@ -4,7 +4,7 @@
   display: grid;
   grid-template-columns: 80px auto;
   grid-template-rows: auto;
-  height: 100vh;
+  height: 100%;
 
   @include rwd.breakpoint(mobile) {
       grid-template-columns: auto;

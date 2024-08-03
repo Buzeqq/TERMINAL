@@ -1,8 +1,14 @@
+@use "../../../../src/styles/mixins/rwd.scss" as rwd;
+
 .dashboard {
   &__cards {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    column-gap: 0.5rem;
+    grid-gap: 20px;
+
+    @include rwd.breakpoint(mobile) {
+      grid-template-columns: 1fr;
+    }
   }
 }
 
@@ -15,6 +21,15 @@
 
     mat-icon {
       margin-right: 10px;
+    }
+  }
+
+  &__table {
+    mat-table {
+      @include rwd.breakpoint(mobile) {
+        height: calc(100vh - 305px);
+        overflow: scroll;
+      }
     }
   }
 }

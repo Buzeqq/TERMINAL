@@ -1,8 +1,14 @@
+@use "../../../../styles/mixins/rwd.scss" as rwd;
+
 :host {
   display: block;
   height: 100%;
 
   mat-card {
     height: 100%;
+
+    mat-card-content {
+      height: 100%;
+    }
   }
 }

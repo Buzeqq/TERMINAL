@@ -1,0 +1,20 @@
+.sample-details {
+  display: flex;
+  row-gap: 10px;
+  flex-direction: column;
+
+  &__header {
+    font-weight: bolder;
+    font-size: large;
+  }
+
+  &__label {
+    font-weight: bold;
+    margin-right: 5px;
+  }
+
+  &__step-list {
+    max-height: 40vh;
+    overflow-y: scroll;
+  }
+}

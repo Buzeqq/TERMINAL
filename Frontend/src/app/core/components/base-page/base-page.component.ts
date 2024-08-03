@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
-import { MatCard, MatCardContent, MatCardHeader } from "@angular/material/card";
+import { MatCard, MatCardContent, MatCardFooter, MatCardHeader } from "@angular/material/card";
+import { TitleCasePipe } from "@angular/common";
 
 @Component({
   selector: 'app-base-page',
@@ -7,7 +8,9 @@ import { MatCard, MatCardContent, MatCardHeader } from "@angular/material/card";
   imports: [
     MatCard,
     MatCardHeader,
-    MatCardContent
+    MatCardContent,
+    MatCardFooter,
+    TitleCasePipe
   ],
   templateUrl: './base-page.component.html',
   styleUrl: './base-page.component.scss'

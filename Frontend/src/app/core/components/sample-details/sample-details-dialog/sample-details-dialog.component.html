@@ -1,0 +1,68 @@
+<mat-dialog-content>
+  <article class="sample-details">
+    <header class="sample-details__header">Sample {{ data.sample.code }}</header>
+
+    <section>
+      <span class="sample-details__label">Created: </span>
+      {{ data.sample.createdAtUtc | date:'medium' }}
+    </section>
+
+    <section>
+      <span class="sample-details__label">Tags:</span>
+      <mat-chip-set>
+        @for (tag of data.sample.tags; track tag.id) {
+          <mat-chip>{{ tag.name }}</mat-chip>
+        } @empty {
+          <app-hint>
+            Sample has no tags.
+          </app-hint>
+        }
+      </mat-chip-set>
+    </section>
+
+    @if (data.sample.recipe) {
+      <section>
+        <span class="sample-details__label">Recipe:</span>
+        {{ data.sample.recipe }}
+      </section>
+    }
+
+    <section>
+      <span class="sample-details__label">Comment:</span>
+      {{ data.sample.comment }}
+    </section>
+
+    <section>
+      <mat-tab-group>
+        @for (step of data.sample.steps; track step.id; let i = $index) {
+          <mat-tab [label]="'Step #' + (i + 1)">
+            <mat-list class="sample-details__step-list">
+              @for (value of step.parameters; track value.id) {
+                <mat-list-item>
+                  <span class="sample-details__label">{{ value.name }}:</span> {{ value.value }}{{ value.unit }}
+                </mat-list-item>
+              }
+            </mat-list>
+          </mat-tab>
+        }
+      </mat-tab-group>
+    </section>
+
+    <footer>
+      <button mat-button color="primary">
+        <mat-icon>redo</mat-icon>
+        Redo
+      </button>
+      @if (data.sample.recipe) {
+        <button mat-button color="primary">
+          <mat-icon>arrow_forward</mat-icon>
+          Show recipe
+        </button>
+      }
+      <button mat-button color="primary">
+        <mat-icon>file_download</mat-icon>
+        Export to CSV
+      </button>
+    </footer>
+  </article>
+</mat-dialog-content>
