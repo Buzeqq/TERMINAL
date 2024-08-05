@@ -27,7 +27,7 @@
   &__table {
     mat-table {
       @include rwd.breakpoint(mobile) {
-        height: calc(100vh - 305px);
+        height: calc(100vh - 360px);
         overflow: scroll;
       }
     }

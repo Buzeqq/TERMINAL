@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, Signal, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, computed, inject, OnInit, Signal } from '@angular/core';
 import { MatCard, MatCardFooter, MatCardHeader, MatCardTitle } from "@angular/material/card";
 import {BasePageComponent} from "../../core/components/base-page/base-page.component";
 import { MatIcon } from "@angular/material/icon";
@@ -25,6 +25,7 @@ import {
 import { BasePageFooterComponent } from "../../core/components/base-page/base-page-footer/base-page-footer.component";
 import { SampleDetailsComponent } from "../../core/components/sample-details/sample-details.component";
 import { AsyncPipe } from "@angular/common";
+import { HintComponent } from "../../core/components/hint/hint.component";
 
 @Component({
   selector: 'app-dashboard',
@@ -55,6 +56,7 @@ import { AsyncPipe } from "@angular/common";
     MatProgressBar,
     SampleDetailsComponent,
     AsyncPipe,
+    HintComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
@@ -68,7 +70,8 @@ export class DashboardComponent implements OnInit {
   readonly areThereAnyRecentSamples: Signal<boolean> = computed(() => this.recentSamples().length > 0);
   readonly isLoading = this.dashboardStore
     .selectSignal(state => state.isLoading);
-  readonly sampleDetails$ = this.dashboardStore.select(state => state.selectedSample);
+  readonly sampleDetails$ = this.dashboardStore
+    .select(state => state.selectedSample);
   readonly selectedSample$ = new Subject<Sample>();
 
   ngOnInit() {

@@ -1,16 +1,17 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AsyncPipe, DatePipe, JsonPipe } from "@angular/common";
 import { SampleDetails } from "../../samples/sample.model";
-import { combineLatestWith, map, Observable } from "rxjs";
-import { BreakpointObserver } from "@angular/cdk/layout";
-import { SampleDetailsDialogComponent } from "./sample-details-dialog/sample-details-dialog.component";
+import { catchError, EMPTY, filter, map, merge, Observable, switchMap } from "rxjs";
 import { MatIcon } from "@angular/material/icon";
-import { MatDialog } from "@angular/material/dialog";
 import { MatChip, MatChipSet } from "@angular/material/chips";
 import { HintComponent } from "../hint/hint.component";
 import { MatButton } from "@angular/material/button";
 import { MatTab, MatTabGroup } from "@angular/material/tabs";
 import { MatList, MatListItem } from "@angular/material/list";
+import { ActivatedRoute } from "@angular/router";
+import { SamplesService } from "../../samples/samples.service";
+import { NotificationService } from "../../services/notification.service";
+import { FailedToLoadSampleDetailsError } from "../../errors/errors";
 
 @Component({
   selector: 'app-sample-details',
@@ -33,30 +34,28 @@ import { MatList, MatListItem } from "@angular/material/list";
   styleUrl: './sample-details.component.scss'
 })
 export class SampleDetailsComponent implements OnInit {
-  @Input({ required: true, alias: 'sample' }) inputSample$: Observable<SampleDetails | undefined> = new Observable<SampleDetails | undefined>();
+  @Input({ alias: 'sample' }) sampleInput$: Observable<SampleDetails | undefined> = new Observable<SampleDetails | undefined>();
 
-  private readonly breakpointObserver = inject(BreakpointObserver);
-  private readonly dialog = inject(MatDialog);
-
-  readonly shouldOpenAsDialog$ = this.breakpointObserver.observe('(max-width: 760px)')
-    .pipe(
-      map(result => result.matches)
-    );
-
-  componentData$: Observable<{ sample: SampleDetails | undefined, shouldOpenAsDialog: boolean }> = new Observable()
+  protected sampleDetails$ = new Observable<SampleDetails>();
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly sampleService: SamplesService,
+    private readonly notificationService: NotificationService) {
+  }
 
   ngOnInit() {
-    this.componentData$ = this.inputSample$.pipe(
-      combineLatestWith(this.shouldOpenAsDialog$),
-      map(([sample, shouldOpenAsDialog]) => {
-        if (shouldOpenAsDialog && sample) {
-          this.dialog.open(SampleDetailsDialogComponent, {
-            data: { sample }
-          });
-        }
-
-        return { sample, shouldOpenAsDialog };
+    this.sampleDetails$ = merge(
+      this.sampleInput$.pipe(filter(sample => !!sample)),
+      this.route.params.pipe(
+        map(params => params['id']),
+        filter(id => !!id),
+        switchMap(id => this.sampleService.getSampleDetails(id))
+      )
+    ).pipe(
+      catchError((err: FailedToLoadSampleDetailsError) => {
+        this.notificationService.notifyError(err.detail ?? err.title);
+        return EMPTY;
       })
-    );
+    )
   }
 }

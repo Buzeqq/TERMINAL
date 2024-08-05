@@ -41,7 +41,13 @@
               [class.recent-samples__row--is-clicked]="false"></mat-row>
           </mat-table>
         </section>
-        <app-sample-details [sample]="sampleDetails$"></app-sample-details>
+        @if (this.selectedSample$ | async) {
+          <app-sample-details [sample]="sampleDetails$"></app-sample-details>
+        } @else {
+          <app-hint>
+            Select a sample to see it's details.
+          </app-hint>
+        }
       </div>
     }
   </app-base-page-content>
