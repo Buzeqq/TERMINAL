@@ -28,17 +28,6 @@ public static class ProjectsModule
             .RequireAuthorization(Permission.ProjectRead.ToString())
             .WithTags(SwaggerSetup.ProjectTag);
 
-        app.MapGet("/all", async (
-                    [FromQuery] int pageSize,
-                    [FromQuery] int pageNumber,
-                    [FromQuery] bool? desc,
-                    ISender sender,
-                    CancellationToken ct
-                ) =>
-                Results.Ok(await sender.Send(new GetProjectsQuery(pageNumber, pageSize, desc ?? true, false), ct)))
-            .RequireAuthorization(Permission.ProjectRead.ToString())
-            .WithTags(SwaggerSetup.ProjectTag);
-
         app.MapGet("/{id:guid}", async (
                 Guid id,
                 ISender sender,
@@ -88,26 +77,6 @@ public static class ProjectsModule
                 var query = new SearchProjectQuery(searchPhrase, pageNumber, pageSize);
                 var projects = await sender.Send(query, ct);
                 return Results.Ok(projects);
-            }).RequireAuthorization(Permission.ProjectRead.ToString())
-            .WithTags(SwaggerSetup.ProjectTag);
-
-        app.MapGet("/amount", async (
-                ISender sender,
-                CancellationToken ct) =>
-            {
-                var query = new GetProjectsAmountQuery();
-                var amount = await sender.Send(query, ct);
-                return Results.Ok(amount);
-            }).RequireAuthorization(Permission.ProjectRead.ToString())
-            .WithTags(SwaggerSetup.ProjectTag);
-
-        app.MapGet("/amount/all", async (
-                ISender sender,
-                CancellationToken ct) =>
-            {
-                var query = new GetProjectsAmountQuery(false);
-                var amount = await sender.Send(query, ct);
-                return Results.Ok(amount);
             }).RequireAuthorization(Permission.ProjectRead.ToString())
             .WithTags(SwaggerSetup.ProjectTag);
 

@@ -2,7 +2,16 @@ import { ComponentStore } from "@ngrx/component-store";
 import { Sample, SampleDetails } from "../../core/samples/sample.model";
 import { inject, Injectable } from "@angular/core";
 import { SamplesService } from "../../core/samples/samples.service";
-import { catchError, combineLatestWith, distinctUntilChanged, EMPTY, map, Observable, switchMap, tap } from "rxjs";
+import {
+  catchError,
+  combineLatestWith,
+  distinctUntilChanged,
+  EMPTY,
+  map,
+  Observable,
+  switchMap,
+  tap
+} from "rxjs";
 import { FailedToLoadSampleDetailsError, FailedToLoadSamplesError } from "../../core/errors/errors";
 import { NotificationService } from "../../core/services/notification.service";
 import { BreakpointObserver } from "@angular/cdk/layout";
@@ -54,9 +63,9 @@ export class DashboardStore extends ComponentStore<DashboardState> {
           distinctUntilChanged(),
           map(([sample, shouldNavigateToSampleDetails]) => {
             if (shouldNavigateToSampleDetails) {
-              this.patchState({ selectedSample: undefined });
               this.router.navigate(['/samples', sample.id])
-                .catch(() => this.notificationService.notifyError('Failed to navigate to sample details page'));
+                .catch(() => this.notificationService.notifyError('Failed to navigate to sample details page!'));
+              return;
             }
 
             return sample;

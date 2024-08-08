@@ -9,36 +9,41 @@
       </div>
       <ul>
         <button mat-button
+                routerLinkActive="navigation-rail-button--active"
+                [routerLinkActiveOptions]="{ exact: true }"
                 class="navigation-rail-button"
-                routerLinkActive="activebutton"
                 (click)="router.navigate(['/dashboard'])">
           <mat-icon>home</mat-icon>
           Dashboard
         </button>
         <button mat-button
+                routerLinkActive="navigation-rail-button--active"
+                [routerLinkActiveOptions]="{ exact: true }"
                 class="navigation-rail-button"
-                routerLinkActive="activebutton"
                 (click)="router.navigate(['/samples'])">
           <mat-icon>science</mat-icon>
           Samples
         </button>
         <button mat-button
+                routerLinkActive="navigation-rail-button--active"
+                [routerLinkActiveOptions]="{ exact: true }"
                 class="navigation-rail-button"
-                routerLinkActive="activebutton"
                 (click)="router.navigate(['/recipes'])">
           <mat-icon>assignment</mat-icon>
           Recipes
         </button>
         <button mat-button
+                routerLinkActive="navigation-rail-button--active"
+                [routerLinkActiveOptions]="{ exact: true }"
                 class="navigation-rail-button"
-                routerLinkActive="activebutton"
                 (click)="router.navigate(['/projects'])">
           <mat-icon>folder</mat-icon>
           Projects
         </button>
         <button mat-button
+                routerLinkActive="navigation-rail-button--active"
+                [routerLinkActiveOptions]="{ exact: true }"
                 class="navigation-rail-button"
-                routerLinkActive="activebutton"
                 (click)="router.navigate(['/account'])">
           <mat-icon>account_circle</mat-icon>
           Account

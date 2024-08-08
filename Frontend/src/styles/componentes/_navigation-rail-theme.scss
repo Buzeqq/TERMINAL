@@ -3,12 +3,11 @@
 
 @mixin color($theme) {
   .navigation-rail-button {
-  }
+    &--active {
+      $hue: if(mat.get-theme-type($theme) == dark, 10, 90);
 
-  .active {
-    $hue: if(mat.get-theme-type($theme) == dark, 10, 90);
-
-    background-color: mat.get-theme-color($theme, primary, $hue);
+      background-color: mat.get-theme-color($theme, primary, $hue) !important;
+    }
   }
 }
 

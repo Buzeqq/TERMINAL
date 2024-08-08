@@ -15,10 +15,11 @@ namespace Terminal.Backend.Infrastructure.DAL.Handlers;
 
 public static class Extensions
 {
-    public static GetProjectsDto AsGetProjectsDto(this IEnumerable<Project> entities)
+    public static GetProjectsDto AsGetProjectsDto(this IEnumerable<Project> entities, int totalAmount)
         => new()
         {
-            Projects = entities.Select(p => new GetProjectsDto.ProjectDto(p.Id, p.Name))
+            Projects = entities.Select(p => new GetProjectsDto.ProjectDto(p.Id, p.Name)),
+            TotalCount = totalAmount
         };
 
     public static GetRecipesDto AsGetRecipesDto(this IEnumerable<Recipe> entities)
