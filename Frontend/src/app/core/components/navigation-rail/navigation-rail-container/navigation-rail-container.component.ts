@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './navigation-rail-container.component.html',
-  styleUrl: './navigation-rail-container.component.scss'
+  styleUrl: './navigation-rail-container.component.scss',
 })
-export class NavigationRailContainerComponent {
-
-}
+export class NavigationRailContainerComponent {}

@@ -1,15 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import { NavigationRailComponent } from "./core/components/navigation-rail/navigation-rail.component";
-import {
-  NavigationRailContainerComponent
-} from "./core/components/navigation-rail/navigation-rail-container/navigation-rail-container.component";
-import {
-  NavigationRailContentComponent
-} from "./core/components/navigation-rail/navigation-rail-content/navigation-rail-content.component";
-import { LoginComponent } from "./pages/login/login.component";
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { NavigationRailComponent } from './core/components/navigation-rail/navigation-rail.component';
+import { NavigationRailContainerComponent } from './core/components/navigation-rail/navigation-rail-container/navigation-rail-container.component';
+import { NavigationRailContentComponent } from './core/components/navigation-rail/navigation-rail-content/navigation-rail-content.component';
+import { LoginComponent } from './pages/login/login.component';
 
 @Component({
   selector: 'app-root',
@@ -21,10 +17,9 @@ import { LoginComponent } from "./pages/login/login.component";
     NavigationRailContainerComponent,
     NavigationRailContentComponent,
     LoginComponent,
-    MatProgressSpinner
+    MatProgressSpinner,
   ],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
-}
+export class AppComponent {}

@@ -14,13 +14,22 @@ internal sealed class GetProjectsQueryHandler(TerminalDbContext dbContext)
     public async Task<GetProjectsDto> Handle(GetProjectsQuery request,
         CancellationToken ct)
     {
-        var totalAmount = await _projects.Where(p => p.IsActive).CountAsync(ct);
+        var shouldSearch = request.SearchPhrase is not null && !string.IsNullOrWhiteSpace(request.SearchPhrase);
 
-        return (await _projects
+        var query = _projects
             .AsNoTracking()
-            .Where(p => p.IsActive || p.IsActive == request.OnlyActive)
-            .OrderBy(request.OrderingParameters)
+            .Where(p => p.IsActive || p.IsActive == request.OnlyActive);
+
+        if (shouldSearch)
+        {
+            query = query
+                .Where(p => EF.Functions.ILike(p.Name, $"%{request.SearchPhrase}%"));
+        }
+
+        var totalCount = await query.CountAsync(ct);
+        return (await query
             .Paginate(request.Parameters)
-            .ToListAsync(ct)).AsGetProjectsDto(totalAmount);
+            .OrderBy(request.OrderingParameters)
+            .ToListAsync(ct)).AsGetProjectsDto(totalCount);
     }
 }

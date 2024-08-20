@@ -5,7 +5,9 @@ import { globalErrorHandlerInterceptor } from './global-error-handler.intercepto
 
 describe('globalErrorHandlerInterceptor', () => {
   const interceptor: HttpInterceptorFn = (req, next) =>
-    TestBed.runInInjectionContext(() => globalErrorHandlerInterceptor(req, next));
+    TestBed.runInInjectionContext(() =>
+      globalErrorHandlerInterceptor(req, next),
+    );
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

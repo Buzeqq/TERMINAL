@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './base-page-header.component.html',
-  styleUrl: './base-page-header.component.scss'
+  styleUrl: './base-page-header.component.scss',
 })
-export class BasePageHeaderComponent {
-
-}
+export class BasePageHeaderComponent {}

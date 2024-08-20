@@ -7,8 +7,7 @@
   </app-base-page-header>
 
   <app-base-page-content>
-    @if (!areThereAnyRecentSamples())
-    {
+    @if (!areThereAnyRecentSamples()) {
       <p class="hint">
         <mat-icon [inline]="true" fontIcon="info"></mat-icon>
         Here will be displayed the latest samples, for now there are none, add a new sample to see it here.

@@ -8,10 +8,9 @@ describe('NavigationRailComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NavigationRailComponent]
-    })
-    .compileComponents();
-    
+      imports: [NavigationRailComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(NavigationRailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -2,10 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'timeAgo',
-  standalone: true
+  standalone: true,
 })
 export class TimeAgoPipe implements PipeTransform {
-
   transform(value: Date): string {
     const now = new Date();
     const diff = Math.abs(now.getTime() - value.getTime()) / 1000;

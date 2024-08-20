@@ -1,0 +1,43 @@
+@if (dataSource$ | async; as data) {
+
+  @if (data.totalCount > 0) {
+    <form [formGroup]="formGroup">
+      <mat-form-field>
+        <mat-label>Search</mat-label>
+        <input formControlName="searchPhrase"
+               matInput
+               placeholder="Start typing to search..."
+               type="text">
+      </mat-form-field>
+    </form>
+  }
+
+  <mat-list>
+    @for (row of data.data; track row.id; let first = $first) {
+      @if (first) {
+        <mat-divider></mat-divider>
+      }
+
+      <mat-list-item matRipple>
+        <ng-container *ngTemplateOutlet="rowTemplate; context: { $implicit: row }"></ng-container>
+      </mat-list-item>
+
+      <mat-divider></mat-divider>
+    } @empty {
+      <app-hint>No data found</app-hint>
+    }
+  </mat-list>
+
+  @if (data.totalCount > 0) {
+    <mat-paginator
+      [length]="data.totalCount"
+      [pageSize]="data.paginationOptions.pageSize"
+      [showFirstLastButtons]="true"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      [pageIndex]="data.paginationOptions.pageNumber"
+      (page)="onPageChange($event)"
+      aria-label="Select page"></mat-paginator>
+  }
+} @else {
+  <mat-spinner class="center"></mat-spinner>
+}

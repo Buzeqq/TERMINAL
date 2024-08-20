@@ -1,7 +1,8 @@
-import { ParameterValue } from "../parameters/parameter.model";
+import { ParameterValue } from '../parameters/parameter.model';
+import { Entity } from '../common.model';
 
-export interface StepDetails {
-  id: string
-  parameters: ParameterValue[]
-  comment: string
+export interface StepDetails extends Entity {
+  id: string;
+  parameters: ParameterValue[];
+  comment: string;
 }

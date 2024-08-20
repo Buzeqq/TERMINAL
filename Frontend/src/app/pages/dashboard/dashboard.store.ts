@@ -1,7 +1,7 @@
-import { ComponentStore } from "@ngrx/component-store";
-import { Sample, SampleDetails } from "../../core/samples/sample.model";
-import { inject, Injectable } from "@angular/core";
-import { SamplesService } from "../../core/samples/samples.service";
+import { ComponentStore } from '@ngrx/component-store';
+import { Sample, SampleDetails } from '../../core/samples/sample.model';
+import { inject, Injectable } from '@angular/core';
+import { SamplesService } from '../../core/samples/samples.service';
 import {
   catchError,
   combineLatestWith,
@@ -10,12 +10,15 @@ import {
   map,
   Observable,
   switchMap,
-  tap
-} from "rxjs";
-import { FailedToLoadSampleDetailsError, FailedToLoadSamplesError } from "../../core/errors/errors";
-import { NotificationService } from "../../core/services/notification.service";
-import { BreakpointObserver } from "@angular/cdk/layout";
-import { Router } from "@angular/router";
+  tap,
+} from 'rxjs';
+import {
+  FailedToLoadSampleDetailsError,
+  FailedToLoadSamplesError,
+} from '../../core/errors/errors.model';
+import { NotificationService } from '../../core/services/notification.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { Router } from '@angular/router';
 
 export interface DashboardState {
   isLoading: boolean;
@@ -25,60 +28,62 @@ export interface DashboardState {
 
 @Injectable()
 export class DashboardStore extends ComponentStore<DashboardState> {
-  constructor() {
-    super({
-      isLoading: false,
-      recentSamples: [],
-    });
-  }
-
   private readonly sampleService = inject(SamplesService);
   private readonly notificationService = inject(NotificationService);
-  private readonly router = inject(Router);
-  private readonly shouldNavigateToSampleDetails$ = inject(BreakpointObserver)
-    .observe('(max-width: 760px)')
-    .pipe(
-      map(result => result.matches)
-    );
-
   readonly loadRecentSamples = this.effect(() => {
     return this.sampleService.getRecentSamples(10).pipe(
-      tap(recentSamples => {
+      tap((recentSamples) => {
         this.patchState({ recentSamples, isLoading: false });
       }),
       catchError((err: FailedToLoadSamplesError) => {
         this.patchState({ isLoading: false });
         this.notificationService.notifyError(err.detail ?? err.title);
         return EMPTY;
-      })
+      }),
     );
   });
-
+  private readonly router = inject(Router);
+  private readonly shouldNavigateToSampleDetails$ = inject(BreakpointObserver)
+    .observe('(max-width: 760px)')
+    .pipe(map((result) => result.matches));
   readonly selectSample = this.effect((sample: Observable<Sample>) => {
     return sample.pipe(
       tap(() => this.patchState({ isLoading: true })),
-      switchMap(sample => this.sampleService.getSampleDetails(sample.id)
-        .pipe(
+      switchMap((sample) =>
+        this.sampleService.getSampleDetails(sample.id).pipe(
           combineLatestWith(this.shouldNavigateToSampleDetails$),
           distinctUntilChanged(),
           map(([sample, shouldNavigateToSampleDetails]) => {
             if (shouldNavigateToSampleDetails) {
-              this.router.navigate(['/samples', sample.id])
-                .catch(() => this.notificationService.notifyError('Failed to navigate to sample details page!'));
+              this.router
+                .navigate(['/samples', sample.id])
+                .catch(() =>
+                  this.notificationService.notifyError(
+                    'Failed to navigate to sample details page!',
+                  ),
+                );
               return;
             }
 
             return sample;
           }),
-          tap(selectedSample => {
+          tap((selectedSample) => {
             this.patchState({ isLoading: false, selectedSample });
           }),
           catchError((err: FailedToLoadSampleDetailsError) => {
             this.patchState({ isLoading: false });
             this.notificationService.notifyError(err.detail ?? err.title);
             return EMPTY;
-          })
-        ))
+          }),
+        ),
+      ),
     );
   });
+
+  constructor() {
+    super({
+      isLoading: false,
+      recentSamples: [],
+    });
+  }
 }

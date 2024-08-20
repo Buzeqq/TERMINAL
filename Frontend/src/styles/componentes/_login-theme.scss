@@ -3,7 +3,8 @@
 @use '../mixins/rwd' as rwd;
 
 @mixin color($theme) {
-  .login {}
+  .login {
+  }
 }
 
 @mixin typography($theme) {

@@ -1,4 +1,6 @@
-export interface Project {
-  id: string
-  name: string
+import { Entity } from '../common.model';
+
+export interface Project extends Entity {
+  id: string;
+  name: string;
 }

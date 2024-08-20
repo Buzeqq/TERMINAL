@@ -8,10 +8,9 @@ describe('NavigationRailButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NavigationRailButtonComponent]
-    })
-    .compileComponents();
-    
+      imports: [NavigationRailButtonComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(NavigationRailButtonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

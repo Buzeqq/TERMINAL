@@ -80,10 +80,11 @@ public static class SamplesModule
                 [FromQuery] int pageSize,
                 [FromQuery] string? orderBy,
                 [FromQuery] bool? desc,
+                [FromQuery] string? searchPhrase,
                 ISender sender,
                 CancellationToken ct) =>
             {
-                var query = new GetSamplesQuery(pageNumber, pageSize, orderBy ?? "CreatedAtUtc", desc ?? true);
+                var query = new GetSamplesQuery(pageNumber, pageSize, orderBy ?? "CreatedAtUtc", desc ?? true, searchPhrase);
                 var samples = await sender.Send(query, ct);
                 return Results.Ok(samples);
             }).RequireAuthorization(Permission.SampleRead.ToString())
@@ -96,19 +97,6 @@ public static class SamplesModule
                 var query = new GetSamplesAmountQuery();
                 var amount = await sender.Send(query, ct);
                 return Results.Ok(amount);
-            }).RequireAuthorization(Permission.SampleRead.ToString())
-            .WithTags(SwaggerSetup.SampleTag);
-
-        app.MapGet("/search", async (
-                [FromQuery] string searchPhrase,
-                [FromQuery] int pageNumber,
-                [FromQuery] int pageSize,
-                ISender sender,
-                CancellationToken ct) =>
-            {
-                var query = new SearchSampleQuery(searchPhrase, pageNumber, pageSize);
-                var samples = await sender.Send(query, ct);
-                return Results.Ok(samples);
             }).RequireAuthorization(Permission.SampleRead.ToString())
             .WithTags(SwaggerSetup.SampleTag);
 

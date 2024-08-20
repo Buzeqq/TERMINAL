@@ -8,10 +8,9 @@ describe('TerminalIconComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TerminalIconComponent]
-    })
-    .compileComponents();
-    
+      imports: [TerminalIconComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(TerminalIconComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './terminal-icon.component.html',
-  styleUrl: './terminal-icon.component.scss'
+  styleUrl: './terminal-icon.component.scss',
 })
-export class TerminalIconComponent {
-
-}
+export class TerminalIconComponent {}

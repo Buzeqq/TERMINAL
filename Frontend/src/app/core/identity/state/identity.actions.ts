@@ -1,5 +1,5 @@
-import { createActionGroup, emptyProps, props } from "@ngrx/store";
-import { Identity, LoginForm } from "../identity.model";
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
+import { Identity, LoginForm } from '../identity.model';
 
 export const IdentityActions = createActionGroup({
   source: 'Identity actions',
@@ -10,6 +10,6 @@ export const IdentityActions = createActionGroup({
     'User logged out': emptyProps(),
     'Failed to log in': emptyProps(),
     'User loaded': props<{ identity: Identity }>(),
-    'Failed to load user': emptyProps()
-  }
+    'Failed to load user': emptyProps(),
+  },
 });

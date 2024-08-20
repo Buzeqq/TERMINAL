@@ -13,7 +13,7 @@ export class TerminalError extends Error implements ProblemDetails {
   type: string;
   status: number;
   instance?: string;
-  errors: { [key: string]: string[]; }[];
+  errors: { [key: string]: string[] }[];
 
   constructor(error: ProblemDetails) {
     super();
@@ -26,7 +26,9 @@ export class TerminalError extends Error implements ProblemDetails {
 }
 
 export class NotAuthorizedError extends TerminalError {}
+
 export class ForbiddenError extends TerminalError {}
+
 export class FailedToLoginError extends TerminalError {
   constructor(error: ProblemDetails) {
     super(error);
@@ -40,6 +42,18 @@ export class FailedToLoadSamplesError extends TerminalError {
 }
 
 export class FailedToLoadSampleDetailsError extends TerminalError {
+  constructor(error: ProblemDetails) {
+    super(error);
+  }
+}
+
+export class FailedToLoadRecipesError extends TerminalError {
+  constructor(error: ProblemDetails) {
+    super(error);
+  }
+}
+
+export class FailedToLoadProjectsError extends TerminalError {
   constructor(error: ProblemDetails) {
     super(error);
   }

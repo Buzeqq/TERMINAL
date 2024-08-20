@@ -21,10 +21,11 @@ public static class ProjectsModule
                     [FromQuery] int pageSize,
                     [FromQuery] int pageNumber,
                     [FromQuery] bool? desc,
+                    [FromQuery] string? searchPhrase,
                     ISender sender,
                     CancellationToken ct
                 ) =>
-                Results.Ok(await sender.Send(new GetProjectsQuery(pageNumber, pageSize, desc ?? true), ct)))
+                Results.Ok(await sender.Send(new GetProjectsQuery(pageNumber, pageSize, desc ?? true, searchPhrase), ct)))
             .RequireAuthorization(Permission.ProjectRead.ToString())
             .WithTags(SwaggerSetup.ProjectTag);
 
@@ -69,15 +70,6 @@ public static class ProjectsModule
                 await sender.Send(command, ct);
                 return Results.Ok();
             }).RequireAuthorization(Permission.ProjectUpdate.ToString())
-            .WithTags(SwaggerSetup.ProjectTag);
-
-        app.MapGet("/search", async ([FromQuery] string searchPhrase, [FromQuery] int pageNumber,
-                [FromQuery] int pageSize, ISender sender, CancellationToken ct) =>
-            {
-                var query = new SearchProjectQuery(searchPhrase, pageNumber, pageSize);
-                var projects = await sender.Send(query, ct);
-                return Results.Ok(projects);
-            }).RequireAuthorization(Permission.ProjectRead.ToString())
             .WithTags(SwaggerSetup.ProjectTag);
 
         app.MapDelete("/{id:guid}", async (

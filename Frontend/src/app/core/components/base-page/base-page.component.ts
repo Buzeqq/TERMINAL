@@ -1,6 +1,11 @@
-import {Component, Input} from '@angular/core';
-import { MatCard, MatCardContent, MatCardFooter, MatCardHeader } from "@angular/material/card";
-import { TitleCasePipe } from "@angular/common";
+import { Component, Input } from '@angular/core';
+import {
+  MatCard,
+  MatCardContent,
+  MatCardFooter,
+  MatCardHeader,
+} from '@angular/material/card';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-base-page',
@@ -10,10 +15,10 @@ import { TitleCasePipe } from "@angular/common";
     MatCardHeader,
     MatCardContent,
     MatCardFooter,
-    TitleCasePipe
+    TitleCasePipe,
   ],
   templateUrl: './base-page.component.html',
-  styleUrl: './base-page.component.scss'
+  styleUrl: './base-page.component.scss',
 })
 export class BasePageComponent {
   @Input({ required: true }) title = '';

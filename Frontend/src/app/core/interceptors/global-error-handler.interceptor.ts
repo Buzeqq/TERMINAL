@@ -1,8 +1,8 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
-import { catchError, EMPTY } from "rxjs";
-import { ForbiddenError, NotAuthorizedError } from "../errors/errors";
-import { inject } from "@angular/core";
-import { NotificationService } from "../services/notification.service";
+import { catchError, EMPTY } from 'rxjs';
+import { ForbiddenError, NotAuthorizedError } from '../errors/errors.model';
+import { inject } from '@angular/core';
+import { NotificationService } from '../services/notification.service';
 
 export const globalErrorHandlerInterceptor: HttpInterceptorFn = (req, next) => {
   const notificationService = inject(NotificationService);
@@ -17,11 +17,13 @@ export const globalErrorHandlerInterceptor: HttpInterceptorFn = (req, next) => {
       }
 
       if (errorResponse.status === 500) {
-        notificationService.notifyError('An error occurred. Please try again later.');
+        notificationService.notifyError(
+          'An error occurred. Please try again later.',
+        );
         return EMPTY;
       }
 
       throw errorResponse;
-    })
+    }),
   );
 };

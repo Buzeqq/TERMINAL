@@ -1,7 +1,7 @@
 import { CanActivateFn, Router } from '@angular/router';
-import { Store } from "@ngrx/store";
-import { inject } from "@angular/core";
-import { selectIdentity } from "../identity/state/identity.selectors";
+import { Store } from '@ngrx/store';
+import { inject } from '@angular/core';
+import { selectIdentity } from '../identity/state/identity.selectors';
 
 export const loggedInGuard: CanActivateFn = async (_route, state) => {
   const store = inject(Store);

@@ -3,33 +3,14 @@
 
   </app-base-page-header>
   <app-base-page-content>
-    @if (projectsData$ | async; as data)
-    {
-      <mat-list>
-        @for (project of data.projects; track project.id; let first = $first) {
-          @if (first) {
-            <mat-divider></mat-divider>
-          }
-
-          <mat-list-item matRipple>
-            {{ project.name }}
-          </mat-list-item>
-
-          <mat-divider></mat-divider>
-        }
-      </mat-list>
-
-      <mat-paginator
-        [length]="data.totalCount"
-        [pageSize]="data.paginationOptions.pageSize"
-        [showFirstLastButtons]="true"
-        [pageSizeOptions]="[5, 10, 25, 100]"
-        [pageIndex]="data.paginationOptions.pageNumber"
-        (page)="onPageChange($event)"
-        aria-label="Select page"></mat-paginator>
-    } @else {
-      <mat-spinner class="center"></mat-spinner>
-    }
+    <app-data-list-component
+      (filterChanged)="onPageChange($event)"
+      [data]="projectsData$"
+      [rowTemplate]="rowTemplate">
+      <ng-template #rowTemplate let-row>
+        {{ row.name }}
+      </ng-template>
+    </app-data-list-component>
   </app-base-page-content>
   <app-base-page-footer>
 

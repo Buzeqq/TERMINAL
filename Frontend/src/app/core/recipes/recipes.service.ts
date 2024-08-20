@@ -1,25 +1,26 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { catchError, Observable } from 'rxjs';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Recipe } from './recipe.model';
 import { environment } from '../../../environments/environment';
-import { Project } from './projects.model';
-import { FailedToLoadProjectsError } from '../errors/errors.model';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { FailedToLoadRecipesError } from '../errors/errors.model';
 
-type ProjectsResponse = { projects: Project[]; totalCount: number };
+type RecipesResponse = { recipes: Recipe[]; totalCount: number };
 
 @Injectable({
   providedIn: 'root',
 })
-export class ProjectsService {
-  private readonly http = inject(HttpClient);
-  private readonly baseUrl = environment.apiUrl + '/projects';
+export class RecipesService {
+  private readonly baseUrl = environment.apiUrl + '/recipes';
 
-  getProjects(
+  constructor(private readonly http: HttpClient) {}
+
+  getRecipes(
     pageNumber: number,
     pageSize: number,
     searchPhrase?: string,
     desc?: boolean,
-  ): Observable<ProjectsResponse> {
+  ): Observable<RecipesResponse> {
     desc ??= true;
     const params: Record<string, number | string | boolean> = {
       pageNumber,
@@ -32,14 +33,14 @@ export class ProjectsService {
     }
 
     return this.http
-      .get<ProjectsResponse>(this.baseUrl + '/', {
+      .get<RecipesResponse>(this.baseUrl + '/', {
         params: {
           ...params,
         },
       })
       .pipe(
         catchError((error: HttpErrorResponse) => {
-          throw new FailedToLoadProjectsError(error.error);
+          throw new FailedToLoadRecipesError(error.error);
         }),
       );
   }
