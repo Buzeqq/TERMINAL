@@ -8,10 +8,10 @@
 
   <app-base-page-content>
     @if (!areThereAnyRecentSamples()) {
-      <p class="hint">
-        <mat-icon [inline]="true" fontIcon="info"></mat-icon>
-        Here will be displayed the latest samples, for now there are none, add a new sample to see it here.
-      </p>
+      <app-hint>
+        Here will be displayed the latest samples, for now there are none, add a
+        new sample to see it here.
+      </app-hint>
       <button mat-button color="primary">Add sample</button>
     } @else {
       <div class="dashboard__cards">
@@ -43,9 +43,7 @@
         @if (this.selectedSample$ | async) {
           <app-sample-details [sample]="sampleDetails$"></app-sample-details>
         } @else {
-          <app-hint>
-            Select a sample to see it's details.
-          </app-hint>
+          <app-hint>Select a sample to see it's details.</app-hint>
         }
       </div>
     }

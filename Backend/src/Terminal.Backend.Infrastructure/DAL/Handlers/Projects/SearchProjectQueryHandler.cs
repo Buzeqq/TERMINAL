@@ -12,13 +12,18 @@ internal sealed class SearchProjectQueryHandler(TerminalDbContext dbContext)
     private readonly DbSet<Project> _projects = dbContext.Projects;
 
     public async Task<GetProjectsDto> Handle(SearchProjectQuery request, CancellationToken cancellationToken)
-        => new()
-        {
-            Projects = await _projects
-                .AsNoTracking()
-                .Where(p => EF.Functions.ILike(p.Name, $"%{request.SearchPhrase}%"))
-                .Select(p => new GetProjectsDto.ProjectDto(p.Id, p.Name))
-                .Paginate(request.Parameters)
-                .ToListAsync(cancellationToken)
-        };
+    {
+        var projectsSearchQuery = _projects
+            .AsNoTracking()
+            .Where(p => EF.Functions.ILike(p.Name, $"%{request.SearchPhrase}%"))
+            .Select(p => new GetProjectsDto.ProjectDto(p.Id, p.Name));
+
+        var totalCount = await projectsSearchQuery.CountAsync(cancellationToken);
+
+        var projects = await projectsSearchQuery
+            .Paginate(request.Parameters)
+            .ToListAsync(cancellationToken);
+
+        return new GetProjectsDto(projects, totalCount, request.Parameters.PageNumber, request.Parameters.PageSize);
+    }
 }

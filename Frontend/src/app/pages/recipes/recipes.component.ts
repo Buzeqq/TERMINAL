@@ -4,23 +4,22 @@ import { BasePageContentComponent } from '../../core/components/base-page/base-p
 import { BasePageFooterComponent } from '../../core/components/base-page/base-page-footer/base-page-footer.component';
 import { BasePageHeaderComponent } from '../../core/components/base-page/base-page-header/base-page-header.component';
 import {
-  DataListComponentComponent,
+  DataListComponent,
   DataListStateChangedEvent,
   PaginationOptions,
-} from '../../core/components/data-list-component/data-list-component.component';
+} from '../../core/components/data-list-component/data-list.component';
 import {
   BehaviorSubject,
   catchError,
-  combineLatestWith,
   EMPTY,
   map,
   Observable,
   switchMap,
 } from 'rxjs';
-import { Project } from '../../core/projects/projects.model';
 import { RecipesService } from '../../core/recipes/recipes.service';
-import { FailedToLoadRecipesError } from '../../core/errors/errors.model';
 import { NotificationService } from '../../core/services/notification.service';
+import { Recipe } from '../../core/recipes/recipe.model';
+import { FailedToLoadProjectsError } from '../../core/errors/errors.model';
 
 @Component({
   selector: 'app-recipes',
@@ -30,56 +29,51 @@ import { NotificationService } from '../../core/services/notification.service';
     BasePageContentComponent,
     BasePageFooterComponent,
     BasePageHeaderComponent,
-    DataListComponentComponent,
+    DataListComponent,
   ],
   templateUrl: './recipes.component.html',
   styleUrl: './recipes.component.scss',
 })
 export class RecipesComponent {
-  private readonly projectsService = inject(RecipesService);
+  readonly dataListFiltersState =
+    new BehaviorSubject<DataListStateChangedEvent>({
+      paginationOptions: { pageNumber: 0, pageSize: 10, desc: false },
+    });
+  private readonly recipesService = inject(RecipesService);
   private readonly notificationService = inject(NotificationService);
-
-  private paginationOptions = new BehaviorSubject<PaginationOptions>({
-    pageNumber: 0,
-    pageSize: 10,
-    desc: true,
-  });
-  private searchPhrase = new BehaviorSubject<string | undefined>(undefined);
-
   recipesData$: Observable<{
     totalCount: number;
-    data: Project[];
+    data: Recipe[];
     paginationOptions: PaginationOptions;
-  }> = this.paginationOptions.asObservable().pipe(
-    combineLatestWith(this.searchPhrase.asObservable()),
-    map(([paginationOptions, searchPhrase]) => ({
-      paginationOptions,
-      searchPhrase,
-    })),
-    switchMap(({ paginationOptions, searchPhrase }) =>
-      this.projectsService
+  }> = this.dataListFiltersState.pipe(
+    switchMap(state =>
+      this.recipesService
         .getRecipes(
-          paginationOptions.pageNumber,
-          paginationOptions.pageSize,
-          searchPhrase,
-          paginationOptions.desc,
+          state.paginationOptions.pageNumber,
+          state.paginationOptions.pageSize,
+          state.searchPhrase,
+          state.paginationOptions.desc
         )
         .pipe(
-          map((data) => ({
-            paginationOptions: paginationOptions,
-            data: data.recipes,
-            totalCount: data.totalCount,
-          })),
-        ),
+          map(r => ({
+            recipes: r.recipes,
+            totalCount: r.totalCount,
+            state,
+          }))
+        )
     ),
-    catchError((error: FailedToLoadRecipesError) => {
+    map(r => ({
+      data: r.recipes,
+      totalCount: r.totalCount,
+      paginationOptions: {
+        pageNumber: r.state.paginationOptions.pageNumber,
+        pageSize: r.state.paginationOptions.pageSize,
+        desc: r.state.paginationOptions.desc,
+      },
+    })),
+    catchError((error: FailedToLoadProjectsError) => {
       this.notificationService.notifyError(error.message);
       return EMPTY;
-    }),
+    })
   );
-
-  onPageChange(event: DataListStateChangedEvent) {
-    this.paginationOptions.next(event.paginationOptions);
-    this.searchPhrase.next(event.searchPhrase);
-  }
 }

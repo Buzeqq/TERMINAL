@@ -20,13 +20,13 @@ export class TimeAgoPipe implements PipeTransform {
     } else if (hours < 24) {
       return `${hours}h ago`;
     } else if (days < 7) {
-      return `${days}d ago`;
+      return `${days} days ago`;
     } else if (weeks < 4) {
-      return `${weeks}w ago`;
+      return `${weeks} weeks ago`;
     } else if (months < 12) {
-      return `${months}m ago`;
+      return `${months} months ago`;
     } else {
-      return `${years}y ago`;
+      return `${years} years ago`;
     }
   }
 }

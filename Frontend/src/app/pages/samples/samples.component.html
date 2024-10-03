@@ -1,8 +1,9 @@
 <app-base-page title="Samples">
-  <app-base-page-header>
-
-  </app-base-page-header>
-
+  <app-base-page-header></app-base-page-header>
+  <app-base-page-content>
+    <app-samples-table [filterable]="true"
+                       [pageable]="true"></app-samples-table>
+  </app-base-page-content>
   <app-base-page-footer>
 
   </app-base-page-footer>

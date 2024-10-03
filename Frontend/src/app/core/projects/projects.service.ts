@@ -4,8 +4,9 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Project } from './projects.model';
 import { FailedToLoadProjectsError } from '../errors/errors.model';
+import { PaginatedResponse } from '../common.model';
 
-type ProjectsResponse = { projects: Project[]; totalCount: number };
+type ProjectsResponse = PaginatedResponse<Project>;
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,7 @@ export class ProjectsService {
     pageNumber: number,
     pageSize: number,
     searchPhrase?: string,
-    desc?: boolean,
+    desc?: boolean
   ): Observable<ProjectsResponse> {
     desc ??= true;
     const params: Record<string, number | string | boolean> = {
@@ -40,7 +41,7 @@ export class ProjectsService {
       .pipe(
         catchError((error: HttpErrorResponse) => {
           throw new FailedToLoadProjectsError(error.error);
-        }),
+        })
       );
   }
 }

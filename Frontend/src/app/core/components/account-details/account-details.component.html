@@ -1,8 +1,12 @@
 <app-base-page title="Account">
   <app-base-page-content>
     @if (userInfo()) {
-      <p>Email: <strong>{{ userInfo().email }}</strong></p>
-      <p>Roles: <strong>{{ userInfo().roles.join(', ') }}</strong></p>
+      <p>
+        Email: <strong>{{ userInfo().email }}</strong>
+      </p>
+      <p>
+        Roles: <strong>{{ userInfo().roles.join(", ") }}</strong>
+      </p>
     } @else {
       Failed to load the user...
     }

@@ -9,11 +9,13 @@ internal sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
 {
     public void Configure(EntityTypeBuilder<Project> builder)
     {
-        builder.HasKey(s => s.Id);
+        builder.HasKey(p => p.Id);
 
-        builder.Property(s => s.Id)
-            .HasConversion(i => i.Value,
-                i => new ProjectId(i));
+        builder.Property(p => p.Id)
+            .HasConversion(i => i.Value, i => new ProjectId(i));
+        builder.Property(p => p.Name)
+            .HasConversion(n => n.Name, n => new ProjectName(n));
+
         builder.HasIndex(p => p.Name).IsUnique();
         builder.HasMany(p => p.Samples)
             .WithOne(m => m.Project)

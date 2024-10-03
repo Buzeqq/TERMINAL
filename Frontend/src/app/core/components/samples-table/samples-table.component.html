@@ -1,0 +1,49 @@
+@if (filterable) {
+  <mat-form-field>
+    <mat-label>Filter</mat-label>
+    <input matInput [formControl]="filter" placeholder="Sample code, project, recipe...">
+  </mat-form-field>
+}
+
+<mat-table [dataSource]="data" matSort>
+
+  <ng-container matColumnDef="code">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Code</mat-header-cell>
+    <mat-cell *matCellDef="let sample">{{ sample.code }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="project">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Project</mat-header-cell>
+    <mat-cell *matCellDef="let sample">{{ sample.project }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="created">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Created</mat-header-cell>
+    <mat-cell *matCellDef="let sample">
+  <span [matTooltip]="(sample.createdAtUtc | date:'medium') ?? ''">
+    {{ sample.createdAtUtc | timeAgo }}
+  </span>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row
+    *matHeaderRowDef="displayedColumns"
+  ></mat-header-row>
+
+  @if (observable | async) {
+    <mat-row
+      (click)="sampleSelected.emit(sample)"
+      *matRowDef="let sample; columns: displayedColumns"
+      [class.recent-samples__row--is-clicked]="false"
+      mat-ripple
+    ></mat-row>
+  }
+</mat-table>
+
+@if (pageable) {
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    [pageSize]="10"
+    [length]="resultsLength"
+    aria-label="Select page of samples"></mat-paginator>
+}

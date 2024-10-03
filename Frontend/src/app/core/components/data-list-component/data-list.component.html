@@ -1,16 +1,17 @@
 @if (dataSource$ | async; as data) {
-
-  @if (data.totalCount > 0) {
-    <form [formGroup]="formGroup">
-      <mat-form-field>
-        <mat-label>Search</mat-label>
-        <input formControlName="searchPhrase"
-               matInput
-               placeholder="Start typing to search..."
-               type="text">
-      </mat-form-field>
-    </form>
-  }
+  <form [formGroup]="formGroup">
+    <mat-form-field>
+      <mat-label>Search</mat-label>
+      <input
+        #searchPhrase
+        formControlName="searchPhrase"
+        matInput
+        placeholder="Start typing to search..."
+        (input)="onFilterChange(searchPhrase.value)"
+        type="text"
+      />
+    </mat-form-field>
+  </form>
 
   <mat-list>
     @for (row of data.data; track row.id; let first = $first) {
@@ -19,7 +20,9 @@
       }
 
       <mat-list-item matRipple>
-        <ng-container *ngTemplateOutlet="rowTemplate; context: { $implicit: row }"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="rowTemplate; context: { row }"
+        ></ng-container>
       </mat-list-item>
 
       <mat-divider></mat-divider>
@@ -36,8 +39,11 @@
       [pageSizeOptions]="[5, 10, 25, 100]"
       [pageIndex]="data.paginationOptions.pageNumber"
       (page)="onPageChange($event)"
-      aria-label="Select page"></mat-paginator>
+      aria-label="Select page"
+    ></mat-paginator>
   }
-} @else {
+}
+
+@if (isLoading()) {
   <mat-spinner class="center"></mat-spinner>
 }

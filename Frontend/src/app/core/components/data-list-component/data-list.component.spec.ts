@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DataListComponentComponent } from './data-list-component.component';
+import { DataListComponent } from './data-list.component';
 
 describe('DataListComponentComponent', () => {
-  let component: DataListComponentComponent;
-  let fixture: ComponentFixture<DataListComponentComponent>;
+  let component: DataListComponent<any>;
+  let fixture: ComponentFixture<DataListComponent<any>>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DataListComponentComponent],
+      imports: [DataListComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DataListComponentComponent);
+    fixture = TestBed.createComponent(DataListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

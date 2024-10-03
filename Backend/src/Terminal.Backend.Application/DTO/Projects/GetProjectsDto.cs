@@ -1,9 +1,15 @@
+using Terminal.Backend.Application.Abstractions;
+
 namespace Terminal.Backend.Application.DTO.Projects;
 
-public class GetProjectsDto
+public record GetProjectsDto(
+    IEnumerable<GetProjectsDto.ProjectDto> Projects,
+    int TotalCount,
+    int PageIndex,
+    int PageSize) : PaginatedResult<GetProjectsDto.ProjectDto>(Projects,
+    TotalCount,
+    PageIndex,
+    PageSize)
 {
-    public IEnumerable<ProjectDto> Projects { get; set; } = [];
-    public int TotalCount { get; set; }
-
     public record ProjectDto(Guid Id, string Name);
 }

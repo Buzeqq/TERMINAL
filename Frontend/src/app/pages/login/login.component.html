@@ -9,7 +9,13 @@
     <form [formGroup]="loginForm" (submit)="onSubmit()">
       <mat-form-field>
         <mat-label>Email</mat-label>
-        <input formControlName="email" matInput type="email" autocomplete="username" required>
+        <input
+          formControlName="email"
+          matInput
+          type="email"
+          autocomplete="username"
+          required
+        />
         @if (loginForm.controls.email.invalid) {
           <mat-error>Invalid email!</mat-error>
         }
@@ -17,7 +23,13 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>Password</mat-label>
-        <input formControlName="password" matInput type="password" autocomplete="current-password" required>
+        <input
+          formControlName="password"
+          matInput
+          type="password"
+          autocomplete="current-password"
+          required
+        />
         <mat-icon matIconSuffix>password</mat-icon>
       </mat-form-field>
       <mat-checkbox formControlName="rememberMe">Remember me</mat-checkbox>

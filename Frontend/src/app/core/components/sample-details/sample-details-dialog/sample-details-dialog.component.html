@@ -1,10 +1,12 @@
 <mat-dialog-content>
   <article class="sample-details">
-    <header class="sample-details__header">Sample {{ data.sample.code }}</header>
+    <header class="sample-details__header">
+      Sample {{ data.sample.code }}
+    </header>
 
     <section>
       <span class="sample-details__label">Created: </span>
-      {{ data.sample.createdAtUtc | date:'medium' }}
+      {{ data.sample.createdAtUtc | date: "medium" }}
     </section>
 
     <section>
@@ -13,9 +15,7 @@
         @for (tag of data.sample.tags; track tag.id) {
           <mat-chip>{{ tag.name }}</mat-chip>
         } @empty {
-          <app-hint>
-            Sample has no tags.
-          </app-hint>
+          <app-hint> Sample has no tags.</app-hint>
         }
       </mat-chip-set>
     </section>
@@ -39,7 +39,8 @@
             <mat-list class="sample-details__step-list">
               @for (value of step.parameters; track value.id) {
                 <mat-list-item>
-                  <span class="sample-details__label">{{ value.name }}:</span> {{ value.value }}{{ value.unit }}
+                  <span class="sample-details__label">{{ value.name }}:</span>
+                  {{ value.value }}{{ value.unit }}
                 </mat-list-item>
               }
             </mat-list>

@@ -27,9 +27,11 @@ internal sealed class GetProjectsQueryHandler(TerminalDbContext dbContext)
         }
 
         var totalCount = await query.CountAsync(ct);
+
         return (await query
             .Paginate(request.Parameters)
             .OrderBy(request.OrderingParameters)
-            .ToListAsync(ct)).AsGetProjectsDto(totalCount);
+            .ToListAsync(ct))
+            .AsGetProjectsDto(totalCount, request.Parameters.PageNumber, request.Parameters.PageSize);
     }
 }

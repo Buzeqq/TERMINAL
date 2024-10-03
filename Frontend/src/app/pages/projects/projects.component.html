@@ -1,18 +1,15 @@
 <app-base-page title="Projects">
-  <app-base-page-header>
-
-  </app-base-page-header>
+  <app-base-page-header></app-base-page-header>
   <app-base-page-content>
     <app-data-list-component
-      (filterChanged)="onPageChange($event)"
+      (filterChanged)="dataListFiltersState.next($event)"
       [data]="projectsData$"
-      [rowTemplate]="rowTemplate">
-      <ng-template #rowTemplate let-row>
+      [rowTemplate]="rowTemplate"
+    >
+      <ng-template #rowTemplate let-row="row">
         {{ row.name }}
       </ng-template>
     </app-data-list-component>
   </app-base-page-content>
-  <app-base-page-footer>
-
-  </app-base-page-footer>
+  <app-base-page-footer></app-base-page-footer>
 </app-base-page>

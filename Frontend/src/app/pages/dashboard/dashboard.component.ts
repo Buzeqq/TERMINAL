@@ -32,6 +32,7 @@ import { BasePageFooterComponent } from '../../core/components/base-page/base-pa
 import { SampleDetailsComponent } from '../../core/components/sample-details/sample-details.component';
 import { AsyncPipe } from '@angular/common';
 import { HintComponent } from '../../core/components/hint/hint.component';
+import { SamplesTableComponent } from '../../core/components/samples-table/samples-table.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -63,6 +64,7 @@ import { HintComponent } from '../../core/components/hint/hint.component';
     SampleDetailsComponent,
     AsyncPipe,
     HintComponent,
+    SamplesTableComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -70,18 +72,18 @@ import { HintComponent } from '../../core/components/hint/hint.component';
 export class DashboardComponent implements OnInit {
   readonly displayedColumns = ['code', 'project', 'created'];
   readonly selectedSample$ = new Subject<Sample>();
+  readonly areThereAnyRecentSamples: Signal<boolean> = computed(
+    () => this.recentSamples().length > 0
+  );
   private readonly dashboardStore = inject(DashboardStore);
   readonly recentSamples = this.dashboardStore.selectSignal(
-    (state) => state.recentSamples,
-  );
-  readonly areThereAnyRecentSamples: Signal<boolean> = computed(
-    () => this.recentSamples().length > 0,
+    state => state.recentSamples
   );
   readonly isLoading = this.dashboardStore.selectSignal(
-    (state) => state.isLoading,
+    state => state.isLoading
   );
   readonly sampleDetails$ = this.dashboardStore.select(
-    (state) => state.selectedSample,
+    state => state.selectedSample
   );
 
   ngOnInit() {

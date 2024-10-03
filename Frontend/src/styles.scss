@@ -1,39 +1,43 @@
-@use '@angular/material' as mat;
-@use '../src/styles/componentes/_navigation-rail-theme.scss' as nav-rail-button;
-@use '../src/styles/componentes/_terminal-icon-theme.scss' as terminal-icon;
-@use '../src/styles/componentes/_login-theme.scss' as login;
-@use '../src/styles/mixins/rwd.scss' as rwd;
+@use "@angular/material" as mat;
+@use "../src/styles/componentes/_navigation-rail-theme.scss" as nav-rail-button;
+@use "../src/styles/componentes/_terminal-icon-theme.scss" as terminal-icon;
+@use "../src/styles/componentes/_login-theme.scss" as login;
+@use "../src/styles/mixins/rwd.scss" as rwd;
 
 @include mat.core();
 
-$terminal-dark-theme: mat.define-theme((
-  color: (
-    theme-type: dark,
-    primary: mat.$cyan-palette,
-    tertiary: mat.$orange-palette
-  ),
-  typography: (
-    brand-family: 'Roboto Mono',
-    bold-weight: 900
-  ),
-  density: (
-    scale: -1
-  )
-));
-$terminal-light-theme: mat.define-theme((
-  color: (
-    theme-type: light,
-    primary: mat.$azure-palette,
-    tertiary: mat.$blue-palette
-  ),
-  typography: (
-    brand-family: 'Roboto Mono',
-    bold-weight: 900
-  ),
-  density: (
-    scale: -1
-  )
-));
+$terminal-dark-theme: mat.define-theme(
+    (
+      color: (
+        theme-type: dark,
+        primary: mat.$cyan-palette,
+        tertiary: mat.$orange-palette,
+      ),
+      typography: (
+        brand-family: "Roboto Mono",
+        bold-weight: 900,
+      ),
+      density: (
+        scale: -1,
+      ),
+    )
+);
+$terminal-light-theme: mat.define-theme(
+    (
+      color: (
+        theme-type: light,
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: (
+        brand-family: "Roboto Mono",
+        bold-weight: 900,
+      ),
+      density: (
+        scale: -1,
+      ),
+    )
+);
 
 html {
   @include mat.all-component-themes($terminal-dark-theme);
@@ -50,9 +54,10 @@ html {
 }
 
 /* You can add global styles to this file, and also import other style files */
-html, body {
+html,
+body {
   height: 100%;
-  color-scheme: light dark
+  color-scheme: light dark;
 }
 
 body {

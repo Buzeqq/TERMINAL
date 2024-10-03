@@ -2,7 +2,7 @@ namespace Terminal.Backend.Application.Common.QueryParameters;
 
 public sealed class PagingParameters
 {
-    private const int MaxPageSize = 50;
+    private const int MaxPageSize = 100;
     private int _pageSize = 10;
 
     public int PageNumber { get; set; } = 1;

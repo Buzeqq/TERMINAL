@@ -11,6 +11,7 @@ import {
   FailedToLoadSampleDetailsError,
   FailedToLoadSamplesError,
 } from '../errors/errors.model';
+import { SortDirection } from '@angular/material/sort';
 
 type SamplesResponse = { samples: Sample[]; totalCount: number };
 
@@ -27,19 +28,19 @@ export class SamplesService {
         params: new HttpParams({ fromObject: { length } }),
       })
       .pipe(
-        map((r) => r.recentSamples),
-        map((r) =>
-          r.map((sample) => ({
+        map(r => r.recentSamples),
+        map(r =>
+          r.map(sample => ({
             ...sample,
             createdAtUtc: new Date(sample.createdAtUtc),
-          })),
+          }))
         ),
-        map((r) =>
-          r.sort((a, b) => b.createdAtUtc.getTime() - a.createdAtUtc.getTime()),
+        map(r =>
+          r.sort((a, b) => b.createdAtUtc.getTime() - a.createdAtUtc.getTime())
         ),
         catchError((err: HttpErrorResponse) => {
           throw new FailedToLoadSamplesError(err.error);
-        }),
+        })
       );
   }
 
@@ -47,27 +48,26 @@ export class SamplesService {
     return this.http
       .get<SampleDetails>(environment.apiUrl + `/samples/${id}`)
       .pipe(
-        map((sample) => ({
+        map(sample => ({
           ...sample,
           createdAtUtc: new Date(sample.createdAtUtc),
         })),
         catchError((err: HttpErrorResponse) => {
           throw new FailedToLoadSampleDetailsError(err.error);
-        }),
+        })
       );
   }
 
   getSamples(
     pageNumber: number,
     pageSize: number,
-    searchPhrase?: string,
-    desc?: boolean,
+    sortDirection: SortDirection,
+    searchPhrase?: string
   ): Observable<SamplesResponse> {
-    desc ??= true;
     const params: Record<string, number | string | boolean> = {
       pageNumber,
       pageSize,
-      desc,
+      desc: sortDirection === 'desc',
     };
 
     if (searchPhrase) {
@@ -81,9 +81,15 @@ export class SamplesService {
         },
       })
       .pipe(
+        map(r => {
+          r.samples.map(s => {
+            s.createdAtUtc = new Date(s.createdAtUtc);
+          });
+          return r;
+        }),
         catchError((error: HttpErrorResponse) => {
           throw new FailedToLoadSamplesError(error.error);
-        }),
+        })
       );
   }
 }
