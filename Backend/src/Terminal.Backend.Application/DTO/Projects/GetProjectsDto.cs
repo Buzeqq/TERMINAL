@@ -7,8 +7,7 @@ namespace Terminal.Backend.Application.DTO.Projects;
 public record GetProjectsDto(
     IEnumerable<GetProjectsDto.ProjectDto> Projects,
     int TotalCount,
-    PagingParameters PagingParameters) : PaginatedResult<GetProjectsDto.ProjectDto>(Projects,
-    TotalCount,
+    PagingParameters PagingParameters) : PaginatedResult(TotalCount,
     PagingParameters)
 {
     public record ProjectDto(Guid Id, string Name);

@@ -7,7 +7,7 @@ namespace Terminal.Backend.Application.DTO.Recipes;
 public record GetRecipesDto(
     IEnumerable<GetRecipesDto.RecipeDto> Recipes,
     int TotalCount,
-    PagingParameters PagingParameters) : PaginatedResult<GetRecipesDto.RecipeDto>(Recipes, TotalCount, PagingParameters)
+    PagingParameters PagingParameters) : PaginatedResult(TotalCount, PagingParameters)
 {
     public record RecipeDto(Guid Id, string Name);
 

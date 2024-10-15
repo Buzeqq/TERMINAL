@@ -72,7 +72,7 @@ public static class SamplesModule
                 [FromQuery] int pageIndex,
                 [FromQuery] int pageSize,
                 [FromQuery] string? orderBy,
-                [FromQuery] OrderDirection? direction,
+                [FromQuery] OrderDirection? orderDirection,
                 [FromQuery] string? searchPhrase,
                 ISender sender,
                 CancellationToken cancellationToken) =>
@@ -80,7 +80,7 @@ public static class SamplesModule
                 var query = new GetSamplesQuery(
                     searchPhrase,
                     new PagingParameters(pageIndex, pageSize),
-                    new OrderingParameters(orderBy ?? "CreatedAtUtc", OrderDirection.Ascending));
+                    new OrderingParameters(orderBy ?? "CreatedAtUtc", orderDirection));
 
                 var samples = await sender.Send(query, cancellationToken);
 

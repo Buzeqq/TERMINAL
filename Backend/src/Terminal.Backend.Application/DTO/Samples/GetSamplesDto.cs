@@ -4,7 +4,7 @@ using Terminal.Backend.Application.Common.QueryParameters;
 namespace Terminal.Backend.Application.DTO.Samples;
 
 public record GetSamplesDto(IEnumerable<GetSamplesDto.SampleDto> Samples, int TotalCount, PagingParameters PagingParameters)
-    : PaginatedResult<GetSamplesDto.SampleDto>(Samples, TotalCount, PagingParameters)
+    : PaginatedResult(TotalCount, PagingParameters)
 {
     public sealed record SampleDto(Guid Id, string Code, string ProjectName, string? RecipeName, string CreatedAtUtc, string Comment);
 }
