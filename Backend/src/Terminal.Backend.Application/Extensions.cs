@@ -2,8 +2,11 @@ using System.Reflection;
 using Mapster;
 using Microsoft.Extensions.DependencyInjection;
 using Terminal.Backend.Application.Abstractions.Behaviors;
+using Terminal.Backend.Application.Common;
 using Terminal.Backend.Application.Common.Emails;
 using Terminal.Backend.Application.Common.Services;
+using Terminal.Backend.Application.DTO.ParameterValues;
+using Terminal.Backend.Core.Abstractions;
 
 namespace Terminal.Backend.Application;
 
@@ -22,6 +25,7 @@ public static class Extensions
         typeAdapterConfig.Scan(Assembly.GetExecutingAssembly());
         services.AddScoped<IConvertDtoService, ConvertDtoService>();
         services.AddScoped<IEmailConfirmationEmailSender, EmailConfirmationEmailSender>();
+        services.AddTransient<IParameterValueVisitor<GetSampleBaseParameterValueDto>, ParameterValueToDtoVisitor>();
 
         return services;
     }

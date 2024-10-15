@@ -1,15 +1,14 @@
-using System.Text.Json.Serialization;
 using Terminal.Backend.Application.DTO.Samples;
 using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Samples.Create;
 
-public sealed record CreateSampleCommand(
-    [property: JsonIgnore] SampleId SampleId,
-    Guid ProjectId,
-    Guid? RecipeId,
+public record CreateSampleCommand(
+    SampleId SampleId,
+    ProjectId ProjectId,
+    RecipeId? RecipeId,
     IEnumerable<CreateSampleStepDto> Steps,
-    IEnumerable<Guid> TagIds,
-    string Comment,
+    IEnumerable<TagId> TagIds,
+    Comment Comment,
     bool SaveAsRecipe,
-    string? RecipeName = null) : IRequest;
+    RecipeName? RecipeName = null) : IRequest;

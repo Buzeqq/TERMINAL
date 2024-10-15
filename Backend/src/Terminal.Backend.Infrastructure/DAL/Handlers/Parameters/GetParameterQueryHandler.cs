@@ -8,11 +8,13 @@ namespace Terminal.Backend.Infrastructure.DAL.Handlers.Parameters;
 internal sealed class GetParameterQueryHandler(TerminalDbContext dbContext)
     : IRequestHandler<GetParameterQuery, Parameter?>
 {
-    private readonly DbSet<Parameter> _parameters = dbContext.Parameters;
 
-    public Task<Parameter?> Handle(GetParameterQuery query, CancellationToken ct)
+    public Task<Parameter?> Handle(GetParameterQuery query, CancellationToken cancellationToken)
     {
         var id = query.Id;
-        return _parameters.AsNoTracking().SingleOrDefaultAsync(p => p.Id == id, ct);
+        return dbContext.Parameters
+            .TagWith("Get parameter by id")
+            .AsNoTracking()
+            .SingleOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
 }

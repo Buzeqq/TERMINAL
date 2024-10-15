@@ -20,13 +20,13 @@ internal sealed class UpdateRecipeCommandHandler(
             throw new RecipeNotFoundException();
         }
 
-        if (recipe.RecipeName != name && !await recipeRepository.IsNameUniqueAsync(name, cancellationToken))
+        if (recipe.Name != name && !await recipeRepository.IsNameUniqueAsync(name, cancellationToken))
         {
             throw new InvalidRecipeNameException(name);
         }
 
         var steps = (await convertDtoService.ConvertAsync(stepsDto, cancellationToken))
-            .Select(s => new RecipeStep(s.Id, s.Comment, s.Parameters, recipe));
+            .Select(s => new RecipeStep(s.Id, s.Comment, s.Values, recipe));
         recipe.Update(name, steps);
 
         await recipeRepository.UpdateAsync(recipe, cancellationToken);

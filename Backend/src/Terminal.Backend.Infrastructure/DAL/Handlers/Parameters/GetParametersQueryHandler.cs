@@ -11,12 +11,14 @@ internal sealed class GetParametersQueryHandler(TerminalDbContext dbContext)
 {
     private readonly DbSet<Parameter> _parameters = dbContext.Parameters;
 
-    public async Task<GetParametersDto> Handle(GetParametersQuery request, CancellationToken ct)
-        => (await _parameters
-                .AsNoTracking()
-                .Include(p => p.Parent)
-                .Where(p => p.IsActive)
-                .OrderBy(p => p.Order)
-                .ToListAsync(ct))
-            .AsGetParametersDto();
+    public async Task<GetParametersDto> Handle(GetParametersQuery request, CancellationToken cancellationToken)
+    {
+        var parameters = await _parameters
+            .TagWith("Get parameters")
+            .AsNoTracking()
+            .OrderBy(p => p.Order)
+            .ToListAsync(cancellationToken);
+
+        return GetParametersDto.Create(parameters);
+    }
 }

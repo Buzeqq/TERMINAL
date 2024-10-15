@@ -100,483 +100,483 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Users
                             Id = 1,
                             ClaimType = "UserRead",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 2,
                             ClaimType = "UserWrite",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 3,
                             ClaimType = "UserUpdate",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 4,
                             ClaimType = "UserDelete",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 5,
                             ClaimType = "ProjectRead",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 6,
                             ClaimType = "ProjectWrite",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 7,
                             ClaimType = "ProjectUpdate",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 8,
                             ClaimType = "ProjectDelete",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 9,
                             ClaimType = "ParameterRead",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 10,
                             ClaimType = "ParameterWrite",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 11,
                             ClaimType = "ParameterUpdate",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 12,
                             ClaimType = "ParameterDelete",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 13,
                             ClaimType = "ProjectRead",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 14,
                             ClaimType = "ProjectWrite",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 15,
                             ClaimType = "ProjectUpdate",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 16,
                             ClaimType = "ProjectDelete",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 17,
                             ClaimType = "TagRead",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 18,
                             ClaimType = "TagWrite",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 19,
                             ClaimType = "TagUpdate",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 20,
                             ClaimType = "TagDelete",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 21,
                             ClaimType = "RecipeRead",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 22,
                             ClaimType = "RecipeWrite",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 23,
                             ClaimType = "RecipeUpdate",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 24,
                             ClaimType = "RecipeDelete",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 25,
                             ClaimType = "SampleRead",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 26,
                             ClaimType = "SampleWrite",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 27,
                             ClaimType = "SampleUpdate",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 28,
                             ClaimType = "SampleDelete",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 29,
                             ClaimType = "StepRead",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 30,
                             ClaimType = "StepWrite",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 31,
                             ClaimType = "StepUpdate",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 32,
                             ClaimType = "StepDelete",
                             ClaimValue = "true",
-                            RoleId = "be624ab5-9965-4482-aa73-6615d220580d"
+                            RoleId = "f431f892-340a-491a-93a7-9822fd9aefef"
                         },
                         new
                         {
                             Id = 33,
                             ClaimType = "UserRead",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 34,
                             ClaimType = "ProjectRead",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 35,
                             ClaimType = "ProjectRead",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 36,
                             ClaimType = "ProjectRead",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 37,
                             ClaimType = "ProjectWrite",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 38,
                             ClaimType = "ProjectUpdate",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 39,
                             ClaimType = "ProjectDelete",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 40,
                             ClaimType = "RecipeRead",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 41,
                             ClaimType = "RecipeUpdate",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 42,
                             ClaimType = "RecipeUpdate",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 43,
                             ClaimType = "RecipeDelete",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 44,
                             ClaimType = "TagRead",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 45,
                             ClaimType = "TagWrite",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 46,
                             ClaimType = "TagUpdate",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 47,
                             ClaimType = "TagDelete",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 48,
                             ClaimType = "SampleRead",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 49,
                             ClaimType = "SampleWrite",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 50,
                             ClaimType = "SampleUpdate",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 51,
                             ClaimType = "SampleDelete",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 52,
                             ClaimType = "ParameterRead",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 53,
                             ClaimType = "ParameterWrite",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 54,
                             ClaimType = "ParameterUpdate",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 55,
                             ClaimType = "ParameterDelete",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 56,
                             ClaimType = "StepRead",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 57,
                             ClaimType = "StepWrite",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 58,
                             ClaimType = "StepUpdate",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 59,
                             ClaimType = "StepDelete",
                             ClaimValue = "true",
-                            RoleId = "6efd4890-0510-44e9-8131-fdcf16a854c8"
+                            RoleId = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf"
                         },
                         new
                         {
                             Id = 60,
                             ClaimType = "ProjectRead",
                             ClaimValue = "true",
-                            RoleId = "a5d79af6-8d12-4898-9097-2229c7e72434"
+                            RoleId = "fe5ab6b3-0d7f-4eef-b7cb-c17b05697641"
                         },
                         new
                         {
                             Id = 61,
                             ClaimType = "RecipeRead",
                             ClaimValue = "true",
-                            RoleId = "a5d79af6-8d12-4898-9097-2229c7e72434"
+                            RoleId = "fe5ab6b3-0d7f-4eef-b7cb-c17b05697641"
                         },
                         new
                         {
                             Id = 62,
                             ClaimType = "RecipeWrite",
                             ClaimValue = "true",
-                            RoleId = "a5d79af6-8d12-4898-9097-2229c7e72434"
+                            RoleId = "fe5ab6b3-0d7f-4eef-b7cb-c17b05697641"
                         },
                         new
                         {
                             Id = 63,
                             ClaimType = "TagRead",
                             ClaimValue = "true",
-                            RoleId = "a5d79af6-8d12-4898-9097-2229c7e72434"
+                            RoleId = "fe5ab6b3-0d7f-4eef-b7cb-c17b05697641"
                         },
                         new
                         {
                             Id = 64,
                             ClaimType = "TagWrite",
                             ClaimValue = "true",
-                            RoleId = "a5d79af6-8d12-4898-9097-2229c7e72434"
+                            RoleId = "fe5ab6b3-0d7f-4eef-b7cb-c17b05697641"
                         },
                         new
                         {
                             Id = 65,
                             ClaimType = "SampleRead",
                             ClaimValue = "true",
-                            RoleId = "a5d79af6-8d12-4898-9097-2229c7e72434"
+                            RoleId = "fe5ab6b3-0d7f-4eef-b7cb-c17b05697641"
                         },
                         new
                         {
                             Id = 66,
                             ClaimType = "SampleWrite",
                             ClaimValue = "true",
-                            RoleId = "a5d79af6-8d12-4898-9097-2229c7e72434"
+                            RoleId = "fe5ab6b3-0d7f-4eef-b7cb-c17b05697641"
                         },
                         new
                         {
                             Id = 67,
                             ClaimType = "ParameterRead",
                             ClaimValue = "true",
-                            RoleId = "a5d79af6-8d12-4898-9097-2229c7e72434"
+                            RoleId = "fe5ab6b3-0d7f-4eef-b7cb-c17b05697641"
                         },
                         new
                         {
                             Id = 68,
                             ClaimType = "StepRead",
                             ClaimValue = "true",
-                            RoleId = "a5d79af6-8d12-4898-9097-2229c7e72434"
+                            RoleId = "fe5ab6b3-0d7f-4eef-b7cb-c17b05697641"
                         },
                         new
                         {
                             Id = 69,
                             ClaimType = "StepWrite",
                             ClaimValue = "true",
-                            RoleId = "a5d79af6-8d12-4898-9097-2229c7e72434"
+                            RoleId = "fe5ab6b3-0d7f-4eef-b7cb-c17b05697641"
                         });
                 });
 
@@ -773,25 +773,25 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Users
                     b.HasData(
                         new
                         {
-                            Id = "be624ab5-9965-4482-aa73-6615d220580d",
+                            Id = "f431f892-340a-491a-93a7-9822fd9aefef",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "6efd4890-0510-44e9-8131-fdcf16a854c8",
+                            Id = "f1c13625-7212-4e69-bdd5-daba8dd1c4bf",
                             Name = "Moderator",
                             NormalizedName = "MODERATOR"
                         },
                         new
                         {
-                            Id = "a5d79af6-8d12-4898-9097-2229c7e72434",
+                            Id = "fe5ab6b3-0d7f-4eef-b7cb-c17b05697641",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "85ef61ce-8039-4d5e-80a0-845e2d8d194c",
+                            Id = "e4804bf0-f521-42ab-b728-9fced1829468",
                             Name = "Guest",
                             NormalizedName = "GUEST"
                         });

@@ -1,9 +1,10 @@
+using Terminal.Backend.Application.Abstractions;
+using Terminal.Backend.Application.Common.QueryParameters;
+
 namespace Terminal.Backend.Application.DTO.Samples;
 
-public class GetSamplesDto
+public record GetSamplesDto(IEnumerable<GetSamplesDto.SampleDto> Samples, int TotalCount, PagingParameters PagingParameters)
+    : PaginatedResult<GetSamplesDto.SampleDto>(Samples, TotalCount, PagingParameters)
 {
-    public IEnumerable<SampleDto> Samples { get; set; } = [];
-    public int TotalCount { get; set; }
-
-    public sealed record SampleDto(Guid Id, string Code, string Project, string CreatedAtUtc, string Comment);
+    public sealed record SampleDto(Guid Id, string Code, string ProjectName, string? RecipeName, string CreatedAtUtc, string Comment);
 }

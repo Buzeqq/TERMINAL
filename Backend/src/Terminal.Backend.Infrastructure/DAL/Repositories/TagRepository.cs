@@ -9,23 +9,23 @@ internal sealed class TagRepository(TerminalDbContext dbContext) : ITagRepositor
 {
     private readonly DbSet<Tag> _tags = dbContext.Tags;
 
-    public async Task AddAsync(Tag tag, CancellationToken ct)
-        => await _tags.AddAsync(tag, ct);
+    public async Task AddAsync(Tag tag, CancellationToken cancellationToken)
+        => await _tags.AddAsync(tag, cancellationToken);
 
-    public Task<Tag?> GetAsync(TagId id, CancellationToken ct)
+    public Task<Tag?> GetAsync(TagId id, CancellationToken cancellationToken)
         =>
-            _tags.SingleOrDefaultAsync(t => t.Id == id, ct);
+            _tags.SingleOrDefaultAsync(t => t.Id == id, cancellationToken);
 
-    public Task UpdateAsync(Tag tag, CancellationToken ct)
+    public Task UpdateAsync(Tag tag, CancellationToken cancellationToken)
     {
         _tags.Update(tag);
         return Task.CompletedTask;
     }
 
-    public async Task<IEnumerable<Tag>> GetManyAsync(IEnumerable<TagId> tagIds, CancellationToken ct) 
+    public async Task<IEnumerable<Tag>> GetManyAsync(IEnumerable<TagId> tagIds, CancellationToken cancellationToken)
         => await _tags
             .Where(t => tagIds.Contains(t.Id))
-            .ToListAsync(ct);
+            .ToListAsync(cancellationToken);
 
     public Task DeleteAsync(Tag tag, CancellationToken cancellationToken)
     {
@@ -33,7 +33,7 @@ internal sealed class TagRepository(TerminalDbContext dbContext) : ITagRepositor
         return Task.CompletedTask;
     }
 
-    public Task<bool> IsNameUniqueAsync(TagName name, CancellationToken cancellationToken) 
+    public Task<bool> IsNameUniqueAsync(TagName name, CancellationToken cancellationToken)
         =>
             _tags.AllAsync(t => t.Name != name, cancellationToken);
 }

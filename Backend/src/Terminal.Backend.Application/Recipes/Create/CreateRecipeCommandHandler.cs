@@ -17,7 +17,7 @@ internal sealed class CreateRecipeCommandHandler(
         var recipe = new Recipe(id, name);
         foreach (var step in await convertDtoService.ConvertAsync(steps, cancellationToken))
         {
-            recipe.Steps.Add(new RecipeStep(StepId.Create(), step.Comment, step.Parameters, recipe));
+            recipe.Steps.Add(new RecipeStep(StepId.Create(), step.Comment, step.Values, recipe));
         }
 
         await recipeRepository.AddAsync(recipe, cancellationToken);

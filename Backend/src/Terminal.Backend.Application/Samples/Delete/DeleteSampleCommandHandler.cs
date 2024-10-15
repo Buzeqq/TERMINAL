@@ -9,12 +9,11 @@ internal sealed class DeleteSampleCommandHandler(ISampleRepository sampleReposit
     public async Task Handle(DeleteSampleCommand request, CancellationToken cancellationToken)
     {
         var id = request.Id;
-        var sample = await sampleRepository.GetAsync(id, cancellationToken);
-        if (sample is null)
+        if (await sampleRepository.ExistsAsync(id, cancellationToken))
         {
             throw new SampleNotFoundException();
         }
 
-        await sampleRepository.DeleteAsync(sample, cancellationToken);
+        await sampleRepository.DeleteAsync(id, cancellationToken);
     }
 }

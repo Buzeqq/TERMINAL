@@ -6,16 +6,16 @@ namespace Terminal.Backend.Application.Tags.ChangeStatus;
 internal sealed class ChangeTagStatusCommandHandler(ITagRepository tagRepository)
     : IRequestHandler<ChangeTagStatusCommand>
 {
-    public async Task Handle(ChangeTagStatusCommand command, CancellationToken ct)
+    public async Task Handle(ChangeTagStatusCommand command, CancellationToken cancellationToken)
     {
         var (id, status) = command;
-        var tag = await tagRepository.GetAsync(id, ct);
+        var tag = await tagRepository.GetAsync(id, cancellationToken);
         if (tag is null)
         {
             throw new TagNotFoundException();
         }
 
         tag.ChangeStatus(status);
-        await tagRepository.UpdateAsync(tag, ct);
+        await tagRepository.UpdateAsync(tag, cancellationToken);
     }
 }

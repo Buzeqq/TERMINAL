@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
-using Terminal.Backend.Application.Identity.Login;
+using Terminal.Backend.Api.Identity.Requests;
 
 namespace Terminal.Backend.Integration.Identity;
 

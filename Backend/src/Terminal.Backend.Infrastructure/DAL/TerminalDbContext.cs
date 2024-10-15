@@ -22,10 +22,6 @@ internal sealed class TerminalDbContext(DbContextOptions<TerminalDbContext> opti
     public DbSet<DecimalParameterValue> DecimalParameterValues { get; set; }
     public DbSet<TextParameterValue> TextParameterValues { get; set; }
     public DbSet<Tag> Tags { get; set; }
-    // public DbSet<User> Users { get; set; }
-    // public DbSet<Invitation> Invitations { get; set; }
-    // public DbSet<Role> Roles { get; set; }
-    // public DbSet<Permission> Permissions { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

@@ -1,10 +1,10 @@
 namespace Terminal.Backend.Application.Identity.Login;
 
 public sealed record LoginCommand(
-    string Email, 
+    string Email,
     string Password,
     string? TwoFactorCode,
-    string? TwoFactorRecoveryCode, 
+    string? TwoFactorRecoveryCode,
     bool UseCookies,
-    bool UseSessionCookies) 
+    bool UseSessionCookies)
     : IRequest;

@@ -3,6 +3,7 @@ using Terminal.Backend.Application.Common;
 using Terminal.Backend.Application.Common.Emails;
 using Terminal.Backend.Application.Exceptions;
 using Terminal.Backend.Application.Identity.ResendConfirmationEmail;
+using Terminal.Backend.Core.ValueObjects;
 using Terminal.Backend.Unit.Identity.Common;
 
 namespace Terminal.Backend.Unit.Identity.ResendConfirmationEmail;
@@ -25,7 +26,7 @@ public class ResendConfirmationEmailCommandHandlerTest
     {
         // Arrange
         var command = new ResendConfirmationEmailCommand("test@test.com");
-        var user = UserFactory.Create();
+        var user = UserFactory.Create(UserId.Create());
         _userManagerMock.FindByEmailAsync(command.Email).Returns(user);
 
         // Act

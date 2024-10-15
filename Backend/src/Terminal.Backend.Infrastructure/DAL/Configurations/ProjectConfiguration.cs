@@ -14,7 +14,7 @@ internal sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
         builder.Property(p => p.Id)
             .HasConversion(i => i.Value, i => new ProjectId(i));
         builder.Property(p => p.Name)
-            .HasConversion(n => n.Name, n => new ProjectName(n));
+            .HasConversion(n => n.Value, n => new ProjectName(n));
 
         builder.HasIndex(p => p.Name).IsUnique();
         builder.HasMany(p => p.Samples)
@@ -22,5 +22,7 @@ internal sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
             .HasForeignKey("ProjectId")
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
+
+        builder.HasQueryFilter(p => p.IsActive);
     }
 }

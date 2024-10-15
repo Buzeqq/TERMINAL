@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
+using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Projects.Update;
 
-public sealed record UpdateProjectCommand([property: JsonIgnore] Guid Id, string Name) : IRequest;
+public record UpdateProjectCommand(ProjectId Id, ProjectName? Name) : IRequest;

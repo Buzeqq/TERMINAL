@@ -22,7 +22,7 @@ export class LoginStore extends ComponentStore<LoginState> {
     this.patchState({ isLoading: true });
 
     return this.service.getUserInfo().pipe(
-      tap(async (identity) => {
+      tap(async identity => {
         this.store.dispatch(IdentityActions.userLoaded({ identity }));
         await this.router.navigate(['/']);
       }),
@@ -30,7 +30,7 @@ export class LoginStore extends ComponentStore<LoginState> {
         this.store.dispatch(IdentityActions.failedToLoadUser());
         this.patchState({ isLoading: false });
         return EMPTY;
-      }),
+      })
     );
   });
   private readonly notificationService = inject(NotificationService);
@@ -38,16 +38,17 @@ export class LoginStore extends ComponentStore<LoginState> {
   readonly tryToLogIn = this.effect((loginForm$: Observable<LoginForm>) => {
     return loginForm$.pipe(
       tap(() => this.patchState({ isLoading: true })),
-      switchMap((form) =>
+      switchMap(form =>
         this.service
           .login(form)
-          .pipe(tap(() => this.store.dispatch(IdentityActions.userLoggedIn()))),
+          .pipe(tap(() => this.store.dispatch(IdentityActions.userLoggedIn())))
       ),
       catchError((err: TerminalError) => {
         this.notificationService.notifyError(err.detail ?? err.title);
         this.store.dispatch(IdentityActions.failedToLogIn());
+        this.patchState({ isLoading: false });
         return EMPTY;
-      }),
+      })
     );
   });
 

@@ -12,7 +12,7 @@ internal sealed class DefaultExceptionHandler : IExceptionHandler
         var (statusCode, title) = exception is TerminalException terminalException
             ? (terminalException.StatusCode as int? ?? StatusCodes.Status400BadRequest, terminalException.Message)
             : (StatusCodes.Status500InternalServerError, "An unexpected error occured");
-        
+
         httpContext.Response.StatusCode = statusCode;
         httpContext.Response.Headers.ContentType = "application/problem+json; charset=utf-8";
         await httpContext.Response.WriteAsJsonAsync(new ProblemDetails
@@ -30,7 +30,7 @@ internal sealed class DefaultExceptionHandler : IExceptionHandler
 
         return true;
     }
-    
+
     private static readonly Dictionary<int, (string Type, string Title)> Defaults = new()
     {
         [400] = ("https://tools.ietf.org/html/rfc9110#section-15.5.1", "Bad Request"),
@@ -50,5 +50,5 @@ internal sealed class DefaultExceptionHandler : IExceptionHandler
         [503] = ("https://tools.ietf.org/html/rfc9110#section-15.6.4", "Service Unavailable"),
         [504] = ("https://tools.ietf.org/html/rfc9110#section-15.6.5", "Gateway Timeout")
     };
-    
+
 }

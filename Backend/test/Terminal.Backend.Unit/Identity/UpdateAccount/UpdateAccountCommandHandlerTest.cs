@@ -6,6 +6,7 @@ using Terminal.Backend.Application.Common.Emails;
 using Terminal.Backend.Application.Exceptions;
 using Terminal.Backend.Application.Identity.UpdateAccount;
 using Terminal.Backend.Core.Exceptions;
+using Terminal.Backend.Core.ValueObjects;
 using Terminal.Backend.Unit.Identity.Common;
 
 namespace Terminal.Backend.Unit.Identity.UpdateAccount;
@@ -30,7 +31,7 @@ public class UpdateAccountCommandHandlerTest
     {
         // Arrange
         var command = new UpdateAccountCommand(null, "strong-password1", "WeakPassword1");
-        var user = UserFactory.Create();
+        var user = UserFactory.Create(UserId.Create());
         _userManagerMock.GetUserAsync(Arg.Any<ClaimsPrincipal>()).Returns(user);
         _userManagerMock.ChangePasswordAsync(user, command.OldPassword!, command.NewPassword!)
             .Returns(IdentityResult.Success);
@@ -60,7 +61,7 @@ public class UpdateAccountCommandHandlerTest
     {
         // Arrange
         var command = new UpdateAccountCommand(null, "strong-password1", null);
-        var user = UserFactory.Create();
+        var user = UserFactory.Create(UserId.Create());
         _userManagerMock.GetUserAsync(Arg.Any<ClaimsPrincipal>()).Returns(user);
 
         // Act & Assert
@@ -72,7 +73,7 @@ public class UpdateAccountCommandHandlerTest
     {
         // Arrange
         var command = new UpdateAccountCommand(null, "strong-password1", "WeakPassword1");
-        var user = UserFactory.Create();
+        var user = UserFactory.Create(UserId.Create());
         _userManagerMock.GetUserAsync(Arg.Any<ClaimsPrincipal>()).Returns(user);
         _userManagerMock.ChangePasswordAsync(user, command.OldPassword!, command.NewPassword!)
             .Returns(IdentityResult.Failed([new IdentityError { Code = "000", Description = "Database error" }]));
@@ -88,7 +89,7 @@ public class UpdateAccountCommandHandlerTest
     {
         // Arrange
         var command = new UpdateAccountCommand("newValidEmail@test.com", null, null);
-        var user = UserFactory.Create();
+        var user = UserFactory.Create(UserId.Create());
         _userManagerMock.GetUserAsync(Arg.Any<ClaimsPrincipal>()).Returns(user);
         _userManagerMock.GetEmailAsync(user).Returns("oldEmail@test.com");
 
@@ -106,7 +107,7 @@ public class UpdateAccountCommandHandlerTest
     {
         // Arrange
         var command = new UpdateAccountCommand("old-email@test.com", null, null);
-        var user = UserFactory.Create();
+        var user = UserFactory.Create(UserId.Create());
         _userManagerMock.GetUserAsync(Arg.Any<ClaimsPrincipal>()).Returns(user);
         _userManagerMock.GetEmailAsync(user).Returns(command.NewEmail!);
 

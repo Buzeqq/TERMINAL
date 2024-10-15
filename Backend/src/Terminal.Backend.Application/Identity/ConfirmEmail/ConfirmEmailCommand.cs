@@ -2,4 +2,4 @@ namespace Terminal.Backend.Application.Identity.ConfirmEmail;
 
 using Core.ValueObjects;
 
-public record ConfirmEmailCommand(string UserId, string Code, Email? NewEmail) : IRequest;
+public record ConfirmEmailCommand(UserId Id, string Code, Email? NewEmail) : IRequest;

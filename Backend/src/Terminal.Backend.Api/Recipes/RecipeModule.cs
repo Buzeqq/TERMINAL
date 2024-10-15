@@ -1,9 +1,12 @@
-using Microsoft.AspNetCore.Mvc;
+using Terminal.Backend.Api.Common;
+using Terminal.Backend.Api.Recipes.Requests;
 using Terminal.Backend.Api.Swagger;
+using Terminal.Backend.Application.Common.QueryParameters;
+using Terminal.Backend.Application.DTO.ParameterValues;
+using Terminal.Backend.Application.DTO.Samples;
 using Terminal.Backend.Application.Recipes.Create;
 using Terminal.Backend.Application.Recipes.Delete;
 using Terminal.Backend.Application.Recipes.Get;
-using Terminal.Backend.Application.Recipes.Search;
 using Terminal.Backend.Application.Recipes.Update;
 using Terminal.Backend.Core.Enums;
 using Terminal.Backend.Core.ValueObjects;
@@ -12,27 +15,14 @@ namespace Terminal.Backend.Api.Recipes;
 
 public static class RecipeModule
 {
-    private const string ApiBaseRoute = "api/recipes";
+    private const string ApiBaseRoute = "recipes";
 
-    private static void AddRecipesEndpoints(this IEndpointRouteBuilder app)
+    private static IEndpointRouteBuilder AddRecipesEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/search", async (
-                [FromQuery] string searchPhrase,
-                [FromQuery] int pageSize,
-                [FromQuery] int pageNumber,
-                ISender sender,
-                CancellationToken ct) =>
-            {
-                var query = new SearchRecipeQuery(searchPhrase, pageNumber, pageSize);
-                var recipes = await sender.Send(query, ct);
-                return Results.Ok(recipes);
-            }).RequireAuthorization(Permission.RecipeRead.ToString())
-            .WithTags(SwaggerSetup.RecipeTag);
-
-        app.MapGet("/{name}", async (string name, ISender sender, CancellationToken ct) =>
+        app.MapGet("/{name}", async (string name, ISender sender, CancellationToken cancellationToken) =>
             {
                 var query = new GetRecipeQuery(name);
-                var recipe = await sender.Send(query, ct);
+                var recipe = await sender.Send(query, cancellationToken);
                 return recipe is null ? Results.NotFound() : Results.Ok(recipe);
             }).RequireAuthorization(Permission.RecipeRead.ToString())
             .WithTags(SwaggerSetup.RecipeTag);
@@ -40,70 +30,78 @@ public static class RecipeModule
         app.MapGet( "/{id:guid}/details", async (
                 Guid id,
                 ISender sender,
-                CancellationToken ct) =>
+                CancellationToken cancellationToken) =>
             {
                 var query = new GetRecipeDetailsQuery(id);
-                var recipeDetails = await sender.Send(query, ct);
+                var recipeDetails = await sender.Send(query, cancellationToken);
                 return recipeDetails is null ? Results.NotFound() : Results.Ok(recipeDetails);
             }).RequireAuthorization(Permission.RecipeRead.ToString())
             .WithTags(SwaggerSetup.RecipeTag);
 
         app.MapGet("/", async (
-                [FromQuery] int pageSize,
-                [FromQuery] int pageNumber,
-                [FromQuery] bool? desc,
+                int pageSize,
+                int pageIndex,
+                string? searchPhrase,
+                OrderDirection? orderDirection,
                 ISender sender,
-                CancellationToken ct) =>
+                CancellationToken cancellationToken) =>
             {
-                var query = new GetRecipesQuery(pageNumber, pageSize, desc ?? true);
-                var recipes = await sender.Send(query, ct);
+                var query = new GetRecipesQuery(
+                    searchPhrase,
+                    new PagingParameters(pageIndex, pageSize),
+                    new OrderingParameters("Name", orderDirection));
+                var recipes = await sender.Send(query, cancellationToken);
                 return Results.Ok(recipes);
             }).RequireAuthorization(Permission.RecipeRead.ToString())
             .WithTags(SwaggerSetup.RecipeTag);
 
         app.MapPost("/", async (
-                CreateRecipeCommand command,
+                CreateRecipeRequest request,
                 ISender sender,
-                CancellationToken ct) =>
+                CancellationToken cancellationToken) =>
             {
-                command = command with { Id = RecipeId.Create() };
-                await sender.Send(command, ct);
-                return Results.Created(ApiBaseRoute, new { command.Id });
+                var id = RecipeId.Create();
+                await sender.Send(new CreateRecipeCommand(
+                    id,
+                    request.Name,
+                    request.Steps.Select(s => new CreateSampleStepDto(
+                            s.Values.SelectParameterValue<StepParameterValueDto>(
+                                tm => new StepTextParameterValueDto(tm.ParameterId, tm.Value),
+                                im => new StepIntegerParameterValueDto(im.ParameterId, im.Value),
+                                dm => new StepDecimalParameterValueDto(dm.ParameterId, dm.Value)),
+                            s.Comment))),
+                    cancellationToken);
+                return Results.Created(ApiBaseRoute, new { id });
             }).RequireAuthorization(Permission.RecipeWrite.ToString())
-            .WithTags(SwaggerSetup.RecipeTag);
-
-        app.MapGet("/amount", async (
-                ISender sender,
-                CancellationToken ct) =>
-            {
-                var query = new GetRecipesAmountQuery();
-                var amount = await sender.Send(query, ct);
-                return Results.Ok(amount);
-            }).RequireAuthorization(Permission.RecipeRead.ToString())
             .WithTags(SwaggerSetup.RecipeTag);
 
         app.MapDelete("/{id:guid}", async (
                 Guid id,
                 ISender sender,
-                CancellationToken ct) =>
+                CancellationToken cancellationToken) =>
             {
-                await sender.Send(new DeleteRecipeCommand(id), ct);
+                await sender.Send(new DeleteRecipeCommand(id), cancellationToken);
                 return Results.Ok();
             }).RequireAuthorization(Permission.RecipeDelete.ToString())
             .WithTags(SwaggerSetup.RecipeTag);
 
         app.MapPatch("/{id:guid}", async (
                 Guid id,
-                UpdateRecipeCommand command,
+                UpdateRecipeRequest request,
                 ISender sender,
-                CancellationToken ct) =>
+                CancellationToken cancellationToken) =>
             {
-                command = command with { Id = id };
-                await sender.Send(command, ct);
+                await sender.Send(new UpdateRecipeCommand(id, request.Name, request.Steps), cancellationToken);
                 return Results.Ok();
             }).RequireAuthorization(Permission.RecipeUpdate.ToString())
             .WithTags(SwaggerSetup.RecipeTag);
+
+        return app;
     }
 
-    public static void UseRecipesEndpoints(this IEndpointRouteBuilder app) => app.MapGroup(ApiBaseRoute).AddRecipesEndpoints();
+    public static IEndpointRouteBuilder UseRecipesEndpoints(this IEndpointRouteBuilder app)
+    {
+        app.MapGroup(ApiBaseRoute).AddRecipesEndpoints();
+        return app;
+    }
 }

@@ -2,10 +2,10 @@ using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Core.Entities;
 
-public sealed class Recipe(RecipeId id, RecipeName recipeName)
+public sealed class Recipe(RecipeId id, RecipeName name)
 {
     public RecipeId Id { get; private set; } = id;
-    public RecipeName RecipeName { get; private set; } = recipeName;
+    public RecipeName Name { get; private set; } = name;
 
     public ICollection<RecipeStep> Steps { get; } = [];
 
@@ -17,13 +17,13 @@ public sealed class Recipe(RecipeId id, RecipeName recipeName)
 
     public void Update(RecipeName name, IEnumerable<RecipeStep> steps)
     {
-        RecipeName = name;
+        Name = name;
 
         var mergedSteps = Steps.Join(steps, s => s.Id, s => s.Id,
             (s1, s2) => new Tuple<RecipeStep, RecipeStep>(s1, s2));
         foreach (var (oldStep, newStep) in mergedSteps)
         {
-            oldStep.Update(newStep.Parameters, newStep.Comment);
+            oldStep.Update(newStep.Values, newStep.Comment);
         }
     }
 }

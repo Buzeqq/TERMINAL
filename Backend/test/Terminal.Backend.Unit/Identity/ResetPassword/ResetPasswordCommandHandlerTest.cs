@@ -2,6 +2,7 @@
 using Terminal.Backend.Application.Common;
 using Terminal.Backend.Application.Exceptions;
 using Terminal.Backend.Application.Identity.ResetPassword;
+using Terminal.Backend.Core.ValueObjects;
 using Terminal.Backend.Unit.Identity.Common;
 
 namespace Terminal.Backend.Unit.Identity.ResetPassword;
@@ -23,7 +24,7 @@ public class ResetPasswordCommandHandlerTest
     {
         // Arrange
         var command = new ResetPasswordCommand("test@test.com", "StrongPassword!23", "code");
-        var user = UserFactory.Create(email: command.Email);
+        var user = UserFactory.Create(UserId.Create(), command.Email);
         _userManager.FindByEmailAsync(Arg.Is<string>(e => e == command.Email)).Returns(user);
         _userManager.IsEmailConfirmedAsync(Arg.Any<ApplicationUser>()).Returns(true);
         _userManager.ResetPasswordAsync(
@@ -59,7 +60,7 @@ public class ResetPasswordCommandHandlerTest
     {
         // Arrange
         var command = new ResetPasswordCommand("test@test.com", "StrongPassword!23", "code");
-        var user = UserFactory.Create(email: command.Email);
+        var user = UserFactory.Create(UserId.Create(), command.Email);
         _userManager.FindByEmailAsync(Arg.Is<string>(e => e == command.Email)).Returns(user);
         _userManager.IsEmailConfirmedAsync(Arg.Any<ApplicationUser>()).Returns(false);
 
@@ -73,7 +74,7 @@ public class ResetPasswordCommandHandlerTest
     {
         // Arrange
         var command = new ResetPasswordCommand("test@test.com", "StrongPassword!23", " ");
-        var user = UserFactory.Create(email: command.Email);
+        var user = UserFactory.Create(UserId.Create(), command.Email);
         _userManager.FindByEmailAsync(Arg.Is<string>(e => e == command.Email)).Returns(user);
         _userManager.IsEmailConfirmedAsync(Arg.Any<ApplicationUser>()).Returns(true);
 
@@ -86,7 +87,7 @@ public class ResetPasswordCommandHandlerTest
     {
         // Arrange
         var command = new ResetPasswordCommand("test@test.com", "StrongPassword!23", "code");
-        var user = UserFactory.Create(email: command.Email);
+        var user = UserFactory.Create(UserId.Create(), command.Email);
         _userManager.FindByEmailAsync(Arg.Is<string>(e => e == command.Email)).Returns(user);
         _userManager.IsEmailConfirmedAsync(Arg.Any<ApplicationUser>()).Returns(true);
         const string description = "internal error";

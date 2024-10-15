@@ -8,5 +8,14 @@ internal class DecimalParameterValueConfiguration : IEntityTypeConfiguration<Dec
 {
     private static string Prefix => "decimal";
 
-    public void Configure(EntityTypeBuilder<DecimalParameterValue> builder) => builder.Property(v => v.Value).HasColumnName($"{Prefix}_value");
+    public void Configure(EntityTypeBuilder<DecimalParameterValue> builder)
+    {
+        builder.Property(v => v.Value)
+            .HasColumnName($"{Prefix}_value");
+
+        builder.HasOne(v => v.DecimalParameter)
+            .WithMany();
+
+        builder.Navigation(v => v.DecimalParameter).AutoInclude();
+    }
 }

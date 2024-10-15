@@ -14,7 +14,7 @@ internal sealed class ConvertDtoService(IParameterRepository parameterRepository
     : IConvertDtoService
 {
     public async Task<IEnumerable<SampleStep>> ConvertAsync(IEnumerable<CreateSampleStepDto> stepsDto,
-        CancellationToken ct)
+        CancellationToken cancellationToken)
     {
         var steps = new List<SampleStep>();
         foreach (var stepDto in stepsDto)
@@ -23,7 +23,7 @@ internal sealed class ConvertDtoService(IParameterRepository parameterRepository
             foreach (var parameterDto in stepDto.Parameters)
             {
                 var id = ParameterValueId.Create();
-                var parameter = await GetParameterValueAsync(id, parameterDto, ct);
+                var parameter = await GetParameterValueAsync(id, parameterDto, cancellationToken);
                 parameters.Add(parameter);
             }
 
@@ -34,7 +34,7 @@ internal sealed class ConvertDtoService(IParameterRepository parameterRepository
     }
 
     public async Task<IEnumerable<SampleStep>> ConvertAsync(IEnumerable<UpdateSampleStepDto> stepsDto,
-        CancellationToken ct)
+        CancellationToken cancellationToken)
     {
         var steps = new List<SampleStep>();
         foreach (var stepDto in stepsDto)
@@ -42,8 +42,8 @@ internal sealed class ConvertDtoService(IParameterRepository parameterRepository
             var parameters = new List<ParameterValue>();
             foreach (var parameterDto in stepDto.Parameters)
             {
-                var id = parameterDto.Id;
-                var parameter = await GetParameterValueAsync(id, parameterDto, ct);
+                var id = parameterDto.ParameterId;
+                var parameter = await GetParameterValueAsync(id, parameterDto, cancellationToken);
                 parameters.Add(parameter);
             }
 
@@ -53,25 +53,25 @@ internal sealed class ConvertDtoService(IParameterRepository parameterRepository
         return steps;
     }
 
-    private async Task<ParameterValue> GetParameterValueAsync(Guid id, CreateSampleBaseParameterValueDto parameterDto,
-        CancellationToken ct)
+    private async Task<ParameterValue> GetParameterValueAsync(Guid id, StepParameterValueDto parameterDto,
+        CancellationToken cancellationToken)
     {
         ParameterValue parameter = parameterDto switch
         {
-            CreateSampleDecimalParameterValueDto @decimal
-                => new DecimalParameterValue(id, await parameterRepository.GetAsync<DecimalParameter>(@decimal.Id, ct)
+            StepDecimalParameterValueDto @decimal
+                => new DecimalParameterValue(id, await parameterRepository.GetAsync<DecimalParameter>(@decimal.ParameterId, cancellationToken)
                                                  ?? throw new ParameterNotFoundException(), @decimal.Value),
-            CreateSampleIntegerParameterValueDto integer
-                => new IntegerParameterValue(id, await parameterRepository.GetAsync<IntegerParameter>(integer.Id, ct)
+            StepIntegerParameterValueDto integer
+                => new IntegerParameterValue(id, await parameterRepository.GetAsync<IntegerParameter>(integer.ParameterId, cancellationToken)
                                                  ?? throw new ParameterNotFoundException(), integer.Value),
-            CreateSampleTextParameterValueDto text
-                => new TextParameterValue(id, await parameterRepository.GetAsync<TextParameter>(text.Id, ct)
+            StepTextParameterValueDto text
+                => new TextParameterValue(id, await parameterRepository.GetAsync<TextParameter>(text.ParameterId, cancellationToken)
                                               ?? throw new ParameterNotFoundException(), text.Value),
             _ => throw new UnknownParameterTypeException(parameterDto)
         };
         return parameter;
     }
 
-    public Task<IEnumerable<Tag>> ConvertAsync(IEnumerable<TagId> tagIds, CancellationToken ct)
-        => tagRepository.GetManyAsync(tagIds, ct);
+    public Task<IEnumerable<Tag>> ConvertAsync(IEnumerable<TagId> tagIds, CancellationToken cancellationToken)
+        => tagRepository.GetManyAsync(tagIds, cancellationToken);
 }

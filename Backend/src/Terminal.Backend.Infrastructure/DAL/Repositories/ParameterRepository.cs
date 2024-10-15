@@ -9,14 +9,14 @@ internal sealed class ParameterRepository(TerminalDbContext dbContext) : IParame
 {
     private readonly DbSet<Parameter> _parameters = dbContext.Parameters;
 
-    public async Task<T?> GetAsync<T>(ParameterId id, CancellationToken ct)
+    public async Task<T?> GetAsync<T>(ParameterId id, CancellationToken cancellationToken)
         where T : Parameter
         => await _parameters
             .Include(p => p.Parent)
-            .SingleOrDefaultAsync(p => p.Id == id, ct) as T;
+            .SingleOrDefaultAsync(p => p.Id == id, cancellationToken) as T;
 
-    public async Task AddAsync(Parameter parameter, CancellationToken ct)
-        => await _parameters.AddAsync(parameter, ct);
+    public async Task AddAsync(Parameter parameter, CancellationToken cancellationToken)
+        => await _parameters.AddAsync(parameter, cancellationToken);
 
     public Task UpdateAsync(Parameter parameter)
     {

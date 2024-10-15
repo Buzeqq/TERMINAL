@@ -9,15 +9,15 @@ internal sealed class RecipeRepository(TerminalDbContext dbContext) : IRecipeRep
 {
     private readonly DbSet<Recipe> _recipes = dbContext.Recipes;
 
-    public Task<Recipe?> GetAsync(RecipeId recipeId, CancellationToken ct)
+    public Task<Recipe?> GetAsync(RecipeId recipeId, CancellationToken cancellationToken)
         =>
             _recipes
             .Include(r => r.Steps)
-            .ThenInclude(s => s.Parameters)
+            .ThenInclude(s => s.Values)
             .ThenInclude(p => p.Parameter)
-            .SingleOrDefaultAsync(r => r.Id == recipeId, ct);
+            .SingleOrDefaultAsync(r => r.Id == recipeId, cancellationToken);
 
-    public async Task AddAsync(Recipe recipe, CancellationToken ct) => await _recipes.AddAsync(recipe, ct);
+    public async Task AddAsync(Recipe recipe, CancellationToken cancellationToken) => await _recipes.AddAsync(recipe, cancellationToken);
 
     public Task DeleteAsync(Recipe recipe, CancellationToken cancellationToken)
     {
@@ -25,9 +25,9 @@ internal sealed class RecipeRepository(TerminalDbContext dbContext) : IRecipeRep
         return Task.CompletedTask;
     }
 
-    public Task<bool> IsNameUniqueAsync(RecipeName name, CancellationToken cancellationToken) 
+    public Task<bool> IsNameUniqueAsync(RecipeName name, CancellationToken cancellationToken)
         =>
-            _recipes.AllAsync(r => r.RecipeName != name, cancellationToken);
+            _recipes.AllAsync(r => r.Name != name, cancellationToken);
 
     public Task UpdateAsync(Recipe recipe, CancellationToken cancellationToken)
     {

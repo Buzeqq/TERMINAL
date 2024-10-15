@@ -9,8 +9,8 @@ internal sealed class SampleRepository(TerminalDbContext dbContext) : ISampleRep
 {
     private readonly DbSet<Sample> _samples = dbContext.Samples;
 
-    public async Task AddAsync(Sample sample, CancellationToken ct)
-        => await _samples.AddAsync(sample, ct);
+    public async Task AddAsync(Sample sample, CancellationToken cancellationToken)
+        => await _samples.AddAsync(sample, cancellationToken);
 
     public Task<Sample?> GetAsync(SampleId id, CancellationToken cancellationToken)
         =>
@@ -18,16 +18,18 @@ internal sealed class SampleRepository(TerminalDbContext dbContext) : ISampleRep
             .Include(s => s.Project)
             .Include(s => s.Recipe)
             .Include(s => s.Steps)
-            .ThenInclude(s => s.Parameters)
+            .ThenInclude(s => s.Values)
             .ThenInclude(p => p.Parameter)
             .Include(s => s.Tags)
             .SingleOrDefaultAsync(s => s.Id == id, cancellationToken);
 
-    public Task DeleteAsync(Sample sample, CancellationToken cancellationToken)
-    {
-        _samples.Remove(sample);
-        return Task.CompletedTask;
-    }
+    public Task<bool> ExistsAsync(SampleId id, CancellationToken cancellationToken)
+        => _samples.AnyAsync(s => s.Id == id, cancellationToken);
+
+    public Task DeleteAsync(SampleId sample, CancellationToken cancellationToken) =>
+        _samples
+            .Where(s => s.Id == sample)
+            .ExecuteDeleteAsync(cancellationToken);
 
     public Task UpdateAsync(Sample sample, CancellationToken cancellationToken)
     {

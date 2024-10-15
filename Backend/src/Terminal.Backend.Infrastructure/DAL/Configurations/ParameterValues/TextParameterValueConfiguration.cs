@@ -8,5 +8,14 @@ internal class TextParameterValueConfiguration : IEntityTypeConfiguration<TextPa
 {
     private static string Prefix => "text";
 
-    public void Configure(EntityTypeBuilder<TextParameterValue> builder) => builder.Property(v => v.Value).HasColumnName($"{Prefix}_value");
+    public void Configure(EntityTypeBuilder<TextParameterValue> builder)
+    {
+        builder.Property(v => v.Value)
+            .HasColumnName($"{Prefix}_value");
+
+        builder.HasOne(v => v.TextParameter)
+            .WithMany();
+
+        builder.Navigation(v => v.TextParameter).AutoInclude();
+    }
 }

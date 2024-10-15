@@ -14,10 +14,12 @@ internal sealed class GetRecipeQueryHandler(TerminalDbContext dbContext)
     public async Task<GetRecipeDto?> Handle(GetRecipeQuery request, CancellationToken cancellationToken)
     {
         var name = request.Name;
-        var recipe = await _recipes.Include(r => r.Steps)
-            .SingleOrDefaultAsync(r => r.RecipeName.Equals(name),
-                cancellationToken);
+        var recipe = await _recipes
+            .TagWith("Get Recipe by name")
+            .Where(r => r.Name == name)
+            .Select(r => new GetRecipeDto(r.Id, r.Name))
+            .SingleOrDefaultAsync(cancellationToken);
 
-        return recipe?.AsDto();
+        return recipe;
     }
 }

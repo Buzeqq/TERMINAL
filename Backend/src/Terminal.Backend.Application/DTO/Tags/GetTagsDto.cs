@@ -1,8 +1,10 @@
+using Terminal.Backend.Application.Abstractions;
+using Terminal.Backend.Application.Common.QueryParameters;
+
 namespace Terminal.Backend.Application.DTO.Tags;
 
-public class GetTagsDto
+public sealed record GetTagsDto(IEnumerable<GetTagsDto.TagDto> Tags, int TotalCount, PagingParameters PagingParameters)
+    : PaginatedResult<GetTagsDto.TagDto>(Tags, TotalCount, PagingParameters)
 {
-    public IEnumerable<TagDto> Tags { get; set; } = [];
-
-    public record TagDto(Guid id, string name);
+    public record TagDto(Guid Id, string Name);
 }

@@ -14,7 +14,7 @@ public sealed record SampleCode
     {
         var isParsable = ulong.TryParse(code.AsSpan(Prefix.Length), out var number);
         var isValid = !string.IsNullOrWhiteSpace(code) &&
-                      code.StartsWith(Prefix) &&
+                      code.StartsWith(Prefix, StringComparison.Ordinal) &&
                       isParsable;
 
         if (!isValid)

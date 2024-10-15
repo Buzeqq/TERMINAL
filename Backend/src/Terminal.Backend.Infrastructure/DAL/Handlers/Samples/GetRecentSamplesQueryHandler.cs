@@ -13,14 +13,21 @@ internal sealed class GetRecentSamplesQueryHandler(TerminalDbContext dbContext) 
 
     public async Task<GetRecentSamplesDto> Handle(GetRecentSamplesQuery request,
         CancellationToken cancellationToken)
-        => new()
-        {
-            RecentSamples = await _samples
-                .OrderByDescending(m => m.CreatedAtUtc)
-                .Take(request.Length)
-                .Select(m =>
-                    new GetSamplesDto.SampleDto(m.Id, m.Code.Value, m.Project.Name, m.CreatedAtUtc.ToString("o"),
-                        m.Comment))
-                .ToListAsync(cancellationToken)
-        };
+    {
+        var samples = await _samples
+            .TagWith("Get Recent Samples")
+            .OrderByDescending(m => m.CreatedAtUtc)
+            .Take(request.Length)
+            .Select(s =>
+                new GetSamplesDto.SampleDto(
+                    s.Id,
+                    s.Code.Value,
+                    s.Project.Name,
+                    s.Recipe != null ? s.Recipe.Name.Value : null,
+                    s.CreatedAtUtc.ToString("o"),
+                    s.Comment))
+            .ToListAsync(cancellationToken);
+
+        return new GetRecentSamplesDto(samples);
+    }
 }

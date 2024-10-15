@@ -49,7 +49,7 @@ public class ArchitectureTests
 
         result.IsSuccessful.Should().BeTrue();
     }
-    
+
     [Fact]
     public void Infrastructure_Should_Have_Dependency_On_Other_Projects()
     {

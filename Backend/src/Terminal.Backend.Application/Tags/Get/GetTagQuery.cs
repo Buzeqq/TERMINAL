@@ -1,8 +1,6 @@
 using Terminal.Backend.Application.DTO.Tags;
+using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Tags.Get;
 
-public class GetTagQuery : IRequest<GetTagDto?>
-{
-    public Guid TagId { get; set; }
-}
+public record GetTagQuery(TagId Id) : IRequest<GetTagDto?>;

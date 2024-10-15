@@ -15,38 +15,37 @@ internal sealed class CreateSampleCommandHandler(
     IProjectRepository projectRepository)
     : IRequestHandler<CreateSampleCommand>
 {
-    public async Task Handle(CreateSampleCommand command, CancellationToken ct)
+    public async Task Handle(CreateSampleCommand command, CancellationToken cancellationToken)
     {
         var (sampleId, projectId, recipeId, stepsDto, tagsDto,
             comment, saveAsRecipe, recipeName) = command;
 
-        var steps = (await convertService.ConvertAsync(stepsDto, ct)).ToList();
+        var steps = (await convertService.ConvertAsync(stepsDto, cancellationToken)).ToList();
         Recipe? recipe = null;
         if (saveAsRecipe)
         {
             if (recipeName is null)
             {
-                throw new InvalidRecipeNameException(recipeName);
+                throw new InvalidRecipeNameException(null);
             }
 
             // for new recipe we need to copy every step, and every parameter value in steps
             recipe = new Recipe(RecipeId.Create(), recipeName);
             foreach (var step in steps)
             {
-                var parameters = new List<ParameterValue>(step.Parameters
-                    .Select(p => p.DeepCopy(Guid.NewGuid())));
+                var parameters = new List<ParameterValue>(step.Values);
                 recipe.Steps.Add(new RecipeStep(Guid.NewGuid(), step.Comment, parameters, recipe));
             }
 
-            await recipeRepository.AddAsync(recipe, ct);
+            await recipeRepository.AddAsync(recipe, cancellationToken);
         }
         else if (recipeId is not null)
         {
-            recipe = await recipeRepository.GetAsync(recipeId, ct);
+            recipe = await recipeRepository.GetAsync(recipeId, cancellationToken);
         }
 
-        var tags = await convertService.ConvertAsync(tagsDto.Select(t => new TagId(t)), ct);
-        var project = await projectRepository.GetAsync(projectId, ct) ?? throw new ProjectNotFoundException();
+        var tags = await convertService.ConvertAsync(tagsDto.Select(t => new TagId(t)), cancellationToken);
+        var project = await projectRepository.GetAsync(projectId, cancellationToken) ?? throw new ProjectNotFoundException();
         if (!project.IsActive)
         {
             throw new ProjectNotActiveException(project.Name);
@@ -56,9 +55,9 @@ internal sealed class CreateSampleCommandHandler(
             project,
             recipe,
             new Comment(comment),
-            steps.ToList(),
+            steps,
             tags.ToList());
         project.Samples.Add(sample);
-        await sampleRepository.AddAsync(sample, ct);
+        await sampleRepository.AddAsync(sample, cancellationToken);
     }
 }

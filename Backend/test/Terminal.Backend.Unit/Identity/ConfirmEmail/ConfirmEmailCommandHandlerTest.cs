@@ -2,6 +2,7 @@
 using Terminal.Backend.Application.Common;
 using Terminal.Backend.Application.Exceptions;
 using Terminal.Backend.Application.Identity.ConfirmEmail;
+using Terminal.Backend.Core.ValueObjects;
 using Terminal.Backend.Unit.Identity.Common;
 
 namespace Terminal.Backend.Unit.Identity.ConfirmEmail;
@@ -22,9 +23,9 @@ public class ConfirmEmailCommandHandlerTest
     public async Task Handle_SuccessfulEmailConfirmForNewEmail_ReturnsVoid()
     {
         // Arrange
-        var user = UserFactory.Create();
+        var user = UserFactory.Create(UserId.Create());
         _userManagerMock.FindByIdAsync(Arg.Any<string>()).Returns(user);
-        var command = new ConfirmEmailCommand("id", "code", null);
+        var command = new ConfirmEmailCommand(user.Id, "code", null);
 
         // Act
         await _handler.Handle(command, CancellationToken.None);
@@ -38,9 +39,9 @@ public class ConfirmEmailCommandHandlerTest
     public async Task Handle_SuccessfulEmailConfirmForEmailChange_ReturnsVoid()
     {
         // Arrange
-        var user = UserFactory.Create();
+        var user = UserFactory.Create(UserId.Create());
         _userManagerMock.FindByIdAsync(Arg.Any<string>()).Returns(user);
-        var command = new ConfirmEmailCommand("id", "code", "test2@test.com");
+        var command = new ConfirmEmailCommand(user.Id, "code", "test2@test.com");
         _userManagerMock.ChangeEmailAsync(user, command.NewEmail!, CodeEncoder.Decode(command.Code))
             .Returns(IdentityResult.Success);
         _userManagerMock.SetUserNameAsync(user, command.NewEmail!)
@@ -60,9 +61,9 @@ public class ConfirmEmailCommandHandlerTest
     public async Task Handle_FailureEmailConfirmForEmailChangeDueToChangeEmailFailure_ThrowsException()
     {
         // Arrange
-        var user = UserFactory.Create();
+        var user = UserFactory.Create(UserId.Create());
         _userManagerMock.FindByIdAsync(Arg.Any<string>()).Returns(user);
-        var command = new ConfirmEmailCommand("id", "code", "test2@test.com");
+        var command = new ConfirmEmailCommand(user.Id, "code", "test2@test.com");
         _userManagerMock.ChangeEmailAsync(user, command.NewEmail!, CodeEncoder.Decode(command.Code))
             .Returns(IdentityResult.Failed());
 
@@ -78,9 +79,9 @@ public class ConfirmEmailCommandHandlerTest
     public async Task Handle_FailureEmailConfirmForEmailChangeDueToSetUserNameFailure_ThrowsException()
     {
         // Arrange
-        var user = UserFactory.Create();
+        var user = UserFactory.Create(UserId.Create());
         _userManagerMock.FindByIdAsync(Arg.Any<string>()).Returns(user);
-        var command = new ConfirmEmailCommand("id", "code", "test2@test.com");
+        var command = new ConfirmEmailCommand(user.Id, "code", "test2@test.com");
         _userManagerMock.ChangeEmailAsync(user, command.NewEmail!, CodeEncoder.Decode(command.Code))
             .Returns(IdentityResult.Success);
         const string errorDescription = "desc";
@@ -111,9 +112,9 @@ public class ConfirmEmailCommandHandlerTest
     public async Task Handle_FailureEmailConfirmDueToBadCode_ThrowsException()
     {
         // Arrange
-        var user = UserFactory.Create();
-        var command = new ConfirmEmailCommand("id", "   ", "test@test.com");
-        _userManagerMock.FindByIdAsync(Arg.Is<string>(s => s == command.UserId)).Returns(user);
+        var user = UserFactory.Create(UserId.Create());
+        var command = new ConfirmEmailCommand(user.Id, "   ", "test@test.com");
+        _userManagerMock.FindByIdAsync(Arg.Is<string>(s => s == command.Id)).Returns(user);
 
         // Act & Assert
         await Assert.ThrowsAsync<BadCodeException>(() => _handler.Handle(command, CancellationToken.None));

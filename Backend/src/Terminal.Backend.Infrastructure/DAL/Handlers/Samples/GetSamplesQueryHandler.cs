@@ -11,32 +11,43 @@ internal sealed class GetSamplesQueryHandler(TerminalDbContext dbContext)
 {
     private readonly DbSet<Sample> _samples = dbContext.Samples;
 
-    public async Task<GetSamplesDto> Handle(GetSamplesQuery request, CancellationToken ct)
+    public async Task<GetSamplesDto> Handle(GetSamplesQuery request, CancellationToken cancellationToken)
     {
-        IQueryable<Sample> samplesQuery = _samples
+        var samplesQuery = _samples
             .AsNoTracking()
-            .Include(s => s.Project)
-            .Include(s => s.Tags);
+            .Select(s => new
+            {
+                s.Id,
+                s.Code,
+                ProjectName = s.Project.Name,
+                RecipeName = s.Recipe != null ? s.Recipe.Name : null,
+                s.CreatedAtUtc,
+                s.Comment
+            });
 
-        var shouldSearch = !string.IsNullOrWhiteSpace(request.SearchPhrase);
-        if (shouldSearch)
+        if (!string.IsNullOrWhiteSpace(request.SearchPhrase))
         {
             samplesQuery = samplesQuery
                 .Where(s =>
-                    EF.Functions.ToTsVector("english", "AX" + s.Code + " " + s.Comment)
-                        .Matches(EF.Functions.PhraseToTsQuery($"{request.SearchPhrase}:*")) ||
-                    EF.Functions.ILike(s.Project.Name, $"%{request.SearchPhrase}%") ||
-                    EF.Functions.ILike(s.Recipe!.RecipeName, $"%{request.SearchPhrase}%"));
+                    s.ProjectName.Value.StartsWith(request.SearchPhrase) ||
+                    (s.RecipeName != null && s.RecipeName!.Value.Contains(request.SearchPhrase)) ||
+                    EF.Functions.ToTsVector("english", "AX" + s.Code + " " + s.Comment).Matches(EF.Functions.PhraseToTsQuery($"{request.SearchPhrase}:*"))
+                );
         }
 
-        var totalCount = await samplesQuery.CountAsync(ct);
+        var totalCount = await samplesQuery.CountAsync(cancellationToken);
+
         var samples = await samplesQuery
             .OrderBy(request.OrderingParameters)
-            .Paginate(request.Parameters)
+            .Paginate(request.PagingParameters)
             .Select(m => new GetSamplesDto.SampleDto(
-                m.Id, m.Code.Value, m.Project.Name, m.CreatedAtUtc.ToString("o"), m.Comment))
-            .ToListAsync(ct);
+                m.Id,
+                m.Code.Value,
+                m.ProjectName,
+                m.RecipeName != null ? m.RecipeName.Value : null,
+                m.CreatedAtUtc.ToString("o"), m.Comment))
+            .ToListAsync(cancellationToken);
 
-        return new GetSamplesDto { Samples = samples, TotalCount = totalCount };
+        return new GetSamplesDto(samples, totalCount, request.PagingParameters);
     }
 }

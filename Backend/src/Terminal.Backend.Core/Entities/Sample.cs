@@ -44,7 +44,7 @@ public sealed class Sample
                 (s1, s2) => new Tuple<SampleStep, SampleStep>(s1, s2));
         foreach (var (oldStep, newStep) in mergedSteps)
         {
-            oldStep.Update(newStep.Parameters, newStep.Comment);
+            oldStep.Update(newStep.Values, newStep.Comment);
         }
 
         Tags = tags.ToList();

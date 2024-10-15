@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
+using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Projects.Create;
 
-public sealed record CreateProjectCommand([property: JsonIgnore] Guid Id, string Name) : IRequest;
+public record CreateProjectCommand(ProjectId Id, string Name) : IRequest;

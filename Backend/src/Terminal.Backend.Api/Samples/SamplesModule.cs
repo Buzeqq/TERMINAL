@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
+using Terminal.Backend.Api.Common;
+using Terminal.Backend.Api.Samples.Requests;
 using Terminal.Backend.Api.Swagger;
+using Terminal.Backend.Application.Common.QueryParameters;
 using Terminal.Backend.Application.DTO.ParameterValues;
 using Terminal.Backend.Application.DTO.Samples;
 using Terminal.Backend.Application.Samples.Create;
 using Terminal.Backend.Application.Samples.Delete;
 using Terminal.Backend.Application.Samples.Get;
-using Terminal.Backend.Application.Samples.Search;
 using Terminal.Backend.Application.Samples.Update;
 using Terminal.Backend.Core.Enums;
 using Terminal.Backend.Core.ValueObjects;
@@ -14,98 +16,85 @@ namespace Terminal.Backend.Api.Samples;
 
 public static class SamplesModule
 {
-    private const string ApiRouteBase = "api/samples";
+    private const string ApiRouteBase = "samples";
 
-    private static void AddSamplesEndpoints(this IEndpointRouteBuilder app)
+    private static IEndpointRouteBuilder AddSamplesEndpoints(this IEndpointRouteBuilder app)
     {
         app.MapPost("/", async (
-                CreateSampleCommand command,
+                CreateSampleRequest request,
                 ISender sender,
-                CancellationToken ct) =>
+                CancellationToken cancellationToken) =>
             {
                 var id = SampleId.Create();
-                command = command with { SampleId = id };
-                await sender.Send(command, ct);
+
+                await sender.Send(new CreateSampleCommand(
+                    id,
+                    request.ProjectId,
+                    request.RecipeId,
+                    request.Steps.Select(s => new CreateSampleStepDto(
+                        s.Values.SelectParameterValue<StepParameterValueDto>(
+                            tm => new StepTextParameterValueDto(tm.ParameterId, tm.Value),
+                            im => new StepIntegerParameterValueDto(im.ParameterId, im.Value),
+                            dm => new StepDecimalParameterValueDto(dm.ParameterId, dm.Value)),
+                        s.Comment)
+                    ),
+                    request.Tags.Select(t => new TagId(t)),
+                    request.Comment,
+                    request.SaveAsARecipe,
+                    request.RecipeName is null ? null : new RecipeName(request.RecipeName)), cancellationToken);
+
                 return Results.Created(ApiRouteBase, new { id });
             }).RequireAuthorization(Permission.SampleWrite.ToString())
-            .WithTags(SwaggerSetup.SampleTag);
-
-        app.MapGet("/example", () =>
-            {
-                var sample = new CreateSampleCommand(SampleId.Create(), ProjectId.Create(), null, new[]
-                    {
-                        new CreateSampleStepDto(new CreateSampleBaseParameterValueDto[]
-                            {
-                                new CreateSampleDecimalParameterValueDto(ParameterId.Create(), 0.111m),
-                                new CreateSampleIntegerParameterValueDto(ParameterId.Create(), 2137),
-                                new CreateSampleTextParameterValueDto(ParameterId.Create(), "text")
-                            },
-                            "comment")
-                    },
-                    new List<Guid>
-                    {
-                        TagId.Create(), TagId.Create(), TagId.Create()
-                    },
-                    "comment", false);
-
-                return Results.Ok(sample);
-            }).AllowAnonymous()
             .WithTags(SwaggerSetup.SampleTag);
 
         app.MapGet("/recent", async (
                 [FromQuery] int length,
                 ISender sender,
-                CancellationToken ct) =>
+                CancellationToken cancellationToken) =>
             {
-                if (length <= 0)
-                {
-                    return Results.BadRequest();
-                }
+                var recentSamples = await sender.Send(new GetRecentSamplesQuery(length), cancellationToken);
 
-                var recentSamples = await sender.Send(new GetRecentSamplesQuery(length), ct);
                 return Results.Ok(recentSamples);
             }).RequireAuthorization(Permission.SampleRead.ToString())
             .WithTags(SwaggerSetup.SampleTag);
 
-        app.MapGet("/{id:guid}", async (Guid id, ISender sender, CancellationToken ct) =>
+        app.MapGet("/{id:guid}", async (Guid id, ISender sender, CancellationToken cancellationToken) =>
             {
-                var query = new GetSampleQuery { Id = id };
-                var sample = await sender.Send(query, ct);
+                var query = new GetSampleQuery(id);
+
+                var sample = await sender.Send(query, cancellationToken);
+
                 return sample is null ? Results.NotFound() : Results.Ok(sample);
             }).RequireAuthorization(Permission.SampleRead.ToString())
             .WithTags(SwaggerSetup.SampleTag);
 
         app.MapGet("/", async (
-                [FromQuery] int pageNumber,
+                [FromQuery] int pageIndex,
                 [FromQuery] int pageSize,
                 [FromQuery] string? orderBy,
-                [FromQuery] bool? desc,
+                [FromQuery] OrderDirection? direction,
                 [FromQuery] string? searchPhrase,
                 ISender sender,
-                CancellationToken ct) =>
+                CancellationToken cancellationToken) =>
             {
-                var query = new GetSamplesQuery(pageNumber, pageSize, orderBy ?? "CreatedAtUtc", desc ?? true, searchPhrase);
-                var samples = await sender.Send(query, ct);
-                return Results.Ok(samples);
-            }).RequireAuthorization(Permission.SampleRead.ToString())
-            .WithTags(SwaggerSetup.SampleTag);
+                var query = new GetSamplesQuery(
+                    searchPhrase,
+                    new PagingParameters(pageIndex, pageSize),
+                    new OrderingParameters(orderBy ?? "CreatedAtUtc", OrderDirection.Ascending));
 
-        app.MapGet("/amount", async (
-                ISender sender,
-                CancellationToken ct) =>
-            {
-                var query = new GetSamplesAmountQuery();
-                var amount = await sender.Send(query, ct);
-                return Results.Ok(amount);
+                var samples = await sender.Send(query, cancellationToken);
+
+                return Results.Ok(samples);
             }).RequireAuthorization(Permission.SampleRead.ToString())
             .WithTags(SwaggerSetup.SampleTag);
 
         app.MapDelete("/{id:guid}", async (
                 Guid id,
                 ISender sender,
-                CancellationToken ct) =>
+                CancellationToken cancellationToken) =>
             {
-                await sender.Send(new DeleteSampleCommand(id), ct);
+                await sender.Send(new DeleteSampleCommand(id), cancellationToken);
+
                 return Results.Ok();
             }).RequireAuthorization(Permission.SampleDelete.ToString())
             .WithTags(SwaggerSetup.SampleTag);
@@ -113,15 +102,33 @@ public static class SamplesModule
         app.MapPatch("/{id:guid}", async (
                 Guid id,
                 ISender sender,
-                UpdateSampleCommand command,
-                CancellationToken ct) =>
+                UpdateSampleRequest request,
+                CancellationToken cancellationToken) =>
             {
-                command = command with { Id = id };
-                await sender.Send(command, ct);
+                await sender.Send(new UpdateSampleCommand(
+                    id,
+                    request.ProjectId,
+                    request.RecipeId,
+                    request.Steps.Select(s => new UpdateSampleStepDto(
+                        s.Id!.Value,
+                        s.Values.SelectParameterValue<StepParameterValueDto>(
+                            tm => new StepTextParameterValueDto(tm.ParameterId, tm.Value),
+                            im => new StepIntegerParameterValueDto(im.ParameterId, im.Value),
+                            dm => new StepDecimalParameterValueDto(dm.ParameterId, dm.Value)),
+                        s.Comment)),
+                    request.Tags.Select(t => new TagId(t)),
+                    request.Comment), cancellationToken);
+
                 return Results.Ok();
             }).RequireAuthorization(Permission.SampleUpdate.ToString())
             .WithTags(SwaggerSetup.SampleTag);
+
+        return app;
     }
 
-    public static void UseSamplesEndpoints(this IEndpointRouteBuilder app) => app.MapGroup(ApiRouteBase).AddSamplesEndpoints();
+    public static IEndpointRouteBuilder UseSamplesEndpoints(this IEndpointRouteBuilder app)
+    {
+        app.MapGroup(ApiRouteBase).AddSamplesEndpoints();
+        return app;
+    }
 }

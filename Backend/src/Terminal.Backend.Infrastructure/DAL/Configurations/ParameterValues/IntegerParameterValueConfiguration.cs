@@ -8,5 +8,14 @@ internal class IntegerParameterValueConfiguration : IEntityTypeConfiguration<Int
 {
     private static string Prefix => "integer";
 
-    public void Configure(EntityTypeBuilder<IntegerParameterValue> builder) => builder.Property(v => v.Value).HasColumnName($"{Prefix}_value");
+    public void Configure(EntityTypeBuilder<IntegerParameterValue> builder)
+    {
+        builder.Property(v => v.Value)
+            .HasColumnName($"{Prefix}_value");
+
+        builder.HasOne(v => v.IntegerParameter)
+            .WithMany();
+
+        builder.Navigation(v => v.IntegerParameter).AutoInclude();
+    }
 }

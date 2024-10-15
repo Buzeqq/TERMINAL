@@ -11,27 +11,27 @@ internal sealed class GetProjectsQueryHandler(TerminalDbContext dbContext)
 {
     private readonly DbSet<Project> _projects = dbContext.Projects;
 
-    public async Task<GetProjectsDto> Handle(GetProjectsQuery request,
-        CancellationToken ct)
+    public async Task<GetProjectsDto> Handle(GetProjectsQuery request, CancellationToken cancellationToken)
     {
-        var shouldSearch = request.SearchPhrase is not null && !string.IsNullOrWhiteSpace(request.SearchPhrase);
+        var (searchPhrase, pagingParameters, orderingParameters) = request;
 
         var query = _projects
-            .AsNoTracking()
-            .Where(p => p.IsActive || p.IsActive == request.OnlyActive);
+            .TagWith($"Get projects ordered [{orderingParameters}] and paginated [{pagingParameters}]")
+            .AsNoTracking();
 
-        if (shouldSearch)
+        if (!string.IsNullOrWhiteSpace(searchPhrase))
         {
             query = query
-                .Where(p => EF.Functions.ILike(p.Name, $"%{request.SearchPhrase}%"));
+                .Where(p => p.Name.Value.Contains(searchPhrase));
         }
 
-        var totalCount = await query.CountAsync(ct);
+        var totalCount = await query.CountAsync(cancellationToken);
 
-        return (await query
-            .Paginate(request.Parameters)
-            .OrderBy(request.OrderingParameters)
-            .ToListAsync(ct))
-            .AsGetProjectsDto(totalCount, request.Parameters.PageNumber, request.Parameters.PageSize);
+        var projects = await query
+            .Paginate(pagingParameters)
+            .OrderBy(orderingParameters)
+            .ToListAsync(cancellationToken);
+
+        return GetProjectsDto.Create(projects, totalCount, pagingParameters);
     }
 }

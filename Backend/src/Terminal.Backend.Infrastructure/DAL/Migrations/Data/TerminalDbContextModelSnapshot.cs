@@ -24,6 +24,44 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("BaseStepParameterValue", b =>
+                {
+                    b.Property<Guid>("BaseStepId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("base_step_id");
+
+                    b.Property<Guid>("ValuesId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("values_id");
+
+                    b.HasKey("BaseStepId", "ValuesId")
+                        .HasName("pk_base_step_parameter_value");
+
+                    b.HasIndex("ValuesId")
+                        .HasDatabaseName("ix_base_step_parameter_value_values_id");
+
+                    b.ToTable("base_step_parameter_value", "data");
+                });
+
+            modelBuilder.Entity("SampleSampleStep", b =>
+                {
+                    b.Property<Guid>("SampleId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("sample_id");
+
+                    b.Property<Guid>("StepsId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("steps_id");
+
+                    b.HasKey("SampleId", "StepsId")
+                        .HasName("pk_sample_sample_step");
+
+                    b.HasIndex("StepsId")
+                        .HasDatabaseName("ix_sample_sample_step_steps_id");
+
+                    b.ToTable("sample_sample_step", "data");
+                });
+
             modelBuilder.Entity("SampleTag", b =>
                 {
                     b.Property<Guid>("SampleId")
@@ -43,19 +81,29 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
                     b.ToTable("sample_tag", "data");
                 });
 
-            modelBuilder.Entity("Terminal.Backend.Core.Entities.ParameterValues.ParameterValue", b =>
+            modelBuilder.Entity("Terminal.Backend.Core.Entities.BaseStep", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid>("StepId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("step_id");
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("comment");
 
-                    b.Property<Guid>("parameter_name")
+                    b.HasKey("Id");
+
+                    b.ToTable((string)null);
+
+                    b.UseTpcMappingStrategy();
+                });
+
+            modelBuilder.Entity("Terminal.Backend.Core.Entities.ParameterValues.ParameterValue", b =>
+                {
+                    b.Property<Guid>("Id")
                         .HasColumnType("uuid")
-                        .HasColumnName("parameter_name");
+                        .HasColumnName("id");
 
                     b.Property<string>("parameter_type")
                         .IsRequired()
@@ -65,12 +113,6 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
 
                     b.HasKey("Id")
                         .HasName("pk_parameter_values");
-
-                    b.HasIndex("StepId")
-                        .HasDatabaseName("ix_parameter_values_step_id");
-
-                    b.HasIndex("parameter_name")
-                        .HasDatabaseName("ix_parameter_values_parameter_name");
 
                     b.ToTable("parameter_values", "data");
 
@@ -84,6 +126,12 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
                         .HasColumnName("id");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("character varying(21)")
+                        .HasColumnName("discriminator");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean")
@@ -105,11 +153,14 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
                     b.HasKey("Id")
                         .HasName("pk_parameters");
 
-                    b.HasIndex("ParentId");
+                    b.HasIndex("ParentId")
+                        .HasDatabaseName("ix_parameters_parent_id");
 
-                    b.ToTable((string)null);
+                    b.ToTable("parameters", "data");
 
-                    b.UseTpcMappingStrategy();
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Parameter");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Project", b =>
@@ -143,19 +194,19 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("RecipeName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("recipe_name");
+                        .HasColumnName("name");
 
                     b.HasKey("Id")
                         .HasName("pk_recipes");
 
-                    b.HasIndex("RecipeName")
-                        .HasDatabaseName("ix_recipes_recipe_name")
+                    b.HasIndex("Name")
+                        .HasDatabaseName("ix_recipes_name")
                         .HasAnnotation("Npgsql:TsVectorConfig", "english");
 
-                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("RecipeName"), "GIN");
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("Name"), "GIN");
 
                     b.ToTable("recipes", "data");
                 });
@@ -205,24 +256,6 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
                     b.ToTable("samples", "data");
                 });
 
-            modelBuilder.Entity("Terminal.Backend.Core.Entities.Step", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("comment");
-
-                    b.HasKey("Id");
-
-                    b.ToTable((string)null);
-
-                    b.UseTpcMappingStrategy();
-                });
-
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Tag", b =>
                 {
                     b.Property<Guid>("Id")
@@ -248,13 +281,41 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
                     b.ToTable("tags", "data");
                 });
 
+            modelBuilder.Entity("Terminal.Backend.Core.Entities.RecipeStep", b =>
+                {
+                    b.HasBaseType("Terminal.Backend.Core.Entities.BaseStep");
+
+                    b.Property<Guid>("RecipeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("recipe_id");
+
+                    b.HasIndex("RecipeId")
+                        .HasDatabaseName("ix_recipe_steps_recipe_id");
+
+                    b.ToTable("recipe_steps", "data");
+                });
+
+            modelBuilder.Entity("Terminal.Backend.Core.Entities.SampleStep", b =>
+                {
+                    b.HasBaseType("Terminal.Backend.Core.Entities.BaseStep");
+
+                    b.ToTable("sample_steps", "data");
+                });
+
             modelBuilder.Entity("Terminal.Backend.Core.Entities.ParameterValues.DecimalParameterValue", b =>
                 {
                     b.HasBaseType("Terminal.Backend.Core.Entities.ParameterValues.ParameterValue");
 
+                    b.Property<Guid>("DecimalParameterId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("decimal_parameter_id");
+
                     b.Property<decimal>("Value")
                         .HasColumnType("numeric")
                         .HasColumnName("decimal_value");
+
+                    b.HasIndex("DecimalParameterId")
+                        .HasDatabaseName("ix_parameter_values_decimal_parameter_id");
 
                     b.HasDiscriminator().HasValue("decimal");
                 });
@@ -263,9 +324,16 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
                 {
                     b.HasBaseType("Terminal.Backend.Core.Entities.ParameterValues.ParameterValue");
 
+                    b.Property<Guid>("IntegerParameterId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("integer_parameter_id");
+
                     b.Property<int>("Value")
                         .HasColumnType("integer")
                         .HasColumnName("integer_value");
+
+                    b.HasIndex("IntegerParameterId")
+                        .HasDatabaseName("ix_parameter_values_integer_parameter_id");
 
                     b.HasDiscriminator().HasValue("integer");
                 });
@@ -274,10 +342,17 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
                 {
                     b.HasBaseType("Terminal.Backend.Core.Entities.ParameterValues.ParameterValue");
 
+                    b.Property<Guid>("TextParameterId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("text_parameter_id");
+
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("text_value");
+
+                    b.HasIndex("TextParameterId")
+                        .HasDatabaseName("ix_parameter_values_text_parameter_id");
 
                     b.HasDiscriminator().HasValue("text");
                 });
@@ -291,7 +366,7 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
                         .HasColumnType("text")
                         .HasColumnName("unit");
 
-                    b.ToTable((string)null);
+                    b.HasDiscriminator().HasValue("NumericParameter");
                 });
 
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Parameters.TextParameter", b =>
@@ -307,35 +382,13 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
                         .HasColumnType("bigint")
                         .HasColumnName("default_value");
 
-                    b.ToTable("text_parameters", "data");
-                });
+                    b.ToTable("parameters", "data", t =>
+                        {
+                            t.Property("DefaultValue")
+                                .HasColumnName("text_parameter_default_value");
+                        });
 
-            modelBuilder.Entity("Terminal.Backend.Core.Entities.RecipeStep", b =>
-                {
-                    b.HasBaseType("Terminal.Backend.Core.Entities.Step");
-
-                    b.Property<Guid>("RecipeId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("recipe_id");
-
-                    b.HasIndex("RecipeId")
-                        .HasDatabaseName("ix_recipe_steps_recipe_id");
-
-                    b.ToTable("recipe_steps", "data");
-                });
-
-            modelBuilder.Entity("Terminal.Backend.Core.Entities.SampleStep", b =>
-                {
-                    b.HasBaseType("Terminal.Backend.Core.Entities.Step");
-
-                    b.Property<Guid>("SampleId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("sample_id");
-
-                    b.HasIndex("SampleId")
-                        .HasDatabaseName("ix_sample_steps_sample_id");
-
-                    b.ToTable("sample_steps", "data");
+                    b.HasDiscriminator().HasValue("TextParameter");
                 });
 
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Parameters.DecimalParameter", b =>
@@ -350,7 +403,16 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
                         .HasColumnType("numeric")
                         .HasColumnName("step");
 
-                    b.ToTable("decimal_parameters", "data");
+                    b.ToTable("parameters", "data", t =>
+                        {
+                            t.Property("DefaultValue")
+                                .HasColumnName("decimal_parameter_default_value");
+
+                            t.Property("Step")
+                                .HasColumnName("decimal_parameter_step");
+                        });
+
+                    b.HasDiscriminator().HasValue("DecimalParameter");
                 });
 
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Parameters.IntegerParameter", b =>
@@ -365,7 +427,41 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
                         .HasColumnType("integer")
                         .HasColumnName("step");
 
-                    b.ToTable("integer_parameters", "data");
+                    b.HasDiscriminator().HasValue("IntegerParameter");
+                });
+
+            modelBuilder.Entity("BaseStepParameterValue", b =>
+                {
+                    b.HasOne("Terminal.Backend.Core.Entities.BaseStep", null)
+                        .WithMany()
+                        .HasForeignKey("BaseStepId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_base_step_parameter_value_base_step_base_step_id");
+
+                    b.HasOne("Terminal.Backend.Core.Entities.ParameterValues.ParameterValue", null)
+                        .WithMany()
+                        .HasForeignKey("ValuesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_base_step_parameter_value_parameter_values_values_id");
+                });
+
+            modelBuilder.Entity("SampleSampleStep", b =>
+                {
+                    b.HasOne("Terminal.Backend.Core.Entities.Sample", null)
+                        .WithMany()
+                        .HasForeignKey("SampleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_sample_sample_step_samples_sample_id");
+
+                    b.HasOne("Terminal.Backend.Core.Entities.SampleStep", null)
+                        .WithMany()
+                        .HasForeignKey("StepsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_sample_sample_step_sample_steps_steps_id");
                 });
 
             modelBuilder.Entity("SampleTag", b =>
@@ -385,31 +481,13 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
                         .HasConstraintName("fk_sample_tag_tags_tags_id");
                 });
 
-            modelBuilder.Entity("Terminal.Backend.Core.Entities.ParameterValues.ParameterValue", b =>
-                {
-                    b.HasOne("Terminal.Backend.Core.Entities.Step", null)
-                        .WithMany("Parameters")
-                        .HasForeignKey("StepId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_parameter_values_step_step_id");
-
-                    b.HasOne("Terminal.Backend.Core.Entities.Parameters.Parameter", "Parameter")
-                        .WithMany()
-                        .HasForeignKey("parameter_name")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_parameter_values_parameters_parameter_name");
-
-                    b.Navigation("Parameter");
-                });
-
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Parameters.Parameter", b =>
                 {
                     b.HasOne("Terminal.Backend.Core.Entities.Parameters.Parameter", "Parent")
                         .WithMany()
                         .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("fk_parameters_parameters_parent_id");
 
                     b.Navigation("Parent");
                 });
@@ -446,14 +524,40 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
                     b.Navigation("Recipe");
                 });
 
-            modelBuilder.Entity("Terminal.Backend.Core.Entities.SampleStep", b =>
+            modelBuilder.Entity("Terminal.Backend.Core.Entities.ParameterValues.DecimalParameterValue", b =>
                 {
-                    b.HasOne("Terminal.Backend.Core.Entities.Sample", null)
-                        .WithMany("Steps")
-                        .HasForeignKey("SampleId")
+                    b.HasOne("Terminal.Backend.Core.Entities.Parameters.DecimalParameter", "DecimalParameter")
+                        .WithMany()
+                        .HasForeignKey("DecimalParameterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_sample_steps_samples_sample_id");
+                        .HasConstraintName("fk_parameter_values_parameters_decimal_parameter_id");
+
+                    b.Navigation("DecimalParameter");
+                });
+
+            modelBuilder.Entity("Terminal.Backend.Core.Entities.ParameterValues.IntegerParameterValue", b =>
+                {
+                    b.HasOne("Terminal.Backend.Core.Entities.Parameters.IntegerParameter", "IntegerParameter")
+                        .WithMany()
+                        .HasForeignKey("IntegerParameterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_parameter_values_parameters_integer_parameter_id");
+
+                    b.Navigation("IntegerParameter");
+                });
+
+            modelBuilder.Entity("Terminal.Backend.Core.Entities.ParameterValues.TextParameterValue", b =>
+                {
+                    b.HasOne("Terminal.Backend.Core.Entities.Parameters.TextParameter", "TextParameter")
+                        .WithMany()
+                        .HasForeignKey("TextParameterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_parameter_values_parameters_text_parameter_id");
+
+                    b.Navigation("TextParameter");
                 });
 
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Project", b =>
@@ -464,16 +568,6 @@ namespace Terminal.Backend.Infrastructure.DAL.Migrations.Data
             modelBuilder.Entity("Terminal.Backend.Core.Entities.Recipe", b =>
                 {
                     b.Navigation("Steps");
-                });
-
-            modelBuilder.Entity("Terminal.Backend.Core.Entities.Sample", b =>
-                {
-                    b.Navigation("Steps");
-                });
-
-            modelBuilder.Entity("Terminal.Backend.Core.Entities.Step", b =>
-                {
-                    b.Navigation("Parameters");
                 });
 #pragma warning restore 612, 618
         }

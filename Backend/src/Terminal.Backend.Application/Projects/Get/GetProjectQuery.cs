@@ -1,8 +1,6 @@
 using Terminal.Backend.Application.DTO.Projects;
+using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Projects.Get;
 
-public sealed class GetProjectQuery : IRequest<GetProjectDto?>
-{
-    public Guid ProjectId { get; set; }
-}
+public record GetProjectQuery(ProjectId Id) : IRequest<GetProjectDto?>;

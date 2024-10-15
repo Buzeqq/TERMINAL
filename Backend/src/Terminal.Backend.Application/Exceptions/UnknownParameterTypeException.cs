@@ -11,8 +11,8 @@ public sealed class UnknownParameterTypeException : TerminalException
     {
     }
 
-    public UnknownParameterTypeException(CreateSampleBaseParameterValueDto dto) :
-        base($"Unknown type of parameter: {dto.Id}")
+    public UnknownParameterTypeException(StepParameterValueDto dto) :
+        base($"Unknown type of parameter: {dto.ParameterId}")
     {
     }
 }

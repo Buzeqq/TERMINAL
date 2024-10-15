@@ -4,18 +4,18 @@ namespace Terminal.Backend.Core.ValueObjects;
 
 public sealed record ProjectName
 {
-    public string Name { get; }
+    public string Value { get; }
 
-    public ProjectName(string name)
+    public ProjectName(string value)
     {
-        if (string.IsNullOrWhiteSpace(name))
+        if (string.IsNullOrWhiteSpace(value))
         {
-            throw new InvalidProjectNameException(name);
+            throw new InvalidProjectNameException(value);
         }
 
-        Name = name;
+        Value = value;
     }
 
-    public static implicit operator string(ProjectName name) => name.Name;
+    public static implicit operator string(ProjectName name) => name.Value;
     public static implicit operator ProjectName(string value) => new(value);
 }

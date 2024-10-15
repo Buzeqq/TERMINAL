@@ -54,6 +54,7 @@ internal sealed class TerminalDbSeeder(TerminalDbContext dbContext)
             .Select(i => new TextParameter(
                 _faker.Random.Guid(),
                 _faker.Database.Column() + i,
+                null,
                 _faker.Lorem.Words(_faker.Random.Int(1, 5)).ToList()
             ));
 
@@ -62,6 +63,7 @@ internal sealed class TerminalDbSeeder(TerminalDbContext dbContext)
             .Select(i => new IntegerParameter(
                 _faker.Random.Guid(),
                 _faker.Database.Column() + i,
+                null,
                 _faker.Random.String2(_faker.Random.Int(1, 4)),
                 _faker.PickRandom(1, 10, 1000, 10_000, 100_000, 1_000_000)
             ));
@@ -71,6 +73,7 @@ internal sealed class TerminalDbSeeder(TerminalDbContext dbContext)
             .Select(i => new DecimalParameter(
                 _faker.Random.Guid(),
                 _faker.Database.Column() + i,
+                null,
                 _faker.Random.String2(_faker.Random.Int(1, 4)),
                 _faker.PickRandom(0.1m, 1m, 10m, 100m, 1_000m, 10_000m, 100_000m)
             ));

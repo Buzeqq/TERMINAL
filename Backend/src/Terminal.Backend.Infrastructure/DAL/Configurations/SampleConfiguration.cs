@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Terminal.Backend.Core.Entities;
 using Terminal.Backend.Core.ValueObjects;
-using Terminal.Backend.Infrastructure.DAL.ValueGenerators;
 
 namespace Terminal.Backend.Infrastructure.DAL.Configurations;
 
@@ -18,19 +17,16 @@ internal sealed class SampleConfiguration : IEntityTypeConfiguration<Sample>
         builder.Property(m => m.Code)
             .HasConversion(c => c.Number,
                 c => new SampleCode(c))
-            .HasValueGenerator(typeof(SampleCodeValueGenerator));
+            .ValueGeneratedOnAdd();
         builder.Property(m => m.Comment)
             .HasConversion(c => c.Value,
                 c => new Comment(c));
 
-        builder
-            .HasMany(m => m.Tags)
+        builder.HasMany(s => s.Tags)
             .WithMany();
 
-        builder.HasMany(m => m.Steps)
-            .WithOne()
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany(s => s.Steps)
+            .WithMany();
 
         builder.HasOne(m => m.Recipe)
             .WithMany()

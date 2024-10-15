@@ -5,5 +5,5 @@ namespace Terminal.Backend.Core.Abstractions.Repositories;
 
 public interface IStepsRepository
 {
-    Task<IEnumerable<RecipeStep>> GetFromRecipeAsync(RecipeId id, CancellationToken ct);
+    Task<IEnumerable<RecipeStep>> GetFromRecipeAsync(RecipeId id, CancellationToken cancellationToken);
 }

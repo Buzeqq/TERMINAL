@@ -3,10 +3,8 @@ using Terminal.Backend.Application.DTO.Samples;
 
 namespace Terminal.Backend.Application.Samples.Get;
 
-public sealed class GetSamplesQuery(int pageNumber, int pageSize, string orderBy, bool desc, string? searchPhrase)
-    : IRequest<GetSamplesDto>
-{
-    public PagingParameters Parameters { get; set; } = new() { PageNumber = pageNumber, PageSize = pageSize };
-    public OrderingParameters OrderingParameters { get; set; } = new() { OrderBy = orderBy, Desc = desc };
-    public string? SearchPhrase { get; set; } = searchPhrase;
-}
+public record GetSamplesQuery(
+    string? SearchPhrase,
+    PagingParameters PagingParameters,
+    OrderingParameters OrderingParameters)
+    : IRequest<GetSamplesDto>;

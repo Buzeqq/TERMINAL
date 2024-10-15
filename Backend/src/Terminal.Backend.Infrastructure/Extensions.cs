@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,10 +7,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Terminal.Backend.Application.Common;
-using Terminal.Backend.Core.Entities;
-using Terminal.Backend.Core.Entities.Parameters;
-using Terminal.Backend.Core.Entities.ParameterValues;
-using Terminal.Backend.Core.ValueObjects;
 using Terminal.Backend.Infrastructure.Authorization;
 using Terminal.Backend.Infrastructure.DAL;
 using Terminal.Backend.Infrastructure.DAL.Behaviours;

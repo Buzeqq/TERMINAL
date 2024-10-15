@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
+using Terminal.Backend.Core.ValueObjects;
 
 namespace Terminal.Backend.Application.Projects.ChangeStatus;
 
-public sealed record ChangeProjectStatusCommand([property: JsonIgnore] Guid ProjectId, bool IsActive) : IRequest;
+public record ChangeProjectStatusCommand(ProjectId ProjectId, bool IsActive) : IRequest;

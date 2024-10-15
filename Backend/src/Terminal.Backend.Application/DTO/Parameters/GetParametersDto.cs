@@ -1,10 +1,34 @@
 using System.Text.Json.Serialization;
+using Terminal.Backend.Core.Entities.Parameters;
 
 namespace Terminal.Backend.Application.DTO.Parameters;
 
-public class GetParametersDto
+public record GetParametersDto(IEnumerable<GetParameterDto> Parameters)
 {
-    public IEnumerable<GetParameterDto> Parameters { get; set; } = [];
+    public static GetParametersDto Create(IEnumerable<Parameter> parameters) =>
+        new(parameters
+            .Select<Parameter, GetParameterDto>(p =>
+            {
+                var parentId = p.ParentId?.Value;
+                return p switch
+                {
+                    IntegerParameter ip => new GetIntegerParameterDto(ip.Id, ip.Name, ip.Unit, ip.Step, ip.Order, ip.DefaultValue, parentId),
+                    DecimalParameter dp => new GetDecimalParameterDto(dp.Id,
+                        dp.Name,
+                        dp.Unit,
+                        dp.Step,
+                        dp.Order,
+                        dp.DefaultValue,
+                        parentId),
+                    TextParameter tp => new GetTextParameterDto(tp.Id,
+                        tp.Name,
+                        tp.AllowedValues,
+                        tp.Order,
+                        tp.DefaultValue,
+                        parentId),
+                    _ => throw new ArgumentOutOfRangeException(nameof(p), p, "Unknown parameter type.")
+                };
+            }));
 }
 
 [JsonDerivedType(typeof(GetTextParameterDto), "text")]

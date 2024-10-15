@@ -4,18 +4,18 @@ namespace Terminal.Backend.Core.ValueObjects;
 
 public sealed record RecipeName
 {
-    public string Name { get; }
+    public string Value { get; }
 
-    public RecipeName(string name)
+    public RecipeName(string value)
     {
-        if (string.IsNullOrWhiteSpace(name))
+        if (string.IsNullOrWhiteSpace(value))
         {
-            throw new InvalidRecipeNameException(name);
+            throw new InvalidRecipeNameException(value);
         }
 
-        Name = name;
+        Value = value;
     }
 
-    public static implicit operator string(RecipeName name) => name.Name;
+    public static implicit operator string(RecipeName name) => name.Value;
     public static implicit operator RecipeName(string value) => new(value);
 }

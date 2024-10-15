@@ -5,7 +5,7 @@ namespace Terminal.Backend.Core.Abstractions.Repositories;
 
 public interface IParameterRepository
 {
-    Task<T?> GetAsync<T>(ParameterId id, CancellationToken ct) where T : Parameter;
-    Task AddAsync(Parameter parameter, CancellationToken ct);
+    Task<T?> GetAsync<T>(ParameterId id, CancellationToken cancellationToken) where T : Parameter;
+    Task AddAsync(Parameter parameter, CancellationToken cancellationToken);
     Task UpdateAsync(Parameter parameter);
 }

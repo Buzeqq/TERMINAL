@@ -1,3 +1,5 @@
+using Terminal.Backend.Core.ValueObjects;
+
 namespace Terminal.Backend.Application.Projects.Delete;
 
-public sealed record DeleteProjectCommand(Guid Id) : IRequest;
+public record DeleteProjectCommand(ProjectId Id) : IRequest;

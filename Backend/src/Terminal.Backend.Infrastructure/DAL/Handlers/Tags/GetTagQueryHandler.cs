@@ -10,12 +10,14 @@ internal sealed class GetTagQueryHandler(TerminalDbContext dbContext) : IRequest
 {
     private readonly DbSet<Tag> _tags = dbContext.Tags;
 
-    public async Task<GetTagDto?> Handle(GetTagQuery request, CancellationToken ct)
+    public async Task<GetTagDto?> Handle(GetTagQuery request, CancellationToken cancellationToken)
     {
-        var tagId = request.TagId;
-        var tag = (await _tags
+        var tagId = request.Id;
+        var tag = await _tags
             .AsNoTracking()
-            .SingleOrDefaultAsync(t => t.Id.Equals(tagId), ct))?.AsGetTagDto();
+            .Where(t => t.Id == tagId)
+            .Select(t => new GetTagDto(t.Id, t.Name, t.IsActive))
+            .SingleOrDefaultAsync(cancellationToken);
 
         return tag;
     }

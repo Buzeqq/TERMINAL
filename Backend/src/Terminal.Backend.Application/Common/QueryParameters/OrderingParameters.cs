@@ -1,8 +1,9 @@
 namespace Terminal.Backend.Application.Common.QueryParameters;
 
-public sealed class OrderingParameters
-{
-    public string OrderBy { get; set; } = "Id";
+public sealed record OrderingParameters(string OrderBy, OrderDirection? Direction);
 
-    public bool Desc { get; set; } = true;
+public enum OrderDirection
+{
+    Ascending,
+    Descending
 }

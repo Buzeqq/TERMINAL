@@ -37,12 +37,13 @@ app.MapHealthChecks("/api/health", new HealthCheckOptions
 app.UseInfrastructure();
 app.UseSerilogRequestLogging();
 
-app.UseIdentityEndpoints();
-app.UseProjectsEndpoints();
-app.UseTagEndpoints();
-app.UseRecipesEndpoints();
-app.UseParametersEndpoints();
-app.UseSamplesEndpoints();
+app.MapGroup("api/v1")
+    .UseIdentityEndpoints()
+    .UseProjectsEndpoints()
+    .UseTagEndpoints()
+    .UseRecipesEndpoints()
+    .UseParametersEndpoints()
+    .UseSamplesEndpoints();
 
 app.Run();
 
