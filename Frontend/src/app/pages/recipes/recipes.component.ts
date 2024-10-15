@@ -37,7 +37,7 @@ import { FailedToLoadProjectsError } from '../../core/errors/errors.model';
 export class RecipesComponent {
   readonly dataListFiltersState =
     new BehaviorSubject<DataListStateChangedEvent>({
-      paginationOptions: { pageNumber: 0, pageSize: 10, desc: false },
+      paginationOptions: { pageNumber: 0, pageSize: 10, sortDirection: '' },
     });
   private readonly recipesService = inject(RecipesService);
   private readonly notificationService = inject(NotificationService);
@@ -52,7 +52,7 @@ export class RecipesComponent {
           state.paginationOptions.pageNumber,
           state.paginationOptions.pageSize,
           state.searchPhrase,
-          state.paginationOptions.desc
+          state.paginationOptions.sortDirection
         )
         .pipe(
           map(r => ({
@@ -68,7 +68,7 @@ export class RecipesComponent {
       paginationOptions: {
         pageNumber: r.state.paginationOptions.pageNumber,
         pageSize: r.state.paginationOptions.pageSize,
-        desc: r.state.paginationOptions.desc,
+        sortDirection: r.state.paginationOptions.sortDirection,
       },
     })),
     catchError((error: FailedToLoadProjectsError) => {

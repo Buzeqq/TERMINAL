@@ -6,7 +6,7 @@ import { Entity } from '../common.model';
 export interface Sample extends Entity {
   id: string;
   code: string;
-  project: string;
+  projectName: string;
   createdAtUtc: Date;
 }
 

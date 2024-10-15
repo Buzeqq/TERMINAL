@@ -19,6 +19,7 @@ import { MatRipple } from '@angular/material/core';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { Entity } from '../../common.model';
 import { HintComponent } from '../hint/hint.component';
+import { SortDirection } from '@angular/material/sort';
 
 export type DataListStateChangedEvent = {
   paginationOptions: PaginationOptions;
@@ -28,7 +29,7 @@ export type DataListStateChangedEvent = {
 export interface PaginationOptions {
   pageNumber: number;
   pageSize: number;
-  desc: boolean;
+  sortDirection: SortDirection;
 }
 
 export type DataListDataSourceInput<T extends Entity> = Observable<{
@@ -77,7 +78,7 @@ export class DataListComponent<TData extends Entity> implements OnInit {
       paginationOptions: {
         pageNumber: 0,
         pageSize: 10,
-        desc: true,
+        sortDirection: 'asc',
       },
     }
   );
@@ -101,7 +102,7 @@ export class DataListComponent<TData extends Entity> implements OnInit {
       paginationOptions: {
         pageNumber: event.pageIndex,
         pageSize: event.pageSize,
-        desc: true,
+        sortDirection: 'asc',
       },
       searchPhrase: this.filterState.value?.searchPhrase,
     });

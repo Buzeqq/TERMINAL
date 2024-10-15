@@ -4,6 +4,7 @@ import { Recipe } from './recipe.model';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { FailedToLoadRecipesError } from '../errors/errors.model';
+import { SortDirection } from '@angular/material/sort';
 
 type RecipesResponse = { recipes: Recipe[]; totalCount: number };
 
@@ -19,13 +20,12 @@ export class RecipesService {
     pageNumber: number,
     pageSize: number,
     searchPhrase?: string,
-    desc?: boolean,
+    sortDirection?: SortDirection
   ): Observable<RecipesResponse> {
-    desc ??= true;
     const params: Record<string, number | string | boolean> = {
       pageNumber,
       pageSize,
-      desc,
+      orderDirection: sortDirection === 'desc' ? 1 : 0,
     };
 
     if (searchPhrase) {
@@ -41,7 +41,7 @@ export class RecipesService {
       .pipe(
         catchError((error: HttpErrorResponse) => {
           throw new FailedToLoadRecipesError(error.error);
-        }),
+        })
       );
   }
 }

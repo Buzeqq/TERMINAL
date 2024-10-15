@@ -99,6 +99,7 @@ export class SamplesTableComponent implements AfterViewInit {
         return this.samplesService.getSamples(
           this.paginator?.pageIndex ?? 0,
           this.paginator?.pageSize ?? 10,
+          this.sort.active,
           this.sort.direction,
           this.filter.value ? this.filter.value : undefined
         );

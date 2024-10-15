@@ -8,17 +8,17 @@
 <mat-table [dataSource]="data" matSort>
 
   <ng-container matColumnDef="code">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Code</mat-header-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header="Code">Code</mat-header-cell>
     <mat-cell *matCellDef="let sample">{{ sample.code }}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="project">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Project</mat-header-cell>
-    <mat-cell *matCellDef="let sample">{{ sample.project }}</mat-cell>
+    <mat-header-cell *matHeaderCellDef>Project</mat-header-cell>
+    <mat-cell *matCellDef="let sample">{{ sample.projectName }}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="created">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Created</mat-header-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header="CreatedAtUtc">Created</mat-header-cell>
     <mat-cell *matCellDef="let sample">
   <span [matTooltip]="(sample.createdAtUtc | date:'medium') ?? ''">
     {{ sample.createdAtUtc | timeAgo }}

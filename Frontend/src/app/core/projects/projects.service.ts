@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { Project } from './projects.model';
 import { FailedToLoadProjectsError } from '../errors/errors.model';
 import { PaginatedResponse } from '../common.model';
+import { SortDirection } from '@angular/material/sort';
 
 type ProjectsResponse = PaginatedResponse<Project>;
 
@@ -18,14 +19,13 @@ export class ProjectsService {
   getProjects(
     pageNumber: number,
     pageSize: number,
-    searchPhrase?: string,
-    desc?: boolean
+    sortDirection?: SortDirection,
+    searchPhrase?: string
   ): Observable<ProjectsResponse> {
-    desc ??= true;
     const params: Record<string, number | string | boolean> = {
       pageNumber,
       pageSize,
-      desc,
+      orderDirection: sortDirection === 'desc' ? 1 : 0,
     };
 
     if (searchPhrase) {

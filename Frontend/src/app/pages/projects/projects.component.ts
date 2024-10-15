@@ -66,7 +66,7 @@ import { NotificationService } from '../../core/services/notification.service';
 export class ProjectsComponent {
   readonly dataListFiltersState =
     new BehaviorSubject<DataListStateChangedEvent>({
-      paginationOptions: { pageNumber: 0, pageSize: 10, desc: false },
+      paginationOptions: { pageNumber: 0, pageSize: 10, sortDirection: '' },
     });
   private readonly projectsService = inject(ProjectsService);
   private readonly notificationService = inject(NotificationService);
@@ -80,8 +80,8 @@ export class ProjectsComponent {
         .getProjects(
           state.paginationOptions.pageNumber,
           state.paginationOptions.pageSize,
-          state.searchPhrase,
-          state.paginationOptions.desc
+          state.paginationOptions.sortDirection,
+          state.searchPhrase
         )
         .pipe(
           map(r => ({
@@ -97,7 +97,7 @@ export class ProjectsComponent {
       paginationOptions: {
         pageNumber: r.state.paginationOptions.pageNumber,
         pageSize: r.state.paginationOptions.pageSize,
-        desc: r.state.paginationOptions.desc,
+        sortDirection: r.state.paginationOptions.sortDirection,
       },
     })),
     catchError((error: FailedToLoadProjectsError) => {

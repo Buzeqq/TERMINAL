@@ -59,19 +59,24 @@ export class SamplesService {
   }
 
   getSamples(
-    pageNumber: number,
+    pageIndex: number,
     pageSize: number,
-    sortDirection: SortDirection,
+    orderBy?: string,
+    sortDirection?: SortDirection,
     searchPhrase?: string
   ): Observable<SamplesResponse> {
     const params: Record<string, number | string | boolean> = {
-      pageNumber,
+      pageIndex,
       pageSize,
-      desc: sortDirection === 'desc',
+      orderDirection: sortDirection === 'desc' ? 1 : 0,
     };
 
     if (searchPhrase) {
       params['searchPhrase'] = searchPhrase;
+    }
+
+    if (orderBy) {
+      params['orderBy'] = orderBy;
     }
 
     return this.http

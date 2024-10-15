@@ -5,6 +5,6 @@ export interface Entity {
 export interface PaginatedResponse<T> {
   data: readonly T[];
   totalCount: number;
-  pageNumber: number;
+  pageIndex: number;
   pageSize: number;
 }
